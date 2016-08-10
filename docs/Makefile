@@ -36,14 +36,35 @@ SHELL := /bin/bash
 # Variables
 ########################################################################
 
+# Commands
+JQT = jqt \
+      -ifilters \
+      -Mconfig:config.yaml \
+      -msnippets:snippets.json
+
+MPCSS = gpp --nostdinc \
+	+c '/*' '*/' \
+	+c '//' '\n' \
+	-U '&' ';' '(' ',' ');' '(' ')' '\$$' '' \
+	-M '&' ';' '(' ',' ');' '(' ')'
+
+HTMLMIN = sed '/^$$/d' 
+CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
+
+
+# Common sources for all targets
+COMMON = \
+	config.yaml	\
+	snippets.json	\
+	main.html	\
+	head.html	\
+	footer.html	\
+	filters.jq	\
+
+# Destination files
 OUTPUT = /tmp/jqt
 
-JQT = jqt -ifilters -Mconfig:config.yaml -msnippets:snippets.json
-HTMLMIN = sed '/^$$/d' 
-
-TEMPLATES = main.html head.html footer.html
-COMMON = $(TEMPLATES) config.yaml snippets.json filters.jq
-ASSETS = github.css jqt.css README.md
+ASSETS = README.md
 
 TARGETS = \
 	$(OUTPUT)/document.html	\
@@ -51,14 +72,15 @@ TARGETS = \
 	$(OUTPUT)/index.html	\
 	$(OUTPUT)/metadata.html	\
 	$(OUTPUT)/template.html	\
+	$(OUTPUT)/jqt.css	\
 
 ########################################################################
 # Rules
 ########################################################################
 
 all: $(TARGETS)
-	cp -uv $(ASSETS) $(OUTPUT)
-	xmllint --noout --valid $(OUTPUT)/*.html
+	@cp -uv $(ASSETS) $(OUTPUT)
+	@xmllint --noout --valid $(OUTPUT)/*.html
 
 snippets.pandoc: snippets.md
 	sed -n 's/^\([a-zA-Z_-]\+\): *[^#].*/\1: >\n  $$\1$$/p' $< > $@
@@ -81,6 +103,9 @@ $(eval $(call Page,engine))
 $(eval $(call Page,document))
 $(eval $(call Page,metadata))
 $(eval $(call Page,template))
+
+$(OUTPUT)/jqt.css: jqt.css github.css
+	$(MPCSS) $< | $(CSSMIN) > $@
 
 ########################################################################
 # Utilities

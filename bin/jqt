@@ -160,7 +160,7 @@ function expand_md
 function expand_json
 {
     local -r -a meta=( -M '<!' '>' '\b' '\b' '>' '<' '>' )
-    local -r -a user=( -U '&' ';' '(' ')' ';' '(' ')' '\$' '' )
+    local -r -a user=( -U '&' ';' '(' ',' ');' '(' ')' '\$' '' )
     local -r -a skips=(
         +cccc '\\n' ''      \
         +cccc '/*' '*/'     \
