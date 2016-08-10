@@ -19,12 +19,16 @@
 	display: inline;
 	margin-right: 0;
 	margin-left:0;
-	font-weight: normal;
-	font-size: 180%;
 }
-#MENU li.logo a {
+#MENU li.logo a {	/* "picture" */
+	font-weight: normal;
+	font-size: 160%;
 	text-decoration: none;
 	background-color: inherit;
+}
+#MENU li.logo span {	/* version */
+	font-size: 12px;
+	font-weight: bold;
 }
 #MENU a {
 	padding: 2px;
