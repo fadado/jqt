@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+<title>jqt · The jq template engine
+</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="jqt v0.1"/>
+<meta name='author' content='Joan Josep Ordinas Rosa' />
+<meta name='dcterms.modified' content='2016-08-05T09:15:11Z' />
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">@import url(jqt.css);</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+	</head>
+	<body>
+		<ul id="MENU">
+												<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a></li>
+<li><a class='current' href="./index.html">Home</a></li>
+<li><a  href="./engine.html">Engine</a></li>
+<li><a  href="./document.html">Document</a></li>
+<li><a  href="./template.html">Template</a></li>
+<li><a  href="./metadata.html">Metadata</a></li>
+		</ul>
+<h1><em>jqt</em> · the <em>jq</em> template engine
+</h1>
+	
+<div id="CONTENT">
+	
+<p>Could be <a href="https://stedolan.github.io/jq/"><cite>jq</cite></a> the basis for a template engine? Let's explore…</p>
+<h2 id="jq"><cite>jq</cite></h2>
+<p><cite>jq</cite> have nice features as string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following simple strings, in the middle of a <cite>jq</cite> program, with generators separated with the comma operator:</p>
+<h3 id="simple-expansion">Simple expansion</h3>
+<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;title&gt;</span>\(.title)<span class="kw">&lt;/title&gt;</span>&quot;, ...</code></pre>
+<h3 id="conditional-expansion">Conditional expansion</h3>
+<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.published//empty)&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</code></pre>
+<h3 id="repeated-expansion">Repeated expansion</h3>
+<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.author[])&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</code></pre>
+<p>In these examples the strings expand, vanish, or multiply without any explicit <code>if</code> or <code>for</code>!</p>
+<h2 id="jqt"><cite>jqt</cite></h2>
+<p>To write <cite>jq</cite> scripts using strings with interpolations is not the idea we have for a template language. We need some syntactic sugar, and this is provided to you by <cite>jqt</cite>. You write templates in a very fashionable style, the templates are translated into a <cite>jq</cite> script and then <cite>jq</cite> is feed with the created script and some metadata and content in JSON or YAML format… and the magic is done!</p>
+<p>And, how do the <em>syntactic sugar</em> looks like? Do you think the following example looks like a template?</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.lang}}&#39;</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+    {# block comments #}
+    <span class="kw">&lt;title&gt;</span>{{.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
+    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
+    {# implicit loop if several authors #}
+    {% .author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
+    {# include files in preprocessing stage #}
+    <span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+    <span class="kw">&lt;h1&gt;</span>{{.title}}<span class="kw">&lt;/h1&gt;</span>
+    <span class="kw">&lt;h2&gt;</span>{{.subtitle//empty}}<span class="kw">&lt;/h2&gt;</span> {# line vanishes if subtitle not defined #}
+    <span class="kw">&lt;ul&gt;</span>
+        {% range(.n) %} {# loop from 0 to .n-1 #}
+            <span class="kw">&lt;li&gt;</span>{{.}}<span class="kw">&lt;/li&gt;</span>
+        {% end %}
+    <span class="kw">&lt;/ul&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre>
+<h2 id="jqt-status"><cite>jqt</cite> status</h2>
+<p>Exciting? Please read all this <a href="#">documentation</a> and follow the links at the very bottom of the page if you are interested in <cite>jqt</cite>.</p>
+</div>
+		<div id="FOOTER">
+			<div style="text-align:center;">
+<hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+</div>
+			<div class="github">
+				❲ <a href="https://github.com/fadado/jqt">code</a> ❘
+		      <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
+				  <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
+				  <a href="https://github.com/fadado/jqt/archive/master.zip">download</a>
+				❳</div>
+		</div>
+	</body>
+</html>

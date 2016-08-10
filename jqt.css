@@ -1,0 +1,68 @@
+@import url(github.css);
+
+/*
+ * jqt added styles
+ */
+#MENU {
+	margin: 0;
+	padding: 0;
+	text-transform: lowercase;
+	font-variant: small-caps;
+	font-size: 120%;
+}
+#MENU li {
+	display: inline;
+	margin-left: 1em;
+	font-weight: bold;
+}
+#MENU li.logo {
+	display: inline;
+	margin-right: 0;
+	margin-left:0;
+	font-weight: normal;
+	font-size: 180%;
+}
+#MENU li.logo a {
+	text-decoration: none;
+	background-color: inherit;
+}
+#MENU a {
+	padding: 2px;
+	outline: none;
+}
+#MENU a:hover {
+	padding: 2px;
+	background-color: gainsboro;
+}
+#MENU a.current {
+	padding: 2px;
+	background-color: gainsboro;
+}
+#TOC {
+	font-family: sans-serif;
+	font-size: 90%;
+	width: 20em;
+	margin: 2em auto 2em auto;
+	padding: 0 2em;
+	border: 3px solid grey;
+	text-align: center;
+}
+#TOC p {
+	font-weight: bold;
+	border-bottom: 1px solid black;
+}
+#TOC ul {
+	list-style-type: square;
+	text-align: left;
+}
+#TOC li {
+	margin: 0;
+}
+#FOOTER div.github {
+	font-family: sans-serif;
+	color: #4183c4;
+	text-align: center;
+}
+/*
+ vim:ts=4:sw=4:ai:noet:fileencoding=utf-8:syntax=css
+ */
