@@ -12,10 +12,7 @@
 	<body>
 
 		<ul id="MENU">
-			<#{# logo #}<li class="logo"><a href="{{.baseURL}}">❬❏❭</a></li>#>
-			<#{# logo #}<li class="logo"><a href="{{.baseURL}}">❴٪❏٪❵</a></li>#>
-			<#{# logo #}<li class="logo"><a href="{{.baseURL}}">{٪❏٪}</a></li>#>
-			{# logo #}<li class="logo"><a href="{{.baseURL}}">❴❴❏❵❵</a></li>
+			{# logo #}<li class="logo"><a href="{{.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>
 			{% .menu[] %}<li><a {{if .id==$M.id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
 		</ul>
 

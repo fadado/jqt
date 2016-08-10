@@ -2,7 +2,7 @@
 	Meta elements
 #>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="jqt v{{.front.version}}"/>
+<meta name="generator" content="jqt v<%include "../VERSION">"/>
 <meta name='author' content='{{[.front.author[].name] | sort[]}}' />
 <meta name='dcterms.modified' content='{{.front.updated//empty}}' />
 <meta name='description' content='{{.front.description//empty}}' />

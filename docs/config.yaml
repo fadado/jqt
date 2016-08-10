@@ -4,7 +4,6 @@
 
 # Global parameters
 
-version: "0.1"
 title: jqt · The jq template engine
 baseurl: http://TO_BE_DEFINED/
 lang: en

@@ -25,7 +25,7 @@ if [[ -f VERSION ]]; then
     read 1>&2 -p "Enter a version number [$SUGGESTED_VERSION]: "
     [[ -z $REPLY ]] && NEXT_VERSION=$SUGGESTED_VERSION
     echo 1>&2 "Will set new version to be $NEXT_VERSION"
-    echo $NEXT_VERSION > VERSION
+    echo -n $NEXT_VERSION > VERSION
     {   echo "Version $NEXT_VERSION:"
         git log --pretty=format:" - %s" "v$CURRENT_VERSION"...HEAD
         echo -e '\n'
@@ -41,7 +41,7 @@ else
     read 1>&2 -p 'Create a new VERSION file [y/yes]? '
     case $REPLY in
     ''|[Yy]|[Yy][Ee][Ss])
-        echo '0.1.0' > VERSION
+        echo -n '0.1.0' > VERSION
         {   echo 'Version 0.1.0'
             git log --pretty=format:' - %s'
             echo -e '\n'
