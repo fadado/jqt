@@ -1,0 +1,4 @@
+<html lang='{{.lang}}'>
+<head>
+  <title>{{.title}}</title>
+</head>

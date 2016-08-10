@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Simple JSON to CSV conversor
+
+test $# -gt 0 && exec < $1
+
+jq --slurp --raw-output '
+    (.[0]//{} | keys_unsorted) as $cols |
+    map(. as $row | $cols | map($row[.])) as $rows |
+    $cols, $rows[] | @csv
+'
+
+exit
+
+# vim:ai:sw=4:ts=4:et:fileencoding=utf-8:syntax=sh

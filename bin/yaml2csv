@@ -1,0 +1,45 @@
+#!/usr/bin/python
+
+# Simple YAML to CSV conversor
+
+import sys
+import yaml
+import csv
+
+def error(e):
+    sys.stderr.write(type(e).__name__ + ': ' + str(e) + '\n')
+    sys.exit(1)
+
+def load_yaml():
+    if len(sys.argv) > 1:
+        seq = yaml.safe_load_all(open(sys.argv[1]))
+    else:
+        seq = yaml.safe_load_all(sys.stdin)
+    return seq
+
+def dump_csv(seq):
+    try:
+        d = next(seq)
+    except StopIteration:
+        sys.stdout.write('\n')
+        return
+    writer = csv.DictWriter(sys.stdout,
+                            fieldnames=d.keys(),
+                            quoting=csv.QUOTE_NONNUMERIC)
+    writer.writeheader()
+    writer.writerow(d)
+    for d in seq:
+        writer.writerow(d)
+
+#
+# Main
+#
+
+try:
+    dump_csv(load_yaml())
+except Exception as e:
+    error(e)
+
+sys.exit(0);
+
+# vim:ai:sw=4:ts=4:et:fileencoding=utf-8:syntax=python

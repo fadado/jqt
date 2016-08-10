@@ -1,0 +1,672 @@
+#!/bin/bash
+
+# jqt - jq based template engine
+
+declare -r VERSION='0.1'    # jqt version
+declare -r DATADIR='/usr/local/share'
+
+declare -r SELF=${0##*/}
+
+########################################################################
+# Bash options
+########################################################################
+
+# Safety
+set -o errexit -o pipefail -o nounset -o noclobber
+
+# Bash extensions
+set +o posix
+shopt -s lastpipe
+
+########################################################################
+# Global filenames
+########################################################################
+
+declare -r TMPDIR="/tmp/${SELF}-$$"
+
+function initialize
+{
+    mkdir $TMPDIR
+    trap "rm -rf ${TMPDIR}" EXIT HUP INT TERM
+}
+
+function mkpipe
+{
+    local -r LOCK="${TMPDIR}/mkpipe-lock"
+    local -i i=0
+    while ! { : > $LOCK; } 2>/dev/null; do
+        sleep 0.01;
+        i+=1
+        (( i > 100 )) && die 'Bored waiting a lock'
+    done
+
+    local n="${TMPDIR}/$RANDOM"
+    while [[ -e $n ]]; do n="${TMPDIR}/$RANDOM"; done
+    mkfifo --mode 600 $n
+
+    rm -f $LOCK
+
+    echo -n $n
+}
+
+########################################################################
+# Extract YAML front matter
+########################################################################
+
+# < stdin > stdout
+function fork_yaml
+{
+    local front_matter=$1 p=$(mkpipe) line
+
+    # < stdin > stdout
+    {   read -r line
+        if [[ $line != '---' ]]; then
+            echo '{ "front-matter": false }'
+        else {
+            echo 'front-matter: true'
+            IFS=''
+            while read -r line; do
+                [[ $line == '---' ]] && break
+                [[ $line == '...' ]] && break
+                [[ $line == '#'*  ]] && continue
+                echo "$line"
+            done
+            } | yaml2json
+        fi
+    } < $p > $front_matter &
+    # Warning: input cannot be absolutely empty!!!
+    tee $p
+}
+
+########################################################################
+# Expand template and document
+########################################################################
+
+declare -a DEFINE=( "-Dversion=$VERSION" )
+declare -a GPP_PATH=( "-I${DATADIR}/jqt" )
+
+# < stdin > stdout
+function expand_jqt
+{
+    # File to load before input file (only one allowed)
+    local -r lib="libjqt.m"
+
+    # Macros
+    local -r -a user=( -U
+        # Macro call delimiters
+        '<%' '>'
+        # Arguments delimiters
+        '\B' '\B' '\W>'
+        # Stackable characters
+        '<' '>'
+        # String to be used for referring to parameters by number
+        '$'
+        # The quote character must be defined adhoc for each file, like:
+        #   <%mode quote "\\">
+        # Also, if desired, multicharacter quote strings can be defined like:
+        #   <%mode string  iiq "[" "]" "\\">
+        ''
+    )
+    local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>')
+
+    # Comments and strings
+    local -r -a skips=(
+        +sccc '&\n' '' ''           # continuation line (& and \n removed)
+        +sccc '<#' '#>\n' ''        # multiline comment, must end in \n
+        +siqi "'" "'" ''            # literal string; like sh single quotes
+        +siQi '"'  '"' ''           # interpolated string; like sh double quotes
+        +ssss '<!--' '-->' ''       # preserved XML comments
+        +sSSS '{{' '}}' ''          # jq processing
+        +sSSS '{%' '%}' ''
+        +sSSS '{#' '#}' ''
+    )
+    gpp --nostdinc          \
+        --warninglevel 2    \
+        "${user[@]}"        \
+        "${meta[@]}"        \
+        "${skips[@]}"       \
+        "${GPP_PATH[@]}"    \
+        "${DEFINE[@]}"      \
+        --include "$lib"
+}
+
+# < stdin > stdout
+function expand_md
+{
+    local -r lib="libjqt.m"
+    local -r -a user=( -U '<%' '>' '\B' '\B' '\W>' '<' '>' '$' '' )
+    local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>' )
+    local -r -a skips=(
+        +sccc '&\n' '' ''
+        +sccc '<#' '#>\n' ''
+        +siqi "'" "'" ''
+        +siQi '"'  '"' ''
+        +ssss '<!--' '-->' ''
+        +ssss '\n```' '\n```' ''
+        +ssss '\n~~~' '\n~~~' ''
+    )
+    gpp --nostdinc          \
+        --warninglevel 2    \
+        "${user[@]}"        \
+        "${meta[@]}"        \
+        "${skips[@]}"       \
+        "${GPP_PATH[@]}"    \
+        "${DEFINE[@]}"      \
+        --include "$lib"
+    echo    # always generate almost one line!!!
+}
+
+# < stdin > stdout
+function expand_json
+{
+    local -r -a meta=( -M '<!' '>' '\b' '\b' '>' '<' '>' )
+    local -r -a user=( -U '&' ';' '(' ')' ';' '(' ')' '\$' '' )
+    local -r -a skips=(
+        +cccc '\\n' ''      \
+        +cccc '/*' '*/'     \
+        +cccc '//' '\n'     \
+        +sSSS '"' '"' '\'   \
+        +sqqq '`' '`' ''    \
+    )
+    gpp --nostdinc          \
+        --warninglevel 2    \
+        "${user[@]}"        \
+        "${meta[@]}"        \
+        "${skips[@]}"       \
+        "${GPP_PATH[@]}"    \
+        "${DEFINE[@]}"
+    echo    # always generate almost one line
+}
+
+########################################################################
+# Convert template to script
+########################################################################
+
+declare -A IMPORTS=( [jqt]='libjqt' )
+declare -A INCLUDES=()
+
+# < stdin > stdout
+function convert
+{
+    local module
+
+    # script preamble
+    echo '# vim:tabstop=2:syntax=jq'
+
+    # jq modules
+    for module in ${!INCLUDES[@]}; do
+        echo "include \"${INCLUDES[$module]}\";"
+    done
+    for module in ${!IMPORTS[@]}; do
+        echo "import \"${IMPORTS[$module]}\" as $module;"
+    done
+
+    # $M as a global metadata reference
+    echo '. as $M |'
+
+    # convert template to script
+    sed -e '
+:RAW
+# if raw block: {% raw %} ... {%%}
+    /^[ \t]*{%[ \t]*raw[ \t]*%}[ \t]*$/,/^[ \]t*{%[ \t]*endraw[ \t]*%}[ \t]*$/ {
+        /^[ \t]*{%[ \t]*\(end\)\?raw[ \t]*%}[ \t]*$/ d
+        s/["\\]/\\&/g
+        s/^.*$/"&",/
+        b
+    }
+
+:COMMENT
+# comments, multiline, not nested: {# ... #}
+    /^\(.*\){#.*#}/ {
+        s//\1/
+        t COMMENT
+    }
+    /{#/! b BLOCK
+    N
+    b COMMENT
+
+:BLOCK
+# if end multiline block: {% end %}
+    /^[ \t]*{%[ \t]*end[ \t]*%}[ \t]*$/ {
+        s//empty)),/
+        b
+    }
+# if start multiline block: {% ... %}
+    /^\([ \t]*\){%\(.\+\)%}[ \t]*$/ {
+        s//\1(\2 | (/
+        b
+    }
+
+:EXPRESSION
+# expressions, multiline, not nested: ... {{ ... }} ...
+    /^\(.*\){{\(.\+\)}}.*$/ {
+        h
+        s//\2/
+        y/"\\\n/\cA\cB\cC/
+        G
+        s/^\(.*\)\n\(.*\){{.*}}/\2\cB(\1)/
+        b EXPRESSION
+    }
+    /{{/! b LINE
+    N
+    b EXPRESSION
+
+:LINE
+# if one line block: {% ... %} ...
+    /^\([ \t]*\){%\(.\+\)%}\(.\+\)$/ {
+        h
+        s//\2/
+        y/"\\\n/\cA\cB\cC/
+        G
+        s/^\(.*\)\n\([ \t]*\){%.\+%}\(.*\)$/(\2\1 | \cA\3\cA),/
+        s/["\\]/\\&/g
+        y/\cA\cB\cC/"\\\n/
+        b
+    }
+# else simple text line
+    s/["\\]/\\&/g
+    y/\cA\cB\cC/"\\\n/
+    s/^.*$/"&",/
+' 
+    # script ending
+    echo 'empty'
+}
+
+########################################################################
+# Markup document
+########################################################################
+
+declare DOCUMENT='' DOCUMENT_ID='stdin' HTML_VERSION='html'
+declare -a PANDOC_OPTS=( '--from=markdown-pandoc_title_block' )
+
+# < stdin > stdout
+function markup
+{
+    local template=${TMPDIR}/template.html
+
+    echo \
+'$if(highlighting-css)$
+<style type="text/css">
+$highlighting-css$
+</style>
+$endif$
+<!--JQT-->
+$if(toc)$
+$toc$
+$endif$
+<!--JQT-->
+$body$
+' > $template
+
+    pandoc  "${PANDOC_OPTS[@]}"     \
+            --to=$HTML_VERSION      \
+            --table-of-contents     \
+            --toc-depth=6           \
+            --template=$template    \
+            --output='-'
+}
+
+########################################################################
+# Manage front matter
+########################################################################
+
+function has_front_matter
+{
+    # warning: consume one line
+    local line
+    read -r line
+    [[ $line == '---' ]]
+}
+
+function extract_front_matter
+{
+    # warning: assume front matter exists
+    sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'
+}
+
+function remove_front_matter
+{
+    # warning: remove all YAML blocks
+    sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'
+}
+
+########################################################################
+# Merge document and all metadata
+########################################################################
+
+declare DOCUMENT_METADATA_NAME='front'  # front matter
+declare DOCUMENT_CONTENT_NAME='body'    # body matter
+
+declare -A JSON_METADATA=() YAML_METADATA=()
+declare -A JSON_METADATA_DOT=() YAML_METADATA_DOT=()
+
+function yaml2json
+{
+    python -c '
+import sys, yaml, json
+json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2, sort_keys=False)
+sys.stdout.write("\n")
+'
+}
+
+# < stdin > stdout
+function merge
+{
+    local front_matter=$1 key
+    local -r script=$(mkpipe)
+
+    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$front_matter
+
+    {   echo '(./"<!--JQT-->") as [$css, $toc, $body] |'
+        echo "{id:\"${DOCUMENT%.md}\", $DOCUMENT_CONTENT_NAME:"'$body, toc:$toc, highlight:$css}'
+        for key in "${!YAML_METADATA[@]}"; do
+            echo "+{ $key:"
+            yaml2json < "${YAML_METADATA[$key]}"
+            echo "}"
+        done
+        for key in "${!YAML_METADATA_DOT[@]}"; do
+            echo "+"
+            yaml2json < "${YAML_METADATA_DOT[$key]}"
+        done
+        for key in "${!JSON_METADATA[@]}"; do
+            echo "+{ $key:"
+            expand_json < "${JSON_METADATA[$key]}"
+            echo "}"
+        done
+        for key in "${!JSON_METADATA_DOT[@]}"; do
+            echo "+"
+            expand_json < "${JSON_METADATA_DOT[$key]}"
+        done
+    } > $script &
+
+    jq  --raw-input \
+        --slurp     \
+        --from-file $script
+}
+
+########################################################################
+# Render template
+########################################################################
+
+declare -a JQ_PATH=( '-L' "$DATADIR/jqt" )
+
+# < stdin > stdout
+function render
+{
+    local script=$1
+
+    jq  "${JQ_PATH[@]}" \
+        '--raw-output'  \
+        '--from-file'   \
+        "$script"
+}
+
+########################################################################
+# Help
+########################################################################
+
+declare -r USAGE=\
+"Usage: $SELF [-h | --help ]
+       $SELF [options] < infile > result
+       $SELF [options] infile > result 
+       $SELF [options] infile result"
+
+function usage
+{
+    (( $# > 0 )) && echo 1>&2 "$SELF: $@"
+    echo 1>&2 "$USAGE"
+    exit 2
+}
+
+function die
+{
+    echo 1>&2 "$SELF: $@"
+    exit 1
+}
+
+function help
+{
+    cat <<EOF
+$SELF - jq based template engine
+
+$USAGE
+
+Preprocessor options:
+    -IDIRECTORY  Append a directory to the end of the gpp list of directories to be searched for include files.
+    -DNAME=VAL  Define the user macro 'name' as equal to 'val'.
+Template options:
+    -E  Stop template processing after the preprocessing stage.
+    -S  Stop template processing before the render stage.
+    -LDIRECTORY  Append a directory to the end of the jq list of directories to be searched for include and import modules.
+    -iMODULE  Include a jq module in the render stage.
+    -jMODULE:NAME  Import a jq module in the render stage.
+Document options:
+    -H  Stop MarkDown processing after generating HTML.
+    -P  Stop MarkDown processing after preprocessing stage.
+    -dNAME  Set content document.
+    -4,-5  Set output HTML version (HTML4 / HTML5).
+    -e  Extract YAML front matter to stdout.
+    -p  Print list of Pandoc options and exit.
+    -r  Remove front matter from MarkDown.
+    -t  Test presence of front matter in MarkDown.
+Metadata options:
+    -C  Stop preprocessing after merging content document and metadata.
+    -fNAME  Set name for YAML document metadata (defaults to 'front').
+    -nNAME  Set name for converted document (defaults to 'body').
+    -mNAME:FILE  Add a JSON or YAML file to the input metadata.
+    -MNAME:FILE  Add a JSON or YAML file to the input metadata at the top level (name is ignored).
+EOF
+    exit 0
+}
+
+# TODO:
+#--toc
+#--table-of-contents
+#--toc-depth=NUMBER
+
+function pandoc_options
+{
+    local opt
+
+    echo 'Pandoc options:'
+    for opt in \
+        '--base-header-level=NUMBER' \
+        '--bibliography=FILE' \
+        '--citation-abbreviations=FILE' \
+        '--columns=NUMBER' \
+        '--csl=FILE' \
+        '--email-obfuscation=none|javascript|references' \
+        '--file-scope' \
+        '--gladtex' \
+        '--highlight-style=STYLE' \
+        '--html-q-tags' \
+        '--id-prefix=STRING' \
+        '--indented-code-classes=CLASSES' \
+        '--jsmath[=URL]' \
+        '--katex[=URL]' \
+        '--katex-stylesheet' \
+        '--latexmathml[=URL]' \
+        '--mathjax[=URL]' \
+        '--mathml[=URL]' \
+        '--mimetex[=URL]' \
+        '--no-highlight' \
+        '--normalize' \
+        '--number-offset=NUMBER[,NUMBER,...]' \
+        '--number-sections' \
+        '--preserve-tabs' \
+        '--section-divs' \
+        '--tab-stop=NUMBER' \
+        '--webtex[=URL]' \
+        '--wrap=[auto|none|preserve]'
+    do echo "$opt"
+    done | pr --omit-pagination --indent=4 --width=100 --columns=2
+	
+    exit 0
+}
+
+########################################################################
+# Command line
+########################################################################
+
+declare -i flagP=0 flagE=0 flagS=0 flagH=0 flagC=0
+declare -i extract=0 remove=0 front_matter=0
+
+declare opt key filename
+
+while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
+    case $opt in
+    # Generic options
+        h)  help
+            ;;
+    # Template options
+        D)  DEFINE=( "${DEFINE[@]}" "-D$OPTARG" ) # also for all gpp uses
+            ;;
+        E)  flagE=1 # also for document
+            ;;
+        S)  flagS=1
+            ;;
+        I)  GPP_PATH=( "${GPP_PATH[@]}" '-I' "$OPTARG" )
+            ;;  # inserted at the right for append effect
+        L)  JQ_PATH=( '-L' "$OPTARG" "${JQ_PATH[@]}" )
+            ;;  # inserted at the left for append effect
+        i)  INCLUDES[$OPTARG]=$OPTARG
+            ;;
+        j)  [[ $OPTARG == *:* ]] || die "Bad module specification; expected 'module:name'"
+            IMPORTS[${OPTARG%:*}]=${OPTARG#*:}
+            ;;
+    # Document options
+        P)  flagP=1
+            ;;
+        H)  flagH=1
+            ;;
+        p)  pandoc_options
+            ;;
+        4)  HTML_VERSION=html
+            ;;
+        5)  HTML_VERSION=html5
+            ;;
+        d)  [[ -e $OPTARG ]] || die "File '$OPTARG' does not exists"
+            DOCUMENT=$OPTARG
+            DOCUMENT_ID=${DOCUMENT%.md}
+            ;;
+        e)  extract=1
+            ;;
+        r)  remove=1
+            ;;
+        t)  front_matter=1
+            ;;
+    # Metadata options
+        C)  flagC=1
+            ;;
+        f)  DOCUMENT_METADATA_NAME=$OPTARG
+            ;;
+        n)  DOCUMENT_CONTENT_NAME=$OPTARG
+            ;;
+        m|M)[[ $OPTARG == *:* ]] || die "Bad format in metadata specification; expected 'key:filename'"
+            key=${OPTARG%:*} filename=${OPTARG#*:}
+            [[ -e $filename ]] || die "File '$filename' does not exists"
+            [[ $filename =~ (.*\.js(on)?)|(.*\.ya?ml) ]] ||
+                die "File '$filename' must have a know extension (js, json, yml, yaml)"
+            if [[ $opt == 'm' ]]; then
+                if [[ $filename =~ .*\.js(on)? ]]; then
+                    JSON_METADATA[$key]=$filename
+                else
+                    YAML_METADATA[$key]=$filename
+                fi
+            elif [[ $opt == 'M' ]]; then
+                if [[ $filename =~ .*\.js(on)? ]]; then
+                    JSON_METADATA_DOT[$key]=$filename
+                else
+                    YAML_METADATA_DOT[$key]=$filename
+                fi
+            fi
+            ;;
+        -)  case $OPTARG in
+    # Generic options
+        help) help
+            ;;
+    # Pandoc options:
+        base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        bibliography=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        citation-abbreviations=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        columns=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        csl=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        email-obfuscation=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        file-scope) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        gladtex) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        highlight-style=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        html-q-tags) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        id-prefix=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        indented-code-classes=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        jsmath|jsmath=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        katex-stylesheet=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        katex|katex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        latexmathml|latexmathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        mathjax|mathjax=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        mathml|mathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        mimetex|mimetex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        no-highlight) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        normalize) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        number-offset=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        number-sections) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        preserve-tabs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        section-divs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        tab-stop=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        webtex|webtex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        wrap=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+    # Errors
+        *)  usage "Unknown option: --$OPTARG" ;; esac
+            ;;
+        :)  usage "Expected argument for option: -$OPTARG"
+            ;;
+        ?)  usage "Unknown option: -$OPTARG"
+            ;;
+    esac
+done
+
+shift $((OPTIND-1)); OPTIND=1
+(( $# > 2 )) && usage 'Expected one or two arguments'
+
+(( flagE+flagS+flagP+flagH+flagC > 1 )) && die 'Cannot mix options: -E, -S, -P, -H, -C'
+(( extract+remove+front_matter > 1 )) && die 'Cannot mix options: -e, -r, -t'
+(( flagE+flagS+flagP+flagH+flagC+extract+remove+front_matter > 1 )) && die 'Incompatible options'
+
+########################################################################
+# Main
+########################################################################
+
+initialize
+
+declare -r FRONT_MATTER=$(mkpipe)
+declare -r RENDER_SCRIPT=$(mkpipe)
+
+(( $# >= 1 )) && exec < $1
+(( $# == 2 )) && exec >| $2
+
+if   (( extract )); then        extract_front_matter
+elif (( remove )); then         remove_front_matter
+elif (( front_matter )); then   has_front_matter
+elif (( flagE )); then          expand_jqt
+elif (( flagS )); then          expand_jqt | convert
+elif (( flagP )); then          expand_md
+elif (( flagH )); then          expand_md | markup
+elif (( flagC )); then          expand_md | fork_yaml $FRONT_MATTER | markup | merge $FRONT_MATTER
+elif [[ -z $DOCUMENT ]]; then   expand_md | markup
+else
+    # process template
+      expand_jqt                \
+    | convert                   \
+    > $RENDER_SCRIPT &
+
+    # process document
+    < $DOCUMENT                 \
+      expand_md                 \
+    | fork_yaml $FRONT_MATTER   \
+    | markup                    \
+    | merge $FRONT_MATTER       \
+    | render $RENDER_SCRIPT
+fi
+
+exit 0
+
+# vim:ts=4:sw=4:ai:et:fileencoding=utf-8:syntax=sh

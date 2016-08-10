@@ -1,0 +1,53 @@
+=======================
+Conditional blocks
+=======================
+
+_____
+{% .yes//empty %}
+	I expand!
+{% end %}
+{% .string//empty %}
+	I expand to '{{.}}'
+{% end %}
+{% .number//empty %}
+	I expand to '{{.}}'
+{%end%}
+{% .number//empty | $M %}
+	I expand preserving $M: '{{$M.number}}'
+{% end %}
+_____
+{% .not//empty %}
+	I vanish!
+{% end %}
+{% .nil//empty %}
+	I vanish!
+{% end %}
+_____
+
+{% .yes//empty | $M %}
+	{% .string//empty %}I expand to '{{.}}'
+{% end %}
+{% .yes//empty | $M %}
+	{% .string//empty %}
+I expand to '{{.}}'
+	{% end %}
+{% end %}
+
+{% (.number > 4)//empty %}
+	then not
+{% end %}
+{% (.number < 3 | not)//empty %}
+	else yes
+{% end %}
+
+{% (.number < 1)//empty %}
+	case 1
+{% end %}
+{% (.number < 1 | not)//empty | $M %}
+{% (.number < 2)//empty %}
+	case 2
+{% end %}
+{% (.number < 2 | not)//empty %}
+	case else
+{% end %}
+{% end %}

@@ -1,0 +1,86 @@
+=======================
+Syntax tests
+=======================
+
+_______________________
+Comments
+_______________________
+
+1 prefix{# comment #}suffix
+2 prefix {# comment #} suffix
+3 prefix {# comment #} suffix{# comment #}
+4 {# comment #}prefix {# comment #} suffix{# comment #}
+5 {# MULTI
+	LINE #}
+6 prefix{# MULTI
+	LINE #}suffix
+7 prefix{# MULTI
+	LINE #}suffix{# comment #}
+8 {# comment #}prefix{# MULTI
+	LINE #}suffix{# comment #}
+9 {#
+	{{ x }}
+	{% b %}
+	{% b %}xxxxxxxxxxxx
+	{% end %}
+	{{
+	x
+	x
+	}}
+#}
+
+_______________________
+Expressions
+_______________________
+
+2 + 2 = {{ 2+2 }}
+2 + 2 = {{ 2
+	   +
+	   2 }}
+{{ 2
+}} + {{ 2
+}} = 4
+
+_______________________
+One line blocks
+_______________________
+
+{% 33 %}1 Diga {{.}}
+{% 33 %}2 Diga {{
+	.
+   }}
+{% 33 %}3 Diga {{
+	.+1-1
+}}
+{% 33 %}4 Di{{"ga"}} {{
+	.+1-1
+}}
+{% 33 %}5 Di{{"ga"+""}} {{
+	.-30
+}}3
+
+_______________________
+Raw block
+_______________________
+
+{% raw %}
+raw
+{%endraw%}
+{% raw %}
+	raw
+{%endraw%}
+	{% raw %}
+		raw
+	{%endraw%}
+{% raw %}
+{{ expression }}
+{%endraw%}
+{% raw %}
+	{{ expression }}
+{%endraw%}
+{%raw%}
+	{% code %}
+	{# comment #}
+{%endraw%}
+
+=======================

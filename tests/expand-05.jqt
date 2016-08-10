@@ -1,0 +1,5 @@
+<# predefined user macro #>
+<%include "macros.m">&
+<%sc Title>
+<%sc 'Long Title'>
+<%sc "Long Title">

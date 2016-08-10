@@ -1,0 +1,9 @@
+{
+  "yes": true,
+  "not": false,
+  "nil": null,
+  "string": "Neque porro quisquam",
+  "number": 3.14159265358979323846,
+  "array": [7,6,5,4,3,2,1 ],
+  "object": { "b": true, "s": "Neque", "n": 3.14 }
+}

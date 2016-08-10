@@ -1,0 +1,2 @@
+<meta name='published' content='{{.published//empty}}' />
+<meta name='updated' content='{{.updated//empty}}' />

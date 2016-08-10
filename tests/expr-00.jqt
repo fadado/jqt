@@ -1,0 +1,91 @@
+=======================
+Tests about expressions
+=======================
+
+Escape: \\ TB (\t) LF(\n) CR(\r)
+
+Interpolated string: {{.yes}}
+Interpolated string: {{.not}}
+Interpolated string: {{.nil}}
+Interpolated string: {{.string}}
+Interpolated string: {{.number}}
+
+_______________________
+Vanished line: {{empty}}
+Vanished line: {{.not//empty}}
+Vanished line: {{.nil//empty}}
+_______________________
+
+Not vanished line: {{.yes//empty}}
+Not vanished line: {{.string//empty}}
+Not vanished line: {{.number//empty}}
+Not vanished line: {{.array//empty}}
+Not vanished line: {{.object//empty}}
+
+Nested expression: {{if .yes then "==={{.number}}===" else "==={{.string}}===" end}}
+Nested expression: {{if .not then "==={{.number}}===" else "==={{.string}}===" end}}
+Nested expression: {{"={{"-{{"*"}}-"}}="}}
+
+Nested expression: {{
+	if .yes
+	then "===\(.number)==="
+	else "===\(.string)==="
+	end
+}}
+Nested expression: {{
+	if .not
+	then "===\(.number)==="
+	else "===\(.string)==="
+	end
+}}
+Nested expression: {{
+	"=\(
+		"-\(
+			"*"
+		)-"
+	)="
+}}
+
+Local name: {{. as $M | $M.number}}
+Local name: {{. as $M | $M.array | map(.*2) | sort | map(tostring)}}
+Local name: {{. as $M | $M.array | map(.*2) | map(tostring) | sort}}
+
+Repeated line: {{.array | keys[]}}
+Repeated line: {{.object | keys[]}}
+Repeated line: {{.array[]}}
+
+Repeated line: {{. as $M | range(1;5) | .*$M.number}}
+
+Repeated line: {{.array | sort[]}}
+
+Repeated line: {{
+	if .nil == null
+	then .array | sort[]
+	else empty end
+}}
+
+{% .number %}The value of pi is {{.}}.
+{% .number %}Pi squared: {{.*2}}
+{% .number*2 %}Pi squared: {{.}}
+{% .array %}Array {{.}} has length {{.|length}}
+{% .array %}Array {{.}} has length {{length}}
+
+{% .array as $a %}Array $a has value {{$a[0]}} at position 0
+{% .array as $a | $M %}Array .array and array $a are equal? ({{$a == $M.array)}}
+{% .array | map(.*2 | tostring) | sort %}Values sorted as strings: {{.}}
+
+{% .array | sort[] | tostring | "<b>{{.}}</b>" | "<li>{{.}}</li>" %}{{.}}
+
+Slice: {{ (.array | sort | reverse)[:4]}}
+Limit: {{[limit(4; .array | sort | reverse[])]}}
+
+Modulo: {{ 2 % 7 }}
+{% 2 % 7 %}Modulo: {{.}}
+
+Object: {{ {a:1}+{b:2} }}
+
+Fibonacci(10): {{ [limit(10; fibonacci)] }}
+Fibonacci(10): {{ [limit(10; fibonacci)][-1] }}
+Fibonacci(10): {{ [limit(10; fibonacci)] | reverse[0] }}
+
+=======================

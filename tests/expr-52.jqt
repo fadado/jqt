@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{.variable | @html}}</title>
+  </head>
+  <body>
+{{ .item_list | map("    "+@text) | join(",\n") }}
+  </body>
+</html>

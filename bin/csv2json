@@ -1,0 +1,39 @@
+#!/usr/bin/python
+
+# Simple CSV to JSON conversor
+
+import sys
+import csv
+import json
+
+def error(e):
+    sys.stderr.write(type(e).__name__ + ': ' + str(e) + '\n')
+    sys.exit(1)
+
+def load_csv():
+    if len(sys.argv) > 1:
+        reader = csv.DictReader(open(sys.argv[1]) )
+    else:
+        reader = csv.DictReader(sys.stdin)
+    return reader
+
+def dump_json(seq):
+    d = None
+    for d in seq:
+        json.dump(d, sys.stdout, indent=2, sort_keys=False)
+        sys.stdout.write('\n')
+    if d is None:
+        sys.stdout.write('\n')
+
+#
+# Main
+#
+
+try:
+    dump_json(load_csv())
+except Exception as e:
+    error(e)
+
+sys.exit(0);
+
+# vim:ai:sw=4:ts=4:et:fileencoding=utf-8:syntax=python

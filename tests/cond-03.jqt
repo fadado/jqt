@@ -1,0 +1,3 @@
+<div>
+	{{if true then "yay" else "" end}}
+</div>

@@ -1,0 +1,35 @@
+#
+# jqt docs configuration
+# 
+
+# Global parameters
+
+version: "0.1"
+title: jqt · The jq template engine
+baseurl: http://TO_BE_DEFINED/
+lang: en
+
+baseURL: &baseurl https://fadado.github.com/jqt/
+
+author:
+- email: jordinas@gmail.com
+  name: Joan Josep Ordinas Rosa
+
+menu:
+- URL: ./index.html
+  id: home
+  name: Home
+- URL: ./engine.html
+  id: engine
+  name: Engine
+- URL: ./document.html
+  id: document
+  name: Document
+- URL: ./template.html
+  id: template
+  name: Template
+- URL: ./metadata.html
+  id: metadata
+  name: Metadata
+
+# vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml

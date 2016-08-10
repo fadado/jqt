@@ -1,0 +1,18 @@
+<#
+	Meta elements
+#>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="jqt v{{.front.version}}"/>
+<meta name='author' content='{{[.front.author[].name] | sort[]}}' />
+<meta name='dcterms.modified' content='{{.front.updated//empty}}' />
+<meta name='description' content='{{.front.description//empty}}' />
+<meta name='keywords' content='{{.front.keywords//empty}}' />
+<#
+	CSS styles
+#>
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">@import url(jqt.css);</style>
+{{.highlight}}
+<#
+	vim:ts=2:sw=2:ai:noet:fileencoding=utf8:syntax=html
+#>

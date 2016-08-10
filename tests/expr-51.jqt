@@ -1,0 +1,1 @@
+{%.pi%}The value of pi is {{.}}.

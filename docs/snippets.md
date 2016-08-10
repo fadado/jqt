@@ -1,0 +1,14 @@
+---
+title: _jqt_ · The _jq_ template engine
+
+footer: |
+  * * *
+  This website is made with [_jqt_](https://fadado.github.io/jqt/).\
+  _jqt_ is licensed under the MIT license (code) and the
+  [CC-BY-3.0](https://creativecommons.org/licenses/by/3.0/) license (docs).
+
+toc-title: Table of contents
+
+# vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=markdown
+---
+<# empty body #>

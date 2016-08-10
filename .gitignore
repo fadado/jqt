@@ -1,0 +1,4 @@
+# Output of templates expansion
+tests/generated/*.jqe
+tests/generated/*.jqs
+tests/generated/*.txt

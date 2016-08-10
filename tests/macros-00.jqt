@@ -1,0 +1,6 @@
+<# define required partials #>
+<%shortcode youtube>&
+<%shortcode analytics>&
+<# expand partials #>
+<%youtube 7zIoLvbCCm8 420 315>
+<%analytics UA-8673551-2>
