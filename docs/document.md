@@ -1,10 +1,10 @@
 ---
-<%include "config.yaml">
+<%include "site.yaml">
 title: Content documents
 updated: "2016-08-05T09:15:11Z"
 ---
 
-<%include "macros.m">&
+<%include "site.m">&
 
 MarkDown documents and snippets.
 

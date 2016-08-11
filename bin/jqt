@@ -350,6 +350,13 @@ sys.stdout.write("\n")
 '
 }
 
+# Global variables available in jq scripts:
+#	.body
+#	.front
+#	.highlight
+#	.id
+#	.toc
+
 # < stdin > stdout
 function merge
 {

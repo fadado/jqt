@@ -36,10 +36,19 @@ SHELL := /bin/bash
 # Variables
 ########################################################################
 
+# Global variables available in jq scripts:
+#	.site		defined in the jqt call
+#	.snippets	defined in the jqt call
+#	.body		predefined by jqt
+#	.front		predefined by jqt
+#	.highlight	predefined by jqt
+#	.id		predefined by jqt
+#	.toc		predefined by jqt
+
 # Commands
 JQT = jqt \
-      -ifilters \
-      -Mconfig:config.yaml \
+      -isite \
+      -msite:site.json \
       -msnippets:snippets.json
 
 MPCSS = gpp --nostdinc \
@@ -54,12 +63,12 @@ CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/
 
 # Common sources for all targets
 COMMON = \
-	config.yaml	\
+	site.json	\
 	snippets.json	\
 	main.html	\
 	head.html	\
 	footer.html	\
-	filters.jq	\
+	site.jq	\
 
 # Destination files
 OUTPUT = /tmp/jqt
@@ -82,10 +91,13 @@ all: $(TARGETS)
 	@cp -uv $(ASSETS) $(OUTPUT)
 	@xmllint --noout --valid $(OUTPUT)/*.html
 
-snippets.pandoc: snippets.md
+site.json: site.yaml
+	yaml2json < $< > $@
+
+snippets.pandoc: snippets.yaml
 	sed -n 's/^\([a-zA-Z_-]\+\): *[^#].*/\1: >\n  $$\1$$/p' $< > $@
 
-snippets.json: snippets.md snippets.pandoc
+snippets.json: snippets.yaml snippets.pandoc
 	pandoc --from markdown --to html --template=snippets.pandoc $< | yaml2json > $@
 
 $(OUTPUT):
@@ -114,7 +126,7 @@ $(OUTPUT)/jqt.css: jqt.css github.css
 .PHONY: clean clobber build
 
 clean:
-	rm -f $(OUTPUT)/* snippets.json snippets.pandoc
+	rm -f $(OUTPUT)/* snippets.json snippets.pandoc site.json
 
 clobber: clean
 	rmdir $(OUTPUT) >/dev/null 2>&1 || true

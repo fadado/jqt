@@ -1,4 +1,4 @@
-# Filters
+# Extra filters for this site
 
 # Remove XML tags
 def striptags:

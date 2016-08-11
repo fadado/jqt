@@ -34,17 +34,6 @@
     ><%_partial><%_partial "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"><%undef _partial>
 >&
 <#
- # <%inceval name arg...>
- # Like include but passing (up to 8) parameters to the included file.
- #>
-<%define inceval
-    <%defeval _inceval
-        <\%defeval _inceval
-            <\%include "$1">
-        >
-    ><%_inceval><%_inceval "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"><%undef _inceval>
->&
-<#
  # <%shortcode name>... <%name arg...>
  # Define name as a macro with contents of name.m as a body.
  # Assume 'm' filename extension.

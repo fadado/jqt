@@ -1,10 +1,10 @@
 ---
-<%include "config.yaml">
+<%include "site.yaml">
 title: Templates syntax
 updated: "2016-08-05T09:15:11Z"
 ---
 
-<%include "macros.m">&
+<%include "site.m">&
 
 ### Features
 

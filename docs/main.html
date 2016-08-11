@@ -1,6 +1,7 @@
 <#
-	Main template
-#>
+ # Main template
+ #>
+<%include "site.m">&
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{.front.lang}}" xml:lang="{{.front.lang}}">
 	<head>
@@ -12,8 +13,8 @@
 	<body>
 
 		<ul id="MENU">
-			{# logo #}<li class="logo"><a href="{{.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>
-			{% .menu[] %}<li><a {{if .id==$M.id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
+			{# logo #}<li class="logo"><a href="{{.site.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>
+			{% .site.menu[] %}<li><a {{if .id==$M.id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
 		</ul>
 
 		{% .id=="home"//empty | $M %}<h1>{{.snippets.title | ascii_downcase}}</h1>
