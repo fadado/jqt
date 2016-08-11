@@ -19,7 +19,7 @@ set +o posix
 shopt -s lastpipe
 
 ########################################################################
-# Global filenames
+# Global filenames and pipe
 ########################################################################
 
 declare -r TMPDIR="/tmp/${SELF}-$$"
@@ -50,32 +50,27 @@ function mkpipe
 }
 
 ########################################################################
-# Extract YAML front matter
+# Manage front matter
 ########################################################################
 
-# < stdin > stdout
-function fork_yaml
+function has_front_matter
 {
-    local front_matter=$1 p=$(mkpipe) line
+    # warning: consume one line
+    local line
+    read -r line
+    [[ $line == '---' ]]
+}
 
-    # < stdin > stdout
-    {   read -r line
-        if [[ $line != '---' ]]; then
-            echo '{ "front-matter": false }'
-        else {
-            echo 'front-matter: true'
-            IFS=''
-            while read -r line; do
-                [[ $line == '---' ]] && break
-                [[ $line == '...' ]] && break
-                [[ $line == '#'*  ]] && continue
-                echo "$line"
-            done
-            } | yaml2json
-        fi
-    } < $p > $front_matter &
-    # Warning: input cannot be absolutely empty!!!
-    tee $p
+function extract_front_matter
+{
+    # warning: assume front matter exists
+    sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'
+}
+
+function remove_front_matter
+{
+    # warning: remove all YAML blocks
+    sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'
 }
 
 ########################################################################
@@ -267,9 +262,39 @@ function convert
     s/["\\]/\\&/g
     y/\cA\cB\cC/"\\\n/
     s/^.*$/"&",/
-' 
+'
     # script ending
     echo 'empty'
+}
+
+########################################################################
+# Extract YAML front matter
+########################################################################
+
+# < stdin > stdout
+function fork_yaml
+{
+    local front_matter=${JSON_METADATA[$DOCUMENT_METADATA_NAME]}
+    local p=$(mkpipe) line
+
+    # extract front matter and transform to JSON and markdownified YAML
+    {   read -r line
+        if [[ $line != '---' ]]; then
+            echo '{ "front-matter": false }'
+        else {
+            echo 'front-matter: true'
+            IFS=''
+            while read -r line; do
+                [[ $line == '---' ]] && break
+                [[ $line == '...' ]] && break
+                [[ $line == '#'*  ]] && continue
+                echo "$line"
+            done
+            } | yaml2json
+        fi
+    } < $p > $front_matter &
+    # Warning: input cannot be absolutely empty!!!
+    tee $p
 }
 
 ########################################################################
@@ -307,30 +332,6 @@ $body$
 }
 
 ########################################################################
-# Manage front matter
-########################################################################
-
-function has_front_matter
-{
-    # warning: consume one line
-    local line
-    read -r line
-    [[ $line == '---' ]]
-}
-
-function extract_front_matter
-{
-    # warning: assume front matter exists
-    sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'
-}
-
-function remove_front_matter
-{
-    # warning: remove all YAML blocks
-    sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'
-}
-
-########################################################################
 # Merge document and all metadata
 ########################################################################
 
@@ -352,10 +353,8 @@ sys.stdout.write("\n")
 # < stdin > stdout
 function merge
 {
-    local front_matter=$1 key
+    local key
     local -r script=$(mkpipe)
-
-    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$front_matter
 
     {   echo '(./"<!--JQT-->") as [$css, $toc, $body] |'
         echo "{id:\"${DOCUMENT%.md}\", $DOCUMENT_CONTENT_NAME:"'$body, toc:$toc, highlight:$css}'
@@ -408,7 +407,7 @@ function render
 declare -r USAGE=\
 "Usage: $SELF [-h | --help ]
        $SELF [options] < infile > result
-       $SELF [options] infile > result 
+       $SELF [options] infile > result
        $SELF [options] infile result"
 
 function usage
@@ -500,7 +499,7 @@ function pandoc_options
         '--wrap=[auto|none|preserve]'
     do echo "$opt"
     done | pr --omit-pagination --indent=4 --width=100 --columns=2
-	
+
     exit 0
 }
 
@@ -637,9 +636,6 @@ shift $((OPTIND-1)); OPTIND=1
 
 initialize
 
-declare -r FRONT_MATTER=$(mkpipe)
-declare -r RENDER_SCRIPT=$(mkpipe)
-
 (( $# >= 1 )) && exec < $1
 (( $# == 2 )) && exec >| $2
 
@@ -650,20 +646,26 @@ elif (( flagE )); then          expand_jqt
 elif (( flagS )); then          expand_jqt | convert
 elif (( flagP )); then          expand_md
 elif (( flagH )); then          expand_md | markup
-elif (( flagC )); then          expand_md | fork_yaml $FRONT_MATTER | markup | merge $FRONT_MATTER
-elif [[ -z $DOCUMENT ]]; then   expand_md | markup
+elif (( flagC )); then
+    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$(mkpipe)
+    expand_md | fork_yaml | markup | merge
+elif [[ -z $DOCUMENT ]]; then
+    # equivalent to flagH
+    expand_md | markup
 else
     # process template
+    declare -r RENDER_SCRIPT=$(mkpipe)
       expand_jqt                \
     | convert                   \
     > $RENDER_SCRIPT &
 
     # process document
+    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$(mkpipe)
     < $DOCUMENT                 \
       expand_md                 \
-    | fork_yaml $FRONT_MATTER   \
+    | fork_yaml                 \
     | markup                    \
-    | merge $FRONT_MATTER       \
+    | merge                     \
     | render $RENDER_SCRIPT
 fi
 
