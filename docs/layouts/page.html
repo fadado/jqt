@@ -1,17 +1,36 @@
 <#	Documentation pages #>
 <#
- #	Table of contents
+ #	Main page block for content
  #>
-<div id="TOC">
-	<p>{{.snippets."toc-title"}}</p>
-	{{.front._toc}}
-</div>
+<%define BODY_BLOCK
+
+<# Table of contents #>
+	<div id="TOC">
+		<p>{{.snippets."toc-title"}}</p>
+		{{.front._toc}}
+	</div>
+
+<# Document body #>
+	<div id="CONTENT">
+		{{.body}}
+	</div>
+>&
 <#
- #	Document content
+ #	Title in HTML head element
  #>
-<div id="CONTENT">
-	{{.body}}
-</div>
+<%define HEAD_TITLE
+		<title>{{.front.title}} &ndash; {{.site.title}}</title>
+>&
+<#
+ #	Title in HTML body element
+ #>
+<%define BODY_TITLE
+		<h1>{{.front.title}} &ndash; {{.snippets.title}}</h1>
+>&
+<#
+ #	Include main template
+ #>
+<%include "default.html">
 <#
 vim:ts=2:sw=2:ai:noet:fileencoding=utf8:syntax=html
 #>

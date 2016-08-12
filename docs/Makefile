@@ -82,7 +82,7 @@ CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/
 COMMON = \
 	$(CACHE)/site.json \
 	$(CACHE)/snippets.json \
-	$(LAYOUTS)/main.html \
+	$(LAYOUTS)/default.html \
 	$(LAYOUTS)/head.html \
 	$(LAYOUTS)/footer.html \
 	site.m \
@@ -121,12 +121,12 @@ $(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CA
 	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< | yaml2json > $@
 
 # Pages
-$(DESTINATION)/index.html: $(CONTENT)/home.md $(LAYOUTS)/index.html $(COMMON) | $(DESTINATION)
-	$(JQT) -DBODY_BLOCK=$(LAYOUTS)/index.html -d $< $(LAYOUTS)/main.html | $(HTMLMIN) > $@
+$(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) | $(DESTINATION)
+	$(JQT) -d $< $(LAYOUTS)/default.html | $(HTMLMIN) > $@
 
 define Page
 $(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $$(COMMON) | $$(DESTINATION)
-	$$(JQT) -DBODY_BLOCK=$(LAYOUTS)/page.html -d $$< $(LAYOUTS)/main.html | $$(HTMLMIN) > $$@
+	$$(JQT) -d $$< $(LAYOUTS)/page.html | $$(HTMLMIN) > $$@
 endef
 
 $(eval $(call Page,engine))
