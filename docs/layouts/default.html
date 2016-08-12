@@ -5,26 +5,34 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{.front.lang}}" xml:lang="{{.front.lang}}">
 	<head>
-		{% .front._id=="content/home"//empty | $M %}<title>{{.front.title}}</title>
-		{% .front._id!="content/home"//empty | $M %}<title>{{.front.title}} &ndash; {{.site.title}}</title>
+<%ifdef HEAD_TITLE>
+			<%call HEAD_TITLE>
+<%else>
+			<title>{{.front.title}}</title>
+<%endif>
+
 		<%include "head.html">
 	</head>
 
 	<body>
-
 		<ul id="MENU">
 			{# logo #}<li class="logo"><a href="{{.site.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>
 			{% .site.menu[] %}<li><a {{if .id==$M.id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
 		</ul>
 
-		{% .front._id=="content/home"//empty | $M %}<h1>{{.snippets.title}}</h1>
-		{% .front._id!="content/home"//empty | $M %}<h1>{{.front.title}} &ndash; {{.snippets.title}}</h1>
+<%ifdef BODY_TITLE>
+			<%call BODY_TITLE>
+<%else>
+			<h1>{{.snippets.title}}</h1>
+<%endif>
 
 		<div id="BODY">
 <%ifdef BODY_BLOCK>
-			<%inceval <%BODY_BLOCK>>
+			<%call BODY_BLOCK>
 <%else>
-			{{.body}}
+			<div id="CONTENT">
+				{{.body}}
+			</div>
 <%endif>
 		</div>
 
