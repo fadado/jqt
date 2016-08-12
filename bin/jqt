@@ -274,7 +274,7 @@ function convert
 # < stdin > stdout
 function fork_yaml
 {
-    local front_matter=${JSON_METADATA[$DOCUMENT_METADATA_NAME]}
+    local front_matter=$1
     local p=$(mkpipe) line
 
     # extract front matter and transform to JSON and markdownified YAML
@@ -350,21 +350,27 @@ sys.stdout.write("\n")
 '
 }
 
-# Global variables available in jq scripts:
+# Global objects available in jq scripts:
 #	.body
-#	.front
-#	.highlight
-#	.id
-#	.toc
+#	.front ...
+#	.front._highlight
+#	.front._id
+#	.front._toc
 
 # < stdin > stdout
 function merge
 {
+    local front_matter=$1
     local key
     local -r script=$(mkpipe)
 
-    {   echo '(./"<!--JQT-->") as [$css, $toc, $body] |'
-        echo "{id:\"${DOCUMENT%.md}\", $DOCUMENT_CONTENT_NAME:"'$body, toc:$toc, highlight:$css}'
+    {   # split .
+        echo '(. / "<!--JQT-->") as [$css, $toc, $body] |'
+        # front and body
+        echo "{ $DOCUMENT_CONTENT_NAME: "'$body'
+        echo ", $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
+        echo "+ { _id: \"${DOCUMENT%.md}\","' _toc: $toc, _highlight: $css })}'
+        # additional metadata
         for key in "${!YAML_METADATA[@]}"; do
             echo "+{ $key:"
             yaml2json < "${YAML_METADATA[$key]}"
@@ -654,8 +660,8 @@ elif (( flagS )); then          expand_jqt | convert
 elif (( flagP )); then          expand_md
 elif (( flagH )); then          expand_md | markup
 elif (( flagC )); then
-    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$(mkpipe)
-    expand_md | fork_yaml | markup | merge
+    declare -r FRONT_MATTER=$(mkpipe)
+    expand_md | fork_yaml $FRONT_MATTER | markup | merge $FRONT_MATTER
 elif [[ -z $DOCUMENT ]]; then
     # equivalent to flagH
     expand_md | markup
@@ -667,12 +673,12 @@ else
     > $RENDER_SCRIPT &
 
     # process document
-    JSON_METADATA[$DOCUMENT_METADATA_NAME]=$(mkpipe)
+    declare -r FRONT_MATTER=$(mkpipe)
     < $DOCUMENT                 \
       expand_md                 \
-    | fork_yaml                 \
+    | fork_yaml $FRONT_MATTER   \
     | markup                    \
-    | merge                     \
+    | merge $FRONT_MATTER       \
     | render $RENDER_SCRIPT
 fi
 

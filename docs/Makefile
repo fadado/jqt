@@ -50,14 +50,11 @@ SHELL := /bin/bash
 # Variables
 ########################################################################
 
-# Global variables available in jq scripts:
+# Global objects available in jq scripts:
 #	.site		defined in the jqt call
 #	.snippets	defined in the jqt call
 #	.body		predefined by jqt
 #	.front		predefined by jqt
-#	.highlight	predefined by jqt
-#	.id		predefined by jqt
-#	.toc		predefined by jqt
 
 # Some directories
 CACHE=.jqt

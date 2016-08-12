@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{.front.lang}}" xml:lang="{{.front.lang}}">
 	<head>
-		{% .id=="home"//empty | $M %}<title>{{.snippets.title | striptags}}</title>
-		{% .id!="home"//empty | $M %}<title>{{.front.title}} &ndash; {{.snippets.title | striptags}}</title>
+		{% .front._id=="home"//empty | $M %}<title>{{.snippets.title | striptags}}</title>
+		{% .front._id!="home"//empty | $M %}<title>{{.front.title}} &ndash; {{.snippets.title | striptags}}</title>
 		<%include "head.html">
 	</head>
 
@@ -17,8 +17,8 @@
 			{% .site.menu[] %}<li><a {{if .id==$M.id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
 		</ul>
 
-		{% .id=="home"//empty | $M %}<h1>{{.snippets.title | ascii_downcase}}</h1>
-		{% .id!="home"//empty | $M %}<h1>{{.front.title}} &ndash; {{.snippets.title | ascii_downcase}}</h1>
+		{% .front._id=="home"//empty | $M %}<h1>{{.snippets.title | ascii_downcase}}</h1>
+		{% .front._id!="home"//empty | $M %}<h1>{{.front.title}} &ndash; {{.snippets.title | ascii_downcase}}</h1>
 
 <%ifdef BODY_BLOCK>
 	<%inceval <%BODY_BLOCK>>
