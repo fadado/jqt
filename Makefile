@@ -1,8 +1,8 @@
 # Utilities to manage site
 
-OUTPUT=/tmp/jqt
-
 .SILENT:
+
+DESTINATION=/tmp/jqt
 
 .PHONY: all reset copy ci push
 
@@ -12,10 +12,10 @@ reset:
 	git clean -fd
 
 copy: reset
-	if [[ -d $(OUTPUT) ]]; then true; else echo 'Source directory does not exist!'; exit 1; fi
-	if [[ ! -f $(OUTPUT)/Makefile ]]; then true; else echo 'Makefile will be overwriten!'; exit 1; fi
+	if [[ -d $(DESTINATION) ]]; then true; else echo 'Source directory does not exist!'; exit 1; fi
+	if [[ ! -f $(DESTINATION)/Makefile ]]; then true; else echo 'Makefile will be overwriten!'; exit 1; fi
 	rm -f *.html *.css README.md
-	cp $(OUTPUT)/* .
+	cp $(DESTINATION)/* .
 	ls -lX
 
 ci:
