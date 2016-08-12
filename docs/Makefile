@@ -115,7 +115,7 @@ $(CACHE)/site.json: site.yaml | $(CACHE)
 	yaml2json < $< > $@
 
 $(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml | $(CACHE)
-	sed -n 's/^\([a-zA-Z_-]\+\): *[^#].*/\1: >\n  $$\1$$/p' $< > $@
+	sed '/^\([a-zA-Z_-]\+\): *[>|]/{s/^\([a-zA-Z_-]\+\):.*/\1: >\n  $$\1$$/;b;};/^\([a-zA-Z_-]\+\): *[^#]/{s/^\([a-zA-Z_-]\+\):.*/\1: $$\1$$/;b;};d;' $< > $@
 
 $(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CACHE)
 	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< | yaml2json > $@
