@@ -1,6 +1,7 @@
+<# HTML head elements #>
 <#
-	Meta elements
-#>
+ #	Meta elements
+ #>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 {# <%include...> is relative to the site source #}
 <meta name="generator" content="jqt v<%include "../VERSION">"/>
@@ -9,11 +10,10 @@
 <meta name='description' content='{{.front.description//empty}}' />
 <meta name='keywords' content='{{.front.keywords//empty}}' />
 <#
-	CSS styles
-#>
-<style type="text/css">code{white-space: pre;}</style>
+ #	CSS styles
+ #>
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 {{.front._highlight}}
 <#
-	vim:ts=2:sw=2:ai:noet:fileencoding=utf8:syntax=html
+vim:ts=2:sw=2:ai:noet:fileencoding=utf8:syntax=html
 #>

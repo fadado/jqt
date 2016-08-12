@@ -102,12 +102,15 @@ TARGETS = \
 # Rules
 ########################################################################
 
+# Directories
 $(CACHE) $(DESTINATION):
 	mkdir $@ >/dev/null 2>&1 || true
 
+# Assets
 $(DESTINATION)/README.md: README.md | $(DESTINATION)
 	cp $< $@
 
+# Derived files
 $(CACHE)/site.json: site.yaml | $(CACHE)
 	yaml2json < $< > $@
 
@@ -117,6 +120,7 @@ $(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml | $(CACHE)
 $(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CACHE)
 	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< | yaml2json > $@
 
+# Pages
 $(DESTINATION)/index.html: $(CONTENT)/home.md $(LAYOUTS)/index.html $(COMMON) | $(DESTINATION)
 	$(JQT) -DBODY_BLOCK=$(LAYOUTS)/index.html -d $< $(LAYOUTS)/main.html | $(HTMLMIN) > $@
 
@@ -130,9 +134,11 @@ $(eval $(call Page,document))
 $(eval $(call Page,metadata))
 $(eval $(call Page,template))
 
+# CSS
 $(DESTINATION)/jqt.css: style/jqt.css style/github.css
 	$(MPCSS) $< | $(CSSMIN) > $@
 
+# Main
 all: $(TARGETS)
 	@xmllint --noout --valid $(DESTINATION)/*.html
 

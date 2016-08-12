@@ -1,9 +1,7 @@
 ---
 <%include "site.yaml">
-title: Welcome
 updated: "2016-08-05T09:15:11Z"
 ---
-
 <%include "site.m">&
 
 [JQ]: <https://stedolan.github.io/jq/>

@@ -369,7 +369,7 @@ function merge
         # front and body
         echo "{ $DOCUMENT_CONTENT_NAME: "'$body'
         echo ", $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
-        echo "+ { _id: \"${DOCUMENT%.md}\","' _toc: $toc, _highlight: $css })}'
+        echo "+ { _id: \"${DOCUMENT_ID}\","' _toc: $toc, _highlight: $css })}'
         # additional metadata
         for key in "${!YAML_METADATA[@]}"; do
             echo "+{ $key:"

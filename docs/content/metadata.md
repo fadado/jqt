@@ -3,7 +3,6 @@
 title: Data model
 updated: "2016-08-05T09:15:11Z"
 ---
-
 <%include "site.m">&
 
 Metadata in YAML and JSON formats
