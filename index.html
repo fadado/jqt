@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
-<title>jqt · The jq template engine
+<title>Welcome &ndash; jqt · The jq template engine
 </title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.1.0"/>
@@ -32,20 +32,20 @@ code > span.er { color: #ff0000; font-weight: bold; }
 	<body>
 		<ul id="MENU">
 			<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
-<li><a class='current' href="./index.html">Home</a></li>
+<li><a  href="./index.html">Home</a></li>
 <li><a  href="./engine.html">Engine</a></li>
 <li><a  href="./document.html">Document</a></li>
 <li><a  href="./template.html">Template</a></li>
 <li><a  href="./metadata.html">Metadata</a></li>
 		</ul>
-<h1><em>jqt</em> · the <em>jq</em> template engine
+<h1>Welcome &ndash; <em>jqt</em> · the <em>jq</em> template engine
 </h1>
 	
 <div id="CONTENT">
 	
-<p>Could be <a href="https://stedolan.github.io/jq/"><cite>jq</cite></a> the basis for a template engine? Let's explore…</p>
+<p>Could be <a href="https://stedolan.github.io/jq/"><cite>jq</cite></a> the basis for a web template engine? Let's explore…</p>
 <h2 id="jq"><cite>jq</cite></h2>
-<p><cite>jq</cite> have nice features as string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following simple strings, in the middle of a <cite>jq</cite> program, with generators separated with the comma operator:</p>
+<p><cite>jq</cite> have nice features as string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following simple strings, in the middle of a <cite>jq</cite> program, separated with the comma operator:</p>
 <h3 id="simple-expansion">Simple expansion</h3>
 <pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;title&gt;</span>\(.title)<span class="kw">&lt;/title&gt;</span>&quot;, ...</code></pre>
 <h3 id="conditional-expansion">Conditional expansion</h3>
@@ -55,6 +55,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>In these examples the strings expand, vanish, or multiply without any explicit <code>if</code> or <code>for</code>!</p>
 <h2 id="jqt"><cite>jqt</cite></h2>
 <p>To write <cite>jq</cite> scripts using strings with interpolations is not the idea we have for a template language. We need some syntactic sugar, and this is provided to you by <cite>jqt</cite>. You write templates in a very fashionable style, the templates are translated into a <cite>jq</cite> script and then <cite>jq</cite> is feed with the created script and some metadata and content in JSON or YAML format… and the magic is done!</p>
+<h3 id="syntactic-sugar">Syntactic sugar</h3>
 <p>And, how do the <em>syntactic sugar</em> looks like? Do you think the following example looks like a template?</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.lang}}&#39;</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
@@ -76,8 +77,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="kw">&lt;/ul&gt;</span>
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></code></pre>
-<h2 id="jqt-status"><cite>jqt</cite> status</h2>
-<p><em>jqt</em> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
+<h3 id="status">Status</h3>
+<p>If you want to learn to use <em>jqt</em>, read the documentation at <a href="https://fadado.github.io/jqt/" class="uri">https://fadado.github.io/jqt/</a>. <em>jqt</em> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
 </div>
 		<div id="FOOTER">
 			<div style="text-align:center;">
