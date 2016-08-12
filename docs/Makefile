@@ -1,5 +1,15 @@
-# jqt docs management
-#
+# jqt documentation site management
+
+########################################################################
+# Prerequisites
+########################################################################
+
+# We are using some of the newest GNU Make features... so require GNU
+# Make version >= 3.82
+version_test := $(filter 3.82,$(firstword $(sort $(MAKE_VERSION) 3.82)))
+ifndef version_test
+$(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
+endif
 
 ########################################################################
 # Configuration
@@ -13,7 +23,7 @@ MAKEFLAGS += --no-builtin-variables
 MAKEFLAGS += --warn-undefined-variables
 
 # Make will not print the recipe used to remake files.
-#.SILENT:
+.SILENT:
 
 # Eliminate use of the built-in implicit rules. Also clear out the
 # default list of suffixes for suffix rules.
@@ -32,6 +42,10 @@ SHELL := /bin/bash
 # .SHELLFLAGS.
 .SHELLFLAGS := -o errexit -o pipefail -o nounset -c
 
+# Make will delete the target of a rule if it has changed and its recipe
+# exits with a nonzero exit status.
+.DELETE_ON_ERROR:
+
 ########################################################################
 # Variables
 ########################################################################
@@ -45,11 +59,18 @@ SHELL := /bin/bash
 #	.id		predefined by jqt
 #	.toc		predefined by jqt
 
+# Some directories
+CACHE=.jqt
+DESTINATION = /tmp/jqt
+CONTENT=./content
+LAYOUTS=./layouts
+
 # Commands
 JQT = jqt \
+      -I$(LAYOUTS) \
       -isite \
-      -msite:site.json \
-      -msnippets:snippets.json
+      -msite:$(CACHE)/site.json \
+      -msnippets:$(CACHE)/snippets.json
 
 MPCSS = gpp --nostdinc \
 	+c '/*' '*/' \
@@ -57,58 +78,54 @@ MPCSS = gpp --nostdinc \
 	-U '&' ';' '(' ',' ');' '(' ')' '\$$' '' \
 	-M '&' ';' '(' ',' ');' '(' ')'
 
-HTMLMIN = sed '/^$$/d' 
+HTMLMIN = sed '/^$$/d'
 CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
-
 
 # Common sources for all targets
 COMMON = \
-	site.json	\
-	snippets.json	\
-	main.html	\
-	head.html	\
-	footer.html	\
-	site.jq	\
+	$(CACHE)/site.json \
+	$(CACHE)/snippets.json \
+	$(LAYOUTS)/main.html \
+	$(LAYOUTS)/head.html \
+	$(LAYOUTS)/footer.html \
+	site.m \
+	site.jq \
 
-# Destination files
-OUTPUT = /tmp/jqt
-
-ASSETS = README.md
-
+# Targets
 TARGETS = \
-	$(OUTPUT)/document.html	\
-	$(OUTPUT)/engine.html	\
-	$(OUTPUT)/index.html	\
-	$(OUTPUT)/metadata.html	\
-	$(OUTPUT)/template.html	\
-	$(OUTPUT)/jqt.css	\
+	$(DESTINATION)/README.md	\
+	$(DESTINATION)/document.html	\
+	$(DESTINATION)/engine.html	\
+	$(DESTINATION)/index.html	\
+	$(DESTINATION)/metadata.html	\
+	$(DESTINATION)/template.html	\
+	$(DESTINATION)/jqt.css	\
 
 ########################################################################
 # Rules
 ########################################################################
 
-all: $(TARGETS)
-	@cp -uv $(ASSETS) $(OUTPUT)
-	@xmllint --noout --valid $(OUTPUT)/*.html
+$(CACHE) $(DESTINATION):
+	mkdir $@ >/dev/null 2>&1 || true
 
-site.json: site.yaml
+$(DESTINATION)/README.md: README.md | $(DESTINATION)
+	cp $< $@
+
+$(CACHE)/site.json: site.yaml | $(CACHE)
 	yaml2json < $< > $@
 
-snippets.pandoc: snippets.yaml
+$(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml | $(CACHE)
 	sed -n 's/^\([a-zA-Z_-]\+\): *[^#].*/\1: >\n  $$\1$$/p' $< > $@
 
-snippets.json: snippets.yaml snippets.pandoc
-	pandoc --from markdown --to html --template=snippets.pandoc $< | yaml2json > $@
+$(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CACHE)
+	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< | yaml2json > $@
 
-$(OUTPUT):
-	mkdir $(OUTPUT) >/dev/null 2>&1 || true
-
-$(OUTPUT)/index.html: home.md index.html $(COMMON) | $(OUTPUT)
-	$(JQT) -DBODY_BLOCK=index.html -d $< main.html | $(HTMLMIN) > $@ 
+$(DESTINATION)/index.html: $(CONTENT)/home.md $(LAYOUTS)/index.html $(COMMON) | $(DESTINATION)
+	$(JQT) -DBODY_BLOCK=$(LAYOUTS)/index.html -d $< $(LAYOUTS)/main.html | $(HTMLMIN) > $@
 
 define Page
-$(OUTPUT)/$(1).html: $(1).md page.html $$(COMMON) | $$(OUTPUT)
-	$$(JQT) -DBODY_BLOCK=page.html -d $$< main.html | $$(HTMLMIN) > $$@ 
+$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $$(COMMON) | $$(DESTINATION)
+	$$(JQT) -DBODY_BLOCK=$(LAYOUTS)/page.html -d $$< $(LAYOUTS)/main.html | $$(HTMLMIN) > $$@
 endef
 
 $(eval $(call Page,engine))
@@ -116,8 +133,11 @@ $(eval $(call Page,document))
 $(eval $(call Page,metadata))
 $(eval $(call Page,template))
 
-$(OUTPUT)/jqt.css: jqt.css github.css
+$(DESTINATION)/jqt.css: style/jqt.css style/github.css
 	$(MPCSS) $< | $(CSSMIN) > $@
+
+all: $(TARGETS)
+	@xmllint --noout --valid $(DESTINATION)/*.html
 
 ########################################################################
 # Utilities
@@ -126,10 +146,10 @@ $(OUTPUT)/jqt.css: jqt.css github.css
 .PHONY: clean clobber build
 
 clean:
-	rm -f $(OUTPUT)/* snippets.json snippets.pandoc site.json
+	rm -rf $(DESTINATION)/*
 
-clobber: clean
-	rmdir $(OUTPUT) >/dev/null 2>&1 || true
+clobber:
+	rm -rf $(DESTINATION) $(CACHE)
 
 build: clean all
 

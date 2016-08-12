@@ -9,7 +9,7 @@ updated: "2016-08-05T09:15:11Z"
 [JQ]: <https://stedolan.github.io/jq/>
 [REPO]: <https://github.com/fadado/jqt>
 
-Could be [<%cite jq>][JQ] the basis for a template engine?
+Could be [<%cite jq>][JQ] the basis for a web template engine?
 Let's explore&hellip;
 
 ## <%cite 'jq'>
@@ -17,7 +17,7 @@ Let's explore&hellip;
 <%cite jq> have nice features as string interpolation and implicit backtracking.
 Mixed with the help of some syntactic sugar a powerful template engine appear.
 Imagine the following simple strings, in the middle of a <%cite jq> program,
-with generators separated with the comma operator:
+separated with the comma operator:
 
 ### Simple expansion
 
@@ -48,6 +48,8 @@ for a template language. We need some syntactic sugar, and this is provided to y
 are translated into a <%cite jq> script and then <%cite jq> is feed with the created
 script and some metadata and content in JSON or YAML format&hellip; and the magic is done!
 
+### Syntactic sugar
+
 And, how do the _syntactic sugar_ looks like?  Do you think the following
 example looks like a template?
 
@@ -74,12 +76,13 @@ example looks like a template?
 </html>
 ```
 
-## <%cite 'jqt'> status
+### Status
 
-_jqt_ is developed under the _Fedora_ Linux distribution, and a lot of
-portability issues are expected at this stage of development. Please, use the
-project [GitHub repository][REPO] features if you want to collaborate or send
-any kind of questions.
+If you want to learn to use _jqt_, read the documentation at
+<https://fadado.github.io/jqt/>.  _jqt_ is developed under the _Fedora_ Linux
+distribution, and a lot of portability issues are expected at this stage of
+development. Please, use the project [GitHub repository][REPO] features if you
+want to collaborate or send any kind of questions.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
