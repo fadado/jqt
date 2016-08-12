@@ -75,7 +75,6 @@ MPCSS = gpp --nostdinc \
 	-U '&' ';' '(' ',' ');' '(' ')' '\$$' '' \
 	-M '&' ';' '(' ',' ');' '(' ')'
 
-HTMLMIN = sed '/^$$/d'
 CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
 
 # Common sources for all targets
@@ -122,11 +121,11 @@ $(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CA
 
 # Pages
 $(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) | $(DESTINATION)
-	$(JQT) -d $< $(LAYOUTS)/default.html | $(HTMLMIN) > $@
+	$(JQT) -d $< $(LAYOUTS)/default.html > $@
 
 define Page
 $(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $$(COMMON) | $$(DESTINATION)
-	$$(JQT) -d $$< $(LAYOUTS)/page.html | $$(HTMLMIN) > $$@
+	$$(JQT) -d $$< $(LAYOUTS)/page.html > $$@
 endef
 
 $(eval $(call Page,engine))
