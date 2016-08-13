@@ -1,9 +1,10 @@
 ---
 <%include "site.yaml">
 title: Templates syntax
-updated: "2016-08-05T09:15:11Z"
+updated: "2016-08-13T07:48:26Z"
 ---
 <%include "site.m">&
+<%include "LINKS.md">&
 
 ### Features
 
@@ -23,6 +24,9 @@ You must be careful writing templates.
 
 * Multiline block start cannot have any suffix text after `{%...%}`.
 * The error messages are wrong referencing the lines where the problems happens.
+
+<# Printed in all pages #>
+<%include "FLOW.md">
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

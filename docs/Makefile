@@ -65,6 +65,7 @@ LAYOUTS=./layouts
 # Commands
 JQT = jqt \
       -I$(LAYOUTS) \
+      -I$(CONTENT) \
       -isite \
       -msite:$(CACHE)/site.json \
       -msnippets:$(CACHE)/snippets.json
@@ -84,6 +85,7 @@ COMMON = \
 	$(LAYOUTS)/default.html \
 	$(LAYOUTS)/head.html \
 	$(LAYOUTS)/footer.html \
+	$(CONTENT)/LINKS.md \
 	site.m \
 	site.jq \
 
@@ -124,7 +126,7 @@ $(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) | $(DESTINATION)
 	$(JQT) -d $< $(LAYOUTS)/default.html > $@
 
 define Page
-$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $$(COMMON) | $$(DESTINATION)
+$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $(COMMON) $(CONTENT)/FLOW.md | $(DESTINATION)
 	$$(JQT) -d $$< $(LAYOUTS)/page.html > $$@
 endef
 

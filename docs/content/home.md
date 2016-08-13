@@ -1,11 +1,9 @@
 ---
 <%include "site.yaml">
-updated: "2016-08-05T09:15:11Z"
+updated: "2016-08-13T07:48:26Z"
 ---
 <%include "site.m">&
-
-[JQ]: <https://stedolan.github.io/jq/>
-[REPO]: <https://github.com/fadado/jqt>
+<%include "LINKS.md">&
 
 Could be [<%cite jq>][JQ] the basis for a web template engine?
 Let's explore&hellip;
