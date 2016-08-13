@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# jqt - jq based template engine
+# jqt - jq based web template engine
 
 declare -r VERSION='0.1.0'
 declare -r DATADIR='/usr/local/share'
@@ -310,17 +310,17 @@ function markup
     local template=${TMPDIR}/template.html
 
     echo \
-'$if(highlighting-css)$
-<style type="text/css">
-$highlighting-css$
-</style>
-$endif$
+'$body$
 <!--JQT-->
 $if(toc)$
 $toc$
 $endif$
 <!--JQT-->
-$body$
+$if(highlighting-css)$
+<style type="text/css">
+$highlighting-css$
+</style>
+$endif$
 ' > $template
 
     pandoc  "${PANDOC_OPTS[@]}"     \
@@ -365,7 +365,7 @@ function merge
     local -r script=$(mkpipe)
 
     {   # split .
-        echo '(. / "<!--JQT-->") as [$css, $toc, $body] |'
+        echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
         # front and body
         echo "{ $DOCUMENT_CONTENT_NAME: "'$body'
         echo ", $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
@@ -418,7 +418,7 @@ function render
 ########################################################################
 
 declare -r USAGE=\
-"Usage: $SELF [-h | --help ]
+"Usage: $SELF [-h | --help | --version ]
        $SELF [options] < infile > result
        $SELF [options] infile > result
        $SELF [options] infile result"
@@ -439,42 +439,76 @@ function die
 function help
 {
     cat <<EOF
-$SELF - jq based template engine
+$SELF - jq based web template engine
 
 $USAGE
 
 Preprocessor options:
-    -IDIRECTORY  Append a directory to the end of the gpp list of directories to be searched for include files.
-    -DNAME=VAL  Define the user macro 'name' as equal to 'val'.
+    -I DIRECTORY
+        Append DIRECTORY to the end of the preprocessor list of
+        directories to be searched for include files.
+    -D NAME=VAL
+        Define the user macro NAME as equal to VAL.
 Template options:
-    -E  Stop template processing after the preprocessing stage.
-    -S  Stop template processing before the render stage.
-    -LDIRECTORY  Append a directory to the end of the jq list of directories to be searched for include and import modules.
-    -iMODULE  Include a jq module in the render stage.
-    -jMODULE:NAME  Import a jq module in the render stage.
+    -L DIRECTORY
+        Append DIRECTORY to the end of the jq list of directories to be
+        searched for included and imported modules.
+    -i MODULE
+        Include the jq MODULE in the render stage.
+    -j MODULE:NAME
+        Import the jq MODULE in the render stage.
 Document options:
-    -H  Stop MarkDown processing after generating HTML.
-    -P  Stop MarkDown processing after preprocessing stage.
-    -dNAME  Set content document.
-    -4,-5  Set output HTML version (HTML4 / HTML5).
-    -e  Extract YAML front matter to stdout.
-    -p  Print list of Pandoc options and exit.
-    -r  Remove front matter from MarkDown.
-    -t  Test presence of front matter in MarkDown.
+    -d FILE
+        Read content document from FILE.
+    -4,-5
+        Set output HTML version (HTML4 / HTML5).
 Metadata options:
-    -C  Stop preprocessing after merging content document and metadata.
-    -fNAME  Set name for YAML document metadata (defaults to 'front').
-    -nNAME  Set name for converted document (defaults to 'body').
-    -mNAME:FILE  Add a JSON or YAML file to the input metadata.
-    -MNAME:FILE  Add a JSON or YAML file to the input metadata at the top level (name is ignored).
+    -m NAME:FILE
+        Add a FILE in JSON or YAML format to the input metadata as a
+        value of object NAME.
+    -M NAME:FILE
+        Add a FILE in JSON or YAML format to the input metadata at the
+        top level (NAME is ignored but must be present and unique).
+Debugging options:
+    -E
+        Stops template processing after the preprocessing stage (outputs
+        the expanded template).
+    -S
+        Stops template processing before the render stage (outputs the
+        jq script).
+    -P
+        Stops MarkDown processing after preprocessing stage (outputs the
+        expanded MarkDown).
+    -H
+        Stops MarkDown processing after generating HTML (outputs several
+        HTML fragments).
+    -C
+        Stops processing before the render stage (outputs full JSON data
+        model).
+Information options:
+    -h, --help
+        Display this message and exit.
+    -p
+        Print list of Pandoc accepted options and exit.
+    --version
+        Display version information and exit.
 EOF
-    exit 0
 }
 
-# TODO:
-#--toc
-#--table-of-contents
-#--toc-depth=NUMBER
+# Not documented:
+#
+#?Document options:
+#?    -e
+#?        Extract YAML front matter to stdout.
+#?    -r
+#?        Remove front matter from MarkDown.
+#?    -t
+#?        Test presence of front matter in MarkDown.
+#?Metadata options:
+#?    -f NAME
+#?        Set name for YAML document metadata (defaults to 'front').
+#?    -n NAME
+#?        Set name for converted document (defaults to 'body').
 
 function pandoc_options
 {
@@ -528,17 +562,14 @@ declare opt key filename
 while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
     case $opt in
     # Generic options
-        h)  help
+        h)  help | ${PAGER:-less}; exit 1
             ;;
-    # Template options
+    # Preprocessor options
         D)  DEFINE=( "${DEFINE[@]}" "-D$OPTARG" ) # also for all gpp uses
-            ;;
-        E)  flagE=1 # also for document
-            ;;
-        S)  flagS=1
             ;;
         I)  GPP_PATH=( "${GPP_PATH[@]}" '-I' "$OPTARG" )
             ;;  # inserted at the right for append effect
+    # Template options
         L)  JQ_PATH=( '-L' "$OPTARG" "${JQ_PATH[@]}" )
             ;;  # inserted at the left for append effect
         i)  INCLUDES[$OPTARG]=$OPTARG
@@ -547,12 +578,6 @@ while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             IMPORTS[${OPTARG%:*}]=${OPTARG#*:}
             ;;
     # Document options
-        P)  flagP=1
-            ;;
-        H)  flagH=1
-            ;;
-        p)  pandoc_options
-            ;;
         4)  HTML_VERSION=html
             ;;
         5)  HTML_VERSION=html5
@@ -563,13 +588,13 @@ while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             ;;
         e)  extract=1
             ;;
+        p)  pandoc_options
+            ;;
         r)  remove=1
             ;;
         t)  front_matter=1
             ;;
     # Metadata options
-        C)  flagC=1
-            ;;
         f)  DOCUMENT_METADATA_NAME=$OPTARG
             ;;
         n)  DOCUMENT_CONTENT_NAME=$OPTARG
@@ -593,9 +618,22 @@ while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
                 fi
             fi
             ;;
+    # Debug options
+        E)  flagE=1 # also for document
+            ;;
+        S)  flagS=1
+            ;;
+        P)  flagP=1
+            ;;
+        H)  flagH=1
+            ;;
+        C)  flagC=1
+            ;;
         -)  case $OPTARG in
     # Generic options
-        help) help
+        help) help | ${PAGER:-less}; exit 0
+            ;;
+        version) echo "$SELF $VERSION"; exit 0
             ;;
     # Pandoc options:
         base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;

@@ -8,10 +8,8 @@
 # Global parameters
 
 title: jqt · the jq template engine
-baseurl: http://TO_BE_DEFINED/
+baseURL: https://fadado.github.com/jqt/
 lang: en
-
-baseURL: &baseurl https://fadado.github.com/jqt/
 
 author:
 - email: jordinas@gmail.com
