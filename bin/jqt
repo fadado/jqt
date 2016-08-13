@@ -418,8 +418,7 @@ function render
 ########################################################################
 
 declare -r USAGE=\
-"Usage: $SELF [-h | --help | --version ]
-       $SELF [options] < infile > result
+"Usage: $SELF [options] < infile > result
        $SELF [options] infile > result
        $SELF [options] infile result"
 
@@ -439,60 +438,49 @@ function die
 function help
 {
     cat <<EOF
-$SELF - jq based web template engine
-
+$SELF - jq based web template engine [version $VERSION]
 $USAGE
 
 Preprocessor options:
-    -I DIRECTORY
-        Append DIRECTORY to the end of the preprocessor list of
-        directories to be searched for include files.
     -D NAME=VAL
         Define the user macro NAME as equal to VAL.
+    -I DIRECTORY
+        Append DIRECTORY to the end of the preprocessor list of directories to be
+        searched for include files.
 Template options:
     -L DIRECTORY
-        Append DIRECTORY to the end of the jq list of directories to be
-        searched for included and imported modules.
+        Append DIRECTORY to the end of the jq list of directories to be searched for
+        included and imported modules.
     -i MODULE
         Include the jq MODULE in the render stage.
     -j MODULE:NAME
         Import the jq MODULE in the render stage.
 Document options:
+    -4, -5
+        Set output HTML version (HTML4 / HTML5).
     -d FILE
         Read content document from FILE.
-    -4,-5
-        Set output HTML version (HTML4 / HTML5).
+    -p  Print list of Pandoc accepted options.
 Metadata options:
-    -m NAME:FILE
-        Add a FILE in JSON or YAML format to the input metadata as a
-        value of object NAME.
     -M NAME:FILE
-        Add a FILE in JSON or YAML format to the input metadata at the
-        top level (NAME is ignored but must be present and unique).
+        Add a FILE in JSON or YAML format to the input metadata at the top level (NAME is
+        ignored but must be present and unique).
+    -m NAME:FILE
+        Add a FILE in JSON or YAML format to the input metadata as a value of object NAME.
 Debugging options:
-    -E
-        Stops template processing after the preprocessing stage (outputs
-        the expanded template).
-    -S
-        Stops template processing before the render stage (outputs the
-        jq script).
-    -P
-        Stops MarkDown processing after preprocessing stage (outputs the
-        expanded MarkDown).
-    -H
-        Stops MarkDown processing after generating HTML (outputs several
-        HTML fragments).
-    -C
-        Stops processing before the render stage (outputs full JSON data
-        model).
+    -C  Stops processing before the render stage (outputs full JSON data model).
+    -E  Stops template processing after the preprocessing stage (outputs the expanded
+        template).
+    -H  Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+    -P  Stops MarkDown processing after preprocessing stage (outputs the expanded
+        MarkDown).
+    -S  Stops template processing before the render stage (outputs the jq script).
 Information options:
     -h, --help
-        Display this message and exit.
-    -p
-        Print list of Pandoc accepted options and exit.
-    --version
-        Display version information and exit.
+        Display this message.
+    -V  Display version information.
 EOF
+    exit 0
 }
 
 # Not documented:
@@ -512,6 +500,26 @@ EOF
 
 function pandoc_options
 {
+    cat <<EOF
+Pandoc options:
+    --base-header-level=NUMBER                        --katex-stylesheet
+    --bibliography=FILE                               --latexmathml[=URL]
+    --citation-abbreviations=FILE                     --mathjax[=URL]
+    --columns=NUMBER                                  --mathml[=URL]
+    --csl=FILE                                        --mimetex[=URL]
+    --email-obfuscation=none|javascript|references    --no-highlight
+    --file-scope                                      --normalize
+    --gladtex                                         --number-offset=NUMBER[,NUMBER,...]
+    --highlight-style=STYLE                           --number-sections
+    --html-q-tags                                     --preserve-tabs
+    --id-prefix=STRING                                --section-divs
+    --indented-code-classes=CLASSES                   --tab-stop=NUMBER
+    --jsmath[=URL]                                    --webtex[=URL]
+    --katex[=URL]                                     --wrap=[auto|none|preserve]
+EOF
+    return
+
+    # !!!
     local opt
 
     echo 'Pandoc options:'
@@ -545,7 +553,7 @@ function pandoc_options
         '--webtex[=URL]' \
         '--wrap=[auto|none|preserve]'
     do echo "$opt"
-    done | pr --omit-pagination --indent=4 --width=100 --columns=2
+    done | pr -e --omit-pagination --indent=4 --width=100 --columns=2
 
     exit 0
 }
@@ -559,10 +567,12 @@ declare -i extract=0 remove=0 front_matter=0
 
 declare opt key filename
 
-while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
+while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
     case $opt in
     # Generic options
-        h)  help | ${PAGER:-less}; exit 1
+        h)  help
+            ;;
+        V) echo "$SELF $VERSION"; exit 0
             ;;
     # Preprocessor options
         D)  DEFINE=( "${DEFINE[@]}" "-D$OPTARG" ) # also for all gpp uses
@@ -631,9 +641,7 @@ while getopts :hD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             ;;
         -)  case $OPTARG in
     # Generic options
-        help) help | ${PAGER:-less}; exit 0
-            ;;
-        version) echo "$SELF $VERSION"; exit 0
+        help) help
             ;;
     # Pandoc options:
         base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;

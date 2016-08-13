@@ -1,20 +1,14 @@
 <#
- # Flow diagram shared in all pages
+ # Flow diagram
  #>
-
-## Flow diagram
-
-This diagram shows how document, template and metadata inputs are combined by
-<%cite jq> to produce the final HTML output.
-
 
 ```
            jqt        +------+   +-------+  jq
 Template +----------->|expand|-->|convert|-------------------------------+
                       +------+   +-------+                               |
                                                                          |
-                                               HTML                      | 
-                                               fragment                  v
+                                               HTML and CSS              | 
+                                               fragments                 v
            MarkDown   +------+   +------+   /-------->+-----+  JSON   +------+
 Document +----------->|expand|-->|markup|--+          |merge|-------->|render|--> HTML
                       +------+   +------+   \-------->+-----+         +------+

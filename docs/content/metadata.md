@@ -8,8 +8,9 @@ updated: "2016-08-13T07:48:26Z"
 
 Metadata in YAML and JSON formats
 
-<# Printed in all pages #>
-<%include "FLOW.md">
+## Processing
+
+### Preprocessing
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -6,7 +6,7 @@ updated: "2016-08-13T07:48:26Z"
 <%include "site.m">&
 <%include "LINKS.md">&
 
-### Features
+### Main <%cite jqt> features
 
 * Each line of text in the template is a generator.
 * Interpolation of expressions using the `{{...}}` syntactic sugar.
@@ -18,15 +18,11 @@ updated: "2016-08-13T07:48:26Z"
 * Raw blocks are enclode between `{% raw %}` and `{%%}` marks.
 * The input metadata provided to <%cite jq> is available in the dot (`.`) and the global variable `M$`.
 
-### Limitations
+## Processing
 
-You must be careful writing templates.
+### Preprocessing
 
-* Multiline block start cannot have any suffix text after `{%...%}`.
-* The error messages are wrong referencing the lines where the problems happens.
-
-<# Printed in all pages #>
-<%include "FLOW.md">
+### Execution by `jq`
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

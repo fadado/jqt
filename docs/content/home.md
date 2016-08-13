@@ -41,7 +41,7 @@ explicit `if` or `for`!
 To write <%cite jq> scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided to you by
 <%cite jqt>. You write templates in a very fashionable style, the templates
-are translated into a <%cite jq> script and then <%cite jq> is feed with the created
+are translated into a <%cite jq> script and then `jq` is feed with the created
 script and some metadata and content in JSON or YAML format&hellip; and the magic is done!
 
 ### Syntactic sugar
@@ -75,7 +75,7 @@ example looks like a template?
 ### Status
 
 If you want to learn to use _jqt_, read the documentation at
-<https://fadado.github.io/jqt/>.  _jqt_ is developed under the _Fedora_ Linux
+[https://fadado.github.io/jqt/][JQT].  _jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
 development. Please, use the project [GitHub repository][REPO] features if you
 want to collaborate or send any kind of questions.

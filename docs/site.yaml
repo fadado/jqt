@@ -17,19 +17,19 @@ author:
 
 menu:
 - URL: ./index.html
-  id: home
+  id: content/home
   name: Home
 - URL: ./engine.html
-  id: engine
+  id: content/engine
   name: Engine
 - URL: ./document.html
-  id: document
+  id: content/document
   name: Document
 - URL: ./template.html
-  id: template
+  id: content/template
   name: Template
 - URL: ./metadata.html
-  id: metadata
+  id: content/metadata
   name: Metadata
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
