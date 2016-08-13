@@ -1,52 +1,71 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-	<head>
-			<title>Template engine &ndash; jqt · the jq template engine</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+<title>Operating the engine &ndash; jqt · the jq template engine</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.1.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-05T09:15:11Z' />
+<meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
-	</head>
-	<body>
-		<ul id="MENU">
-			<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
+
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+
+
+  </head>
+
+  <body>
+    <ul id="MENU">
+      <li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
 <li><a  href="./index.html">Home</a></li>
-<li><a  href="./engine.html">Engine</a></li>
+<li><a class='current' href="./engine.html">Engine</a></li>
 <li><a  href="./document.html">Document</a></li>
 <li><a  href="./template.html">Template</a></li>
 <li><a  href="./metadata.html">Metadata</a></li>
-		</ul>
-			<h1>Template engine &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
-		<div id="BODY">
-				<div id="TOC">
-		<p>Table of contents</p>
-		
+    </ul>
+
+<h1>Operating the engine &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
+    <div id="BODY">
+  <div id="TOC">
+    <p>Table of contents</p>
+    
 <ul>
-<li><a href="#jq-templates"><cite>jq</cite> templates</a><ul>
-<li><a href="#flow">Flow</a></li>
+<li><a href="#general-operation">General operation</a></li>
+<li><a href="#invoking-jqt">Invoking <em>jqt</em></a><ul>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#options">Options</a></li>
 </ul></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#installation">Installation</a></li>
 </ul>
-	</div>
-	<div id="CONTENT">
-		
-<h2 id="jq-templates"><cite>jq</cite> templates</h2>
-<p>The <cite>jq</cite> template language will be called <cite>jqt</cite>. The tools used in the implementation of <cite>jqt</cite> are:</p>
-<ul>
-<li><a href="https://stedolan.github.io/jq/">jq</a>, a lightweight and flexible command-line JSON processor.</li>
-<li><a href="https://www.gnu.org/software/bash/">Bash</a>, <a href="https://www.gnu.org/software/sed/">sed</a> and other shell tools.</li>
-<li><a href="https://www.gnu.org/software/make/">GNU Make</a>, the tool that builds executable programs and libraries from source code.</li>
-<li><a href="https://logological.org/gpp">GPP</a>, a general-purpose preprocessor.</li>
-<li><a href="http://pandoc.org/">Pandoc</a>, a universal document converter.</li>
-</ul>
-<p>Template engine components</p>
-<h3 id="flow">Flow</h3>
-<pre><code>           jqt        +------+   +-------+  jq
+
+  </div>
+  <div id="CONTENT">
+    <h2 id="general-operation">General operation</h2>
+<p><em>jqt</em> orchestrates several shell utilities to transform MarkDown text and YAML or JSON data into a final HTML document. The transformation is driven by a template, where HTML is mixed with <em>jq</em> snippets to implement the transformation logic. This diagram shows how document, template and metadata inputs are combined by <em>jqt</em> to produce the final HTML output.</p>
+<pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
                                                                          |
-                                               HTML                      | 
-                                               fragment                  v
+                                               HTML and CSS              | 
+                                               fragments                 v
            MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
 Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
                       +------+   +------+   \--------&gt;+-----+         +------+
@@ -58,18 +77,154 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 Metadata              +------+                             |
          +-------------------------------------------------+
            YAML   </code></pre>
-	</div>
-		</div>
-		<div id="FOOTER">
-			<div style="text-align:center;">
-	<hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+<h2 id="invoking-jqt">Invoking <em>jqt</em></h2>
+<h3 id="syntax">Syntax</h3>
+<p><code>jqt</code> accepts several options and can be called with zero, one or two file arguments. As the output of <code>jqt --help</code> shows, the usage possibilities are:</p>
+<pre><code>Usage: jqt [options] &lt; infile &gt; result
+       jqt [options] infile &gt; result
+       jqt [options] infile result</code></pre>
+<h3 id="options">Options</h3>
+<h4 id="preprocessor-options">Preprocessor options</h4>
+<dl>
+<dt>-D NAME=VAL</dt>
+<dd><p>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.</p>
+</dd>
+<dt>-I DIRECTORY</dt>
+<dd><p>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.</p>
+</dd>
+</dl>
+<h4 id="template-options">Template options</h4>
+<dl>
+<dt>-L DIRECTORY</dt>
+<dd><p>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.</p>
+</dd>
+<dt>-i MODULE</dt>
+<dd><p>Include the jq <em>MODULE</em> in the render stage.</p>
+</dd>
+<dt>-j MODULE:NAME</dt>
+<dd><p>Import the jq <em>MODULE</em> in the render stage.</p>
+</dd>
+</dl>
+<h4 id="document-options">Document options</h4>
+<dl>
+<dt>-4, -5</dt>
+<dd><p>Set output HTML version (HTML4 / HTML5).</p>
+</dd>
+<dt>-d FILE</dt>
+<dd><p>Read content document from <em>FILE</em>.</p>
+</dd>
+<dt>-p</dt>
+<dd><p>Print list of Pandoc accepted options.</p>
+</dd>
+</dl>
+<h4 id="metadata-options">Metadata options</h4>
+<dl>
+<dt>-M NAME:FILE</dt>
+<dd><p>Add a <em>FILE</em> in YAML or JSON format to the input metadata at the top level (<em>NAME</em> is ignored but must be present and unique).</p>
+</dd>
+<dt>-m NAME:FILE</dt>
+<dd><p>Add a <em>FILE</em> in YAML or JSON format to the input metadata as a value of object <em>NAME</em>.</p>
+</dd>
+</dl>
+<h4 id="debugging-options">Debugging options</h4>
+<dl>
+<dt>-E</dt>
+<dd><p>Stops template processing after the preprocessing stage (outputs the expanded template).</p>
+<pre><code>$ jqt -E layouts/footer.html 
+&lt;div style=&quot;text-align:center;&quot;&gt;
+{{.snippets.footer}}
+&lt;/div&gt;
+...</code></pre>
+</dd>
+<dt>-S</dt>
+<dd><p>Stops template processing before the render stage (outputs the jq script).</p>
+<pre><code>$ jqt -S docs/layouts/footer.html 
+import &quot;libjqt&quot; as jqt;
+. as $M |
+&quot;&lt;div style=\&quot;text-align:center;\&quot;&gt;&quot;,
+&quot;  \(.snippets.footer)&quot;,
+&quot;&lt;/div&gt;&quot;,
+...</code></pre>
+</dd>
+<dt>-P</dt>
+<dd><p>Stops MarkDown processing after preprocessing stage (outputs the expanded MarkDown).</p>
+<pre><code>$ jqt -P content/engine.md 
+---
+title: jqt · the jq template engine
+baseURL: https://fadado.github.com/jqt/
+lang: en
+---
+
+## &lt;cite&gt;jq&lt;/cite&gt; templates
+
+The &lt;cite&gt;jq&lt;/cite&gt; template language will be called &lt;cite&gt;jqt&lt;/cite&gt;.  
+The tools used in the implementation of &lt;cite&gt;jqt&lt;/cite&gt; are:</code></pre>
+</dd>
+<dt>-H</dt>
+<dd><p>Stops MarkDown processing after generating HTML (outputs several HTML fragments).</p>
+<pre><code>$ jqt -Icontent -H content/engine.md 
+&lt;p&gt;Could be &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/a&gt; the
+basis for a web template engine? Let&#39;s explore…&lt;/p&gt;
+&lt;h2 id=&quot;jq&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/h2&gt;
+...</code></pre>
+</dd>
+<dt>-C</dt>
+<dd><p>Stops processing before the render stage (outputs full JSON data model).</p>
+<pre><code>$ jqt -I layouts -C -d content/home.md layouts/default.html 
+{
+    &quot;body&quot;: &quot;&lt;!DOCTYPE html ...
+    &quot;front&quot;: {
+        &quot;front-matter&quot;: false,
+        ...
+    }
+}</code></pre>
+</dd>
+</dl>
+<h2 id="implementation">Implementation</h2>
+<p>The command <code>jqt</code> is a shell script executed by <code>bash</code>. <code>jqt</code> has been tested with <a href="https://www.gnu.org/software/bash/">Bash 4.3</a>, <a href="https://www.gnu.org/software/sed/">GNU sed 4.2</a>, <a href="https://logological.org/gpp">GPP 2.24</a>, <a href="https://stedolan.github.io/jq/">jq 1.5</a> and <a href="http://pandoc.org/">Pandoc 1.13</a>. Also is used a small Python snippet which depends on the modules <code>json</code> and <code>yaml</code>.</p>
+<p>The project uses <a href="https://www.gnu.org/software/make/">GNU Make</a> on several development activities, but <code>make</code> is not necessary to run <code>jqt</code>.</p>
+<p>All external shell commands called by <code>jqt</code> are:</p>
+<ul>
+<li><code>cat</code></li>
+<li><code>gpp</code></li>
+<li><code>jq</code></li>
+<li><code>mkdir</code></li>
+<li><code>mkfifo</code></li>
+<li><code>pandoc</code></li>
+<li><code>python</code></li>
+<li><code>rm</code></li>
+<li><code>sed</code></li>
+<li><code>sleep</code></li>
+<li><code>tee</code></li>
+</ul>
+<p>Under a recent <cite>Fedora</cite> <cite>Linux</cite> distribution the following commands will install all the extra software <em>jqt</em> needs:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> dnf -y <span class="kw">install</span> <span class="kw">make</span> general-purpose-preprocessor jq pandoc PyYAML</code></pre>
+<h2 id="installation">Installation</h2>
+<p>If you know how to use <code>make</code> please read the <code>Makefile</code> located in the <em>jqt</em> top directory and run <code>make install</code> if you agree with the thinks that will happen. You can also change the installation directory:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">make</span> <span class="kw">install</span> <span class="ot">prefix=</span>/your/installation/path</code></pre>
+<p>You can also install <em>jqt</em> by hand with few orders like:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">mkdir</span> -p /usr/local/bin /usr/local/share/jqt
+$ <span class="kw">sudo</span> <span class="kw">cp</span> bin/jqt /usr/local/bin
+$ <span class="kw">sudo</span> <span class="kw">chmod</span> +x /usr/local/bin/jqt
+$ <span class="kw">sudo</span> <span class="kw">cp</span> share/* /usr/local/share/jqt</code></pre>
+<p>If you are using a recent <cite>Fedora</cite> <cite>Linux</cite> distribution or similar <code>make</code> will also help you to install all the extra software <em>jqt</em> needs:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">make</span> setup</code></pre>
+
+  </div>    </div>
+
+    <div id="FOOTER">
+<div style="text-align:center;">
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+
 </div>
 <div class="github">
-	❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-		<a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-		<a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-		<a href="https://github.com/fadado/jqt/releases">releases</a>
-	❳</div>
-		</div>
-	</body>
+  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
+    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
+    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
+    <a href="https://github.com/fadado/jqt/releases">releases</a>
+  ❳</div>
+
+    </div>
+  </body>
 </html>
+

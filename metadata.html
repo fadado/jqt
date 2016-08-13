@@ -1,43 +1,95 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-	<head>
-			<title>Data model &ndash; jqt · the jq template engine</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+<title>Data model &ndash; jqt · the jq template engine</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.1.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-05T09:15:11Z' />
+<meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
-	</head>
-	<body>
-		<ul id="MENU">
-			<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
+
+
+
+  </head>
+
+  <body>
+    <ul id="MENU">
+      <li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
 <li><a  href="./index.html">Home</a></li>
 <li><a  href="./engine.html">Engine</a></li>
 <li><a  href="./document.html">Document</a></li>
 <li><a  href="./template.html">Template</a></li>
-<li><a  href="./metadata.html">Metadata</a></li>
-		</ul>
-			<h1>Data model &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
-		<div id="BODY">
-				<div id="TOC">
-		<p>Table of contents</p>
-		
-	</div>
-	<div id="CONTENT">
-		
-<p>Metadata in YAML and JSON formats</p>
-	</div>
-		</div>
-		<div id="FOOTER">
-			<div style="text-align:center;">
-	<hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+<li><a class='current' href="./metadata.html">Metadata</a></li>
+    </ul>
+
+<h1>Data model &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
+    <div id="BODY">
+  <div id="TOC">
+    <p>Table of contents</p>
+    
+<ul>
+<li><a href="#processing">Processing</a><ul>
+<li><a href="#preprocessing">Preprocessing</a></li>
+</ul></li>
+<li><a href="#other-utilities">Other utilities</a><ul>
+<li><a href="#format-conversion">Format conversion</a></li>
+<li><a href="#querying-yaml-and-csv">Querying YAML and CSV</a></li>
+</ul></li>
+</ul>
+
+  </div>
+  <div id="CONTENT">
+    <p>Metadata in YAML and JSON formats</p>
+<h2 id="processing">Processing</h2>
+<h3 id="preprocessing">Preprocessing</h3>
+<h2 id="other-utilities">Other utilities</h2>
+<p>When preparing metadata sometimes you need to mix files in several formats, or you want to apply to YAML input queries in the <em>jq</em> style.</p>
+<h3 id="format-conversion">Format conversion</h3>
+<p>To make easy integrate metadata from several sources <em>jqt</em> comes with the following utilities to convert between CSV, JSON and YAML formats:</p>
+<ul>
+<li><code>csv2json</code></li>
+<li><code>csv2yaml</code></li>
+<li><code>json2csv</code></li>
+<li><code>json2yaml</code></li>
+<li><code>yaml2csv</code></li>
+<li><code>yaml2json</code></li>
+</ul>
+<p>The utilities are filters that read standard input or a file passed as an argument and write to standard output.</p>
+<h3 id="querying-yaml-and-csv">Querying YAML and CSV</h3>
+<p>Also, sometimes you want to apply queries in the <em>jq</em> style to CSV or YAML files. As a wrappers to <code>jq</code> you have the following utilities shipped with <em>jqt</em>:</p>
+<ul>
+<li><code>cq</code></li>
+<li><code>yq</code></li>
+</ul>
+<p>These utilities imitate at maximum the <code>jq</code> command line interface, for example not requiring redirection of input:</p>
+<pre><code>$ yq &#39;.store.book[2]&#39; tests/data/store.yaml
+---
+author: Herman Melville
+category: fiction
+isbn: 0-553-21311-3
+price: 8.99
+title: Moby Dick
+...</code></pre>
+<p>You can also ask for JSON output:</p>
+<pre><code>$ yq --json -c &#39;.store.book[2]&#39; tests/data/store.yaml
+{&quot;category&quot;:&quot;fiction&quot;,&quot;price&quot;:8.99,&quot;author&quot;:&quot;Herman Melville&quot;,...</code></pre>
+<p>Read the output of <code>yq --help</code> for more information.</p>
+
+  </div>    </div>
+
+    <div id="FOOTER">
+<div style="text-align:center;">
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+
 </div>
 <div class="github">
-	❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-		<a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-		<a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-		<a href="https://github.com/fadado/jqt/releases">releases</a>
-	❳</div>
-		</div>
-	</body>
+  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
+    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
+    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
+    <a href="https://github.com/fadado/jqt/releases">releases</a>
+  ❳</div>
+
+    </div>
+  </body>
 </html>
+

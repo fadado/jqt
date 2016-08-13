@@ -238,3 +238,6 @@ font-family:sans-serif;
 color:#4183c4;
 text-align:center;
 }
+#FOOTER div.github a{
+font-variant:small-caps;
+}
