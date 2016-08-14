@@ -16,6 +16,46 @@ updated: "2016-08-13T07:48:26Z"
 
 ### Preprocessing
 
+The MarkDown input content is preprocessed using `gpp`
+
+#### Syntax of macros
+
+```
+<%define sc
+    <span style="font-variant:small-caps;">$1</span>
+>
+```
+
+```
+continuation lines using ampersand&
+```
+
+#### Skips
+
+##### Comments
+
+Comments are no cpied to the output.
+
+Macros evaluation inside comments is disabled.
+
+```
+<# block comments, removed, including terminating new-line #>
+```
+
+##### Strings
+
+Strings are copied to the output, but evaluation of macros inside strings can
+be is disabled.
+
+String delimiters can be copied, or not, to the output.
+
+```
+<%sc 'single quoted strings only in macro calls'>
+<%sc "double quoted strings, expanding macros inside, only in macro calls'>
+<!-- XML comments, not removed -->
+Fenced code blocks with tildes (~~~) or backticks (```)
+```
+
 ### HTML Generation
 
 ## Pandoc options

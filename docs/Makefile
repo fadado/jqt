@@ -1,4 +1,4 @@
-# jqt documentation site management
+# jqt site documentation management
 
 ########################################################################
 # Prerequisites
@@ -50,55 +50,60 @@ SHELL := /bin/bash
 # Variables
 ########################################################################
 
+# Output directories
+CACHE := .jqt
+DESTINATION := /tmp/jqt
+
+# Directories for input files
+CONTENT := ./content
+STRUCTURE := ./structure
+PRESENTATION := ./presentation
+
 # Global objects available in jq scripts:
-#	.site		defined in the jqt call
-#	.snippets	defined in the jqt call
 #	.body		predefined by jqt
 #	.front		predefined by jqt
+#	.site		defined in the jqt call
+#	.snippets	defined in the jqt call
 
-# Some directories
-CACHE=.jqt
-DESTINATION = /tmp/jqt
-CONTENT=./content
-LAYOUTS=./layouts
+# The template engine
+JQT := jqt \
+	-I$(STRUCTURE) \
+	-I$(CONTENT) \
+	-isite \
+	-msite:$(CACHE)/site.json \
+	-msnippets:$(CACHE)/snippets.json \
+	--toc-depth=3 \
 
-# Commands
-JQT = jqt \
-      -I$(LAYOUTS) \
-      -I$(CONTENT) \
-      --toc-depth=3 \
-      -isite \
-      -msite:$(CACHE)/site.json \
-      -msnippets:$(CACHE)/snippets.json
-
-MPCSS = gpp --nostdinc \
+# Macro process CSS
+MPCSS := gpp --nostdinc \
 	+c '/*' '*/' \
 	+c '//' '\n' \
 	-U '&' ';' '(' ',' ');' '(' ')' '\$$' '' \
-	-M '&' ';' '(' ',' ');' '(' ')'
+	-M '&' ';' '(' ',' ');' '(' ')' \
 
-CSSMIN  = sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
+# Minify CSS
+CSSMIN  := sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
 
 # Common sources for all targets
-COMMON = \
+COMMON := \
 	$(CACHE)/site.json \
 	$(CACHE)/snippets.json \
-	$(LAYOUTS)/default.html \
-	$(LAYOUTS)/head.html \
-	$(LAYOUTS)/footer.html \
+	$(STRUCTURE)/default.html \
+	$(STRUCTURE)/head.html \
+	$(STRUCTURE)/footer.html \
 	$(CONTENT)/LINKS.md \
 	site.m \
 	site.jq \
 
-# Targets
-TARGETS = \
-	$(DESTINATION)/README.md	\
-	$(DESTINATION)/document.html	\
-	$(DESTINATION)/engine.html	\
-	$(DESTINATION)/index.html	\
-	$(DESTINATION)/metadata.html	\
-	$(DESTINATION)/template.html	\
-	$(DESTINATION)/jqt.css	\
+# Files to "build"
+TARGETS := \
+	$(DESTINATION)/README.md \
+	$(DESTINATION)/document.html \
+	$(DESTINATION)/engine.html \
+	$(DESTINATION)/index.html \
+	$(DESTINATION)/metadata.html \
+	$(DESTINATION)/template.html \
+	$(DESTINATION)/jqt.css \
 
 ########################################################################
 # Rules
@@ -116,28 +121,29 @@ $(DESTINATION)/README.md: README.md | $(DESTINATION)
 $(CACHE)/site.json: site.yaml | $(CACHE)
 	yaml2json < $< > $@
 
+$(CACHE)/snippets.pandoc: private id=^\([a-zA-Z_-]\+\)
 $(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml | $(CACHE)
-	sed '/^\([a-zA-Z_-]\+\): *[>|]/{s/^\([a-zA-Z_-]\+\):.*/\1: >\n  $$\1$$/;b;};/^\([a-zA-Z_-]\+\): *[^#]/{s/^\([a-zA-Z_-]\+\):.*/\1: $$\1$$/;b;};d;' $< > $@
+	sed '/$(id): *[>|]/{s/$(id):.*/\1: >\n  $$\1$$/;b;};/$(id): *[^#]/{s/$(id):.*/\1: $$\1$$/;b;};d;' \
+	< $< > $@
 
 $(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CACHE)
-	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< | yaml2json > $@
+	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< \
+	| yaml2json > $@
 
 # Pages
 $(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) | $(DESTINATION)
-	$(JQT) -d $< $(LAYOUTS)/default.html > $@
+	$(JQT) -d $< $(STRUCTURE)/default.html > $@
 
 define Page
-$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(LAYOUTS)/page.html $(COMMON) $(CONTENT)/FLOW.md | $(DESTINATION)
-	$$(JQT) -d $$< $(LAYOUTS)/page.html > $$@
+$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(STRUCTURE)/page.html $(COMMON) $(CONTENT)/FLOW.md | $(DESTINATION)
+	$$(JQT) -d $$< $(STRUCTURE)/page.html > $$@
 endef
 
-$(eval $(call Page,engine))
-$(eval $(call Page,document))
-$(eval $(call Page,metadata))
-$(eval $(call Page,template))
+PAGES := engine document metadata template
+$(foreach page,$(PAGES),$(eval $(call Page,$(page))))
 
 # CSS
-$(DESTINATION)/jqt.css: style/jqt.css style/github.css
+$(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
 	$(MPCSS) $< | $(CSSMIN) > $@
 
 # Main

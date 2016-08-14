@@ -90,5 +90,8 @@
 	color: #4183c4;
 	text-align: center;
 }
+#FOOTER div.github a {
+	font-variant: small-caps;
+}
 
 // vim:ts=4:sw=4:ai:noet:fileencoding=utf-8:syntax=css

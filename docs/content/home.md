@@ -5,14 +5,14 @@ updated: "2016-08-13T07:48:26Z"
 <%include "site.m">&
 <%include "LINKS.md">&
 
-Could be [<%cite jq>][JQ] the basis for a web template engine?
+Could be [_jq_][JQ] the basis for a web template engine?
 Let's explore&hellip;
 
-## <%cite 'jq'>
+## _jq_
 
-<%cite jq> have nice features as string interpolation and implicit backtracking.
+_jq_ have nice features as string interpolation and implicit backtracking.
 Mixed with the help of some syntactic sugar a powerful template engine appear.
-Imagine the following simple strings, in the middle of a <%cite jq> program,
+Imagine the following simple strings, in the middle of a _jq_ program,
 separated with the comma operator:
 
 ### Simple expansion
@@ -36,12 +36,12 @@ separated with the comma operator:
 In these examples the strings expand, vanish, or multiply without any
 explicit `if` or `for`!
 
-## <%cite jqt>
+## _jqt_
 
-To write <%cite jq> scripts using strings with interpolations is not the idea we have
+To write _jq_ scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided to you by
-<%cite jqt>. You write templates in a very fashionable style, the templates
-are translated into a <%cite jq> script and then `jq` is feed with the created
+_jqt_. You write templates in a very fashionable style, the templates
+are translated into a _jq_ script and then `jq` is feed with the created
 script and some metadata and content in JSON or YAML format&hellip; and the magic is done!
 
 ### Syntactic sugar

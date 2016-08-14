@@ -11,5 +11,6 @@ setup:
 	@rpm -q --quiet general-purpose-preprocessor || sudo dnf -y install general-purpose-preprocessor
 	@rpm -q --quiet jq || sudo dnf -y install jq
 	@rpm -q --quiet pandoc || sudo dnf -y install pandoc
+	@test -d /usr/share/doc/PyYAML || sudo dnf -y install PyYAML
 
 # vim:ai:sw=8:ts=8:noet:syntax=make

@@ -8,15 +8,15 @@ updated: "2016-08-13T07:48:26Z"
 
 ## General operation
 
-<%cite jqt> orchestrates several shell utilities to transform MarkDown text and
+_jqt_ orchestrates several shell utilities to transform MarkDown text and
 YAML or JSON data into a final HTML document. The transformation is driven by a template,
-where HTML is mixed with <%cite jq> snippets to implement the transformation logic.
+where HTML is mixed with _jq_ snippets to implement the transformation logic.
 This diagram shows how document, template and metadata inputs are combined by
-<%cite jqt> to produce the final HTML output.
+_jqt_ to produce the final HTML output.
 
 <%include "FLOW.md">
 
-## The `jqt`command
+## Invoking _jqt_
 
 ### Syntax
 
@@ -85,39 +85,90 @@ for included and imported modules.
 
 #### Debugging options
 
--C
-
-:   Stops processing before the render stage (outputs full JSON data model).
-
 -E
 
 :   Stops template processing after the preprocessing stage (outputs the
 expanded template).
 
--H
+    ```
+    $ jqt -E layouts/footer.html 
+    <div style="text-align:center;">
+    {{.snippets.footer}}
+    </div>
+    ...
+    ```
 
-:   Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+-S
+
+:   Stops template processing before the render stage (outputs the jq script).
+
+    ```
+    $ jqt -S docs/layouts/footer.html 
+    import "libjqt" as jqt;
+    . as $M |
+    "<div style=\"text-align:center;\">",
+    "  \(.snippets.footer)",
+    "</div>",
+    ...
+    ```
 
 -P
 
 :   Stops MarkDown processing after preprocessing stage (outputs the expanded
 MarkDown).
 
--S
+    ```
+    $ jqt -P content/engine.md 
+    ---
+    title: jqt · the jq template engine
+    baseURL: https://fadado.github.com/jqt/
+    lang: en
+    ---
 
-:   Stops template processing before the render stage (outputs the jq script).
+    ## <cite>jq</cite> templates
+
+    The <cite>jq</cite> template language will be called <cite>jqt</cite>.  
+    The tools used in theimplementation of <cite>jqt</cite> are:
+    ```
+
+-H
+
+:   Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+
+    ```
+    $ jqt -Icontent -H content/engine.md 
+    <p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
+    basis for a web template engine? Let's explore…</p>
+    <h2 id="jq"><em>jq</em></h2>
+    ...
+    ```
+
+-C
+
+:   Stops processing before the render stage (outputs full JSON data model).
+
+    ```
+    $ jqt -I layouts -C -d content/home.md layouts/default.html 
+    {
+        "body": "<!DOCTYPE html ...
+        "front": {
+            "front-matter": false,
+            ...
+        }
+    }
+    ```
 
 ## Implementation
 
-The main tools used by <%cite jqt> are:
+The command `jqt` is a shell script executed by `bash`.
+`jqt` has been tested with [Bash 4.3][BASH], [GNU sed 4.2][SED], [GPP 2.24][GPP],
+[jq 1.5][JQ] and [Pandoc 1.13][PANDOC]. Also is used a small Python snippet which depends
+on the modules `json` and `yaml`.
 
-* [Bash](https://www.gnu.org/software/bash/), [sed](https://www.gnu.org/software/sed/) and other shell tools.
-* [GPP][GPP], a general-purpose preprocessor.
-* [jq][JQ], a lightweight and flexible command-line JSON processor.
-* [Pandoc][PANDOC], a universal document converter.
+The project uses [GNU Make][MAKE] on several development activities, but `make`
+is not necessary to run `jqt`.
 
-The command `jqt` is an script executed by `bash`. The external shell commands
-called by `jqt` are:
+All external shell commands called by `jqt` are:
 
 * `cat`
 * `gpp`
@@ -125,15 +176,46 @@ called by `jqt` are:
 * `mkdir`
 * `mkfifo`
 * `pandoc`
-* `python` (with `json` and `yaml` modules)
+* `python`
 * `rm`
 * `sed`
 * `sleep`
 * `tee`
 
+Under a recent <%cite Fedora> <%cite Linux> distribution the following commands will install
+all the extra software _jqt_ needs:
+
+```zsh
+$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
+```
+
 ## Installation
 
-...
+If you know how to use `make` please read the `Makefile` located in the _jqt_
+top directory and run `make install` if you agree with the thinks that will
+happen. You can also change the installation directory:
+
+```zsh
+$ sudo make install prefix=/your/installation/path
+```
+
+You can also install _jqt_ by hand with few orders like:
+
+
+```zsh
+$ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
+$ sudo cp bin/jqt /usr/local/bin
+$ sudo chmod +x /usr/local/bin/jqt
+$ sudo cp share/* /usr/local/share/jqt
+```
+
+If you are using a recent <%cite Fedora> <%cite Linux> distribution or similar
+`make` will also help you to install all the extra software _jqt_ needs:
+
+```zsh
+$ sudo make setup
+```
+
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
