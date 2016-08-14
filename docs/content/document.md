@@ -3,7 +3,7 @@
 title: Content documents
 updated: "2016-08-13T07:48:26Z"
 ---
-<%include "site.m">&
+<%include "macros.m">&
 <%include "LINKS.md">&
 
 ## Document structure
@@ -63,20 +63,21 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 When running `jqt` several long options are forwarded to `pandoc`:
 
 ```
---base-header-level=NUMBER                        --katex-stylesheet
---bibliography=FILE                               --latexmathml[=URL]
---citation-abbreviations=FILE                     --mathjax[=URL]
---columns=NUMBER                                  --mathml[=URL]
---csl=FILE                                        --mimetex[=URL]
---email-obfuscation=none|javascript|references    --no-highlight
---file-scope                                      --normalize
---gladtex                                         --number-offset=NUMBER[,NUMBER,...]
---highlight-style=STYLE                           --number-sections
---html-q-tags                                     --preserve-tabs
---id-prefix=STRING                                --section-divs
---indented-code-classes=CLASSES                   --tab-stop=NUMBER
---jsmath[=URL]                                    --webtex[=URL]
---katex[=URL]                                     --wrap=[auto|none|preserve]
+    --base-header-level=NUMBER                        --latexmathml[=URL]
+    --bibliography=FILE                               --mathjax[=URL]
+    --citation-abbreviations=FILE                     --mathml[=URL]
+    --columns=NUMBER                                  --mimetex[=URL]
+    --csl=FILE                                        --no-highlight
+    --email-obfuscation=none|javascript|references    --normalize
+    --file-scope                                      --number-offset=NUMBER[,NUMBER,...]
+    --gladtex                                         --number-sections
+    --highlight-style=STYLE                           --preserve-tabs
+    --html-q-tags                                     --section-divs
+    --id-prefix=STRING                                --tab-stop=NUMBER
+    --indented-code-classes=CLASSES                   --toc-depth=NUMBER
+    --jsmath[=URL]                                    --webtex[=URL]
+    --katex[=URL]                                     --wrap=[auto|none|preserve]
+    --katex-stylesheet
 ```
 
 <#

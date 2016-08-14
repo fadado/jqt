@@ -2,7 +2,7 @@
 <%include "site.yaml">
 updated: "2016-08-13T07:48:26Z"
 ---
-<%include "site.m">&
+<%include "macros.m">&
 <%include "LINKS.md">&
 
 Could be [_jq_][JQ] the basis for a web template engine?
@@ -42,7 +42,7 @@ To write _jq_ scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided to you by
 _jqt_. You write templates in a very fashionable style, the templates
 are translated into a _jq_ script and then `jq` is feed with the created
-script and some metadata and content in JSON or YAML format&hellip; and the magic is done!
+script and some metadata and content in YAML or JSON format&hellip; and the magic is done!
 
 ### Syntactic sugar
 

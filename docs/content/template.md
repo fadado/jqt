@@ -3,7 +3,7 @@
 title: Templates syntax
 updated: "2016-08-13T07:48:26Z"
 ---
-<%include "site.m">&
+<%include "macros.m">&
 <%include "LINKS.md">&
 
 ### Main _jqt_ features

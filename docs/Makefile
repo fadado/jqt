@@ -59,17 +59,11 @@ CONTENT := ./content
 STRUCTURE := ./structure
 PRESENTATION := ./presentation
 
-# Global objects available in jq scripts:
-#	.body		predefined by jqt
-#	.front		predefined by jqt
-#	.site		defined in the jqt call
-#	.snippets	defined in the jqt call
-
-# The template engine
+# The template engine (.site and .snippets defined in the jqt call)
 JQT := jqt \
 	-I$(STRUCTURE) \
 	-I$(CONTENT) \
-	-isite \
+	-ifilters \
 	-msite:$(CACHE)/site.json \
 	-msnippets:$(CACHE)/snippets.json \
 	--toc-depth=3 \
@@ -92,63 +86,68 @@ COMMON := \
 	$(STRUCTURE)/head.html \
 	$(STRUCTURE)/footer.html \
 	$(CONTENT)/LINKS.md \
-	site.m \
-	site.jq \
+	filters.jq \
+	macros.m \
 
 # Files to "build"
-TARGETS := \
-	$(DESTINATION)/README.md \
-	$(DESTINATION)/document.html \
-	$(DESTINATION)/engine.html \
-	$(DESTINATION)/index.html \
-	$(DESTINATION)/metadata.html \
-	$(DESTINATION)/template.html \
-	$(DESTINATION)/jqt.css \
+ASSETS := README.md jqt.css
+PAGES := engine document metadata template
+TARGETS := $(foreach f,$(ASSETS) $(foreach p,index $(PAGES),$(p).html),$(DESTINATION)/$(f))
 
 ########################################################################
 # Rules
 ########################################################################
 
+# Main
+all: $(TARGETS)
+	test -f /etc/xml/xhtml1-dtds.xml \
+	&& xmllint --noout --valid $(DESTINATION)/*.html
+
 # Directories
 $(CACHE) $(DESTINATION):
 	mkdir $@ >/dev/null 2>&1 || true
 
-# Assets
-$(DESTINATION)/README.md: README.md | $(DESTINATION)
-	cp $< $@
-
-# Derived files
-$(CACHE)/site.json: site.yaml | $(CACHE)
+# Cached files
+$(CACHE)/site.json: site.yaml \
+| $(CACHE)
 	yaml2json < $< > $@
 
 $(CACHE)/snippets.pandoc: private id=^\([a-zA-Z_-]\+\)
-$(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml | $(CACHE)
+$(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml \
+| $(CACHE)
 	sed '/$(id): *[>|]/{s/$(id):.*/\1: >\n  $$\1$$/;b;};/$(id): *[^#]/{s/$(id):.*/\1: $$\1$$/;b;};d;' \
 	< $< > $@
 
-$(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc | $(CACHE)
+$(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc \
+| $(CACHE)
 	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< \
 	| yaml2json > $@
 
-# Pages
-$(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) | $(DESTINATION)
+# Target files
+$(DESTINATION)/README.md: README.md \
+| $(DESTINATION)
+	$(info ==> $@)
+	cp $< $@
+
+$(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) \
+| $(DESTINATION)
+	$(info ==> $@)
 	$(JQT) -d $< $(STRUCTURE)/default.html > $@
 
-define Page
-$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(STRUCTURE)/page.html $(COMMON) $(CONTENT)/FLOW.md | $(DESTINATION)
-	$$(JQT) -d $$< $(STRUCTURE)/page.html > $$@
+$(DESTINATION)/engine.html: $(CONTENT)/FLOW.md
+
+define Target
+$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(STRUCTURE)/$(2).html $(COMMON) \
+| $(DESTINATION)
+	$$(info ==> $$@)
+	$$(JQT) -d $$< $(STRUCTURE)/$(2).html > $$@
 endef
 
-PAGES := engine document metadata template
-$(foreach page,$(PAGES),$(eval $(call Page,$(page))))
+$(foreach p,$(PAGES),$(eval $(call Target,$(p),page)))
 
-# CSS
 $(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
+	$(info ==> $@)
 	$(MPCSS) $< | $(CSSMIN) > $@
-
-# Main
-all: $(TARGETS)
-	@xmllint --noout --valid $(DESTINATION)/*.html
 
 ########################################################################
 # Utilities
@@ -163,5 +162,16 @@ clobber:
 	rm -rf $(DESTINATION) $(CACHE)
 
 build: clean all
+
+# Show targets
+.PHONY: help
+help:
+	echo 'Targets:';					\
+	$(MAKE) --print-data-base --just-print 2>&1		\
+	| grep -v '^[mM]akefile'				\
+	| awk '/^[^ \t.%][-A-Za-z0-9_]*:/ { print $$1 }'	\
+	| sort --unique						\
+	| sed 's/:\+$$//'					\
+	| pr --omit-pagination --indent=4 --width=80 --columns=4
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

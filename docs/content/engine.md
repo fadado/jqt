@@ -3,7 +3,7 @@
 title: Operating the engine
 updated: "2016-08-13T07:48:26Z"
 ---
-<%include "site.m">&
+<%include "macros.m">&
 <%include "LINKS.md">&
 
 ## General operation
@@ -76,12 +76,12 @@ for included and imported modules.
 
 -M NAME:FILE
 
-:   Add a *FILE* in JSON or YAML format to the input metadata at the top level
+:   Add a *FILE* in YAML or JSON format to the input metadata at the top level
 (*NAME* is ignored but must be present and unique).
 
 -m NAME:FILE
 
-:   Add a *FILE* in JSON or YAML format to the input metadata as a value of object *NAME*.
+:   Add a *FILE* in YAML or JSON format to the input metadata as a value of object *NAME*.
 
 #### Debugging options
 
@@ -128,7 +128,7 @@ MarkDown).
     ## <cite>jq</cite> templates
 
     The <cite>jq</cite> template language will be called <cite>jqt</cite>.  
-    The tools used in theimplementation of <cite>jqt</cite> are:
+    The tools used in the implementation of <cite>jqt</cite> are:
     ```
 
 -H

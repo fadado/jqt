@@ -62,10 +62,11 @@ help:
 # Tests
 ########################################################################
 
-.PHONY: check cond expr loop macros syntax expand
+.PHONY: check jqt format cond expr loop macros syntax expand csv yaml
 
-check: expand jqt
+check: expand jqt format
 jqt: cond expr loop macros syntax
+format: csv yaml
 
 define TestJQT
 # Run one example
@@ -83,6 +84,8 @@ $(1)-%: $(1)-%.jqt ;
 $(1): $(sort $(subst tests/,,$(wildcard tests/$(1)-[0-9][0-9].jqt)))
 endef
 
+$(foreach t,cond expr loop macros syntax,$(eval $(call TestJQT,$(t))))
+
 define TestGPP
 # Run one example
 $(2)-%.$(1):
@@ -96,10 +99,21 @@ $(2): $(sort $(subst tests/,,$(wildcard tests/$(2)-[0-9][0-9].$(1))))
 endef
 
 $(eval $(call TestGPP,jqt,expand))
-$(eval $(call TestJQT,cond))
-$(eval $(call TestJQT,expr))
-$(eval $(call TestJQT,loop))
-$(eval $(call TestJQT,macros))
-$(eval $(call TestJQT,syntax))
+
+define TestFileFormat
+# Run one example
+$(1)-%.sh:
+	echo "==> $$(basename $$@)"
+	$(SHELL) tests/$$@
+# Run one example named without file suffix
+$(1)-%: $(1)-%.sh ;
+# Run all tests
+$(1): $(sort $(subst tests/,,$(wildcard tests/$(1)-[0-9][0-9].sh)))
+# Check output of all filters is empty for empty input
+	test -z "$$$$(for f in bin/$(1)2* bin/*2$(1); do echo | $$$$f; done)" \
+	|| { echo 1>&2 'EMPTY-FAILED'; false; }
+endef
+
+$(foreach t,csv yaml,$(eval $(call TestFileFormat,$(t))))
 
 # vim:ai:sw=8:ts=8:noet:syntax=make

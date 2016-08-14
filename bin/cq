@@ -1,0 +1,114 @@
+#!/bin/bash
+
+#
+# Wraps jq to be able to process CSV
+#
+
+# Options
+set -o errexit -o noglob -o nounset -o pipefail
+shopt -s expand_aliases
+
+# Script name
+declare -r SELF=${0##*/}
+
+# Format conversors
+alias c2j=${0%$SELF}csv2json
+alias j2c=${0%$SELF}json2csv
+alias j2y=${0%$SELF}json2yaml
+
+# Show help
+function help {
+    cat <<EOF
+${SELF} - commandline CSV processor
+Usage: ${SELF} [options] <jq filter> [file]
+
+    ${SELF} is a wrapper to jq for processing CSV input, applying the given
+    filter to it CSV text input and producing the filter's results as
+    CSV or JSON on standard output.
+
+    The options available are ${SELF} specific and also from jq. The ${SELF}
+    options are:
+     -h     Show this help
+     -C     Output using CSV format (default)
+     -J     Output using JSON format
+     -Y     Output using YAML format
+     -V     Output the jq version
+
+    Some of the jq options include:
+     -e     set the exit status code based on the output
+     -f     Read filter from the file f
+     -s     read (slurp) all inputs into an array; apply filter to it
+     -S     sort keys of objects on output
+     --arg a v          set variable \$a to value v
+     --argjson a v      set variable \$a to JSON value v
+     --slurpfile a f    set variable \$a to an array of values read from f
+    Not all jq options have sense using ${SELF}.
+
+    For more advanced filters see the jq(1) manpage and
+    https://stedolan.github.io/jq
+EOF
+    exit $(( $# == 0 ))
+}
+
+# Entry point
+function main {
+    local -i json=0 yaml=0
+
+    local opt
+    while getopts :hJKVY-: opt; do
+        case $opt in
+            h) help ;;
+            C)  ;;
+            J) json=1 ;;
+            Y) yaml=1 ;;
+            V) exec jq --version ;;
+            -) case $OPTARG in
+                   help) help ;;
+                   CSV|csv) ;;
+                   JSON|json) json=1 ;;
+                   YAML|yaml) yaml=1 ;;
+                   *) OPTIND=$((OPTIND-1))
+                      break ;; # assume jq option
+               esac
+               ;;
+            ?) OPTIND=$((OPTIND-1))
+               break ;; # assume jq option
+        esac
+    done
+
+    shift $((OPTIND-1))
+    (( $# > 0 )) || help
+    [[ $1 == '--version' ]] && exec jq --version
+
+    # Is stdin a TTY?
+    if [[ -t 0 ]]; then
+        if (( $# >= 2 )); then
+            # Is the last parameter a regular file?
+            local last=${!#}
+            if [[ -f $last ]]; then
+                # reopen stdin
+                exec 0< "$last"
+                # remove last parameter
+                set -- "${@:1:$(($#-1))}"
+            fi
+        fi
+    fi
+
+    # Wrap jq
+    if (( json )); then
+        # Preserve JSON output
+        c2j | jq "$@"
+    elif (( yaml )); then
+        c2j | jq "$@" | j2y
+    else
+        c2j | jq "$@" | j2c
+    fi
+
+    # Exit status is that of the last command executed.
+    exit
+}
+
+# Call main
+main "$@"
+
+# vim:ai:sw=4:ts=4:et:syntax=sh
