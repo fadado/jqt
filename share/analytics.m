@@ -1,4 +1,6 @@
 <#
+ # Usage: <%partial analytics UA-8673551-2>
+ #
  # $1: analytics UA
  #>
 <script type="text/javascript">
@@ -15,5 +17,5 @@
     })();
 </script>
 <#
- # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=html
- #>
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=html
+#>

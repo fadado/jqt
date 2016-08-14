@@ -66,6 +66,7 @@ LAYOUTS=./layouts
 JQT = jqt \
       -I$(LAYOUTS) \
       -I$(CONTENT) \
+      --toc-depth=3 \
       -isite \
       -msite:$(CACHE)/site.json \
       -msnippets:$(CACHE)/snippets.json

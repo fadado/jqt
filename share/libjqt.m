@@ -1,28 +1,11 @@
 <#
  # libjqt GPP macros
  #>
-<#
- # Redefine, for clarity, again the GPP mode for jqt
- #>
-<%mode user "<%" ">" "\B" "\B" "\W>" "<" ">" "$" "">&
-<%mode meta "<%" ">" "\B" "\B" "\W>" "<" ">">&
-<%mode string ccc "&\n" "">&
-<%mode string ccc "<#" "#>\n">&
-<%mode string iqi "'" "'" "">&
-<%mode string iQi "\"" "\"" "">&
-<%mode string sss "<!--" "-->" "">&
-<%mode string sss "\n```" "\n```" "">&
-<%mode string sss "\n~~~" "\n~~~" "">&
-<%mode string sss "\n---\n" "\n---\n" "">&
-<%mode string sss "{{" "}}" "">&
-<%mode string sss "{%" "%}" "">&
-<%mode string sss "{#" "#}" "">&
-<#
- # Quote character, only for this file
- #>
+<# Quote character, only for this file #>
 <%mode quote "\\">&
 <#
- # <%partial name arg...>
+ # Usage: <%partial name arg...>
+ #
  # Like include but passing (up to 8) parameters to the included file.
  # Assume 'm' filename extension.
  #>
@@ -34,7 +17,8 @@
     ><%_partial><%_partial "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"><%undef _partial>
 >&
 <#
- # <%shortcode name>... <%name arg...>
+ # Usage: <%shortcode name>... <%name arg...>
+ #
  # Define name as a macro with contents of name.m as a body.
  # Assume 'm' filename extension.
  # Equivalent to: <%defeval name <%include name.m>>
@@ -42,19 +26,21 @@
 <%define shortcode
     <%defeval _shortcode
         <\%defeval $1
-            <\%include $1.m>
+            <\%include "$1.m">
         >
     ><%_shortcode><%undef _shortcode>
 >&
 <#
- # <%call scan text>
+ # Usage: <%call scan text>
+ #
  # Evaluate text with macro calls.
  #>
 <%define scan
     <%defeval _scan $1><%_scan><%undef _scan>
 >&
 <#
- # <%call name arg...>
+ # Usage: <%call name arg...>
+ #
  # Call a macro by name.
  #>
 <%define call
@@ -63,7 +49,8 @@
     ><%_call><%undef _call>
 >&
 <#
- # <%append name text>
+ # Usage: <%append name text>
+ #
  # Equivalent to: <%defeval name <%name>text.>
  #>
 <%define append
@@ -72,5 +59,5 @@
     ><%_append><%undef _append>
 >&
 <#
- # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=perl
- #>
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=perl
+#>
