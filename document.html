@@ -28,45 +28,135 @@
     <p>Table of contents</p>
     
 <ul>
+<li><a href="#general-operation">General operation</a></li>
 <li><a href="#document-structure">Document structure</a><ul>
 <li><a href="#front-matter">Front matter</a></li>
 <li><a href="#body">Body</a></li>
 </ul></li>
-<li><a href="#processing">Processing</a><ul>
+<li><a href="#document-conversion">Document conversion</a><ul>
 <li><a href="#preprocessing">Preprocessing</a></li>
 <li><a href="#html-generation">HTML Generation</a></li>
 </ul></li>
-<li><a href="#pandoc-options">Pandoc options</a></li>
 </ul>
 
   </div>
   <div id="CONTENT">
-    <h2 id="document-structure">Document structure</h2>
+    <h2 id="general-operation">General operation</h2>
+<p><em>jqt</em> will transform your MarkDown documents to HTML using <a href="http://pandoc.org/">Pandoc</a>, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess the documents. Pandoc's output is then merged with the YAML front matter and the input metadata before send it to the render stage. This is described on the middle of this diagram:</p>
+<pre><code>           jqt        +------+   +-------+  jq script
+Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
+                      +------+   +-------+                               |
+                                                                         |
+                                               HTML and CSS              | 
+                                               fragments                 v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
+                      +------+   +------+   \--------&gt;+-----+         +------+
+                                               YAML    ^   ^
+                                          front-matter |   |
+                                                       |   |
+           JSON       +------+                         |   |
+         +-----------&gt;|expand|-------------------------+   |
+Metadata              +------+                             |
+         +-------------------------------------------------+
+           YAML   </code></pre>
+<h2 id="document-structure">Document structure</h2>
+<p>Documents contains MarkDown text with an optional YAML front matter.</p>
 <h3 id="front-matter">Front matter</h3>
+<p>Pandoc accepts YAML metadata intermixed with the MarkDown content. <em>jqt</em> will extract the YAML front matter, located at the very begining of the file, transform it to JSON with the top level scalar elements converted to MarkDown, and inject it into the render stage under the global object named <code>.front</code>.</p>
 <h3 id="body">Body</h3>
-<h2 id="processing">Processing</h2>
+<p>Pandoc will convert the document body to HTML, and <em>jqt</em> will inject it into the render stage under the global scalar named <code>.body</code>. If the document contains fenced code blocks specifying the language of the code block, the highlight code will be in the scalar <code>.front._css</code>. Also, the table of contents will be in the scalar <code>.front._toc</code>.</p>
+<h2 id="document-conversion">Document conversion</h2>
+<p>The document conversion has two stages. In the first the text is preprocessed, and the second does the proper conversion to HTML.</p>
 <h3 id="preprocessing">Preprocessing</h3>
-<p>The MarkDown input content is preprocessed using <code>gpp</code></p>
+<p>The MarkDown input content is preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options are available, like defining new macros, include other files, etc. For example, a macro call like <code>&lt;%include &quot;../VERSION&quot;&gt;</code> will expand to he string <code>0.1.0</code> as you can see on the top of this page.</p>
 <h4 id="syntax-of-macros">Syntax of macros</h4>
+<p>Macro definition:</p>
 <pre><code>&lt;%define sc
     &lt;span style=&quot;font-variant:small-caps;&quot;&gt;$1&lt;/span&gt;
-&gt;</code></pre>
-<pre><code>continuation lines using ampersand&amp;</code></pre>
+&gt;&amp;</code></pre>
+<p>Macro call examples:</p>
+<pre><code>&lt;%sc &#39;A title in small caps&#39;&gt;
+
+&lt;%include &quot;LINKS.md&quot;&gt;&amp;</code></pre>
 <h4 id="skips">Skips</h4>
-<h5 id="comments">Comments</h5>
-<p>Comments are no cpied to the output.</p>
-<p>Macros evaluation inside comments is disabled.</p>
-<pre><code>&lt;# block comments, removed, including terminating new-line #&gt;</code></pre>
-<h5 id="strings">Strings</h5>
-<p>Strings are copied to the output, but evaluation of macros inside strings can be is disabled.</p>
-<p>String delimiters can be copied, or not, to the output.</p>
-<pre><code>&lt;%sc &#39;single quoted strings only in macro calls&#39;&gt;
-&lt;%sc &quot;double quoted strings, expanding macros inside, only in macro calls&#39;&gt;
+<p>Some fragments of text are skipped during macro expansion.</p>
+<pre><code>&lt;# block comments, removed, must end in newline (also removed) #&gt;</code></pre>
+<pre><code>Continuation lines using ampersand (removed with the newline character)&amp;</code></pre>
+<p>Strings are copied to the output, but evaluation of macros inside strings can be disabled. String delimiters can be copied, or not, to the output.</p>
+<pre><code>&lt;%sc &#39;single quoted strings, only available in user defined macro calls&#39;&gt;
+&lt;%sc &quot;double quoted strings, only available in user defined macro calls&#39;&gt;
+Inline code `inside backticks`
 &lt;!-- XML comments, not removed --&gt;
-Fenced code blocks with tildes (~~~) or backticks (```)</code></pre>
+```
+Fenced code blocks with tildes (~~~) or backticks (```)
+```</code></pre>
+<p>This table summarize all the skips available:</p>
+<table>
+<caption><strong>Semantics for all MarkDown skips</strong></caption>
+<thead>
+<tr class="header">
+<th align="center">Delimiters</th>
+<th align="left">Place</th>
+<th align="left">Macro expansion</th>
+<th align="left">Delimiters removed</th>
+<th align="left">Content removed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">&lt;# #&gt;</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="center">' '</td>
+<td align="left">User defined macros</td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">&quot; &quot;</td>
+<td align="left">User defined macros</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="center">` `</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">&lt;!-- --&gt;</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="center">```</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">~~~</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
 <h3 id="html-generation">HTML Generation</h3>
-<h2 id="pandoc-options">Pandoc options</h2>
-<p>When running <code>jqt</code> several long options are forwarded to <code>pandoc</code>:</p>
+<p><em>jqt</em> accept as input format the Pandoc's MarkDown variant, with the title block extension disabled. When running <code>jqt</code> several Pandoc long options can be forwarded to <code>pandoc</code>:</p>
 <pre><code>    --base-header-level=NUMBER                        --latexmathml[=URL]
     --bibliography=FILE                               --mathjax[=URL]
     --citation-abbreviations=FILE                     --mathml[=URL]
@@ -87,7 +177,7 @@ Fenced code blocks with tildes (~~~) or backticks (```)</code></pre>
 
     <div id="FOOTER">
 <div style="text-align:center;">
-  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
 <div class="github">
@@ -98,6 +188,15 @@ Fenced code blocks with tildes (~~~) or backticks (```)</code></pre>
   ❳</div>
 
     </div>
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-82432866-1', 'auto');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>
 

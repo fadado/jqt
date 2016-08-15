@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.1.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
+<meta name='dcterms.modified' content='2016-08-15T11:17:00Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 
 <style type="text/css">
@@ -59,7 +59,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
   </div>
   <div id="CONTENT">
     <h2 id="general-operation">General operation</h2>
-<p><em>jqt</em> orchestrates several shell utilities to transform MarkDown text and YAML or JSON data into a final HTML document. The transformation is driven by a template, where HTML is mixed with <em>jq</em> snippets to implement the transformation logic. This diagram shows how document, template and metadata inputs are combined by <em>jqt</em> to produce the final HTML output.</p>
+<p><em>jqt</em> orchestrates several shell utilities to transform MarkDown text and YAML or JSON data into a final HTML document. The transformation is driven by a template, where HTML is mixed with <em>jq</em> snippets to implement the transformation logic. This diagram shows how document, template and metadata inputs (on the left) are combined by <em>jqt</em> to produce the final HTML output:</p>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
@@ -183,7 +183,7 @@ basis for a web template engine? Let&#39;s explore…&lt;/p&gt;
 <h2 id="implementation">Implementation</h2>
 <p>The command <code>jqt</code> is a shell script executed by <code>bash</code>. <code>jqt</code> has been tested with <a href="https://www.gnu.org/software/bash/">Bash 4.3</a>, <a href="https://www.gnu.org/software/sed/">GNU sed 4.2</a>, <a href="https://logological.org/gpp">GPP 2.24</a>, <a href="https://stedolan.github.io/jq/">jq 1.5</a> and <a href="http://pandoc.org/">Pandoc 1.13</a>. Also is used a small Python snippet which depends on the modules <code>json</code> and <code>yaml</code>.</p>
 <p>The project uses <a href="https://www.gnu.org/software/make/">GNU Make</a> on several development activities, but <code>make</code> is not necessary to run <code>jqt</code>.</p>
-<p>All external shell commands called by <code>jqt</code> are:</p>
+<p>The external shell commands called by <code>jqt</code> are:</p>
 <ul>
 <li><code>cat</code></li>
 <li><code>gpp</code></li>
@@ -197,24 +197,24 @@ basis for a web template engine? Let&#39;s explore…&lt;/p&gt;
 <li><code>sleep</code></li>
 <li><code>tee</code></li>
 </ul>
-<p>Under a recent <cite>Fedora</cite> <cite>Linux</cite> distribution the following commands will install all the extra software <em>jqt</em> needs:</p>
+<p>Under a recent <cite>Fedora</cite> <cite>Linux</cite> distribution the following command will install all the extra software <em>jqt</em> needs:</p>
 <pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> dnf -y <span class="kw">install</span> <span class="kw">make</span> general-purpose-preprocessor jq pandoc PyYAML</code></pre>
 <h2 id="installation">Installation</h2>
-<p>If you know how to use <code>make</code> please read the <code>Makefile</code> located in the <em>jqt</em> top directory and run <code>make install</code> if you agree with the thinks that will happen. You can also change the installation directory:</p>
+<p>If you know how to use <code>make</code> please read the <code>Makefile</code> located in the <em>jqt</em> top directory and run <code>make install</code> if you agree with the things that will happen. You can also change the installation directory:</p>
 <pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">make</span> <span class="kw">install</span> <span class="ot">prefix=</span>/your/installation/path</code></pre>
-<p>You can also install <em>jqt</em> by hand with few orders like:</p>
+<p>But if you choose a directory diferent of <code>/usr/local/share</code> for the shared data you must still edit the parameter <code>DATADIR</code> definition in the <code>bin/jqt</code> file.</p>
+<p>You can also install <em>jqt</em> by hand executing few orders from the <em>jqt</em> top directory:</p>
 <pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">mkdir</span> -p /usr/local/bin /usr/local/share/jqt
-$ <span class="kw">sudo</span> <span class="kw">cp</span> bin/jqt /usr/local/bin
-$ <span class="kw">sudo</span> <span class="kw">chmod</span> +x /usr/local/bin/jqt
+$ <span class="kw">sudo</span> <span class="kw">cp</span> bin/* /usr/local/bin
 $ <span class="kw">sudo</span> <span class="kw">cp</span> share/* /usr/local/share/jqt</code></pre>
-<p>If you are using a recent <cite>Fedora</cite> <cite>Linux</cite> distribution or similar <code>make</code> will also help you to install all the extra software <em>jqt</em> needs:</p>
+<p>If you are using a recent <cite>Fedora</cite> <cite>Linux</cite> distribution or similar <code>make</code> will also help you to install all the extra software <em>jqt</em> needs (except <code>make</code> itself):</p>
 <pre class="sourceCode zsh"><code class="sourceCode zsh">$ <span class="kw">sudo</span> <span class="kw">make</span> setup</code></pre>
 
   </div>    </div>
 
     <div id="FOOTER">
 <div style="text-align:center;">
-  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
 <div class="github">
@@ -225,6 +225,15 @@ $ <span class="kw">sudo</span> <span class="kw">cp</span> share/* /usr/local/sha
   ❳</div>
 
     </div>
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-82432866-1', 'auto');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>
 

@@ -28,6 +28,7 @@
     <p>Table of contents</p>
     
 <ul>
+<li><a href="#general-operation">General operation</a></li>
 <li><a href="#processing">Processing</a><ul>
 <li><a href="#preprocessing">Preprocessing</a></li>
 </ul></li>
@@ -39,7 +40,27 @@
 
   </div>
   <div id="CONTENT">
-    <p>Metadata in YAML and JSON formats</p>
+    <h2 id="general-operation">General operation</h2>
+<p><em>jqt</em> will</p>
+<p>Metadata in YAML and JSON formats</p>
+<p>This is described on the bottom of this diagram:</p>
+<pre><code>           jqt        +------+   +-------+  jq script
+Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
+                      +------+   +-------+                               |
+                                                                         |
+                                               HTML and CSS              | 
+                                               fragments                 v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
+                      +------+   +------+   \--------&gt;+-----+         +------+
+                                               YAML    ^   ^
+                                          front-matter |   |
+                                                       |   |
+           JSON       +------+                         |   |
+         +-----------&gt;|expand|-------------------------+   |
+Metadata              +------+                             |
+         +-------------------------------------------------+
+           YAML   </code></pre>
 <h2 id="processing">Processing</h2>
 <h3 id="preprocessing">Preprocessing</h3>
 <h2 id="other-utilities">Other utilities</h2>
@@ -79,7 +100,7 @@ title: Moby Dick
 
     <div id="FOOTER">
 <div style="text-align:center;">
-  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
 <div class="github">
@@ -90,6 +111,15 @@ title: Moby Dick
   ❳</div>
 
     </div>
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-82432866-1', 'auto');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>
 

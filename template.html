@@ -8,6 +8,25 @@
 <meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
 
 
   </head>
@@ -28,16 +47,186 @@
     <p>Table of contents</p>
     
 <ul>
-<li><a href="#main-jqt-features">Main <em>jqt</em> features</a></li>
-<li><a href="#processing">Processing</a><ul>
+<li><a href="#general-operation">General operation</a></li>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#conversion">Conversion</a><ul>
 <li><a href="#preprocessing">Preprocessing</a></li>
-<li><a href="#execution-by-jq">Execution by <code>jq</code></a></li>
+<li><a href="#main-jqt-features">Main <em>jqt</em> features</a></li>
 </ul></li>
 </ul>
 
   </div>
   <div id="CONTENT">
-    <h3 id="main-jqt-features">Main <em>jqt</em> features</h3>
+    <h2 id="general-operation">General operation</h2>
+<p><em>jqt</em> will transform your templates into <em>jq</em> scripts, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. The generated script will be executed, in the render stage, to generate the final HTML document while consuming the collected JSON inputs. This is described on the top of this diagram:</p>
+<pre><code>           jqt        +------+   +-------+  jq script
+Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
+                      +------+   +-------+                               |
+                                                                         |
+                                               HTML and CSS              | 
+                                               fragments                 v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
+                      +------+   +------+   \--------&gt;+-----+         +------+
+                                               YAML    ^   ^
+                                          front-matter |   |
+                                                       |   |
+           JSON       +------+                         |   |
+         +-----------&gt;|expand|-------------------------+   |
+Metadata              +------+                             |
+         +-------------------------------------------------+
+           YAML   </code></pre>
+<h2 id="syntax">Syntax</h2>
+<p>A template is a file with UTF-8-encoded text, with a few kinds of delimited statements intermixed. The delimiters are as follows:</p>
+<table>
+<caption><strong>Delimiters used in <em>jqt</em> templates</strong></caption>
+<thead>
+<tr class="header">
+<th align="left">Delimiters</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">{# ... #}</td>
+<td align="left">comments not included in the output</td>
+</tr>
+<tr class="even">
+<td align="left">{{ ... }}</td>
+<td align="left">expressions to evaluate and print</td>
+</tr>
+<tr class="odd">
+<td align="left">{% ... %}</td>
+<td align="left">control statements</td>
+</tr>
+</tbody>
+</table>
+<p>The text inside the delimiters is normal <em>jq</em> code. As a bonus, the <code>M$</code> global variable point to <code>jq</code> JSON input.</p>
+<p>You can pass to <code>jqt</code> the following template options:</p>
+<dl>
+<dt>-L DIRECTORY</dt>
+<dd><p>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.</p>
+</dd>
+<dt>-i MODULE</dt>
+<dd><p>Include the jq <em>MODULE</em> in the render stage.</p>
+</dd>
+<dt>-j MODULE:NAME</dt>
+<dd><p>Import the jq <em>MODULE</em> in the render stage.</p>
+</dd>
+</dl>
+<p>This is a complete template example:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.lang}}&#39;</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+    {# block comments #}
+    <span class="kw">&lt;title&gt;</span>{{.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
+    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
+    {# implicit loop if several authors #}
+    {% .author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
+    {# include files in preprocessing stage #}
+    <span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+    <span class="kw">&lt;h1&gt;</span>{{.title}}<span class="kw">&lt;/h1&gt;</span>
+    <span class="kw">&lt;h2&gt;</span>{{.subtitle//empty}}<span class="kw">&lt;/h2&gt;</span> {# line vanishes if subtitle not defined #}
+    <span class="kw">&lt;ul&gt;</span>
+        {% range(.n) %} {# loop from 0 to .n-1 #}
+            <span class="kw">&lt;li&gt;</span>{{.}}<span class="kw">&lt;/li&gt;</span>
+        {% end %}
+    <span class="kw">&lt;/ul&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre>
+<h2 id="conversion">Conversion</h2>
+<h3 id="preprocessing">Preprocessing</h3>
+<p>Templates are preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options are available, like defining new macros, include other files, etc.</p>
+<h4 id="syntax-of-macros">Syntax of macros</h4>
+<p>Macro definition:</p>
+<pre><code>&lt;%define HEAD_TITLE
+  &lt;title&gt;{{.front.title}} &amp;ndash; {{.site.title}}&lt;/title&gt;
+&gt;&amp;</code></pre>
+<p>Macro call examples:</p>
+<pre><code>&lt;meta name=&quot;generator&quot; content=&quot;jqt v&lt;%include &quot;../VERSION&quot;&gt;&quot;/&gt;
+
+&lt;%include &quot;default.html&quot;&gt;
+
+&lt;%partial analytics &#39;UA-82432866-1&#39;&gt;&amp;</code></pre>
+<p>Conditional macro call:</p>
+<pre><code>&lt;%ifndef HEAD_TITLE&gt;&amp;
+    &lt;title&gt;{{.front.title}}&lt;/title&gt;
+&lt;%else&gt;&lt;%call HEAD_TITLE&gt;&lt;%endif&gt;&amp;</code></pre>
+<h4 id="skips">Skips</h4>
+<p>Some fragments of text are skipped during macro expansion.</p>
+<pre><code>&lt;# block comments, removed, must end in newline (also removed) #&gt;</code></pre>
+<pre><code>Continuation lines using ampersand (removed with the newline character)&amp;</code></pre>
+<p>Strings are copied to the output, but evaluation of macros inside strings can be disabled. String delimiters can be copied, or not, to the output.</p>
+<pre><code>&lt;%sc &#39;single quoted strings, only available in user defined macro calls&#39;&gt;
+&lt;%sc &quot;double quoted strings, only available in user defined macro calls&#39;&gt;
+&lt;!-- XML comments, not removed --&gt;
+All the jqt template tags: {#...#}, {%...%}, {{...}} </code></pre>
+<p>Templates are preprocessed like MarkDown input, but the skips available are no the same. This table summarize all the skips available:</p>
+<table>
+<caption><strong>Semantics for all template skips</strong></caption>
+<thead>
+<tr class="header">
+<th align="center">Delimiters</th>
+<th align="left">Place</th>
+<th align="left">Macro expansion</th>
+<th align="left">Delimiters removed</th>
+<th align="left">Content removed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">&lt;# #&gt;</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="center">' '</td>
+<td align="left">User defined macros</td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">&quot; &quot;</td>
+<td align="left">User defined macros</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="center">&lt;!-- --&gt;</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">{{ }}</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="center">{% %}</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center">{# #}</td>
+<td align="left">Text</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<h3 id="main-jqt-features">Main <em>jqt</em> features</h3>
 <ul>
 <li>Each line of text in the template is a generator.</li>
 <li>Interpolation of expressions using the <code>{{...}}</code> syntactic sugar.</li>
@@ -48,15 +237,12 @@
 <li>Raw blocks are enclode between <code>{% raw %}</code> and <code>{%%}</code> marks.</li>
 <li>The input metadata provided to <em>jq</em> is available in the dot (<code>.</code>) and the global variable <code>M$</code>.</li>
 </ul>
-<h2 id="processing">Processing</h2>
-<h3 id="preprocessing">Preprocessing</h3>
-<h3 id="execution-by-jq">Execution by <code>jq</code></h3>
 
   </div>    </div>
 
     <div id="FOOTER">
 <div style="text-align:center;">
-  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (docs).</p>
+  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
 <div class="github">
@@ -67,6 +253,15 @@
   ❳</div>
 
     </div>
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-82432866-1', 'auto');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>
 

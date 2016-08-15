@@ -18,9 +18,7 @@ copy: reset
 	cp $(DESTINATION)/* .
 	ls -lX
 
-ci:
+publish:
 	git add .
-	git commit
-
-push:
-	git push origin gh-pages
+	git commit --amend
+	git push --force origin gh-pages
