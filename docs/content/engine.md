@@ -11,8 +11,8 @@ updated: "2016-08-15T11:17:00Z"
 _jqt_ orchestrates several shell utilities to transform MarkDown text and
 YAML or JSON data into a final HTML document. The transformation is driven by a template,
 where HTML is mixed with _jq_ snippets to implement the transformation logic.
-This diagram shows how document, template and metadata inputs are combined by
-_jqt_ to produce the final HTML output.
+This diagram shows how document, template and metadata inputs (on the left) are combined by
+_jqt_ to produce the final HTML output:
 
 <%include "FLOW.md">
 

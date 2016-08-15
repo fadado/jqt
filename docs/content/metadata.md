@@ -6,7 +6,16 @@ updated: "2016-08-13T07:48:26Z"
 <%include "macros.m">&
 <%include "LINKS.md">&
 
+## Process
+
+_jqt_ will
+
 Metadata in YAML and JSON formats
+
+This is described on the bottom of this diagram:
+
+<%include "FLOW.md">
+
 
 ## Processing
 

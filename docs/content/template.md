@@ -6,6 +6,14 @@ updated: "2016-08-13T07:48:26Z"
 <%include "macros.m">&
 <%include "LINKS.md">&
 
+## Process
+
+_jqt_ will
+
+This is described on the top of this diagram:
+
+<%include "FLOW.md">
+
 ### Main _jqt_ features
 
 * Each line of text in the template is a generator.

@@ -137,6 +137,7 @@ function expand_md
         +siqi "'" "'" ''
         +siQi '"'  '"' ''
         +ssss '<!--' '-->' ''
+        +ssss '`'  '`' ''
         +ssss '\n```' '\n```' ''
         +ssss '\n~~~' '\n~~~' ''
     )
