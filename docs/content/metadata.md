@@ -6,7 +6,7 @@ updated: "2016-08-13T07:48:26Z"
 <%include "macros.m">&
 <%include "LINKS.md">&
 
-## Process
+## General operation
 
 _jqt_ will
 
@@ -16,10 +16,42 @@ This is described on the bottom of this diagram:
 
 <%include "FLOW.md">
 
-
-## Processing
+## Data XXXXXX
 
 ### Preprocessing
+
+The JSON input content is preprocessed using [GPP][GPP]. All the expected options are available,
+like defining new macros, include other files, etc. YAML input is not preprocessed.
+
+The main preprocessor use to remove comments in the CPP style.
+
+#### Syntax of macros
+
+Macro definition:
+
+```
+<!define X X>&
+```
+
+Macro call examples:
+
+```
+...
+```
+
+#### Skips
+
+JSON input is preprocessed like MarkDown input, but the skips available are no the same.
+This table summarize all the skips available:
+
+ Delimiters     Place   Macro expansion     Delimiters removed  Content removed
+-------------   -----   ---------------     ------------------  ---------------
+/* */           Text    No                  Yes                 Yes
+// \n           Text    No                  Yes                 Yes
+` `             Text    No                  Yes                 No
+" "             Text    Yes                 No                  No
+
+Table: **Semantics for all JSON skips**
 
 ## Other utilities
 

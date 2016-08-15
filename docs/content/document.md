@@ -6,7 +6,7 @@ updated: "2016-08-13T07:48:26Z"
 <%include "macros.m">&
 <%include "LINKS.md">&
 
-## Process
+## General operation
 
 _jqt_ will transform your MarkDown documents to HTML using
 [Pandoc][PANDOC], but before that [GPP][GPP] is used to preprocess the
@@ -49,10 +49,20 @@ as you can see on the top of this page.
 
 #### Syntax of macros
 
+Macro definition:
+
 ```
 <%define sc
     <span style="font-variant:small-caps;">$1</span>
->
+>&
+```
+
+Macro call examples:
+
+```
+<%sc 'A title in small caps'>
+
+<%include "LINKS.md">&
 ```
 
 #### Skips
@@ -80,6 +90,8 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 ```
 ~~~
 
+This table summarize all the skips available:
+
  Delimiters     Place                   Macro expansion     Delimiters removed  Content removed
 -------------   -----                   ---------------     ------------------  ---------------
 &#60;# #>       Text                    No                  Yes                 Yes
@@ -90,7 +102,7 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 &#96;``         Text                    No                  No                  No
 &#126;~~        Text                    No                  No                  No
 
-Table: **Semantics for all skips**
+Table: **Semantics for all MarkDown skips**
 
 ### HTML Generation
 

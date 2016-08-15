@@ -136,6 +136,8 @@ $(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) \
 	$(JQT) -d $< $(STRUCTURE)/default.html > $@
 
 $(DESTINATION)/engine.html: $(CONTENT)/FLOW.md
+$(DESTINATION)/index.html: $(CONTENT)/EXAMPLE.md
+$(DESTINATION)/template.html: $(CONTENT)/EXAMPLE.md
 
 define Target
 $(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(STRUCTURE)/$(2).html $(COMMON) \

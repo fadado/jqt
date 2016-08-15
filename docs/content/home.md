@@ -49,28 +49,7 @@ script and some metadata and content in YAML or JSON format&hellip; and the magi
 And, how do the _syntactic sugar_ looks like?  Do you think the following
 example looks like a template?
 
-```html
-<html lang='{{.lang}}'>
-<head>
-    {# block comments #}
-    <title>{{.title | gsub("<[^>]*>"; "")}}</title>
-    <meta name='date' content='{{.updated//empty}}' />
-    {# implicit loop if several authors #}
-    {% .author | sort[] %}<meta name='author' content='{{.}}' />
-    {# include files in preprocessing stage #}
-    <%include "head.html">
-</head>
-<body>
-    <h1>{{.title}}</h1>
-    <h2>{{.subtitle//empty}}</h2> {# line vanishes if subtitle not defined #}
-    <ul>
-        {% range(.n) %} {# loop from 0 to .n-1 #}
-            <li>{{.}}</li>
-        {% end %}
-    </ul>
-</body>
-</html>
-```
+<%include "EXAMPLE.md">&
 
 ### Status
 
