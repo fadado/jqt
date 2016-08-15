@@ -1,6 +1,6 @@
 ---
 <%include "site.yaml">
-updated: "2016-08-13T07:48:26Z"
+updated: "2016-08-15T08:56:24Z"
 ---
 <%include "macros.m">&
 <%include "LINKS.md">&
@@ -74,8 +74,9 @@ example looks like a template?
 
 ### Status
 
-If you want to learn to use _jqt_, read the documentation at
-[https://fadado.github.io/jqt/][JQT].  _jqt_ is developed under the _Fedora_ Linux
+If you want to learn to use _jqt_,  [read this documentation](#)
+and [install _jqt_](./engine.html#installation) and associated utilities.
+_jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
 development. Please, use the project [GitHub repository][REPO] features if you
 want to collaborate or send any kind of questions.

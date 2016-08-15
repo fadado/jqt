@@ -1,7 +1,7 @@
 ---
 <%include "site.yaml">
 title: Operating the engine
-updated: "2016-08-13T07:48:26Z"
+updated: "2016-08-15T11:17:00Z"
 ---
 <%include "macros.m">&
 <%include "LINKS.md">&
@@ -168,7 +168,7 @@ on the modules `json` and `yaml`.
 The project uses [GNU Make][MAKE] on several development activities, but `make`
 is not necessary to run `jqt`.
 
-All external shell commands called by `jqt` are:
+The external shell commands called by `jqt` are:
 
 * `cat`
 * `gpp`
@@ -182,7 +182,7 @@ All external shell commands called by `jqt` are:
 * `sleep`
 * `tee`
 
-Under a recent <%cite Fedora> <%cite Linux> distribution the following commands will install
+Under a recent <%cite Fedora> <%cite Linux> distribution the following command will install
 all the extra software _jqt_ needs:
 
 ```zsh
@@ -192,30 +192,32 @@ $ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
 ## Installation
 
 If you know how to use `make` please read the `Makefile` located in the _jqt_
-top directory and run `make install` if you agree with the thinks that will
+top directory and run `make install` if you agree with the things that will
 happen. You can also change the installation directory:
 
 ```zsh
 $ sudo make install prefix=/your/installation/path
 ```
 
-You can also install _jqt_ by hand with few orders like:
+But if you choose a directory diferent of `/usr/local/share` for the shared data
+you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
 
+You can also install _jqt_ by hand executing few orders from the _jqt_ top
+directory:
 
 ```zsh
 $ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
-$ sudo cp bin/jqt /usr/local/bin
-$ sudo chmod +x /usr/local/bin/jqt
+$ sudo cp bin/* /usr/local/bin
 $ sudo cp share/* /usr/local/share/jqt
 ```
 
 If you are using a recent <%cite Fedora> <%cite Linux> distribution or similar
-`make` will also help you to install all the extra software _jqt_ needs:
+`make` will also help you to install all the extra software _jqt_ needs (except
+`make` itself):
 
 ```zsh
 $ sudo make setup
 ```
-
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -101,7 +101,8 @@ TARGETS := $(foreach f,$(ASSETS) $(foreach p,index $(PAGES),$(p).html),$(DESTINA
 # Main
 all: $(TARGETS)
 	test -f /etc/xml/xhtml1-dtds.xml \
-	&& xmllint --noout --valid $(DESTINATION)/*.html
+	&& xmllint --noout --valid $(DESTINATION)/*.html \
+	&& echo 'XHTML valid!'
 
 # Directories
 $(CACHE) $(DESTINATION):
