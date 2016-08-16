@@ -39,3 +39,4 @@ Information options:
 <%include "opt/p.md">
 <%include "opt/V.md">
 
+See the manpage for full documentation and more options.

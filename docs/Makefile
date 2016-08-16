@@ -105,7 +105,11 @@ COMMON := \
 # Files to "build"
 ASSETS := README.md jqt.css
 PAGES := engine document metadata template
-TARGETS := $(foreach f,$(ASSETS) $(foreach p,index $(PAGES),$(p).html),$(DESTINATION)/$(f))
+MANPAGE := ../jqt.1.gz
+TARGETS := \
+	$(MANPAGE) \
+	$(foreach f,$(ASSETS),$(DESTINATION)/$(f)) \
+	$(foreach f,$(foreach p,index $(PAGES),$(p).html),$(DESTINATION)/$(f))
 
 ########################################################################
 # Rules
@@ -172,6 +176,12 @@ $(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
 	> $@
 
+# Man page
+$(MANPAGE): $(CONTENT)/jqt.1.md
+	$(MPMD) -I. -I$(CONTENT) $<  \
+	| pandoc --standalone --from markdown --to man \
+	| gzip > $@
+
 ########################################################################
 # Utilities
 ########################################################################
@@ -179,7 +189,7 @@ $(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
 .PHONY: clean clobber build
 
 clean:
-	rm -rf $(DESTINATION)/*
+	rm -rf $(DESTINATION)/* $(MANPAGE)
 
 clobber:
 	rm -rf $(DESTINATION) $(CACHE)

@@ -10,6 +10,7 @@ project := jqt
 prefix	?= /usr/local
 bindir	?= $(prefix)/bin
 datadir	?= $(prefix)/share
+mandir	?= $(prefix)/share/man
 
 ########################################################################
 # Prerequisites
@@ -103,11 +104,14 @@ clobber: clean
 install:
 	test -d $(bindir) || $(SUDO) mkdir --verbose --parents $(bindir)
 	test -d $(datadir)/$(project) || $(SUDO) mkdir --verbose --parents $(datadir)/$(project)
+	test -d $(mandir)/man1 || $(SUDO) mkdir --verbose --parents $(mandir)/man1
 	$(SUDO) install --verbose --compare --mode 555 bin/* $(bindir)
 	$(SUDO) install --verbose --compare --mode 644 share/* $(datadir)/$(project)
+	$(SUDO) install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
 
 uninstall:
 	$(SUDO) rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
+	$(SUDO) rm --verbose --force -- $(mandir)/man1/jqt.1.gz
 	test -d $(datadir)/$(project) \
 	&& $(SUDO) rm --verbose --force --recursive $(datadir)/$(project) \
 	|| true

@@ -1,4 +1,4 @@
--V
+-V, --version
 :   Display version information.
 
 <#
