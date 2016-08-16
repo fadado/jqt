@@ -33,130 +33,95 @@ Usage: jqt [options] < infile > result
 
 #### Preprocessor options
 
--D NAME=VAL
-
-:   Define the user macro *NAME* as equal to *VAL*.
-
--I DIRECTORY
-
-:   Append *DIRECTORY* to the end of the preprocessor list of directories to be
-searched for include files.
-
+<%include "opt/D.md">
+<%include "opt/I.md">
 
 #### Template options
 
--L DIRECTORY
-
-:   Append *DIRECTORY* to the end of the jq list of directories to be searched
-for included and imported modules.
-
--i MODULE
-
-:   Include the jq *MODULE* in the render stage.
-
--j MODULE:NAME
-
-:   Import the jq *MODULE* in the render stage.
+<%include "opt/L.md">
+<%include "opt/i.md">
+<%include "opt/j.md">
 
 #### Document options
 
--4, -5
-
-:   Set output HTML version (HTML4 / HTML5).
-
--d FILE
-
-:   Read content document from *FILE*.
-
--p
-
-:   Print list of Pandoc accepted options.
+<%include "opt/4.md">
+<%include "opt/d.md">
+<%include "opt/n.md">
 
 #### Metadata options
 
--M NAME:FILE
-
-:   Add a *FILE* in YAML or JSON format to the input metadata at the top level
-(*NAME* is ignored but must be present and unique).
-
--m NAME:FILE
-
-:   Add a *FILE* in YAML or JSON format to the input metadata as a value of object *NAME*.
+<%include "opt/M.md">
+<%include "opt/f.md">
+<%include "opt/m.md">
 
 #### Debugging options
 
--E
+<%include "opt/E.md">
 
-:   Stops template processing after the preprocessing stage (outputs the
-expanded template).
+```
+$ jqt -E layouts/footer.html 
+<div style="text-align:center;">
+{{.snippets.footer}}
+</div>
+...
+```
 
-    ```
-    $ jqt -E layouts/footer.html 
-    <div style="text-align:center;">
-    {{.snippets.footer}}
-    </div>
-    ...
-    ```
+<%include "opt/S.md">
 
--S
+```
+$ jqt -S docs/layouts/footer.html 
+import "libjqt" as jqt;
+. as $M |
+"<div style=\"text-align:center;\">",
+"  \(.snippets.footer)",
+"</div>",
+...
+```
 
-:   Stops template processing before the render stage (outputs the jq script).
+<%include "opt/P.md">
 
-    ```
-    $ jqt -S docs/layouts/footer.html 
-    import "libjqt" as jqt;
-    . as $M |
-    "<div style=\"text-align:center;\">",
-    "  \(.snippets.footer)",
-    "</div>",
-    ...
-    ```
+```
+$ jqt -P content/engine.md 
+---
+title: jqt · the jq template engine
+baseURL: https://fadado.github.com/jqt/
+lang: en
+---
 
--P
+## <cite>jq</cite> templates
 
-:   Stops MarkDown processing after preprocessing stage (outputs the expanded
-MarkDown).
+The <cite>jq</cite> template language will be called <cite>jqt</cite>.  
+The tools used in the implementation of <cite>jqt</cite> are:
+```
 
-    ```
-    $ jqt -P content/engine.md 
-    ---
-    title: jqt · the jq template engine
-    baseURL: https://fadado.github.com/jqt/
-    lang: en
-    ---
+<%include "opt/H.md">
 
-    ## <cite>jq</cite> templates
+```
+$ jqt -Icontent -H content/engine.md 
+<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
+basis for a web template engine? Let's explore…</p>
+<h2 id="jq"><em>jq</em></h2>
+...
+```
 
-    The <cite>jq</cite> template language will be called <cite>jqt</cite>.  
-    The tools used in the implementation of <cite>jqt</cite> are:
-    ```
+<%include "opt/C.md">
 
--H
-
-:   Stops MarkDown processing after generating HTML (outputs several HTML fragments).
-
-    ```
-    $ jqt -Icontent -H content/engine.md 
-    <p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
-    basis for a web template engine? Let's explore…</p>
-    <h2 id="jq"><em>jq</em></h2>
-    ...
-    ```
-
--C
-
-:   Stops processing before the render stage (outputs full JSON data model).
-
-    ```
-    $ jqt -I layouts -C -d content/home.md layouts/default.html 
-    {
-        "body": "<!DOCTYPE html ...
-        "front": {
-            "front-matter": false,
-            ...
-        }
+```
+$ jqt -I layouts -C -d content/home.md layouts/default.html 
+{
+    "body": "<!DOCTYPE html ...
+    "front": {
+        "front-matter": false,
+        ...
     }
-    ```
+}
+```
+
+#### Information options
+
+<%include "opt/h.md">
+<%include "opt/p.md">
+<%include "opt/V.md">
 
 ## Implementation
 

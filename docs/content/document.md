@@ -16,6 +16,14 @@ This is described on the middle of this diagram:
 
 <%include "FLOW.md">
 
+You can pass the following options to `jqt` to modify document evaluation:
+
+<%include "opt/4.md">
+<%include "opt/D.md">
+<%include "opt/I.md">
+<%include "opt/d.md">
+<%include "opt/n.md">
+
 ## Document structure
 
 Documents contains MarkDown text with an optional YAML front matter.

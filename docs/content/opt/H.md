@@ -1,0 +1,6 @@
+-H
+:   Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+
+<#
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
+#>

@@ -16,6 +16,14 @@ This is described on the top of this diagram:
 
 <%include "FLOW.md">
 
+You can pass the following options to `jqt` to modify template evaluation:
+
+<%include "opt/D.md">
+<%include "opt/I.md">
+<%include "opt/L.md">
+<%include "opt/i.md">
+<%include "opt/j.md">
+
 ## Syntax
 
 A template is a file with UTF-8-encoded text, with a few kinds of delimited
@@ -117,23 +125,6 @@ Table: **Delimiters used in _jqt_ templates**
 The text inside the expressions and control delimiters is normal _jq_ code, when as
 a bonus, the `M$` global variable point to `jq` JSON input (the initial `.`
 &ndash;dot&ndash;).
-
-## Template evaluation
-
-You can pass to `jqt` the following template options to include or import external _jq_ modules:
-
--L DIRECTORY
-
-:   Append *DIRECTORY* to the end of the jq list of directories to be searched
-for included and imported modules.
-
--i MODULE
-
-:   Include the jq *MODULE* in the render stage.
-
--j MODULE:NAME
-
-:   Import the jq *MODULE* in the render stage.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

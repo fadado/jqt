@@ -16,6 +16,14 @@ This is described on the bottom of this diagram:
 
 <%include "FLOW.md">
 
+You can pass the following options to `jqt` to modify metadata evaluation:
+
+<%include "opt/D.md">
+<%include "opt/I.md">
+<%include "opt/M.md">
+<%include "opt/f.md">
+<%include "opt/m.md">
+
 ## Data XXXXXX
 
 ### Preprocessing

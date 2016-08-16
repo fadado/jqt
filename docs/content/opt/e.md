@@ -1,0 +1,6 @@
+-e
+:    Extract YAML front matter to stdout.
+
+<#
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
+#>

@@ -68,6 +68,19 @@ JQT := jqt \
 	-msnippets:$(CACHE)/snippets.json \
 	--toc-depth=3 \
 
+# Macro process MarkDown
+MPMD := gpp --nostdinc \
+	+sccc '&\n' '' '' \
+	+sccc '<\#' '\#>\n' '' \
+	+siqi "'" "'" '' \
+	+siQi '"' '"' '' \
+	+ssss '<!--' '-->' '' \
+	+ssss '`' '`' '' \
+	+ssss '\n```' '\n```' '' \
+	+ssss '\n~~~' '\n~~~' '' \
+	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' '' \
+	-M '<%' '>' '\B' '\B' '\W>' '<' '>' \
+
 # Macro process CSS
 MPCSS := gpp --nostdinc \
 	+c '/*' '*/' \
@@ -76,7 +89,7 @@ MPCSS := gpp --nostdinc \
 	-M '&' ';' '(' ',' ');' '(' ')' \
 
 # Minify CSS
-CSSMIN  := sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
+CSSMIN := sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
 
 # Common sources for all targets
 COMMON := \
@@ -151,6 +164,13 @@ $(foreach p,$(PAGES),$(eval $(call Target,$(p),page)))
 $(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
 	$(info ==> $@)
 	$(MPCSS) $< | $(CSSMIN) > $@
+
+# Help text
+/tmp/help: $(CONTENT)/help.txt
+	$(MPMD) -I. -I$(CONTENT) $<  \
+	| pandoc --from markdown --to plain - \
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
+	> $@
 
 ########################################################################
 # Utilities

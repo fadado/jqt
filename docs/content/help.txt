@@ -1,0 +1,41 @@
+jqt - jq based web template engine [version <%include "../VERSION">]
+
+Usage: jqt [options] < infile > result\
+       jqt [options] infile > result\
+       jqt [options] infile result
+
+Preprocessor options:
+
+<%include "opt/D.md">
+<%include "opt/I.md">
+
+Template options:
+
+<%include "opt/L.md">
+<%include "opt/i.md">
+<%include "opt/j.md">
+
+Document options:
+
+<%include "opt/4.md">
+<%include "opt/d.md">
+
+Metadata options:
+
+<%include "opt/M.md">
+<%include "opt/m.md">
+
+Debugging options:
+
+<%include "opt/C.md">
+<%include "opt/E.md">
+<%include "opt/H.md">
+<%include "opt/P.md">
+<%include "opt/S.md">
+
+Information options:
+
+<%include "opt/h.md">
+<%include "opt/p.md">
+<%include "opt/V.md">
+
