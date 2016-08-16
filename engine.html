@@ -50,7 +50,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#general-operation">General operation</a></li>
 <li><a href="#invoking-jqt">Invoking <em>jqt</em></a><ul>
 <li><a href="#syntax">Syntax</a></li>
-<li><a href="#options">Options</a></li>
+<li><a href="#options">Options</a><ul>
+<li><a href="#preprocessor-options">Preprocessor options</a></li>
+<li><a href="#document-options">Document options</a></li>
+<li><a href="#template-options">Template options</a></li>
+<li><a href="#metadata-options">Metadata options</a></li>
+<li><a href="#debugging-options">Debugging options</a></li>
+<li><a href="#information-options">Information options</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#implementation">Implementation</a></li>
 <li><a href="#installation">Installation</a></li>
@@ -80,74 +87,92 @@ Metadata              +------+                             |
 <h2 id="invoking-jqt">Invoking <em>jqt</em></h2>
 <h3 id="syntax">Syntax</h3>
 <p><code>jqt</code> accepts several options and can be called with zero, one or two file arguments. As the output of <code>jqt --help</code> shows, the usage possibilities are:</p>
-<pre><code>Usage: jqt [options] &lt; infile &gt; result
-       jqt [options] infile &gt; result
-       jqt [options] infile result</code></pre>
+<p><strong>jqt</strong> [<em>options</em>] &lt; <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> <em>result</em></p>
 <h3 id="options">Options</h3>
 <h4 id="preprocessor-options">Preprocessor options</h4>
 <dl>
 <dt>-D NAME=VAL</dt>
-<dd><p>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.</p>
+<dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
 </dd>
 <dt>-I DIRECTORY</dt>
-<dd><p>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.</p>
-</dd>
-</dl>
-<h4 id="template-options">Template options</h4>
-<dl>
-<dt>-L DIRECTORY</dt>
-<dd><p>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.</p>
-</dd>
-<dt>-i MODULE</dt>
-<dd><p>Include the jq <em>MODULE</em> in the render stage.</p>
-</dd>
-<dt>-j MODULE:NAME</dt>
-<dd><p>Import the jq <em>MODULE</em> in the render stage.</p>
+<dd>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
 </dd>
 </dl>
 <h4 id="document-options">Document options</h4>
 <dl>
 <dt>-4, -5</dt>
-<dd><p>Set output HTML version (HTML4 / HTML5).</p>
+<dd>Set output HTML version (HTML4 / HTML5).
 </dd>
 <dt>-d FILE</dt>
-<dd><p>Read content document from <em>FILE</em>.</p>
+<dd>Read content document from <em>FILE</em>.
 </dd>
-<dt>-p</dt>
-<dd><p>Print list of Pandoc accepted options.</p>
+<dt>-n NAME</dt>
+<dd>Set name for converted document (defaults to 'body').
+</dd>
+</dl>
+<h4 id="template-options">Template options</h4>
+<dl>
+<dt>-i MODULE</dt>
+<dd>Include the jq <em>MODULE</em> in the render stage.
+</dd>
+<dt>-j MODULE:NAME</dt>
+<dd>Import the jq <em>MODULE</em> in the render stage.
+</dd>
+<dt>-L DIRECTORY</dt>
+<dd>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.
 </dd>
 </dl>
 <h4 id="metadata-options">Metadata options</h4>
 <dl>
+<dt>-f NAME</dt>
+<dd>Set name for YAML document metadata (defaults to 'front').
+</dd>
 <dt>-M NAME:FILE</dt>
-<dd><p>Add a <em>FILE</em> in YAML or JSON format to the input metadata at the top level (<em>NAME</em> is ignored but must be present and unique).</p>
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata at the top level (<em>NAME</em> is ignored but must be present and unique).
 </dd>
 <dt>-m NAME:FILE</dt>
-<dd><p>Add a <em>FILE</em> in YAML or JSON format to the input metadata as a value of object <em>NAME</em>.</p>
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata as a value of object <em>NAME</em>.
 </dd>
 </dl>
 <h4 id="debugging-options">Debugging options</h4>
 <dl>
+<dt>-C</dt>
+<dd>Stops processing before the render stage (outputs full JSON data model).
+</dd>
+</dl>
+<pre><code>$ jqt -I layouts -C -d content/home.md layouts/default.html 
+{
+    &quot;body&quot;: &quot;&lt;!DOCTYPE html ...
+    &quot;front&quot;: {
+        &quot;front-matter&quot;: false,
+        ...
+    }
+}</code></pre>
+<dl>
 <dt>-E</dt>
-<dd><p>Stops template processing after the preprocessing stage (outputs the expanded template).</p>
+<dd>Stops template processing after the preprocessing stage (outputs the expanded template).
+</dd>
+</dl>
 <pre><code>$ jqt -E layouts/footer.html 
 &lt;div style=&quot;text-align:center;&quot;&gt;
 {{.snippets.footer}}
 &lt;/div&gt;
 ...</code></pre>
+<dl>
+<dt>-H</dt>
+<dd>Stops MarkDown processing after generating HTML (outputs several HTML fragments).
 </dd>
-<dt>-S</dt>
-<dd><p>Stops template processing before the render stage (outputs the jq script).</p>
-<pre><code>$ jqt -S docs/layouts/footer.html 
-import &quot;libjqt&quot; as jqt;
-. as $M |
-&quot;&lt;div style=\&quot;text-align:center;\&quot;&gt;&quot;,
-&quot;  \(.snippets.footer)&quot;,
-&quot;&lt;/div&gt;&quot;,
+</dl>
+<pre><code>$ jqt -Icontent -H content/engine.md 
+&lt;p&gt;Could be &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/a&gt; the
+basis for a web template engine? Let&#39;s explore…&lt;/p&gt;
+&lt;h2 id=&quot;jq&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/h2&gt;
 ...</code></pre>
-</dd>
+<dl>
 <dt>-P</dt>
-<dd><p>Stops MarkDown processing after preprocessing stage (outputs the expanded MarkDown).</p>
+<dd>Stops MarkDown processing after preprocessing stage (outputs the expanded MarkDown).
+</dd>
+</dl>
 <pre><code>$ jqt -P content/engine.md 
 ---
 title: jqt · the jq template engine
@@ -159,25 +184,28 @@ lang: en
 
 The &lt;cite&gt;jq&lt;/cite&gt; template language will be called &lt;cite&gt;jqt&lt;/cite&gt;.  
 The tools used in the implementation of &lt;cite&gt;jqt&lt;/cite&gt; are:</code></pre>
+<dl>
+<dt>-S</dt>
+<dd>Stops template processing before the render stage (outputs the jq script).
 </dd>
-<dt>-H</dt>
-<dd><p>Stops MarkDown processing after generating HTML (outputs several HTML fragments).</p>
-<pre><code>$ jqt -Icontent -H content/engine.md 
-&lt;p&gt;Could be &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/a&gt; the
-basis for a web template engine? Let&#39;s explore…&lt;/p&gt;
-&lt;h2 id=&quot;jq&quot;&gt;&lt;em&gt;jq&lt;/em&gt;&lt;/h2&gt;
+</dl>
+<pre><code>$ jqt -S docs/layouts/footer.html 
+import &quot;libjqt&quot; as jqt;
+. as $M |
+&quot;&lt;div style=\&quot;text-align:center;\&quot;&gt;&quot;,
+&quot;  \(.snippets.footer)&quot;,
+&quot;&lt;/div&gt;&quot;,
 ...</code></pre>
+<h4 id="information-options">Information options</h4>
+<dl>
+<dt>-h, --help</dt>
+<dd>Display this message.
 </dd>
-<dt>-C</dt>
-<dd><p>Stops processing before the render stage (outputs full JSON data model).</p>
-<pre><code>$ jqt -I layouts -C -d content/home.md layouts/default.html 
-{
-    &quot;body&quot;: &quot;&lt;!DOCTYPE html ...
-    &quot;front&quot;: {
-        &quot;front-matter&quot;: false,
-        ...
-    }
-}</code></pre>
+<dt>-p</dt>
+<dd>Print list of Pandoc accepted options.
+</dd>
+<dt>-V, --version</dt>
+<dd>Display version information.
 </dd>
 </dl>
 <h2 id="implementation">Implementation</h2>
