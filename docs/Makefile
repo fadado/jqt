@@ -66,7 +66,7 @@ JQT := jqt \
 	-ifilters \
 	-msite:$(CACHE)/site.json \
 	-msnippets:$(CACHE)/snippets.json \
-	--toc-depth=3 \
+	--toc-depth=4 \
 
 # Macro process MarkDown
 MPMD := gpp --nostdinc \

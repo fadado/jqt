@@ -24,25 +24,25 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 <%include "opt/4.md">
 <%include "opt/C.md">
 <%include "opt/D.md">
-<%include "opt/E.md">
-<%include "opt/H.md">
-<%include "opt/I.md">
-<%include "opt/L.md">
-<%include "opt/M.md">
-<%include "opt/P.md">
-<%include "opt/S.md">
-<%include "opt/V.md">
 <%include "opt/d.md">
+<%include "opt/E.md">
 <%include "opt/e.md">
 <%include "opt/f.md">
+<%include "opt/H.md">
 <%include "opt/h.md">
+<%include "opt/I.md">
 <%include "opt/i.md">
 <%include "opt/j.md">
+<%include "opt/L.md">
+<%include "opt/M.md">
 <%include "opt/m.md">
 <%include "opt/n.md">
+<%include "opt/P.md">
 <%include "opt/p.md">
 <%include "opt/r.md">
+<%include "opt/S.md">
 <%include "opt/t.md">
+<%include "opt/V.md">
 
 # FILES
 

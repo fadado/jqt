@@ -16,12 +16,12 @@ This is described on the middle of this diagram:
 
 <%include "FLOW.md">
 
-You can pass the following options to `jqt` to modify document evaluation:
+You can pass the following options to `jqt` to modify document conversion:
 
 <%include "opt/4.md">
 <%include "opt/D.md">
-<%include "opt/I.md">
 <%include "opt/d.md">
+<%include "opt/I.md">
 <%include "opt/n.md">
 
 ## Document structure
@@ -98,24 +98,32 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 ```
 ~~~
 
-This table summarize all the skips available:
+This table summarize all the available skips:
 
- Delimiters     Place                   Macro expansion     Delimiters removed  Content removed
--------------   -----                   ---------------     ------------------  ---------------
-&#60;# #>       Text                    No                  Yes                 Yes
-' '             User defined macros     No                  Yes                 No
-" "             User defined macros     Yes                 Yes                 No
-&#96; &#96;     Text                    No                  No                  No
-&lt;!-- -->     Text                    No                  No                  No
-&#96;``         Text                    No                  No                  No
-&#126;~~        Text                    No                  No                  No
+ Delimiters                         Place                   Macro expansion     Delimiters removed  Content removed
+-------------                       -----                   ---------------     ------------------  ---------------
+`&\n`[^1]                           Document text           No                  Yes                 There is no content
+`<#` `#>`                           Document text           No                  Yes                 Yes
+`'` `'`                             User defined macros     No                  Yes                 No
+`"` `"`                             User defined macros     Yes                 Yes                 No
+`` ` `` `` ` ``                     Document text           No                  No                  No
+`<!--` `-->`                        Document text           No                  No                  No
+<code>&#96;&#96;&#96;</code>[^2]    Document text           No                  No                  No
+`~~~`[^3]                           Document text           No                  No                  No
 
 Table: **Semantics for all MarkDown skips**
+
+[^1]: An ampersand followed by a newline is treated as a line continuation (that
+is, the ampersand and the newline are removed and effectively ignored).
+
+[^2]: Blocks of code fenced between two lines with three backticks.
+
+[^3]: Blocks of code fenced between two lines with three tildes.
 
 ### HTML Generation
 
 _jqt_ accept as input format the Pandoc's MarkDown variant, with the title
-block extension disabled.  When running `jqt` several Pandoc long options can
+block extension disabled.  When running `jqt` the following Pandoc long options can
 be forwarded to `pandoc`:
 
 ```

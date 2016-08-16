@@ -19,9 +19,9 @@ This is described on the bottom of this diagram:
 You can pass the following options to `jqt` to modify metadata evaluation:
 
 <%include "opt/D.md">
+<%include "opt/f.md">
 <%include "opt/I.md">
 <%include "opt/M.md">
-<%include "opt/f.md">
 <%include "opt/m.md">
 
 ## Data XXXXXX
@@ -41,6 +41,10 @@ Macro definition:
 <!define X X>&
 ```
 
+```
+Continuation lines using backslash (removed with the newline character)\
+```
+
 Macro call examples:
 
 ```
@@ -54,12 +58,16 @@ This table summarize all the skips available:
 
  Delimiters     Place   Macro expansion     Delimiters removed  Content removed
 -------------   -----   ---------------     ------------------  ---------------
-/* */           Text    No                  Yes                 Yes
-// \n           Text    No                  Yes                 Yes
-` `             Text    No                  Yes                 No
-" "             Text    Yes                 No                  No
+`\\n`[^2]       Text    No                  Yes                 There is no content
+`/*` `*/`       Text    No                  Yes                 Yes
+`//` `\n`[^1]   Text    No                  Yes                 Yes
+`"` `"`         Text    Yes                 No                  No
 
 Table: **Semantics for all JSON skips**
+
+[^1]: This represents a newline character.
+[^2]: A backslash followed by a newline is treated as a line continuation (that
+is, the backslash and the newline are removed and effectively ignored).
 
 ## Other utilities
 

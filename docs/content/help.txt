@@ -9,16 +9,16 @@ Preprocessor options:
 <%include "opt/D.md">
 <%include "opt/I.md">
 
+Document options:
+
+<%include "opt/4.md">
+<%include "opt/d.md">
+
 Template options:
 
 <%include "opt/L.md">
 <%include "opt/i.md">
 <%include "opt/j.md">
-
-Document options:
-
-<%include "opt/4.md">
-<%include "opt/d.md">
 
 Metadata options:
 

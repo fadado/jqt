@@ -162,7 +162,6 @@ function expand_json
         +cccc '/*' '*/'     \
         +cccc '//' '\n'     \
         +sSSS '"' '"' '\'   \
-        +sqqq '`' '`' ''    \
     )
     gpp --nostdinc          \
         --warninglevel 2    \
@@ -484,7 +483,7 @@ Pandoc options:
     --katex[=URL]                                     --wrap=[auto|none|preserve]
     --katex-stylesheet
 EOF
-    return
+    exit
 
     # !!!
     local opt

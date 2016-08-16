@@ -23,11 +23,9 @@ _jqt_ to produce the final HTML output:
 `jqt` accepts several options and can be called with zero, one or two file
 arguments.  As the output of `jqt --help` shows, the usage possibilities are:
 
-```
-Usage: jqt [options] < infile > result
-       jqt [options] infile > result
-       jqt [options] infile result
-```
+| **jqt** [_options_] < _infile_ > _result_
+| **jqt** [_options_] _infile_ > _result_
+| **jqt** [_options_] _infile_ _result_
 
 ### Options
 
@@ -36,25 +34,38 @@ Usage: jqt [options] < infile > result
 <%include "opt/D.md">
 <%include "opt/I.md">
 
-#### Template options
-
-<%include "opt/L.md">
-<%include "opt/i.md">
-<%include "opt/j.md">
-
 #### Document options
 
 <%include "opt/4.md">
 <%include "opt/d.md">
 <%include "opt/n.md">
 
+#### Template options
+
+<%include "opt/i.md">
+<%include "opt/j.md">
+<%include "opt/L.md">
+
 #### Metadata options
 
-<%include "opt/M.md">
 <%include "opt/f.md">
+<%include "opt/M.md">
 <%include "opt/m.md">
 
 #### Debugging options
+
+<%include "opt/C.md">
+
+```
+$ jqt -I layouts -C -d content/home.md layouts/default.html 
+{
+    "body": "<!DOCTYPE html ...
+    "front": {
+        "front-matter": false,
+        ...
+    }
+}
+```
 
 <%include "opt/E.md">
 
@@ -66,15 +77,13 @@ $ jqt -E layouts/footer.html
 ...
 ```
 
-<%include "opt/S.md">
+<%include "opt/H.md">
 
 ```
-$ jqt -S docs/layouts/footer.html 
-import "libjqt" as jqt;
-. as $M |
-"<div style=\"text-align:center;\">",
-"  \(.snippets.footer)",
-"</div>",
+$ jqt -Icontent -H content/engine.md 
+<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
+basis for a web template engine? Let's explore…</p>
+<h2 id="jq"><em>jq</em></h2>
 ...
 ```
 
@@ -94,27 +103,16 @@ The <cite>jq</cite> template language will be called <cite>jqt</cite>.
 The tools used in the implementation of <cite>jqt</cite> are:
 ```
 
-<%include "opt/H.md">
+<%include "opt/S.md">
 
 ```
-$ jqt -Icontent -H content/engine.md 
-<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
-basis for a web template engine? Let's explore…</p>
-<h2 id="jq"><em>jq</em></h2>
+$ jqt -S docs/layouts/footer.html 
+import "libjqt" as jqt;
+. as $M |
+"<div style=\"text-align:center;\">",
+"  \(.snippets.footer)",
+"</div>",
 ...
-```
-
-<%include "opt/C.md">
-
-```
-$ jqt -I layouts -C -d content/home.md layouts/default.html 
-{
-    "body": "<!DOCTYPE html ...
-    "front": {
-        "front-matter": false,
-        ...
-    }
-}
 ```
 
 #### Information options
