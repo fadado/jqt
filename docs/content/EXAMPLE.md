@@ -3,24 +3,23 @@
  #>
 
 ```html
-<html lang='{{.lang}}'>
+<html lang='{{.front.lang}}'>
 <head>
-    {# block comments #}
-    <title>{{.title | gsub("<[^>]*>"; "")}}</title>
-    <meta name='date' content='{{.updated//empty}}' />
-    {# implicit loop if several authors #}
-    {% .author | sort[] %}<meta name='author' content='{{.}}' />
+    <title>{{.front.title | gsub("<[^>]*>"; "")}}</title>
     {# include files in preprocessing stage #}
     <%include "head.html">
+    <meta name="generator" content="jqt v<%include "../VERSION">"/>
+    {# optional line #}
+    <meta name='dcterms.modified' content='{{.front.updated//empty}}' />
+    {# implicit loop for all authors #}
+    {% .front.author | sort[] %}<meta name='author' content='{{.}}' />
 </head>
 <body>
-    <h1>{{.title}}</h1>
-    <h2>{{.subtitle//empty}}</h2> {# line vanishes if subtitle not defined #}
-    <ul>
-        {% range(.n) %} {# loop from 0 to .n-1 #}
-            <li>{{.}}</li>
-        {% end %}
-    </ul>
+    <h1>{{.front.title}}</h1>
+    <div id="CONTENT">
+        {{.body}}
+    </div>
+    <%partial analytics 'UA-82432866-1'>
 </body>
 </html>
 ```

@@ -1,6 +1,6 @@
 ---
 <%include "site.yaml">
-updated: "2016-08-15T08:56:24Z"
+updated: "2016-08-17T09:55:33Z"
 ---
 <%include "macros.m">&
 <%include "LINKS.md">&
@@ -40,21 +40,21 @@ explicit `if` or `for`!
 
 To write _jq_ scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided to you by
-_jqt_. You write templates in a very fashionable style, the templates
+_jqt_: you write templates in a very fashionable style, the templates
 are translated into a _jq_ script and then `jq` is feed with the created
-script and some metadata and content in YAML or JSON format&hellip; and the magic is done!
+script and some metadata and content in [YAML][YAML] or [JSON][JSON] format&hellip; and the magic is done!
 
 ### Syntactic sugar
 
 And, how do the _syntactic sugar_ looks like?  Do you think the following
-example looks like a template?
+example seems to be a template?
 
 <%include "EXAMPLE.md">&
 
 ### Status
 
-If you want to learn to use _jqt_,  [read this documentation](#)
-and [install _jqt_](./engine.html#installation) and associated utilities.
+If you want to learn to use _jqt_,  [read this documentation][JQT]
+and [install _jqt_](./engine.html#installation).
 _jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
 development. Please, use the project [GitHub repository][REPO] features if you

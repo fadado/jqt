@@ -10,6 +10,9 @@
 [BASH]: https://www.gnu.org/software/bash/
 [SED]: https://www.gnu.org/software/sed/
 [MAKE]: https://www.gnu.org/software/make/
+[YAML]: http://yaml.org/
+[JSON]: http://json.org/
+[MARKDOWN]: https://daringfireball.net/projects/markdown/
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -1,27 +1,69 @@
 ---
 <%include "site.yaml">
 title: Operating the engine
-updated: "2016-08-15T11:17:00Z"
+updated: "2016-08-17T09:50:11Z"
 ---
 <%include "macros.m">&
 <%include "LINKS.md">&
 
 ## General operation
 
-_jqt_ orchestrates several shell utilities to transform MarkDown text and
-YAML or JSON data into a final HTML document. The transformation is driven by a template,
-where HTML is mixed with _jq_ snippets to implement the transformation logic.
+_jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
+[YAML][YAML] or [JSON][JSON] data into a final HTML document. The transformation is driven by a template,
+where HTML is mixed with [_jq_][JQ] snippets to implement the transformation logic.
 This diagram shows how document, template and metadata inputs (on the left) are combined by
 _jqt_ to produce the final HTML output:
 
 <%include "FLOW.md">
 
+The command `jqt` is a shell script executed by `bash`.
+The external shell commands called by `jqt` are `cat`, `gpp`, `jq`, `mkdir`,
+`mkfifo`, `pandoc`, `python`, `rm`, `sed`, `sleep` and `tee`.
+
+`jqt` has been tested with [Bash 4.3][BASH], [GNU sed 4.2][SED], [GPP 2.24][GPP],
+[jq 1.5][JQ] and [Pandoc 1.13][PANDOC]. A small Python snippet is used which depends
+on the modules `json` (introduced with [Python 2.6](https://docs.python.org/2.6/))
+and `yaml` ([PyYAML](http://pyyaml.org/) implementation).
+The project uses [GNU Make][MAKE] on several development activities, but `make`
+is not necessary to run `jqt`.
+
+## Installation
+
+Under a recent <%cite Fedora> <%cite Linux> distribution most of the commands
+used by _jqt_ are installed by default. The following command will install all the extra
+software _jqt_ needs:
+
+```zsh
+$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
+```
+
+After clone or [download](https://github.com/fadado/jqt/releases) _jqt_ you can
+install it by hand executing a few orders on the _jqt_ top directory:
+
+```zsh
+$ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
+$ sudo cp bin/* /usr/local/bin
+$ sudo cp share/* /usr/local/share/jqt
+$ [[ $PATH =~ /usr/local/bin ]] || echo 'You must edit your PATH'
+```
+
+If you know how to use `make` please read the `Makefile` located in the _jqt_
+top directory and run `make install` if you agree with the things that will
+happen. You can also change the installation directory:
+
+```zsh
+$ sudo make install prefix=/your/installation/path
+```
+
+But if you choose a directory diferent of `/usr/local/share` for the shared data
+you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
+
 ## Invoking _jqt_
 
-### Syntax
+### Synopsis
 
 `jqt` accepts several options and can be called with zero, one or two file
-arguments.  As the output of `jqt --help` shows, the usage possibilities are:
+arguments.  The usage possibilities are:
 
 | **jqt** [_options_] < _infile_ > _result_
 | **jqt** [_options_] _infile_ > _result_
@@ -55,132 +97,16 @@ arguments.  As the output of `jqt --help` shows, the usage possibilities are:
 #### Debugging options
 
 <%include "opt/C.md">
-
-```
-$ jqt -I layouts -C -d content/home.md layouts/default.html 
-{
-    "body": "<!DOCTYPE html ...
-    "front": {
-        "front-matter": false,
-        ...
-    }
-}
-```
-
 <%include "opt/E.md">
-
-```
-$ jqt -E layouts/footer.html 
-<div style="text-align:center;">
-{{.snippets.footer}}
-</div>
-...
-```
-
 <%include "opt/H.md">
-
-```
-$ jqt -Icontent -H content/engine.md 
-<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the
-basis for a web template engine? Let's explore…</p>
-<h2 id="jq"><em>jq</em></h2>
-...
-```
-
 <%include "opt/P.md">
-
-```
-$ jqt -P content/engine.md 
----
-title: jqt · the jq template engine
-baseURL: https://fadado.github.com/jqt/
-lang: en
----
-
-## <cite>jq</cite> templates
-
-The <cite>jq</cite> template language will be called <cite>jqt</cite>.  
-The tools used in the implementation of <cite>jqt</cite> are:
-```
-
 <%include "opt/S.md">
-
-```
-$ jqt -S docs/layouts/footer.html 
-import "libjqt" as jqt;
-. as $M |
-"<div style=\"text-align:center;\">",
-"  \(.snippets.footer)",
-"</div>",
-...
-```
 
 #### Information options
 
 <%include "opt/h.md">
 <%include "opt/p.md">
 <%include "opt/V.md">
-
-## Implementation
-
-The command `jqt` is a shell script executed by `bash`.
-`jqt` has been tested with [Bash 4.3][BASH], [GNU sed 4.2][SED], [GPP 2.24][GPP],
-[jq 1.5][JQ] and [Pandoc 1.13][PANDOC]. Also is used a small Python snippet which depends
-on the modules `json` and `yaml`.
-
-The project uses [GNU Make][MAKE] on several development activities, but `make`
-is not necessary to run `jqt`.
-
-The external shell commands called by `jqt` are:
-
-* `cat`
-* `gpp`
-* `jq`
-* `mkdir`
-* `mkfifo`
-* `pandoc`
-* `python`
-* `rm`
-* `sed`
-* `sleep`
-* `tee`
-
-Under a recent <%cite Fedora> <%cite Linux> distribution the following command will install
-all the extra software _jqt_ needs:
-
-```zsh
-$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
-```
-
-## Installation
-
-If you know how to use `make` please read the `Makefile` located in the _jqt_
-top directory and run `make install` if you agree with the things that will
-happen. You can also change the installation directory:
-
-```zsh
-$ sudo make install prefix=/your/installation/path
-```
-
-But if you choose a directory diferent of `/usr/local/share` for the shared data
-you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
-
-You can also install _jqt_ by hand executing few orders from the _jqt_ top
-directory:
-
-```zsh
-$ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
-$ sudo cp bin/* /usr/local/bin
-$ sudo cp share/* /usr/local/share/jqt
-```
-
-If you are using a recent <%cite Fedora> <%cite Linux> distribution or similar
-`make` will also help you to install all the extra software _jqt_ needs (except
-`make` itself):
-
-```zsh
-$ sudo make setup
-```
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -50,7 +50,7 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 :   Initialization file for `gpp`.
 
 /usr/local/share/jqt/libjqt.jqt
-:   Initialization files for `jq`.
+:   Initialization file for `jq`.
 
 /usr/local/share/jqt/\*.m
 :   Macro example files for `gpp`.

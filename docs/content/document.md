@@ -1,22 +1,22 @@
 ---
 <%include "site.yaml">
 title: Content documents
-updated: "2016-08-13T07:48:26Z"
+updated: "2016-08-17T10:34:16Z"
 ---
 <%include "macros.m">&
 <%include "LINKS.md">&
 
 ## General operation
 
-_jqt_ will transform your MarkDown documents to HTML using
-[Pandoc][PANDOC], but before that [GPP][GPP] is used to preprocess the
-documents. Pandoc's output is then merged with the YAML front matter and the input metadata
-before send it to the render stage.
-This is described on the middle of this diagram:
+_jqt_ will transform your [MarkDown][MARKDOWN] documents to HTML using Pandoc,
+but before that [GPP][GPP] is used to preprocess the documents. Pandoc's output
+is then merged with the [YAML][YAML] front matter and other input metadata before be sended
+to the render stage.  This is described on the middle of this diagram:
 
 <%include "FLOW.md">
 
-You can pass the following options to `jqt` to modify document conversion:
+When invoking `jqt` you cas use the following options to influence the document
+conversion:
 
 <%include "opt/4.md">
 <%include "opt/D.md">
@@ -24,28 +24,28 @@ You can pass the following options to `jqt` to modify document conversion:
 <%include "opt/I.md">
 <%include "opt/n.md">
 
-## Document structure
+## File structure
 
-Documents contains MarkDown text with an optional YAML front matter.
+Document files contains MarkDown text preceded by an optional YAML front matter.
 
 ### Front matter
 
 Pandoc accepts YAML metadata intermixed with the MarkDown content. _jqt_ will
 extract the YAML front matter, located at the very begining of the file,
-transform it to JSON with the top level scalar elements converted to MarkDown,
-and inject it into the render stage under the global object named `.front`.
+convert the top level scalar elements to HTML,
+and inject it into the render stage under a global JSON object named `.front`.
 
 ### Body
 
 Pandoc will convert the document body to HTML,
-and _jqt_ will inject it into the render stage under the global scalar named
+and _jqt_ will inject it into the render stage under a global JSON scalar named
 `.body`. If the document contains fenced code blocks specifying the language of
 the code block, the highlight code will be in the scalar `.front._css`. Also, the
 table of contents will be in the scalar `.front._toc`.
 
-## Document conversion
+## Document syntax
 
-The document conversion has two stages. In the first the text is preprocessed,
+The document conversion has two stages. In the first text is preprocessed,
 and the second does the proper conversion to HTML.
 
 ### Preprocessing
@@ -53,11 +53,33 @@ and the second does the proper conversion to HTML.
 The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options are available,
 like defining new macros, include other files, etc. For example, a macro call
 like `<%include "../VERSION">` will expand to he string <code><%include "../VERSION"></code>
-as you can see on the top of this page.
+as you can see in this paragraph and on the top of these pages.
 
-#### Syntax of macros
+#### Macro calls
 
-Macro definition:
+All the power of GPP is available to help you when
+[transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
+the input document. The macro syntax used by _jqt_ precedes macro names with the characters `<%`
+and finishes the macro calls with the character `>`.
+The more common predefined macros have this syntax:
+
+```
+<%defeval x y>
+<%define x y>
+<%elif expr>
+<%else>
+<%endif>
+<%eval expr>
+<%if expr>
+<%ifdef x>
+<%ifeq x y>
+<%ifndef x>
+<%ifneq x y>
+<%include file>
+<%undef x>
+```
+
+Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.):
 
 ```
 <%define sc
@@ -65,66 +87,67 @@ Macro definition:
 >&
 ```
 
-Macro call examples:
+Predefined macros and user define macros have the same call sequence:
 
 ```
+<%include "LINKS.md">
 <%sc 'A title in small caps'>
-
-<%include "LINKS.md">&
 ```
+
+Warning: you must read the [GPP manual](https://files.nothingisreal.com/software/gpp/gpp.html)
+if you want to know all the gory details.
 
 #### Skips
 
-Some fragments of text are skipped during macro expansion.
+Some fragments of text are skipped during macro expansion, like comments,
+continuation lines and arbitrary but delimited strings of characters:
 
 ```
 <# block comments, removed, must end in newline (also removed) #>
+Continuation lines using an ampersand just before the newline character&
 ```
 
-```
-Continuation lines using ampersand (removed with the newline character)&
-```
-
-Strings are copied to the output, but evaluation of macros inside strings can
-be disabled.  String delimiters can be copied, or not, to the output.
+_Strings_ are copied to the output, but evaluation of macros inside strings can
+be enabled or disabled.  String delimiters can be copied, or not, to the output:
 
 ~~~
+<!-- XML comments -->
 <%sc 'single quoted strings, only available in user defined macro calls'>
 <%sc "double quoted strings, only available in user defined macro calls'>
 Inline code `inside backticks`
-<!-- XML comments, not removed -->
 ```
 Fenced code blocks with tildes (~~~) or backticks (```)
 ```
 ~~~
 
-This table summarize all the available skips:
+This table summarize all the available document skips:
 
  Delimiters                         Place                   Macro expansion     Delimiters removed  Content removed
 -------------                       -----                   ---------------     ------------------  ---------------
 `&\n`[^1]                           Document text           No                  Yes                 There is no content
-`<#` `#>`                           Document text           No                  Yes                 Yes
+`<#` `#>\n`                         Document text           No                  Yes                 Yes
+`<!--` `-->`                        Document text           No                  No                  No
 `'` `'`                             User defined macros     No                  Yes                 No
 `"` `"`                             User defined macros     Yes                 Yes                 No
 `` ` `` `` ` ``                     Document text           No                  No                  No
-`<!--` `-->`                        Document text           No                  No                  No
-<code>&#96;&#96;&#96;</code>[^2]    Document text           No                  No                  No
-`~~~`[^3]                           Document text           No                  No                  No
+<code>\\n&#96;&#96;&#96;</code>[^2] Document text           No                  No                  No
+`\n~~~`[^3]                         Document text           No                  No                  No
 
-Table: **Semantics for all MarkDown skips**
+Table: **Semantics for all document skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
 
-[^2]: Blocks of code fenced between two lines with three backticks.
+[^2]: Blocks of code fenced between two lines with three or more backticks.
 
-[^3]: Blocks of code fenced between two lines with three tildes.
+[^3]: Blocks of code fenced between two lines with three or more tildes.
 
-### HTML Generation
+### Pandoc’s Markdown
 
-_jqt_ accept as input format the Pandoc's MarkDown variant, with the title
-block extension disabled.  When running `jqt` the following Pandoc long options can
-be forwarded to `pandoc`:
+_jqt_ accept as input format the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
+variant, with the title block extension disabled, and produces transitional
+HTML.  When running `jqt` the following Pandoc long options can be specified in
+the command line and will be forwarded to `pandoc`:
 
 ```
     --base-header-level=NUMBER                        --latexmathml[=URL]

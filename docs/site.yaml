@@ -1,6 +1,6 @@
 #
 # jqt docs configuration
-# 
+#
 # Provide defaults to each .md file including "config.yaml" before defining
 # other elements, and is available in the .site top-level variable.
 #

@@ -8,15 +8,15 @@ updated: "2016-08-13T07:48:26Z"
 
 ## General operation
 
-_jqt_ will
-
-Metadata in YAML and JSON formats
-
-This is described on the bottom of this diagram:
+You can provide metadata in the document front matter to be inserted when
+rendering the template. Also, `jqt` will accept in the command line  additional
+files in [YAML][YAML] or [JSON][JSON] to be merged with
+the front matter. This is described on the bottom of this diagram:
 
 <%include "FLOW.md">
 
-You can pass the following options to `jqt` to modify metadata evaluation:
+When invoking `jqt` you can use the following options to define the additional input
+metadata and influence JSON preprocessing:
 
 <%include "opt/D.md">
 <%include "opt/f.md">
@@ -24,44 +24,69 @@ You can pass the following options to `jqt` to modify metadata evaluation:
 <%include "opt/M.md">
 <%include "opt/m.md">
 
-## Data XXXXXX
+## Data formats
 
-### Preprocessing
+### YAML
 
-The JSON input content is preprocessed using [GPP][GPP]. All the expected options are available,
-like defining new macros, include other files, etc. YAML input is not preprocessed.
+Document front matter metadata and additional input YAML files will be converted to
+JSON and merged to be the `jq` input in the render stage.
 
-The main preprocessor use to remove comments in the CPP style.
+### JSON
 
-#### Syntax of macros
+Additional JSON input can be provided in external files. The files are
+preprocessed using [GPP][GPP], and all the expected options are available, like
+defining new macros, include other files, etc.
 
-Macro definition:
+#### Macro calls
+
+The macro syntax used by _jqt_ in JSON files is different
+for predefined macros and for user defined macros:
+
+* The predefined macro names are preceded with the characters <code>&lt;!</code> and the macro calls finishes with the character `>`.
+* The user defined macro names for calls without arguments are preceded with the
+  character `&` and the macro calls finishes with the character `;`.
+* The user defined macro names for calls witht arguments are preceded with the
+  character `&`, followed by the character `(`, with arguments separated by
+  commas (`,`), and the macro calls finishes with the characters `);`.  
+
+The more common predefined macros have this syntax:
 
 ```
-<!define X X>&
+<!defeval x y>
+<!define x y>
+<!elif expr>
+<!else>
+<!endif>
+<!eval expr>
+<!if expr>
+<!ifdef x>
+<!ifeq x y>
+<!ifndef x>
+<!ifneq x y>
+<!include file>
+<!undef x>
 ```
 
-```
-Continuation lines using backslash (removed with the newline character)\
-```
-
-Macro call examples:
-
-```
-...
-```
+Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.):
 
 #### Skips
 
-JSON input is preprocessed like MarkDown input, but the skips available are no the same.
-This table summarize all the skips available:
+The main use of the preprocessor is to remove comments in the CPP style:
 
- Delimiters     Place   Macro expansion     Delimiters removed  Content removed
--------------   -----   ---------------     ------------------  ---------------
-`\\n`[^2]       Text    No                  Yes                 There is no content
-`/*` `*/`       Text    No                  Yes                 Yes
-`//` `\n`[^1]   Text    No                  Yes                 Yes
-`"` `"`         Text    Yes                 No                  No
+```
+/* block comments */
+// line comments
+```
+
+This table summarize all the available skips in JSON files:
+
+ Delimiters         Macro expansion     Delimiters removed  Content removed
+-------------       ---------------     ------------------  ---------------
+`\\n`[^2]           No                  Yes                 There is no content
+`/*` `*/`           No                  Yes                 Yes
+`//` `\n`[^1]       No                  Yes                 Yes
+`"` `"`             Yes                 No                  No
+`` ` `` `` ` ``     No                  Yes                 No
 
 Table: **Semantics for all JSON skips**
 
@@ -69,13 +94,9 @@ Table: **Semantics for all JSON skips**
 [^2]: A backslash followed by a newline is treated as a line continuation (that
 is, the backslash and the newline are removed and effectively ignored).
 
-## Other utilities
+### Data conversion
 
-When preparing metadata sometimes you need to mix files in several formats, or you
-want to apply to YAML input queries in the _jq_ style.
-
-### Format conversion
-
+When preparing data inputs sometimes you need to mix files in several formats.
 To make easy integrate metadata from several sources _jqt_ comes with the
 following utilities to convert between CSV, JSON and YAML formats:
 
@@ -86,12 +107,13 @@ following utilities to convert between CSV, JSON and YAML formats:
 * `yaml2csv`
 * `yaml2json`
 
-The utilities are filters that read standard input or a file passed as an
+These utilities are filters that read standard input or a file passed as an
 argument and write to standard output.
 
-### Querying YAML and CSV
+## Querying data files
 
-Also, sometimes you want to apply queries in the _jq_ style to CSV or YAML files.
+Sometimes you want to apply queries in the _jq_ style to CSV or YAML files,
+in the same style as _jq_ processes JSON data.
 As a wrappers to `jq` you have the following utilities shipped with _jqt_:
 
 * `cq`

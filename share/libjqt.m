@@ -31,7 +31,7 @@
     ><%_shortcode><%undef _shortcode>
 >&
 <#
- # Usage: <%call scan text>
+ # Usage: <%scan text>
  #
  # Evaluate text with macro calls.
  #>
