@@ -41,7 +41,7 @@ border:none;
 }
 code{
 font-size:12px;
-background-color:#f8f8ff;
+background-color:#F8F8FF;
 color:#444;
 padding:.3em .2em .0em;
 border:1px solid #dedede;
@@ -74,14 +74,14 @@ margin:10px auto;
 pre code{
 display:block;padding:0.5em;
 color:#333;
-background:#f8f8ff
+background:#F8F8FF;
 }
 pre .comment,
 pre .template_comment,
 pre .diff .header,
 pre .javadoc{
 color:#998;
-font-style:italic
+font-style:italic;
 }
 pre .keyword,
 pre .css .rule .keyword,
@@ -194,9 +194,12 @@ margin-right:0;
 margin-left:0;
 }
 #MENU li.logo a{font-weight:normal;
-font-size:160%;
+font-size:150%;
 text-decoration:none;
+color:#008B8B;
 background-color:inherit;
+}
+#MENU li.logo a:hover{text-decoration:overline;
 }
 #MENU li.logo span{font-size:12px;
 font-weight:bold;
@@ -207,11 +210,11 @@ outline:none;
 }
 #MENU a:hover{
 padding:2px;
-background-color:gainsboro;
+background-color:#DCDCDC;
 }
 #MENU a.current{
 padding:2px;
-background-color:gainsboro;
+background-color:#DCDCDC;
 }
 #TOC{
 font-family:sans-serif;
@@ -241,3 +244,4 @@ text-align:center;
 #FOOTER div.github a{
 font-variant:small-caps;
 }
+

@@ -20,5 +20,5 @@ copy: reset
 
 publish:
 	git add .
-	git commit --amend
+	git commit --amend -C HEAD
 	git push --force origin gh-pages

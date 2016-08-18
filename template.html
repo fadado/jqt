@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
-<title>Templates syntax &ndash; jqt · the jq template engine</title>
+<title>Template syntax &ndash; jqt · the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="jqt v0.1.0"/>
+<meta name="generator" content="jqt v0.2.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
@@ -33,34 +33,37 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
   <body>
     <ul id="MENU">
-      <li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v0.1.0</span></li>
-<li><a  href="./index.html">Home</a></li>
+      <!--<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>-->
+      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.2.0</span></li>
 <li><a  href="./engine.html">Engine</a></li>
-<li><a  href="./document.html">Document</a></li>
 <li><a class='current' href="./template.html">Template</a></li>
-<li><a  href="./metadata.html">Metadata</a></li>
+<li><a  href="./document.html">Document</a></li>
+<li><a  href="./data.html">Data</a></li>
     </ul>
 
-<h1>Templates syntax &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
+<h1>Template syntax &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
     <div id="BODY">
   <div id="TOC">
     <p>Table of contents</p>
     
 <ul>
 <li><a href="#general-operation">General operation</a></li>
-<li><a href="#syntax">Syntax</a><ul>
+<li><a href="#template-syntax">Template syntax</a><ul>
 <li><a href="#preprocessing">Preprocessing</a><ul>
-<li><a href="#syntax-of-macros">Syntax of macros</a></li>
+<li><a href="#macro-calls">Macro calls</a></li>
 <li><a href="#skips">Skips</a></li>
 </ul></li>
-<li><a href="#jq-fragments"><em>jq</em> fragments</a></li>
+<li><a href="#code-snippets">Code snippets</a><ul>
+<li><a href="#expressions">Expressions</a></li>
+<li><a href="#actions">Actions</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
   </div>
   <div id="CONTENT">
     <h2 id="general-operation">General operation</h2>
-<p><em>jqt</em> will transform your templates into <em>jq</em> scripts, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. The generated script will be executed, in the render stage, to generate the final HTML document while consuming the merged JSON inputs. This is described on the top of this diagram:</p>
+<p><em>jqt</em> will transform your template into a <a href="https://stedolan.github.io/jq/"><em>jq</em></a> script, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. The generated script will be combined with the document and data inputs in the render stage to produce the final HTML document. This is described on the top of this diagram:</p>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
@@ -70,15 +73,15 @@ Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
            MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
 Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
                       +------+   +------+   \--------&gt;+-----+         +------+
-                                               YAML    ^   ^
+                                          YAML         ^   ^
                                           front-matter |   |
-                                                       |   |
+                                          metadata     |   |
            JSON       +------+                         |   |
          +-----------&gt;|expand|-------------------------+   |
-Metadata              +------+                             |
+    Data              +------+                             |
          +-------------------------------------------------+
            YAML   </code></pre>
-<p>You can pass the following options to <code>jqt</code> to modify template evaluation:</p>
+<p>When invoking <code>jqt</code> you can use the following options to modify template rendering:</p>
 <dl>
 <dt>-D NAME=VAL</dt>
 <dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
@@ -96,70 +99,79 @@ Metadata              +------+                             |
 <dd>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.
 </dd>
 </dl>
-<h2 id="syntax">Syntax</h2>
-<p>A template is a file with UTF-8-encoded text, with a few kinds of delimited statements intermixed. This is a complete template example:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.lang}}&#39;</span><span class="kw">&gt;</span>
+<h2 id="template-syntax">Template syntax</h2>
+<p>A template is a text file with intermixed snippets of <em>jq</em> code. Snippets can be <dfn>expressions</dfn> (delimited by <code>{{</code> and <code>}}</code>), which get replaced with values when a template is rendered and <dfn>actions</dfn> (delimited by <code>{%</code> and <code>%}</code>), which control the logic of the template. Comments (delimited by <code>{#</code> and <code>#}</code>) are ignored and not copied to the output. This is a complete template example:</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.front.lang}}&#39;</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
-    {# block comments #}
-    <span class="kw">&lt;title&gt;</span>{{.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
-    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
-    {# implicit loop if several authors #}
-    {% .author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
+    <span class="kw">&lt;title&gt;</span>{{.front.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
     {# include files in preprocessing stage #}
     <span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
+    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
+    {# optional line #}
+    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.front.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
+    {# implicit loop for all authors #}
+    {% .front.author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
-    <span class="kw">&lt;h1&gt;</span>{{.title}}<span class="kw">&lt;/h1&gt;</span>
-    <span class="kw">&lt;h2&gt;</span>{{.subtitle//empty}}<span class="kw">&lt;/h2&gt;</span> {# line vanishes if subtitle not defined #}
-    <span class="kw">&lt;ul&gt;</span>
-        {% range(.n) %} {# loop from 0 to .n-1 #}
-            <span class="kw">&lt;li&gt;</span>{{.}}<span class="kw">&lt;/li&gt;</span>
-        {% end %}
-    <span class="kw">&lt;/ul&gt;</span>
+    <span class="kw">&lt;h1&gt;</span>{{.front.title}}<span class="kw">&lt;/h1&gt;</span>
+    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
+        {{.body}}
+    <span class="kw">&lt;/div&gt;</span>
+    <span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></code></pre>
-<p>Main features:</p>
-<ul>
-<li>One line statements begin with optional space and <code>{%...%}</code>. The rest of the line is in the nested block.</li>
-<li>Multiline blocks begin with optional space and <code>{%...%}</code>.</li>
-<li>Multiline blocks finish with optional space and <code>{% end %}</code>.</li>
-<li>Raw blocks are enclode between <code>{% raw %}</code> and <code>{%%}</code> marks.</li>
-<li>The input metadata provided to <em>jq</em> is available in the dot (<code>.</code>) and the global variable <code>M$</code>.</li>
-</ul>
 <h3 id="preprocessing">Preprocessing</h3>
-<p>Templates are preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options are available, like defining new macros, include other files, etc.</p>
-<h4 id="syntax-of-macros">Syntax of macros</h4>
-<p>Macro definition:</p>
+<p>Templates are preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options in a macro processor are available, like defining new macros, include other files, etc. For example, a template fragment like</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;</code></pre>
+<p>will expand to the string <code>&lt;meta name=&quot;generator&quot; content=&quot;jqt v0.2.0&quot;/&gt;</code> as you can see in the internal code of this page.</p>
+<h4 id="macro-calls">Macro calls</h4>
+<p>The macro syntax used by <em>jqt</em> precedes macro names with the characters <code>&lt;%</code> and finishes the macro calls with the character <code>&gt;</code>. The more common predefined macros have this syntax:</p>
+<pre><code>&lt;%defeval x y&gt;
+&lt;%define x y&gt;
+&lt;%elif expr&gt;
+&lt;%else&gt;
+&lt;%endif&gt;
+&lt;%eval expr&gt;
+&lt;%if expr&gt;
+&lt;%ifdef x&gt;
+&lt;%ifeq x y&gt;
+&lt;%ifndef x&gt;
+&lt;%ifneq x y&gt;
+&lt;%include file&gt;
+&lt;%undef x&gt;</code></pre>
+<p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.):</p>
+<pre><code>&lt;%define stylesheet
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;$1&quot;/&gt;
+&gt;</code></pre>
+<p>Predefined macros and user define macros have the same call sequence:</p>
+<pre><code>&lt;%include &quot;head.html&quot;&gt;
+&lt;%stylesheet jqt.css&gt;</code></pre>
+<p>With these simple tools is possible to emulate features considered advanced in some template engines, like template inheritance (also known as <em>blocks</em>). For example, in the base template (assume it is named <code>default.html</code>) you must put this conditional macro call:</p>
+<pre><code>&lt;%ifndef HEAD_TITLE&gt;
+    &lt;title&gt;{{.front.title}}&lt;/title&gt; {# default block #}
+&lt;%else&gt;&lt;%call HEAD_TITLE&gt;&lt;%endif&gt;</code></pre>
+<p>And in the derived template you define a macro for the desired block, and include the base template:</p>
 <pre><code>&lt;%define HEAD_TITLE
   &lt;title&gt;{{.front.title}} &amp;ndash; {{.site.title}}&lt;/title&gt;
-&gt;&amp;</code></pre>
-<p>Macro call examples:</p>
-<pre><code>&lt;meta name=&quot;generator&quot; content=&quot;jqt v&lt;%include &quot;../VERSION&quot;&gt;&quot;/&gt;
-
-&lt;%include &quot;default.html&quot;&gt;
-
-&lt;%partial analytics &#39;UA-82432866-1&#39;&gt;&amp;</code></pre>
-<p>Conditional macro call:</p>
-<pre><code>&lt;%ifndef HEAD_TITLE&gt;&amp;
-    &lt;title&gt;{{.front.title}}&lt;/title&gt;
-&lt;%else&gt;&lt;%call HEAD_TITLE&gt;&lt;%endif&gt;&amp;</code></pre>
+&gt;
+&lt;%include &quot;default.html&quot;&gt;</code></pre>
+<p>In addition to GPP predefined macros <em>jqt</em> define in the file <code>libjqt.m</code>, always included in the render stage, a little library of macros. The more useful will be perhaps <code>&lt;%partial name arg...&gt;</code>, to include a template file passing arguments to it and <code>&lt;%call name arg...&gt;</code>, to call a macro by name.</p>
+<p>Warning: you must read the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
 <h4 id="skips">Skips</h4>
-<p>Some fragments of text are skipped during macro expansion.</p>
-<pre><code>&lt;# block comments, removed, must end in newline (also removed) #&gt;</code></pre>
-<pre><code>Continuation lines using ampersand (removed with the newline character)&amp;</code></pre>
-<p>Strings are copied to the output, but evaluation of macros inside strings can be disabled. String delimiters can be copied, or not, to the output.</p>
-<pre><code>&lt;%sc &#39;single quoted strings, only available in user defined macro calls&#39;&gt;
-&lt;%sc &quot;double quoted strings, only available in user defined macro calls&#39;&gt;
-&lt;!-- XML comments, not removed --&gt;
-All the jqt template tags: {#...#}, {%...%}, {{...}} </code></pre>
-<p>Templates are preprocessed like MarkDown input, but the skips available are no the same. This table summarize all the skips available:</p>
-<p>This table summarize all the skips available:</p>
+<p>Some fragments of text are skipped during macro expansion, like comments, continuation lines and arbitrary but delimited strings of characters:</p>
+<pre><code>&lt;# Block comments, removed, must end in newline (also removed) #&gt;
+Continuation lines using an ampersand just before the newline character&amp;</code></pre>
+<p><em>Strings</em> are copied to the output, but evaluation of macros inside strings can be enabled or disabled. String delimiters can be copied, or not, to the output:</p>
+<pre><code>&lt;!-- XML comments --&gt;
+&lt;%sc &#39;Single quoted strings, only available in user defined macro calls&#39;&gt;
+&lt;%sc &quot;Double quoted strings, only available in user defined macro calls&#39;&gt;
+All jqt template delimited regions: {#...#}, {%...%}, {{...}} </code></pre>
+<p>This table summarizes all the available template skips:</p>
 <table>
 <caption><strong>Semantics for all template skips</strong></caption>
 <thead>
 <tr class="header">
 <th align="center">Delimiters</th>
-<th align="left">Place</th>
 <th align="left">Macro expansion</th>
 <th align="left">Delimiters removed</th>
 <th align="left">Content removed</th>
@@ -168,64 +180,56 @@ All the jqt template tags: {#...#}, {%...%}, {{...}} </code></pre>
 <tbody>
 <tr class="odd">
 <td align="center"><code>&amp;\n</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">Yes</td>
 <td align="left">There is no content</td>
 </tr>
 <tr class="even">
 <td align="center"><code>&lt;#</code> <code>#&gt;</code></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">Yes</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="odd">
-<td align="center"><code>'</code> <code>'</code></td>
-<td align="left">User defined macros</td>
+<td align="center"><code>'</code> <code>'</code><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
 <td align="left">No</td>
 <td align="left">Yes</td>
 <td align="left">No</td>
 </tr>
 <tr class="even">
-<td align="center"><code>&quot;</code> <code>&quot;</code></td>
-<td align="left">User defined macros</td>
+<td align="center"><code>&quot;</code> <code>&quot;</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></td>
 <td align="left">Yes</td>
 <td align="left">Yes</td>
 <td align="left">No</td>
 </tr>
 <tr class="odd">
 <td align="center"><code>&lt;!--</code> <code>--&gt;</code></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">No</td>
 <td align="left">No</td>
 </tr>
 <tr class="even">
 <td align="center"><code>{{</code> <code>}}</code></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">No</td>
 <td align="left">No</td>
 </tr>
 <tr class="odd">
 <td align="center"><code>{%</code> <code>%}</code></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">No</td>
 <td align="left">No</td>
 </tr>
 <tr class="even">
 <td align="center"><code>{#</code> <code>#}</code></td>
-<td align="left">Template text</td>
 <td align="left">No</td>
 <td align="left">No</td>
 <td align="left">No</td>
 </tr>
 </tbody>
 </table>
-<h3 id="jq-fragments"><em>jq</em> fragments</h3>
-<p>The delimiters used by <em>jqt</em> are as follows:</p>
+<h3 id="code-snippets">Code snippets</h3>
+<p>The input text for a template is UTF-8 text with intermixed snippets of <em>jq</em> code. Snippets can be expressions, actions and comments. The delimiters used by <em>jqt</em> are as follows:</p>
 <table>
 <caption><strong>Delimiters used in <em>jqt</em> templates</strong></caption>
 <thead>
@@ -236,24 +240,48 @@ All the jqt template tags: {#...#}, {%...%}, {{...}} </code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>{# ... #}</code></td>
-<td align="left">comments not included in the output</td>
+<td align="left"><code>{{ ... }}</code></td>
+<td align="left">Expressions to evaluate and print</td>
 </tr>
 <tr class="even">
-<td align="left"><code>{{ ... }}</code></td>
-<td align="left">expressions to evaluate and print</td>
+<td align="left"><code>{% ... %}</code></td>
+<td align="left">Actions for conditional and evaluation and loops</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>{% ... %}</code></td>
-<td align="left">control statements</td>
+<td align="left"><code>{# ... #}</code></td>
+<td align="left">Comments not included in the output</td>
 </tr>
 </tbody>
 </table>
-<p>The text inside the expressions and control delimiters is normal <em>jq</em> code, when as a bonus, the <code>M$</code> global variable point to <code>jq</code> JSON input (the initial <code>.</code> –dot–).</p>
+<h4 id="expressions">Expressions</h4>
+<p>The text inside expressions and actions is normal <em>jq</em> code, where as a bonus, the <code>M$</code> global variable points to the <code>jq</code> JSON input (the initial <code>.</code>). The rules for expression evaluation are very simple:</p>
+<ul>
+<li>If an expression evaluates to <code>empty</code> the whole line vanishes.</li>
+<li>If an expression produces only one value the snippet is replaced with this value.</li>
+<li>If an expression produces multiple values the whole line is repeated multiple times, with the expression evaluated again each time.</li>
+</ul>
+<h4 id="actions">Actions</h4>
+<p>There are two kinds of actions:</p>
+<ul>
+<li><dfn>One line actions</dfn>: lines beginning with optional space, followed by a <code>{%...%}</code> snippet and more text.</li>
+<li><dfn>Multiline actions</dfn>: first line beginning with optional space, followed by an opening <code>{%...%}</code> snippet and a newline; then zero or more template lines; final line beginning with optional space, the ending <code>{% end %}</code> snippet and a newline. Multiline actions can nest and contain expressions and one line actions.</li>
+</ul>
+<p>The evaluation rules for one line actions are as follows:</p>
+<ul>
+<li>If the snippet evaluates to <code>empty</code> the whole line vanishes.</li>
+<li>Otherwise, for each value produced by the snippet the text following the snippet is evaluated with the value assigned to the dot (<code>.</code>). The initial dot is still available in the global variable <code>M$</code>.</li>
+</ul>
+<p>The evaluation rules for multiline actions are as follows:</p>
+<ul>
+<li>If the opening snippet evaluates to <code>empty</code> all lines until the ending snippet disappear.</li>
+<li>Otherwise, for each value produced by the opening snippet the lines until the ending snippet are evaluated with the value assigned to the dot (<code>.</code>). The initial dot is still available in the global variable <code>M$</code>.</li>
+</ul>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>An ampersand followed by a newline is treated as a line continuation (that is, the ampersand and the newline are removed and effectively ignored).<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Only inside user defined macros.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Only inside user defined macros.<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
 
@@ -283,4 +311,5 @@ All the jqt template tags: {#...#}, {%...%}, {{...}} </code></pre>
 </script>
   </body>
 </html>
+
 
