@@ -15,7 +15,7 @@ to the render stage.  This is described on the middle of this diagram:
 
 <%include "FLOW.md">
 
-When invoking `jqt` you cas use the following options to influence the document
+When invoking `jqt` you can use the following options to influence the document
 conversion:
 
 <%include "opt/4.md">
@@ -31,7 +31,7 @@ Document files contains MarkDown text preceded by an optional YAML front matter.
 ### Front matter
 
 Pandoc accepts YAML metadata intermixed with the MarkDown content. _jqt_ will
-extract the YAML front matter, located at the very begining of the file,
+extract the YAML front matter, located at the very beginning of the file,
 convert the top level scalar elements to HTML,
 and inject it into the render stage under a global JSON object named `.front`.
 
@@ -50,7 +50,7 @@ and the second does the proper conversion to HTML.
 
 ### Preprocessing
 
-The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options are available,
+The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a macro processor are available,
 like defining new macros, include other files, etc. For example, a macro call
 like `<%include "../VERSION">` will expand to he string <code><%include "../VERSION"></code>
 as you can see in this paragraph and on the top of these pages.

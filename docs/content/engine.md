@@ -55,7 +55,7 @@ happen. You can also change the installation directory:
 $ sudo make install prefix=/your/installation/path
 ```
 
-But if you choose a directory diferent of `/usr/local/share` for the shared data
+But if you choose a directory different of `/usr/local/share` for the shared data
 you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
 
 ## Invoking _jqt_

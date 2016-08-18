@@ -16,7 +16,7 @@ This is described on the top of this diagram:
 
 <%include "FLOW.md">
 
-When invoking `jqt` you cas use the following options to modify the template
+When invoking `jqt` you can use the following options to modify the template
 rendering:
 
 <%include "opt/D.md">
@@ -37,7 +37,7 @@ This is a complete template example:
 
 ### Preprocessing
 
-Templates are preprocessed using [GPP][GPP]. All the expected options are available,
+Templates are preprocessed using [GPP][GPP]. All the expected options in a macro processor are available,
 like defining new macros, include other files, etc. For example, a template fragment
 like
 
@@ -161,7 +161,7 @@ The rules for expression evaluation are very simple:
 * If an expression evaluates to `empty` the whole line vanishes.
 * If an expression produces only one value the snippet is replaced with this value.
 * If an expression produces multiple values the whole line is repeated multiple
-  times, whith the expression evaluated again each time.
+  times, with the expression evaluated again each time.
 
 #### Actions
 
