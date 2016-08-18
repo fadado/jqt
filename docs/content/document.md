@@ -8,14 +8,14 @@ updated: "2016-08-17T10:34:16Z"
 
 ## General operation
 
-_jqt_ will transform your [MarkDown][MARKDOWN] documents to HTML using Pandoc,
-but before that [GPP][GPP] is used to preprocess the documents. Pandoc's output
+_jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using Pandoc,
+but before that [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter and other input metadata before be sended
 to the render stage.  This is described on the middle of this diagram:
 
 <%include "FLOW.md">
 
-When invoking `jqt` you can use the following options to influence the document
+When invoking `jqt` you can use the following options to influence document
 conversion:
 
 <%include "opt/4.md">
@@ -26,14 +26,13 @@ conversion:
 
 ## File structure
 
-Document files contains MarkDown text preceded by an optional YAML front matter.
+Document files contain MarkDown text preceded by an optional YAML front matter.
 
 ### Front matter
 
-Pandoc accepts YAML metadata intermixed with the MarkDown content. _jqt_ will
-extract the YAML front matter, located at the very beginning of the file,
-convert the top level scalar elements to HTML,
-and inject it into the render stage under a global JSON object named `.front`.
+Pandoc accepts YAML metadata intermixed with MarkDown content. _jqt_ 
+extracts the YAML front matter, located at the very beginning of the file,
+and injects it into the render stage under a global JSON object named `.front`.
 
 ### Body
 
@@ -84,7 +83,7 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 ```
 <%define sc
     <span style="font-variant:small-caps;">$1</span>
->&
+>
 ```
 
 Predefined macros and user define macros have the same call sequence:
@@ -94,8 +93,7 @@ Predefined macros and user define macros have the same call sequence:
 <%sc 'A title in small caps'>
 ```
 
-Warning: you must read the [GPP manual](https://files.nothingisreal.com/software/gpp/gpp.html)
-if you want to know all the gory details.
+Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
@@ -103,7 +101,7 @@ Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and arbitrary but delimited strings of characters:
 
 ```
-<# block comments, removed, must end in newline (also removed) #>
+<# Block comments, removed, must end in newline (also removed) #>
 Continuation lines using an ampersand just before the newline character&
 ```
 
@@ -112,8 +110,8 @@ be enabled or disabled.  String delimiters can be copied, or not, to the output:
 
 ~~~
 <!-- XML comments -->
-<%sc 'single quoted strings, only available in user defined macro calls'>
-<%sc "double quoted strings, only available in user defined macro calls'>
+<%sc 'Single quoted strings, only available in user defined macro calls'>
+<%sc "Double quoted strings, only available in user defined macro calls'>
 Inline code `inside backticks`
 ```
 Fenced code blocks with tildes (~~~) or backticks (```)

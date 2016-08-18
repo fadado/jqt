@@ -8,10 +8,13 @@ updated: "2016-08-13T07:48:26Z"
 
 ## General operation
 
-You can provide metadata in the document front matter to be inserted when
-rendering the template. Also, `jqt` will accept in the command line  additional
-files in [YAML][YAML] or [JSON][JSON] format to be merged with
-the front matter. This is described on the bottom of this diagram:
+_jqt_ is designed to combine one template with one [MarkDown][MARKDOWN] document and a
+[data model](https://en.wikipedia.org/wiki/Data_model) to
+produce the final HTML result.
+To define the data model you can provide metadata in the document front matter to be inserted when
+rendering the template. Also, `jqt` accepts additional files in the command line
+in [YAML][YAML] or [JSON][JSON] format to be merged with
+the document front matter. This is described on the bottom of this diagram:
 
 <%include "FLOW.md">
 
@@ -28,14 +31,15 @@ metadata and influence JSON preprocessing:
 
 ### YAML
 
-Document front matter metadata and additional input YAML files will be converted to
+Document front matter metadata and additional input YAML files are converted to
 JSON and merged to be the `jq` input in the render stage.
 
 ### JSON
 
-Additional JSON input can be provided in external files. The files are
-preprocessed using [GPP][GPP], and all the expected options in a macro processor are available, like
-defining new macros, include other files, etc.
+Additional JSON files can be provided and are merged with front matter metadata
+to be the `jq` input in the render stage.  The files are preprocessed using
+[GPP][GPP], and all the expected options in a macro processor are available,
+like defining new macros, include other files, etc.
 
 #### Macro calls
 
@@ -47,7 +51,7 @@ for predefined macros and for user defined macros:
 * The user defined macro names for calls without arguments are preceded with
   the character `&` and the macro calls finishes with the character `;`.
 * The user defined macro names for calls with arguments are preceded with the
-  character `&`, followed by the character `(`, followed with arguments separated by
+  character `&`, then followed by the character `(`, accept arguments separated by
   commas (`,`), and the macro calls finishes with the characters `);`.  
 
 The more common predefined macros have this syntax:
@@ -77,17 +81,19 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 { "price": "&price(100);" }
 ```
 
+Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+
 #### Skips
 
 The main use of the preprocessor is to remove comments in the CPP style:
 
 ```
-/* block comments */
-// line comments
+/* Block comments */
+// Line comments
 ```
 
 Double quoted strings are also defined as skips, and backticks can be used to
-disable macro expansion (inside double quoted strings are ignored).
+disable macro expansion (inside double quoted strings backticks are ignored).
 This table summarize all the available skips in JSON files:
 
  Delimiters         Macro expansion     Delimiters removed  Content removed
@@ -129,8 +135,7 @@ As a wrappers to `jq` you have the following utilities shipped with _jqt_:
 * `cq`, apply `jq` to CSV input files.
 * `yq`, apply `jq` to YAML input files.
 
-These utilities imitate at maximum the `jq` command line interface, for example
-not requiring redirection of input:
+These utilities imitate at maximum the `jq` command line interface:
 
 ```
 $ yq '.store.book[2]' tests/data/store.yaml
@@ -150,7 +155,7 @@ $ yq --json -c '.store.book[2]' tests/data/store.yaml
 {"category":"fiction","price":8.99,"author":"Herman Melville",...
 ```
 
-Read the output of `yq --help` for more information.
+Read the output of `yq --help` and `cq --help` for more information.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

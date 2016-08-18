@@ -6,6 +6,7 @@
 [JQ]: https://stedolan.github.io/jq/
 [REPO]: https://github.com/fadado/jqt
 [GPP]: https://logological.org/gpp
+[GPPMAN]: https://files.nothingisreal.com/software/gpp/gpp.html
 [PANDOC]: http://pandoc.org/
 [BASH]: https://www.gnu.org/software/bash/
 [SED]: https://www.gnu.org/software/sed/

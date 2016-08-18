@@ -1,3 +1,28 @@
+Version 0.2.0:
+ - Finished site structure and minimal documentation
+ - Better content sections
+ - Better skip tables
+ - Man page ok
+ - Modularized options
+ - Completed document.md first version
+ - Fusion of sub-makefiles
+ - Added analytics
+ - Integrated yq
+ - Completed hello.md and engine.md first versions.
+ - Refactorized macros
+ - Started documentation blueprint
+ - Created auxiliar MD files
+ - Revised help information
+ - Do not minify HTML
+ - Implement the block concept
+ - Trailing line in snippets removed
+ - Only two global objects: .front and .body
+ - Classify files in directories
+ - Refactoring several files, added local macros, etc.
+ - Refactoring global pipes
+ - Link to releases
+ - Macro process CSS
+
 Version 0.1.0
  - In principio
 

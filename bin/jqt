@@ -2,7 +2,7 @@
 
 # jqt - jq based web template engine
 
-declare -r VERSION='0.1.0'
+declare -r VERSION='0.2.0'
 declare -r DATADIR='/usr/local/share'
 
 declare -r SELF=${0##*/}

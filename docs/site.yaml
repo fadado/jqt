@@ -22,12 +22,12 @@ menu:
 - URL: ./engine.html
   id: content/engine
   name: Engine
-- URL: ./document.html
-  id: content/document
-  name: Document
 - URL: ./template.html
   id: content/template
   name: Template
+- URL: ./document.html
+  id: content/document
+  name: Document
 - URL: ./metadata.html
   id: content/metadata
   name: Metadata
