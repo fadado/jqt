@@ -31,9 +31,8 @@ MAKEFLAGS += --warn-undefined-variables
 
 # Sets the default goal to be used if no targets were specified on the
 # command line.
-.DEFAULT_GOAL := all
-
 .PHONY: all
+.DEFAULT_GOAL := all
 
 # Default shell: if we require GNU Make, why not require Bash?
 SHELL := /bin/bash
@@ -51,21 +50,48 @@ SHELL := /bin/bash
 ########################################################################
 
 # Output directories
-CACHE := .jqt
-DESTINATION := /tmp/jqt
+Meta := .jqt
+Destination := /tmp/jqt
 
 # Directories for input files
-CONTENT := ./content
-STRUCTURE := ./structure
-PRESENTATION := ./presentation
+Assets := ./assets
+Content := ./content
+Presentation := ./presentation
+Structure := ./structure
+
+# Common sources for all targets
+Common := \
+	$(Meta)/config.json \
+	$(Meta)/snippets.json \
+	$(Structure)/default.html \
+	$(Structure)/head.html \
+	$(Structure)/footer.html \
+	$(Content)/LINKS.md \
+	filters.jq \
+	macros.m \
+
+# Files to "build"
+Home := index
+Pages := engine document metadata template
+Files := README.md jqt.css
+ManPage := ../jqt.1.gz
+Targets := \
+	$(ManPage) \
+	$(foreach f,$(Files),$(Destination)/$(f)) \
+	$(foreach f,$(foreach p,$(Home) $(Pages),$(p).html),$(Destination)/$(f))
+
+########################################################################
+# Commands
+########################################################################
 
 # The template engine (.site and .snippets defined in the jqt call)
-JQT := jqt \
-	-I$(STRUCTURE) \
-	-I$(CONTENT) \
+JQT = jqt $(JQTFLAGS)
+JQTFLAGS := \
+	-I$(Structure) \
+	-I$(Content) \
 	-ifilters \
-	-msite:$(CACHE)/site.json \
-	-msnippets:$(CACHE)/snippets.json \
+	-msite:$(Meta)/config.json \
+	-msnippets:$(Meta)/snippets.json \
 	--toc-depth=4 \
 
 # Macro process MarkDown
@@ -81,6 +107,15 @@ MPMD := gpp --nostdinc \
 	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' '' \
 	-M '<%' '>' '\B' '\B' '\W>' '<' '>' \
 
+# Macro process JSON
+MPJSON := gpp --nostdinc \
+        +cccc '\\n' '' \
+        +cccc '/*' '*/' \
+        +cccc '//' '\n' \
+        +sSSS '"' '"' '\' \
+	-U '&' ';' '(' ',' ');' '(' ')' '$$' '' ) \
+	-M '<!' '>' '\b' '\b' '>' '<' '>' )
+
 # Macro process CSS
 MPCSS := gpp --nostdinc \
 	+c '/*' '*/' \
@@ -91,94 +126,78 @@ MPCSS := gpp --nostdinc \
 # Minify CSS
 CSSMIN := sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
 
-# Common sources for all targets
-COMMON := \
-	$(CACHE)/site.json \
-	$(CACHE)/snippets.json \
-	$(STRUCTURE)/default.html \
-	$(STRUCTURE)/head.html \
-	$(STRUCTURE)/footer.html \
-	$(CONTENT)/LINKS.md \
-	filters.jq \
-	macros.m \
-
-# Files to "build"
-ASSETS := README.md jqt.css
-PAGES := engine document metadata template
-MANPAGE := ../jqt.1.gz
-TARGETS := \
-	$(MANPAGE) \
-	$(foreach f,$(ASSETS),$(DESTINATION)/$(f)) \
-	$(foreach f,$(foreach p,index $(PAGES),$(p).html),$(DESTINATION)/$(f))
+# Validate output pages (disable or redefine as you like)
+XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
+		&& xmllint --noout --valid $(Destination)/*.html \
+		&& echo 'XHTML valid!'
+#XHTMLValid := :
 
 ########################################################################
 # Rules
 ########################################################################
 
 # Main
-all: $(TARGETS)
-	test -f /etc/xml/xhtml1-dtds.xml \
-	&& xmllint --noout --valid $(DESTINATION)/*.html \
-	&& echo 'XHTML valid!'
+all: $(Targets)
+	$(XHTMLValid)
 
 # Directories
-$(CACHE) $(DESTINATION):
+$(Meta) $(Destination):
 	mkdir $@ >/dev/null 2>&1 || true
 
-# Cached files
-$(CACHE)/site.json: site.yaml \
-| $(CACHE)
+# Metad files
+$(Meta)/config.json: config.yaml \
+| $(Meta)
 	yaml2json < $< > $@
 
-$(CACHE)/snippets.pandoc: private id=^\([a-zA-Z_-]\+\)
-$(CACHE)/snippets.pandoc: $(CONTENT)/snippets.yaml \
-| $(CACHE)
+$(Meta)/snippets.pandoc: private id=^\([a-zA-Z_-]\+\)
+$(Meta)/snippets.pandoc: $(Content)/snippets.yaml \
+| $(Meta)
 	sed '/$(id): *[>|]/{s/$(id):.*/\1: >\n  $$\1$$/;b;};/$(id): *[^#]/{s/$(id):.*/\1: $$\1$$/;b;};d;' \
 	< $< > $@
 
-$(CACHE)/snippets.json: $(CONTENT)/snippets.yaml $(CACHE)/snippets.pandoc \
-| $(CACHE)
-	pandoc --from markdown --to html --template=$(CACHE)/snippets.pandoc $< \
+$(Meta)/snippets.json: $(Content)/snippets.yaml $(Meta)/snippets.pandoc \
+| $(Meta)
+	pandoc --from markdown --to html --template=$(Meta)/snippets.pandoc $< \
 	| yaml2json > $@
 
 # Target files
-$(DESTINATION)/README.md: README.md \
-| $(DESTINATION)
+$(Destination)/README.md: $(Assets)/README.md \
+| $(Destination)
 	$(info ==> $@)
 	cp $< $@
 
-$(DESTINATION)/index.html: $(CONTENT)/home.md $(COMMON) \
-| $(DESTINATION)
+$(Destination)/index.html: $(Content)/home.md $(Common) \
+| $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(STRUCTURE)/default.html > $@
+	$(JQT) -d $< $(Structure)/default.html > $@
 
-$(DESTINATION)/engine.html: $(CONTENT)/FLOW.md
-$(DESTINATION)/index.html: $(CONTENT)/EXAMPLE.md
-$(DESTINATION)/template.html: $(CONTENT)/EXAMPLE.md
+$(Destination)/engine.html: $(Content)/FLOW.md
+$(Destination)/index.html: $(Content)/EXAMPLE.md
+$(Destination)/template.html: $(Content)/EXAMPLE.md
 
 define Target
-$(DESTINATION)/$(1).html: $(CONTENT)/$(1).md $(STRUCTURE)/$(2).html $(COMMON) \
-| $(DESTINATION)
+$(Destination)/$(1).html: $(Content)/$(1).md $(Structure)/$(2).html $(Common) \
+| $(Destination)
 	$$(info ==> $$@)
-	$$(JQT) -d $$< $(STRUCTURE)/$(2).html > $$@
+	$(JQT) -d $$< $(Structure)/$(2).html > $$@
 endef
 
-$(foreach p,$(PAGES),$(eval $(call Target,$(p),page)))
+$(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(DESTINATION)/jqt.css: $(PRESENTATION)/jqt.css $(PRESENTATION)/github.css
+$(Destination)/jqt.css: $(Presentation)/jqt.css $(Presentation)/github.css
 	$(info ==> $@)
 	$(MPCSS) $< | $(CSSMIN) > $@
 
 # Help text
-/tmp/help: $(CONTENT)/help.txt
-	$(MPMD) -I. -I$(CONTENT) $<  \
+/tmp/help: $(Content)/help.txt
+	$(MPMD) -I. -I$(Content) $<  \
 	| pandoc --from markdown --to plain - \
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
 	> $@
 
 # Man page
-$(MANPAGE): $(CONTENT)/jqt.1.md
-	$(MPMD) -I. -I$(CONTENT) $<  \
+$(ManPage): $(Content)/jqt.1.md
+	$(MPMD) -I. -I$(Content) $<  \
 	| pandoc --standalone --from markdown --to man \
 	| gzip > $@
 
@@ -189,10 +208,10 @@ $(MANPAGE): $(CONTENT)/jqt.1.md
 .PHONY: clean clobber build
 
 clean:
-	rm -rf $(DESTINATION)/* $(MANPAGE)
+	rm -rf $(Destination)/* $(ManPage)
 
 clobber:
-	rm -rf $(DESTINATION) $(CACHE)
+	rm -rf $(Destination) $(Meta)
 
 build: clean all
 

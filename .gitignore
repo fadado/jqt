@@ -1,4 +1,6 @@
-# Output of templates expansion
+# cache
+/docs/.jqt
+# output of templates expansion
 tests/generated/*.jqe
 tests/generated/*.jqs
 tests/generated/*.txt

@@ -1,5 +1,5 @@
 ---
-<%include "site.yaml">
+<%include "config.yaml">
 title: Template syntax
 updated: "2016-08-13T07:48:26Z"
 ---

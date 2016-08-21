@@ -1,5 +1,5 @@
 ---
-<%include "site.yaml">
+<%include "config.yaml">
 title: Operating the engine
 updated: "2016-08-17T09:50:11Z"
 ---

@@ -1,5 +1,5 @@
 ---
-<%include "site.yaml">
+<%include "config.yaml">
 title: Content documents
 updated: "2016-08-17T10:34:16Z"
 ---

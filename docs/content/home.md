@@ -1,5 +1,5 @@
 ---
-<%include "site.yaml">
+<%include "config.yaml">
 updated: "2016-08-17T09:55:33Z"
 ---
 <%include "macros.m">&

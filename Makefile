@@ -141,7 +141,7 @@ define TestJQT
 # Run one example
 $(1)-%.jqt:
 	echo "==> $$(basename $$@)"
-	if [[ -e tests/$$(basename $$@).json ]]; then \
+	if test -e tests/$$(basename $$@).json; then \
 	    jqt -ifilters -Ltests/filters -Mtop:tests/$$(basename $$@).json -dtests/md-00.md tests/$$@ tests/generated/$$(basename $$@).txt; \
 	else \
 	    jqt -ifilters -Ltests/filters -dtests/md-00.md tests/$$@ tests/generated/$$(basename $$@).txt; \

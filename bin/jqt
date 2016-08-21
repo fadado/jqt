@@ -447,13 +447,13 @@ Some of the options include:
 Preprocessor options      Debugging options 
     -D NAME=VAL               -C
     -I DIRECTORY              -E
-Document options              -H
-    -4, -5                    -P
-    -d FILE                   -S
-Template options          Information options 
-    -L DIRECTORY              -h, --help
-    -i MODULE                 -p
-    -j MODULE:NAME            -V, --version
+Template options              -H
+    -L DIRECTORY              -P
+    -i MODULE                 -S
+    -j MODULE:NAME          Information options 
+Document options              -h, --help
+    -4, -5                    -p
+    -d FILE                   -V, --version
 Metadata options 
     -M NAME:FILE
     -m NAME:FILE
