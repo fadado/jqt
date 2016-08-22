@@ -2,8 +2,10 @@
  * Web site styles
  **********************************************************************/
 
+&include("csscolors.m")
+
 // GitHub style
-&include("github.css");
+&include("github.css")
 
 //
 // Menu bar

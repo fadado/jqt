@@ -41,7 +41,7 @@ pre code {
 }
 code {
 	font-size:12px;
-	background-color:#f8f8ff;
+	background-color:&GhostWhite;;
 	color:#444;
 	padding:.3em .2em .0em;
 	border:1px solid #dedede;
@@ -77,7 +77,7 @@ dd{margin-left:2em;margin-bottom:1em;}
 pre code {
   display: block; padding: 0.5em;
   color: #333;
-  background: #f8f8ff
+  background: &GhostWhite;;
 }
 
 pre .comment,
@@ -85,7 +85,7 @@ pre .template_comment,
 pre .diff .header,
 pre .javadoc {
   color: #998;
-  font-style: italic
+  font-style: italic;
 }
 
 pre .keyword,
