@@ -1,0 +1,19 @@
+=======================
+Conditional blocks
+=======================
+
+_____
+	I expand!
+	I expand to 'Neque porro quisquam'
+	I expand to '3.141592653589793'
+	I expand preserving $M: '3.141592653589793'
+_____
+_____
+
+I expand to 'Neque porro quisquam'
+I expand to 'Neque porro quisquam'
+
+	else yes
+
+	case else
+

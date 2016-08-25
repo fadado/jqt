@@ -1,0 +1,104 @@
+=======================
+Tests about expressions
+=======================
+
+Escape: \\ TB (\t) LF(\n) CR(\r)
+
+Interpolated string: true
+Interpolated string: false
+Interpolated string: null
+Interpolated string: Neque porro quisquam
+Interpolated string: 3.141592653589793
+
+_______________________
+_______________________
+
+Not vanished line: true
+Not vanished line: Neque porro quisquam
+Not vanished line: 3.141592653589793
+Not vanished line: [7,6,5,4,3,2,1]
+Not vanished line: {"b":true,"s":"Neque","n":3.14}
+
+Nested expression: ===3.141592653589793===
+Nested expression: ===Neque porro quisquam===
+Nested expression: =-*-=
+
+Nested expression: ===3.141592653589793===
+Nested expression: ===Neque porro quisquam===
+Nested expression: =-*-=
+
+Local name: 3.141592653589793
+Local name: ["2","4","6","8","10","12","14"]
+Local name: ["10","12","14","2","4","6","8"]
+
+Repeated line: 0
+Repeated line: 1
+Repeated line: 2
+Repeated line: 3
+Repeated line: 4
+Repeated line: 5
+Repeated line: 6
+Repeated line: b
+Repeated line: n
+Repeated line: s
+Repeated line: 7
+Repeated line: 6
+Repeated line: 5
+Repeated line: 4
+Repeated line: 3
+Repeated line: 2
+Repeated line: 1
+
+Repeated line: 3.141592653589793
+Repeated line: 6.283185307179586
+Repeated line: 9.42477796076938
+Repeated line: 12.566370614359172
+
+Repeated line: 1
+Repeated line: 2
+Repeated line: 3
+Repeated line: 4
+Repeated line: 5
+Repeated line: 6
+Repeated line: 7
+
+Repeated line: 1
+Repeated line: 2
+Repeated line: 3
+Repeated line: 4
+Repeated line: 5
+Repeated line: 6
+Repeated line: 7
+
+The value of pi is 3.141592653589793.
+Pi squared: 6.283185307179586
+Pi squared: 6.283185307179586
+Array [7,6,5,4,3,2,1] has length 7
+Array [7,6,5,4,3,2,1] has length 7
+
+Array $a has value 7 at position 0
+Array .array and array $a are equal? (true)
+Values sorted as strings: ["10","12","14","2","4","6","8"]
+
+<li><b>1</b></li>
+<li><b>2</b></li>
+<li><b>3</b></li>
+<li><b>4</b></li>
+<li><b>5</b></li>
+<li><b>6</b></li>
+<li><b>7</b></li>
+
+Slice: [7,6,5,4]
+Limit: [7,6,5,4]
+
+Modulo: 2
+Modulo: 2
+
+Object: {"a":1,"b":2}
+
+Fibonacci(10): [0,1,1,2,3,5,8,13,21,34]
+Fibonacci(10): 34
+Fibonacci(10): 34
+
+=======================
+

@@ -1,0 +1,11 @@
+/*
+ * JSON strings
+ */
+{
+    "line1": "// this is not a comment",
+    "line2": "this // is not a comment",
+    "line3": "this is not a comment //",
+    "str1": "this string has \" inside",
+    "str2": "this string has \n inside"
+}
+// vim:sw=4:ts=4:ai:et:syntax=javascript

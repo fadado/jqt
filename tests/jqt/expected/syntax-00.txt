@@ -1,0 +1,50 @@
+=======================
+Syntax tests
+=======================
+
+_______________________
+Comments
+_______________________
+
+1 prefixsuffix
+2 prefix  suffix
+3 prefix  suffix
+4 prefix  suffix
+5 
+6 prefixsuffix
+7 prefixsuffix
+8 prefixsuffix
+9 
+
+_______________________
+Expressions
+_______________________
+
+2 + 2 = 4
+2 + 2 = 4
+2 + 2 = 4
+
+_______________________
+One line blocks
+_______________________
+
+1 Diga 33
+2 Diga 33
+3 Diga 33
+4 Diga 33
+5 Diga 33
+
+_______________________
+Raw block
+_______________________
+
+raw
+	raw
+		raw
+{{ expression }}
+	{{ expression }}
+	{% code %}
+	{# comment #}
+
+=======================
+

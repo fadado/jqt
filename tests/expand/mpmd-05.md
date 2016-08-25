@@ -1,0 +1,6 @@
+<# multiline #>
+&
+<# empty #>
+&
+<# document #>
+&

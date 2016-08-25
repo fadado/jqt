@@ -34,10 +34,13 @@ function mkpipe
 {
     local -r LOCK="${TMPDIR}/mkpipe-lock"
     local -i i=0
-    while ! { : > $LOCK; } 2>/dev/null; do
+    until { : > $LOCK; } 2>/dev/null; do
         sleep 0.01;
         i+=1
-        (( i > 100 )) && die 'Bored waiting a lock'
+        (( i < 100 )) || {
+            echo 1>&2 "$SELF: Bored waiting a lock to open"
+            kill -s TERM $$ || kill -s KILL $$
+        }
     done
 
     local n="${TMPDIR}/$RANDOM"
@@ -53,28 +56,17 @@ function mkpipe
 # Manage front matter
 ########################################################################
 
-function has_front_matter
-{
-    # warning: consume one line
-    local line
-    read -r line
-    [[ $line == '---' ]]
-}
+# warning: consume one line
+has_front_matter() { read -r && [[ $REPLY == '---' ]]; }
 
-function extract_front_matter
-{
-    # warning: assume front matter exists
-    sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'
-}
+# warning: assume front matter exists
+extract_front_matter() { sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'; }
 
-function remove_front_matter
-{
-    # warning: remove all YAML blocks
-    sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'
-}
+# warning: remove all YAML blocks
+remove_front_matter() { sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'; }
 
 ########################################################################
-# Expand template and document
+# Expand sources
 ########################################################################
 
 declare -a DEFINE=( "-Dversion=$VERSION" )
@@ -87,29 +79,19 @@ function expand_jqt
     local -r lib="libjqt.m"
 
     # Macros
-    local -r -a user=( -U
-        # Macro call delimiters
-        '<%' '>'
-        # Arguments delimiters
-        '\B' '\B' '\W>'
-        # Stackable characters
-        '<' '>'
-        # String to be used for referring to parameters by number
-        '$'
-        # The quote character must be defined adhoc for each file, like:
-        #   <%mode quote "\\">
-        # Also, if desired, multicharacter quote strings can be defined like:
-        #   <%mode string  iiq "[" "]" "\\">
-        ''
-    )
+    local -r -a user=( -U '<%' '>' '\B' '\B' '\W>' '<' '>' '$' '' )
     local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>')
+    # The quote character must be defined adhoc for each file, like:
+    #   <%mode quote "\\">
+    # Also, if desired, multicharacter quote strings can be defined like:
+    #   <%mode string  iiq "[" "]" "\\">
 
     # Comments and strings
     local -r -a skips=(
         +sccc '&\n' '' ''           # continuation line (& and \n removed)
         +sccc '<#' '#>\n' ''        # multiline comment, must end in \n
         +siqi "'" "'" ''            # literal string; like sh single quotes
-        +siQi '"'  '"' ''           # interpolated string; like sh double quotes
+        +siQi '"' '"' ''            # interpolated string; like sh double quotes
         +ssss '<!--' '-->' ''       # preserved XML comments
         +sSSS '{{' '}}' ''          # jq processing
         +sSSS '{%' '%}' ''
@@ -123,6 +105,7 @@ function expand_jqt
         "${GPP_PATH[@]}"    \
         "${DEFINE[@]}"      \
         --include "$lib"
+    echo    # always generate almost one line!!!
 }
 
 # < stdin > stdout
@@ -134,8 +117,8 @@ function expand_md
     local -r -a skips=(
         +sccc '&\n' '' ''
         +sccc '<#' '#>\n' ''
-        +siqi "'" "'" ''
-        +siQi '"'  '"' ''
+        +siqi "'" "'" '\'
+        +siQi '"' '"' '\'
         +ssss '<!--' '-->' ''
         +ssss '`'  '`' ''
         +ssss '\n```' '\n```' ''
@@ -155,23 +138,64 @@ function expand_md
 # < stdin > stdout
 function expand_json
 {
-    local -r -a user=( -U '&' ';' '(' ',' ');' '(' ')' '$' '' )
-    local -r -a meta=( -M '<!' '>' '\b' '\b' '>' '<' '>' )
+    local -r -a user=( -U '&' ';' '(\W' ',\W' ')' '(' ')' '$' '' )
+    local -r -a meta=( -M '<!' '>' '\b' '\b'  '>' '<' '>' )
     local -r -a skips=(
-        +cccc '\\n' ''      \
-        +cccc '/*' '*/'     \
-        +cccc '//' '\n'     \
-        +sSSS '"' '"' '\'   \
+        +sccc '&\n' '' ''
+        +cccc '/*' '*/'
+        +cccc '//' '\n'
+        +siqi "'" "'" '\'
+        +sSSS '"'  '"' '\'
+    )
+    local -r -a predefined=(
+        -Damp='&'
+        -Dapos="'"
+        -Dgt='>'
+        -Dlt='<'
+        -Dquot='"'
     )
     gpp --nostdinc          \
         --warninglevel 2    \
+        $predefined         \
         "${user[@]}"        \
         "${meta[@]}"        \
         "${skips[@]}"       \
         "${GPP_PATH[@]}"    \
         "${DEFINE[@]}"
-    echo    # always generate almost one line
+    echo    # always generate almost one line!!!
 }
+
+# < stdin > stdout
+function expand_css
+{
+    local -r minify=$1
+    local -r -a user=( -U ''    ''   '(\W' ',\W' ')'  '(' ')' '$' '' )
+    local -r -a meta=( -M '\n&' '\n' '\b'  '\b'  '\n' '(' ')' )
+    local -r -a skips=(
+        +cccc '&\n' ''
+        +cccc '/*' '*/'
+        +cccc '//' '\n'
+        +ssss '"' '"' '\'
+        +ssss "'" "'" '\'
+    )
+    local -r -a gpp_opts=(
+        --nostdinc
+        --warninglevel 2
+        "${user[@]}"
+        "${meta[@]}"
+        "${skips[@]}"
+        "${GPP_PATH[@]}"
+        "${DEFINE[@]}"
+    )
+    if [[ $minify == 'min' ]]; then
+        gpp "${gpp_opts[@]}" \
+        | sed 's/^[ \t]\+//;s/[ \t]$//;/^$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
+    else
+        gpp "${gpp_opts[@]}"
+    fi
+    echo    # always generate almost one line!!!
+}
+
 
 ########################################################################
 # Convert template to script
@@ -345,8 +369,7 @@ function yaml2json
     python -c '
 import sys, yaml, json
 json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2, sort_keys=False)
-sys.stdout.write("\n")
-'
+sys.stdout.write("\n")'
 }
 
 # Global objects available in jq scripts:
@@ -428,12 +451,6 @@ function usage
     exit 2
 }
 
-function die
-{
-    echo 1>&2 "$SELF: $@"
-    exit 1
-}
-
 function help
 {
     cat <<'EOF'
@@ -444,19 +461,17 @@ Usage: jqt [options] < infile > result
 
 Some of the options include:
 
-Preprocessor options      Debugging options 
-    -D NAME=VAL               -C
-    -I DIRECTORY              -E
-Template options              -H
-    -L DIRECTORY              -P
-    -i MODULE                 -S
-    -j MODULE:NAME          Information options 
+Preprocessor options      Metadata options
+    -D NAME=VAL               -M NAME:FILE
+    -I DIRECTORY              -m NAME:FILE
+    -P LANGUAGE           Debugging options
+Template options              -C
+    -L DIRECTORY              -H                  
+    -i MODULE                 -S                
+    -j MODULE:NAME          Information options
 Document options              -h, --help
     -4, -5                    -p
     -d FILE                   -V, --version
-Metadata options 
-    -M NAME:FILE
-    -m NAME:FILE
 
 See the manpage for full documentation and more options.
 EOF
@@ -529,12 +544,13 @@ EOF
 # Command line
 ########################################################################
 
-declare -i flagP=0 flagE=0 flagS=0 flagH=0 flagC=0
+declare -i flagS=0 flagH=0 flagC=0
 declare -i extract=0 remove=0 front_matter=0
+declare expand=''
 
 declare opt key filename
 
-while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
+while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:CHS-: opt; do
     case $opt in
     # Generic options
         h)  help
@@ -546,12 +562,22 @@ while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             ;;
         I)  GPP_PATH=( "${GPP_PATH[@]}" '-I' "$OPTARG" )
             ;;  # inserted at the right for append effect
+        P)  # now Q, next P
+            case $OPTARG in
+                [Cc][Ss][Ss]) expand='expand_css max' ;;
+                [Cc][Ss][Ss]-min) expand='expand_css min' ;;
+                jqt) expand='expand_jqt' ;;
+                [Jj][Ss][Oo][Nn]) expand='expand_json' ;;
+                md|mkd|[Mm]ark[Dd]own) expand='expand_md' ;;
+                *) usage "Unknown language: $OPTARG" ;;
+            esac
+            ;;
     # Template options
         L)  JQ_PATH=( '-L' "$OPTARG" "${JQ_PATH[@]}" )
             ;;  # inserted at the left for append effect
         i)  INCLUDES[$OPTARG]=$OPTARG
             ;;
-        j)  [[ $OPTARG == *:* ]] || die "Bad module specification; expected 'module:name'"
+        j)  [[ $OPTARG == *:* ]] || usage "Bad module specification; expected 'module:name'"
             IMPORTS[${OPTARG%:*}]=${OPTARG#*:}
             ;;
     # Document options
@@ -559,7 +585,7 @@ while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             ;;
         5)  HTML_VERSION=html5
             ;;
-        d)  [[ -e $OPTARG ]] || die "File '$OPTARG' does not exists"
+        d)  [[ -e $OPTARG ]] || usage "File '$OPTARG' does not exists"
             DOCUMENT=$OPTARG
             DOCUMENT_ID=${DOCUMENT%.md}
             ;;
@@ -576,11 +602,11 @@ while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             ;;
         n)  DOCUMENT_CONTENT_NAME=$OPTARG
             ;;
-        m|M)[[ $OPTARG == *:* ]] || die "Bad format in metadata specification; expected 'key:filename'"
+        m|M)[[ $OPTARG == *:* ]] || usage "Bad format in metadata specification; expected 'key:filename'"
             key=${OPTARG%:*} filename=${OPTARG#*:}
-            [[ -e $filename ]] || die "File '$filename' does not exists"
+            [[ -e $filename ]] || usage "File '$filename' does not exists"
             [[ $filename =~ (.*\.js(on)?)|(.*\.ya?ml) ]] ||
-                die "File '$filename' must have a know extension (js, json, yml, yaml)"
+                usage "File '$filename' must have a know extension (js, json, yml, yaml)"
             if [[ $opt == 'm' ]]; then
                 if [[ $filename =~ .*\.js(on)? ]]; then
                     JSON_METADATA[$key]=$filename
@@ -596,15 +622,11 @@ while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
             fi
             ;;
     # Debug options
-        E)  flagE=1 # also for document
-            ;;
-        S)  flagS=1
-            ;;
-        P)  flagP=1
+        C)  flagC=1
             ;;
         H)  flagH=1
             ;;
-        C)  flagC=1
+        S)  flagS=1
             ;;
         -)  case $OPTARG in
     # Generic options
@@ -653,11 +675,13 @@ while getopts :hVD:ESI:L:i:j:PHp45d:ertCf:n:m:M:-: opt; do
 done
 
 shift $((OPTIND-1)); OPTIND=1
-(( $# > 2 )) && usage 'Expected one or two arguments'
+(( $# <= 2 )) || usage 'Expected one or two arguments'
 
-(( flagE+flagS+flagP+flagH+flagC > 1 )) && die 'Cannot mix options: -E, -S, -P, -H, -C'
-(( extract+remove+front_matter > 1 )) && die 'Cannot mix options: -e, -r, -t'
-(( flagE+flagS+flagP+flagH+flagC+extract+remove+front_matter > 1 )) && die 'Incompatible options'
+(( extract+remove+front_matter <= 1 )) || usage 'Cannot mix options: -e, -r, -t'
+(( flagS+flagH+flagC <= 1 )) || usage 'Cannot mix options: -S, -H, -C'
+[[ -z $expand ]] || (( flagS+flagH+flagC  == 0 )) || usage 'Incompatible options'
+[[ -z $expand ]] || (( extract+remove+front_matter == 0 )) || usage 'Incompatible options'
+(( flagS+flagH+flagC+extract+remove+front_matter <= 1 )) || usage 'Incompatible options'
 
 ########################################################################
 # Main
@@ -668,12 +692,11 @@ initialize
 (( $# >= 1 )) && exec < $1
 (( $# == 2 )) && exec >| $2
 
-if   (( extract )); then        extract_front_matter
+if   [[ -n $expand ]]; then     $expand
+elif (( extract )); then        extract_front_matter
 elif (( remove )); then         remove_front_matter
 elif (( front_matter )); then   has_front_matter
-elif (( flagE )); then          expand_jqt
 elif (( flagS )); then          expand_jqt | convert
-elif (( flagP )); then          expand_md
 elif (( flagH )); then          expand_md | markup
 elif (( flagC )); then
     declare -r FRONT_MATTER=$(mkpipe)

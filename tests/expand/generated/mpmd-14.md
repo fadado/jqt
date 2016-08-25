@@ -1,0 +1,5 @@
+Lorem Ipsum
+```
+<%MACRO>
+```
+

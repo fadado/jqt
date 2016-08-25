@@ -131,58 +131,80 @@ help:
 # Tests
 ########################################################################
 
-.PHONY: check jqt format cond expr loop macros syntax expand csv yaml
+.PHONY: check
+check: test-jqt test-expand test-format
 
-check: expand jqt format
-jqt: cond expr loop macros syntax
-format: csv yaml
+#
+# Test JQT
+#
+.PHONY: test-jqt test-cond test-expr test-loop test-macros test-syntax
+test-jqt: test-cond test-expr test-loop test-macros test-syntax
 
 define TestJQT
 # Run one example
-$(1)-%.jqt:
-	echo "==> $$(basename $$@)"
-	if test -e tests/$$(basename $$@).json; then \
-	    jqt -ifilters -Ltests/filters -Mtop:tests/$$(basename $$@).json -dtests/md-00.md tests/$$@ tests/generated/$$(basename $$@).txt; \
+test-$(1)-%.jqt:
+	echo "==> jqt: $$(subst test-,,$$(basename $$@))"
+	if test -e tests/jqt/$$(subst test-,,$$(basename $$@)).json; then \
+	    jqt -ifilters -Ltests/jqt/filters -Mtop:tests/jqt/$$(subst test-,,$$(basename $$@)).json -dtests/jqt/md-00.md tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
 	else \
-	    jqt -ifilters -Ltests/filters -dtests/md-00.md tests/$$@ tests/generated/$$(basename $$@).txt; \
+	    jqt -ifilters -Ltests/jqt/filters -dtests/jqt/md-00.md tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
 	fi
-	diff tests/expected/$$(basename $$@).txt tests/generated/$$(basename $$@).txt
+	diff tests/jqt/expected/$$(subst test-,,$$(basename $$@)).txt tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt
 # Run one example named without file suffix
-$(1)-%: $(1)-%.jqt ;
+test-$(1)-%: test-$(1)-%.jqt ;
 # Run all tests
-$(1): $(sort $(subst tests/,,$(wildcard tests/$(1)-[0-9][0-9].jqt)))
+test-$(1): $(sort $(subst tests/jqt/,test-,$(wildcard tests/jqt/$(1)-[0-9][0-9].jqt)))
 endef
 
-$(foreach t,cond expr loop macros syntax,$(eval $(call TestJQT,$(t))))
+$(eval $(call TestJQT,cond))
+$(eval $(call TestJQT,expr))
+$(eval $(call TestJQT,loop))
+$(eval $(call TestJQT,macros))
+$(eval $(call TestJQT,syntax))
 
-define TestGPP
+#
+# Test macro expansion
+#
+.PHONY: test-expand test-mpjqt
+test-expand: test-mpjqt test-mpmd test-mpjson
+
+define TestMacroExpand
 # Run one example
-$(2)-%.$(1):
-	echo "==> $$(basename $$@)"
-	jqt -E tests/$$@ > tests/generated/$$@
-	diff tests/expected/$$@ tests/generated/$$@
+test-$(2)-%.$(1):
+	echo "==> expand: $$(subst test-,,$$(basename $$@))"
+	jqt -P $(1) tests/expand/$$(subst test-,,$$@) > tests/expand/generated/$$(subst test-,,$$@)
+	diff tests/expand/expected/$$(subst test-,,$$@) tests/expand/generated/$$(subst test-,,$$@)
 # Run one example named without file suffix
-$(2)-%: $(2)-%.$(1) ;
+test-$(2)-%: test-$(2)-%.$(1) ;
 # Run all tests
-$(2): $(sort $(subst tests/,,$(wildcard tests/$(2)-[0-9][0-9].$(1))))
+test-$(2): $(sort $(subst tests/expand/,test-,$(wildcard tests/expand/$(2)-[0-9][0-9].$(1))))
 endef
 
-$(eval $(call TestGPP,jqt,expand))
+$(eval $(call TestMacroExpand,jqt,mpjqt))
+$(eval $(call TestMacroExpand,md,mpmd))
+$(eval $(call TestMacroExpand,json,mpjson))
+
+#
+# Test file format conversions
+#
+.PHONY: test-format test-csv test-yaml
+test-format: test-csv test-yaml
 
 define TestFileFormat
 # Run one example
-$(1)-%.sh:
-	echo "==> $$(basename $$@)"
-	$(SHELL) tests/$$@
+test-$(1)-%.sh:
+	echo "==> format: $$(subst test-,,$$(basename $$@))"
+	$(SHELL) tests/format/$$(subst test-,,$$@)
 # Run one example named without file suffix
-$(1)-%: $(1)-%.sh ;
+test-$(1)-%: test-$(1)-%.sh ;
 # Run all tests
-$(1): $(sort $(subst tests/,,$(wildcard tests/$(1)-[0-9][0-9].sh)))
+test-$(1): $(sort $(subst tests/format/,test-,$(wildcard tests/format/$(1)-[0-9][0-9].sh)))
 # Check output of all filters is empty for empty input
 	test -z "$$$$(for f in bin/$(1)2* bin/*2$(1); do echo | $$$$f; done)" \
 	|| { echo 1>&2 'EMPTY-FAILED'; false; }
 endef
 
-$(foreach t,csv yaml,$(eval $(call TestFileFormat,$(t))))
+$(eval $(call TestFileFormat,csv))
+$(eval $(call TestFileFormat,yaml))
 
 # vim:ai:sw=8:ts=8:noet:syntax=make

@@ -4,17 +4,17 @@ title: Template syntax
 updated: "2016-08-13T07:48:26Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.md">&
+<%include "LINKS.MD">&
 
 ## General operation
 
 _jqt_ will transform your template into a [_jq_][JQ]  script, but before that
 [GPP][GPP] is used to preprocess them. The generated script will be combined
-with the document and metadata inputs in the render stage to produce the
+with the document and data inputs in the render stage to produce the
 final HTML document.
 This is described on the top of this diagram:
 
-<%include "FLOW.md">
+<%include "FLOW.MD">
 
 When invoking `jqt` you can use the following options to modify template
 rendering:
@@ -33,7 +33,7 @@ values when a template is rendered and <dfn>actions</dfn> (delimited by `{%` and
 template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
 This is a complete template example:
 
-<%include "EXAMPLE.md">&
+<%include "EXAMPLE.MD">&
 
 ### Preprocessing
 

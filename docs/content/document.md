@@ -1,19 +1,19 @@
 ---
 <%include "config.yaml">
-title: Content documents
+title: Content document
 updated: "2016-08-17T10:34:16Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.md">&
+<%include "LINKS.MD">&
 
 ## General operation
 
 _jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using Pandoc,
 but before that [GPP][GPP] is used to preprocess them. Pandoc's output
-is then merged with the [YAML][YAML] front matter and other input metadata before be sended
+is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
-<%include "FLOW.md">
+<%include "FLOW.MD">
 
 When invoking `jqt` you can use the following options to influence document
 conversion:
@@ -89,7 +89,7 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 Predefined macros and user define macros have the same call sequence:
 
 ```
-<%include "LINKS.md">
+<%include "LINKS.MD">
 <%sc 'A title in small caps'>
 ```
 

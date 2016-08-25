@@ -28,8 +28,8 @@ menu:
 - URL: ./document.html
   id: content/document
   name: Document
-- URL: ./metadata.html
-  id: content/metadata
-  name: Metadata
+- URL: ./data.html
+  id: content/data
+  name: Data
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml

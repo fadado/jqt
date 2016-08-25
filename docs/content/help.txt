@@ -8,17 +8,18 @@ Preprocessor options:
 
 <%include "opt/D.md">
 <%include "opt/I.md">
-
-Document options:
-
-<%include "opt/4.md">
-<%include "opt/d.md">
+<%include "opt/P.md">
 
 Template options:
 
 <%include "opt/L.md">
 <%include "opt/i.md">
 <%include "opt/j.md">
+
+Document options:
+
+<%include "opt/4.md">
+<%include "opt/d.md">
 
 Metadata options:
 
@@ -28,9 +29,7 @@ Metadata options:
 Debugging options:
 
 <%include "opt/C.md">
-<%include "opt/E.md">
 <%include "opt/H.md">
-<%include "opt/P.md">
 <%include "opt/S.md">
 
 Information options:

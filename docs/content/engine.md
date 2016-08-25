@@ -4,17 +4,17 @@ title: Operating the engine
 updated: "2016-08-17T09:50:11Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.md">&
+<%include "LINKS.MD">&
 
 ## General operation
 
 _jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
 [YAML][YAML] or [JSON][JSON] data into a final HTML document. The transformation is driven by a template,
 where HTML is mixed with [_jq_][JQ] snippets to implement the transformation logic.
-This diagram shows how document, template and metadata inputs (on the left) are combined by
+This diagram shows how document, template and data inputs (on the left) are combined by
 _jqt_ to produce the final HTML output:
 
-<%include "FLOW.md">
+<%include "FLOW.MD">
 
 The command `jqt` is a shell script executed by `bash`.
 The external shell commands called by `jqt` are `cat`, `gpp`, `jq`, `mkdir`,
@@ -75,6 +75,7 @@ arguments.  The usage possibilities are:
 
 <%include "opt/D.md">
 <%include "opt/I.md">
+<%include "opt/P.md">
 
 #### Document options
 
@@ -88,7 +89,7 @@ arguments.  The usage possibilities are:
 <%include "opt/j.md">
 <%include "opt/L.md">
 
-#### Metadata options
+#### Data options
 
 <%include "opt/f.md">
 <%include "opt/M.md">
@@ -97,9 +98,7 @@ arguments.  The usage possibilities are:
 #### Debugging options
 
 <%include "opt/C.md">
-<%include "opt/E.md">
 <%include "opt/H.md">
-<%include "opt/P.md">
 <%include "opt/S.md">
 
 #### Information options

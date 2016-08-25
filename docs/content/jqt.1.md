@@ -25,7 +25,6 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 <%include "opt/C.md">
 <%include "opt/D.md">
 <%include "opt/d.md">
-<%include "opt/E.md">
 <%include "opt/e.md">
 <%include "opt/f.md">
 <%include "opt/H.md">

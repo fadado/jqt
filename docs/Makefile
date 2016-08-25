@@ -66,13 +66,13 @@ Common := \
 	$(Structure)/default.html \
 	$(Structure)/head.html \
 	$(Structure)/footer.html \
-	$(Content)/LINKS.md \
+	$(Content)/LINKS.MD \
 	filters.jq \
 	macros.m \
 
 # Files to "build"
 Home := index
-Pages := engine document metadata template
+Pages := engine document data template
 Files := README.md jqt.css
 ManPage := ../jqt.1.gz
 Targets := \
@@ -93,38 +93,6 @@ JQTFLAGS := \
 	-msite:$(Meta)/config.json \
 	-msnippets:$(Meta)/snippets.json \
 	--toc-depth=4 \
-
-# Macro process MarkDown
-MPMD := gpp --nostdinc \
-	+sccc '&\n' '' '' \
-	+sccc '<\#' '\#>\n' '' \
-	+siqi "'" "'" '' \
-	+siQi '"' '"' '' \
-	+ssss '<!--' '-->' '' \
-	+ssss '`' '`' '' \
-	+ssss '\n```' '\n```' '' \
-	+ssss '\n~~~' '\n~~~' '' \
-	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' '' \
-	-M '<%' '>' '\B' '\B' '\W>' '<' '>' \
-
-# Macro process JSON
-MPJSON := gpp --nostdinc \
-        +cccc '\\n' '' \
-        +cccc '/*' '*/' \
-        +cccc '//' '\n' \
-        +sSSS '"' '"' '\' \
-	-U '&' ';' '(' ',' ');' '(' ')' '$$' '' ) \
-	-M '<!' '>' '\b' '\b' '>' '<' '>' )
-
-# Macro process CSS
-MPCSS := gpp --nostdinc \
-	+c '/*' '*/' \
-	+c '//' '\n' \
-	-U '&' ';' '(' ',' ')' '(' ')' '\$$' '' \
-	-M '&' ';' '(' '\b' ')' '(' ')' \
-
-# Minify CSS
-CSSMIN := sed 's/^[ \t]\+//;s/[ \t]\$$//;/^$$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
 
 # Validate output pages (disable or redefine as you like)
 XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
@@ -171,9 +139,9 @@ $(Destination)/index.html: $(Content)/home.md $(Common) \
 	$(info ==> $@)
 	$(JQT) -d $< $(Structure)/default.html > $@
 
-$(Destination)/engine.html: $(Content)/FLOW.md
-$(Destination)/index.html: $(Content)/EXAMPLE.md
-$(Destination)/template.html: $(Content)/EXAMPLE.md
+$(Destination)/engine.html: $(Content)/FLOW.MD
+$(Destination)/index.html: $(Content)/EXAMPLE.MD
+$(Destination)/template.html: $(Content)/EXAMPLE.MD
 
 define Target
 $(Destination)/$(1).html: $(Content)/$(1).md $(Structure)/$(2).html $(Common) \
@@ -186,20 +154,21 @@ $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
 $(Destination)/jqt.css: $(Presentation)/jqt.css $(Presentation)/github.css
 	$(info ==> $@)
-	$(MPCSS) $< | $(CSSMIN) > $@
-
-# Help text
-/tmp/help: $(Content)/help.txt
-	$(MPMD) -I. -I$(Content) $<  \
-	| pandoc --from markdown --to plain - \
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
-	> $@
+	jqt -P CSS-min -I$(Presentation) $< > $@
 
 # Man page
 $(ManPage): $(Content)/jqt.1.md
-	$(MPMD) -I. -I$(Content) $<  \
+	$(info ==> $@)
+	jqt -P MarkDown -I$(Content) $<  \
 	| pandoc --standalone --from markdown --to man \
 	| gzip > $@
+
+# Help text
+/tmp/help: $(Content)/help.txt
+	jqt -P MarkDown -I$(Content) $<  \
+	| pandoc --from markdown --to plain - \
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
+	> $@
 
 ########################################################################
 # Utilities

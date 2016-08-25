@@ -11,11 +11,6 @@ shopt -s expand_aliases
 # Script name
 declare -r SELF=${0##*/}
 
-# Format conversors
-alias y2j=${0%$SELF}yaml2json
-alias j2y=${0%$SELF}json2yaml
-alias j2c=${0%$SELF}json2csv
-
 # Show help
 function help {
     cat <<EOF
@@ -97,11 +92,11 @@ function main {
     # Wrap jq
     if (( json )); then
         # Preserve JSON output
-        y2j | jq "$@"
+        yaml2json | jq "$@"
     elif (( csv )); then
-        y2j | jq "$@" | j2c
+        yaml2json | jq "$@" | json2csv
     else
-        y2j | jq "$@" | j2y
+        yaml2json | jq "$@" | json2yaml
     fi
 
     # Exit status is that of the last command executed.

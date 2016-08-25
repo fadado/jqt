@@ -1,0 +1,29 @@
+/* Macros; continuation lines */
+<!define address &
+"streetAddress": "21 2nd Street",&
+"city": "New York",&
+"state": "NY",&
+"postalCode": "10021"&
+>
+{ "husband":
+    {
+        "firstName": "John",
+        "lastName": "Smith",
+        "age": 25,
+        "address": {&address;},
+        "gender": {
+            "type": "male"
+        }
+    }
+    "spouse":
+    {
+        "firstName": "Mary",
+        "lastName": "Smith",
+        "age": 26,
+        "address": {&address;},
+        "gender": {
+            "type": "female"
+        }
+    }
+}
+// vim:sw=4:ts=4:ai:et:syntax=javascript
