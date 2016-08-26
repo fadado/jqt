@@ -97,11 +97,12 @@ all: check
 .PHONY: clean clobber install uninstall
 
 clean:
-	rm -f tests/generated/*
+	rm -f tests/generated/* jqt.1.gz
 
 clobber: clean
 
 install:
+	[[ -e jqt.1.gz ]] || { cd docs && make ../jqt.1.gz; }
 	test -d $(bindir) || $(SUDO) mkdir --verbose --parents $(bindir)
 	test -d $(datadir)/$(project) || $(SUDO) mkdir --verbose --parents $(datadir)/$(project)
 	test -d $(mandir)/man1 || $(SUDO) mkdir --verbose --parents $(mandir)/man1

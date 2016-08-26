@@ -148,11 +148,11 @@ function expand_json
         +sSSS '"' '"' '\'       # JSON string
     )
     local -r -a predefined=(
-        -D amp='&'
-        -D apos="'"
-        -D gt='>'
-        -D lt='<'
-        -D quot='"'
+        -Damp='&'
+        -Dapos="'"
+        -Dgt='>'
+        -Dlt='<'
+        -Dquot='"'
     )
     gpp --nostdinc          \
         --warninglevel 2    \

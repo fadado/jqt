@@ -4,3 +4,5 @@
 tests/generated/*.jqe
 tests/generated/*.jqs
 tests/generated/*.txt
+# man pages
+jqt.1.gz
