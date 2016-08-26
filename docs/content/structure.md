@@ -1,6 +1,6 @@
 ---
 <%include "config.yaml">
-title: Template syntax
+title: Document structure
 updated: "2016-08-13T07:48:26Z"
 ---
 <%include "macros.m">&
@@ -8,7 +8,9 @@ updated: "2016-08-13T07:48:26Z"
 
 ## General operation
 
-_jqt_ will transform your template into a [_jq_][JQ]  script, but before that
+The document structure is defined with the HTML markup, and is added to the document content
+using a template.
+_jqt_ transforms templates into a [_jq_][JQ] scripts, but before 
 [GPP][GPP] is used to preprocess them. The generated script will be combined
 with the document and data inputs in the render stage to produce the
 final HTML document.

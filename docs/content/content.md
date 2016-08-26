@@ -1,6 +1,6 @@
 ---
 <%include "config.yaml">
-title: Content document
+title: Document content
 updated: "2016-08-17T10:34:16Z"
 ---
 <%include "macros.m">&
@@ -9,7 +9,7 @@ updated: "2016-08-17T10:34:16Z"
 ## General operation
 
 _jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using Pandoc,
-but before that [GPP][GPP] is used to preprocess them. Pandoc's output
+but before [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 

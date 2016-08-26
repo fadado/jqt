@@ -72,7 +72,7 @@ Common := \
 
 # Files to "build"
 Home := index
-Pages := engine document data template
+Pages := engine structure content data
 Files := README.md jqt.css
 ManPage := ../jqt.1.gz
 Targets := \

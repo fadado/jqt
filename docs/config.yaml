@@ -20,12 +20,12 @@ menu:
 - URL: ./engine.html
   id: content/engine
   name: Engine
-- URL: ./template.html
-  id: content/template
-  name: Template
-- URL: ./document.html
-  id: content/document
-  name: Document
+- URL: ./structure.html
+  id: content/structure
+  name: Structure
+- URL: ./content.html
+  id: content/content
+  name: Content
 - URL: ./data.html
   id: content/data
   name: Data
