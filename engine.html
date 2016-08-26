@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.2.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-17T09:50:11Z' />
+<meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 
 <style type="text/css">
@@ -33,11 +33,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
   <body>
     <ul id="MENU">
-      <!--<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>-->
       <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.2.0</span></li>
 <li><a class='current' href="./engine.html">Engine</a></li>
-<li><a  href="./template.html">Template</a></li>
-<li><a  href="./document.html">Document</a></li>
+<li><a  href="./structure.html">Structure</a></li>
+<li><a  href="./content.html">Content</a></li>
 <li><a  href="./data.html">Data</a></li>
     </ul>
 
@@ -51,13 +50,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#installation">Installation</a></li>
 <li><a href="#invoking-jqt">Invoking <em>jqt</em></a><ul>
 <li><a href="#synopsis">Synopsis</a></li>
-<li><a href="#options">Options</a><ul>
-<li><a href="#preprocessor-options">Preprocessor options</a></li>
-<li><a href="#document-options">Document options</a></li>
-<li><a href="#template-options">Template options</a></li>
-<li><a href="#data-options">Data options</a></li>
-<li><a href="#debugging-options">Debugging options</a></li>
-<li><a href="#information-options">Information options</a></li>
+<li><a href="#options">Options</a></li>
+</ul></li>
+<li><a href="#preprocessing">Preprocessing</a><ul>
+<li><a href="#kinds-of-preprocessing">Kinds of preprocessing</a></li>
+<li><a href="#css-preprocessing">CSS preprocessing</a><ul>
+<li><a href="#macro-calls">Macro calls</a></li>
+<li><a href="#skips">Skips</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -74,7 +73,7 @@ Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                                                fragments                 v
            MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
 Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
-                      +------+   +------+   \--------&gt;+-----+         +------+
+                      +------+   +------+   \--------&gt;+-----+         +------+    page
                                           YAML         ^   ^
                                           front-matter |   |
                                           metadata     |   |
@@ -82,7 +81,10 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
          +-----------&gt;|expand|-------------------------+   |
     Data              +------+                             |
          +-------------------------------------------------+
-           YAML   </code></pre>
+           YAML                                            |
+                                 +------+                  |
+         +----------------------&gt;|markup|------------------+
+           YAML snippets         +------+</code></pre>
 <p>The command <code>jqt</code> is a shell script executed by <code>bash</code>. The external shell commands called by <code>jqt</code> are <code>cat</code>, <code>gpp</code>, <code>jq</code>, <code>mkdir</code>, <code>mkfifo</code>, <code>pandoc</code>, <code>python</code>, <code>rm</code>, <code>sed</code>, <code>sleep</code> and <code>tee</code>.</p>
 <p><code>jqt</code> has been tested with <a href="https://www.gnu.org/software/bash/">Bash 4.3</a>, <a href="https://www.gnu.org/software/sed/">GNU sed 4.2</a>, <a href="https://logological.org/gpp">GPP 2.24</a>, <a href="https://stedolan.github.io/jq/">jq 1.5</a> and <a href="http://pandoc.org/">Pandoc 1.13</a>. A small Python snippet is used which depends on the modules <code>json</code> (introduced with <a href="https://docs.python.org/2.6/">Python 2.6</a>) and <code>yaml</code> (<a href="http://pyyaml.org/">PyYAML</a> implementation). The project uses <a href="https://www.gnu.org/software/make/">GNU Make</a> on several development activities, but <code>make</code> is not necessary to run <code>jqt</code>.</p>
 <h2 id="installation">Installation</h2>
@@ -99,34 +101,33 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
 <h2 id="invoking-jqt">Invoking <em>jqt</em></h2>
 <h3 id="synopsis">Synopsis</h3>
 <p><code>jqt</code> accepts several options and can be called with zero, one or two file arguments. The usage possibilities are:</p>
-<p><strong>jqt</strong> [<em>options</em>] &lt; <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> <em>result</em></p>
+<p><strong>jqt</strong> [<strong>-h</strong> | <strong>--help</strong> | <strong>-p</strong> | <strong>-V</strong> | <strong>--version</strong>]<br /><strong>jqt</strong> [<em>options</em>] &lt; <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> <em>result</em></p>
 <h3 id="options">Options</h3>
-<h4 id="preprocessor-options">Preprocessor options</h4>
-<dl>
-<dt>-D NAME=VAL</dt>
-<dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
-</dd>
-<dt>-I DIRECTORY</dt>
-<dd>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
-</dd>
-<dt>-P LANGUAGE</dt>
-<dd>Expand input data with the macro-processor (LANGUAGE must be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
-</dd>
-</dl>
-<h4 id="document-options">Document options</h4>
 <dl>
 <dt>-4, -5</dt>
 <dd>Set output HTML version (HTML4 / HTML5).
 </dd>
+<dt>-C</dt>
+<dd>Stops processing before the render stage (outputs full JSON data model).
+</dd>
+<dt>-D NAME=VAL</dt>
+<dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
+</dd>
 <dt>-d FILE</dt>
 <dd>Read content document from <em>FILE</em>.
 </dd>
-<dt>-n NAME</dt>
-<dd>Define the name for converted document in <em>jq</em> scripts (defaults to <code>body</code>).
+<dt>-e</dt>
+<dd>Extract YAML front matter.
 </dd>
-</dl>
-<h4 id="template-options">Template options</h4>
-<dl>
+<dt>-H</dt>
+<dd>Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+</dd>
+<dt>-h, --help</dt>
+<dd>Display this message.
+</dd>
+<dt>-I DIRECTORY</dt>
+<dd>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
+</dd>
 <dt>-i MODULE</dt>
 <dd>Include the jq <em>MODULE</em> in the render stage.
 </dd>
@@ -136,43 +137,139 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
 <dt>-L DIRECTORY</dt>
 <dd>Append <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.
 </dd>
-</dl>
-<h4 id="data-options">Data options</h4>
-<dl>
-<dt>-f NAME</dt>
-<dd>Define the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>front</code>).
-</dd>
 <dt>-M NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata at the top level (<em>NAME</em> is ignored but must be present and unique).
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input data at the top level (<em>NAME</em> is ignored but must be present and unique).
 </dd>
 <dt>-m NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata as a value of object <em>NAME</em>.
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input data as a value of object <em>NAME</em>.
 </dd>
-</dl>
-<h4 id="debugging-options">Debugging options</h4>
-<dl>
-<dt>-C</dt>
-<dd>Stops processing before the render stage (outputs full JSON data model).
+<dt>-n NAME</dt>
+<dd>Define the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>page</code>).
 </dd>
-<dt>-H</dt>
-<dd>Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+<dt>-P LANGUAGE</dt>
+<dd>Expand input data with the macro-processor (<em>LANGUAGE</em> must be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
+</dd>
+<dt>-p</dt>
+<dd>Print list of Pandoc accepted options.
+</dd>
+<dt>-r</dt>
+<dd>Remove front matter from MarkDown.
 </dd>
 <dt>-S</dt>
 <dd>Stops template processing before the render stage (outputs the jq script).
 </dd>
-</dl>
-<h4 id="information-options">Information options</h4>
-<dl>
-<dt>-h, --help</dt>
-<dd>Display this message.
+<dt>-T [NAME:FILE]</dt>
+<dd>Transforms YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, HTML output is generated.
 </dd>
-<dt>-p</dt>
-<dd>Print list of Pandoc accepted options.
+<dt>-t</dt>
+<dd>Test presence of front matter in MarkDown.
 </dd>
 <dt>-V, --version</dt>
 <dd>Display version information.
 </dd>
 </dl>
+<h2 id="preprocessing">Preprocessing</h2>
+<p>One distinctive feature of <em>jqt</em> is the text expansion applied to almost all kind of input files. Also, <em>jqt</em> can be used as a standalone preprocessor thanks to the <code>-P</code> option.</p>
+<h3 id="kinds-of-preprocessing">Kinds of preprocessing</h3>
+<p>The sections about <a href="./structure.html#preprocessing">templates</a>, <a href="./content.html#preprocessing">documents</a> and <a href="./data.html#json">data</a> cover in detail their usage of the preprocessor.</p>
+<p>A different transformation can also be be considered a kind of preprocessing. The option <code>-T</code> allows the use of YAML files for collections of MarkDown snippets:</p>
+<dl>
+<dt>-T [NAME:FILE]</dt>
+<dd>Transforms YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, HTML output is generated.
+</dd>
+</dl>
+<h3 id="css-preprocessing">CSS preprocessing</h3>
+<p>As a bonus, <em>jqt</em> can also expand CSS style sheets. This is documented in this section because it is outside the <em>jqt</em> normal processing work flow.</p>
+<p>To enable CSS preprocessing the <code>-P</code> option must be used with the <code>css</code> or <code>css-min</code> options:</p>
+<dl>
+<dt>-P LANGUAGE</dt>
+<dd>Expand input data with the macro-processor (<em>LANGUAGE</em> must be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
+</dd>
+</dl>
+<p>You can minify the CSS style sheet choosing the <code>css-min</code> option. The CSS minimization is not extremely aggressive, but is safe and sufficient.</p>
+<h4 id="macro-calls">Macro calls</h4>
+<p>The macro syntax used by <em>jqt</em> in CSS files is very similar to used by the traditional <code>cpp</code> preprocessing of C and C++ languages, but changing the prefix character <code>#</code> by <code>&amp;</code>. The more common predefined macros have this syntax:</p>
+<pre><code>&amp;defeval x y
+&amp;define x y
+&amp;elif expr
+&amp;else
+&amp;endif
+&amp;eval expr
+&amp;if expr
+&amp;ifdef x
+&amp;ifeq x y
+&amp;ifndef x
+&amp;ifneq x y
+&amp;include file
+&amp;undef x</code></pre>
+<p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.). The more common used features are the inclusion on external files and definition of simple constants:</p>
+<pre><code>&amp;include &quot;theme.css&quot;
+
+&amp;define Blue #0000FF
+
+{ color: &amp;Blue; }</code></pre>
+<p>Warning: you must read the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
+<h4 id="skips">Skips</h4>
+<p>The main use of the preprocessor is to remove comments in the CPP style:</p>
+<pre><code>/* Block comments */
+// Line comments</code></pre>
+<p>Quoted strings are also defined as skips, and backticks can be used to disable macro expansion (inside double quoted strings backticks are ignored). This table summarizes all the available skips in JSON files:</p>
+<table>
+<caption><strong>Semantics for all CSS skips</strong></caption>
+<thead>
+<tr class="header">
+<th align="center">Delimiters</th>
+<th align="left">Macro expansion</th>
+<th align="left">Delimiters removed</th>
+<th align="left">Content removed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><code>&amp;\n</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">There is no content</td>
+</tr>
+<tr class="even">
+<td align="center"><code>/*</code> <code>*/</code></td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="center"><code>//</code> <code>\n</code><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="center"><code>`</code> <code>`</code></td>
+<td align="left">No</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="center"><code>&quot;</code> <code>&quot;</code></td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="center"><code>'</code> <code>'</code></td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>An ampersand followed by a newline is treated as a line continuation (that is, the ampersand and the newline are removed and effectively ignored).<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>This represents a newline character.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
 
   </div>    </div>
 

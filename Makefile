@@ -4,7 +4,7 @@
 
 DESTINATION=/tmp/jqt
 
-.PHONY: all reset copy ci push
+.PHONY: all reset copy publish
 
 all: copy
 

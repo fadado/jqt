@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.2.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-13T07:48:26Z' />
+<meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 
 
@@ -14,11 +14,10 @@
 
   <body>
     <ul id="MENU">
-      <!--<li class="logo"><a href="https://fadado.github.com/jqt/">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>-->
       <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.2.0</span></li>
 <li><a  href="./engine.html">Engine</a></li>
-<li><a  href="./template.html">Template</a></li>
-<li><a  href="./document.html">Document</a></li>
+<li><a  href="./structure.html">Structure</a></li>
+<li><a  href="./content.html">Content</a></li>
 <li><a class='current' href="./data.html">Data</a></li>
     </ul>
 
@@ -35,9 +34,12 @@
 <li><a href="#macro-calls">Macro calls</a></li>
 <li><a href="#skips">Skips</a></li>
 </ul></li>
-<li><a href="#data-conversion">Data conversion</a></li>
 </ul></li>
+<li><a href="#tools">Tools</a><ul>
+<li><a href="#data-conversion">Data conversion</a></li>
 <li><a href="#querying-data-files">Querying data files</a></li>
+<li><a href="#process-front-matter">Process front matter</a></li>
+</ul></li>
 </ul>
 
   </div>
@@ -52,7 +54,7 @@ Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                                                fragments                 v
            MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
 Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
-                      +------+   +------+   \--------&gt;+-----+         +------+
+                      +------+   +------+   \--------&gt;+-----+         +------+    page
                                           YAML         ^   ^
                                           front-matter |   |
                                           metadata     |   |
@@ -60,54 +62,60 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
          +-----------&gt;|expand|-------------------------+   |
     Data              +------+                             |
          +-------------------------------------------------+
-           YAML   </code></pre>
+           YAML                                            |
+                                 +------+                  |
+         +----------------------&gt;|markup|------------------+
+           YAML snippets         +------+</code></pre>
 <p>When invoking <code>jqt</code> you can use the following options to define the additional input data and influence JSON preprocessing:</p>
 <dl>
 <dt>-D NAME=VAL</dt>
 <dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
 </dd>
-<dt>-f NAME</dt>
-<dd>Define the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>front</code>).
-</dd>
 <dt>-I DIRECTORY</dt>
 <dd>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
 </dd>
 <dt>-M NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata at the top level (<em>NAME</em> is ignored but must be present and unique).
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input data at the top level (<em>NAME</em> is ignored but must be present and unique).
 </dd>
 <dt>-m NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input metadata as a value of object <em>NAME</em>.
+<dd>Add a <em>FILE</em> in YAML or JSON format to the input data as a value of object <em>NAME</em>.
+</dd>
+<dt>-n NAME</dt>
+<dd>Define the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>page</code>).
+</dd>
+<dt>-T [NAME:FILE]</dt>
+<dd>Transforms YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, HTML output is generated.
 </dd>
 </dl>
 <h2 id="data-formats">Data formats</h2>
 <h3 id="yaml">YAML</h3>
 <p>Document front matter metadata and additional input YAML files are converted to JSON and merged to be the <code>jq</code> input in the render stage.</p>
 <h3 id="json">JSON</h3>
-<p>Additional JSON files can be provided and are merged with front matter metadata to be the <code>jq</code> input in the render stage. The files are preprocessed using <a href="https://logological.org/gpp">GPP</a>, and all the expected options in a macro processor are available, like defining new macros, include other files, etc.</p>
+<p>Additional JSON files can be provided and are merged with front matter metadata to be the <code>jq</code> input in the render stage. The files are preprocessed using <a href="https://logological.org/gpp">GPP</a>, and all the expected options in a preprocessor are available, like defining new macros, include other files, etc.</p>
 <h4 id="macro-calls">Macro calls</h4>
 <p>The macro syntax used by <em>jqt</em> in JSON files is different for predefined macros and for user defined macros:</p>
 <ul>
-<li>The predefined macro names are preceded with the characters <code>&lt;!</code> and the macro calls finishes with the character <code>&gt;</code>.</li>
+<li>The predefined macro names are preceded with the characters <code>&lt;%</code> and the macro calls finishes with the character <code>&gt;</code>.</li>
 <li>The user defined macro names for calls without arguments are preceded with the character <code>&amp;</code> and the macro calls finishes with the character <code>;</code>.</li>
 <li>The user defined macro names for calls with arguments are preceded with the character <code>&amp;</code>, then followed by the character <code>(</code>, accept arguments separated by commas (<code>,</code>), and the macro calls finishes with the character <code>)</code>.</li>
 </ul>
 <p>The more common predefined macros have this syntax:</p>
-<pre><code>&lt;!defeval x y&gt;
-&lt;!define x y&gt;
-&lt;!elif expr&gt;
-&lt;!else&gt;
-&lt;!endif&gt;
-&lt;!eval expr&gt;
-&lt;!if expr&gt;
-&lt;!ifdef x&gt;
-&lt;!ifeq x y&gt;
-&lt;!ifndef x&gt;
-&lt;!ifneq x y&gt;
-&lt;!include file&gt;
-&lt;!undef x&gt;</code></pre>
+<pre><code>&lt;%defeval x y&gt;
+&lt;%define x y&gt;
+&lt;%elif expr&gt;
+&lt;%else&gt;
+&lt;%endif&gt;
+&lt;%eval expr&gt;
+&lt;%if expr&gt;
+&lt;%ifdef x&gt;
+&lt;%ifeq x y&gt;
+&lt;%ifndef x&gt;
+&lt;%ifneq x y&gt;
+&lt;%include file&gt;
+&lt;%undef x&gt;</code></pre>
 <p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.):</p>
-<pre><code>&lt;!define euro \u20AC&gt;
-&lt;!define price $1 &amp;euro;&gt;
+<pre><code>&lt;%define euro \u20AC&gt;
+&lt;%define price $1 &amp;euro;&gt;
 
 { &quot;price&quot;: &quot;&amp;price(100)&quot; }</code></pre>
 <p>Warning: you must read the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
@@ -159,6 +167,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 </tr>
 </tbody>
 </table>
+<h2 id="tools">Tools</h2>
 <h3 id="data-conversion">Data conversion</h3>
 <p>When preparing data inputs sometimes you need to mix files in several formats. To make easy the integration of data from several sources <em>jqt</em> comes with the following utilities to convert between CSV, JSON and YAML formats:</p>
 <ul>
@@ -170,7 +179,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <li><code>yaml2json</code></li>
 </ul>
 <p>These utilities are filters that read standard input or a file passed as an argument and write to standard output.</p>
-<h2 id="querying-data-files">Querying data files</h2>
+<h3 id="querying-data-files">Querying data files</h3>
 <p>Sometimes you want to apply queries in the <em>jq</em> style to CSV or YAML files, in the same style as <em>jq</em> processes JSON data. As a wrappers to <code>jq</code> you have the following utilities shipped with <em>jqt</em>:</p>
 <ul>
 <li><code>cq</code>, apply <code>jq</code> to CSV input files.</li>
@@ -189,6 +198,19 @@ title: Moby Dick
 <pre><code>$ yq --json -c &#39;.store.book[2]&#39; tests/data/store.yaml
 {&quot;category&quot;:&quot;fiction&quot;,&quot;price&quot;:8.99,&quot;author&quot;:&quot;Herman Melville&quot;,...</code></pre>
 <p>Read the output of <code>yq --help</code> and <code>cq --help</code> for more information.</p>
+<h3 id="process-front-matter">Process front matter</h3>
+<p>When invoking <code>jqt</code> you can use the following options to extract, remove or test the presence of front matter data in the input document:</p>
+<dl>
+<dt>-e</dt>
+<dd>Extract YAML front matter.
+</dd>
+<dt>-r</dt>
+<dd>Remove front matter from MarkDown.
+</dd>
+<dt>-t</dt>
+<dd>Test presence of front matter in MarkDown.
+</dd>
+</dl>
 <div class="footnotes">
 <hr />
 <ol>

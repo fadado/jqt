@@ -236,6 +236,10 @@ text-align:left;
 #TOC li{
 margin:0;
 }
+.footnotes p{
+margin:0;
+padding:0;
+}
 #FOOTER div.github{
 font-family:sans-serif;
 color:#4183c4;
