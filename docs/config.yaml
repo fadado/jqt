@@ -10,15 +10,13 @@
 title: jqt · the jq template engine
 baseURL: https://fadado.github.com/jqt/
 lang: en
+logo: "❴❴❏❵❵"
 
 author:
 - email: jordinas@gmail.com
   name: Joan Josep Ordinas Rosa
 
 menu:
-- URL: ./index.html
-  id: content/home
-  name: Home
 - URL: ./engine.html
   id: content/engine
   name: Engine

@@ -12,7 +12,8 @@
 
   <body>
     <ul id="MENU">
-      {# logo #}<li class="logo"><a href="{{.site.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>
+      <!--{# logo #}<li class="logo"><a href="{{.site.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>-->
+      {# logo #}<li class="logo"><a href="index.html">{{.front.logo}}</a><span>v<%include "../VERSION"></span></li>
       {% .site.menu[] %}<li><a {{if .id==$M.front._id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
     </ul>
 

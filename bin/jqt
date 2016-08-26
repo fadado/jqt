@@ -93,7 +93,7 @@ function expand_jqt
         +siqi "'" "'" ''            # literal string; like sh single quotes
         +siQi '"' '"' ''            # interpolated string; like sh double quotes
         +ssss '<!--' '-->' ''       # preserved XML comments
-        +sSSS '{{' '}}' ''          # jq processing
+        +sSSS '{{' '}}' ''          # preserved for jq processing
         +sSSS '{%' '%}' ''
         +sSSS '{#' '#}' ''
     )
@@ -115,12 +115,12 @@ function expand_md
     local -r -a user=( -U '<%' '>' '\B' '\B' '\W>' '<' '>' '$' '' )
     local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>' )
     local -r -a skips=(
-        +sccc '&\n' '' ''
-        +sccc '<#' '#>\n' ''
-        +siqi "'" "'" '\'
-        +siQi '"' '"' '\'
-        +ssss '<!--' '-->' ''
-        +ssss '`'  '`' ''
+        +sccc '&\n' '' ''           # continuation line (& and \n removed)
+        +sccc '<#' '#>\n' ''        # multiline comment, must end in \n
+        +siqi "'" "'" '\'           # literal string; like sh single quotes
+        +siQi '"' '"' '\'           # interpolated string; like sh double quotes
+        +ssss '<!--' '-->' ''       # preserved XML comments
+        +ssss '`'  '`' ''           # MarkDown code regions
         +ssss '\n```' '\n```' ''
         +ssss '\n~~~' '\n~~~' ''
     )
@@ -141,18 +141,18 @@ function expand_json
     local -r -a user=( -U '&' ';' '(\W' ',\W' ')' '(' ')' '$' '' )
     local -r -a meta=( -M '<!' '>' '\b' '\b'  '>' '<' '>' )
     local -r -a skips=(
-        +sccc '&\n' '' ''
-        +cccc '/*' '*/'
-        +cccc '//' '\n'
-        +siqi "'" "'" '\'
-        +sSSS '"'  '"' '\'
+        +sccc '&\n' '' ''       # continuation line (& and \n removed)
+        +cccc '/*' '*/'         # multiline comment
+        +cccc '//' '\n'         # line comment 
+        +sqqq '`' '`' '\'       # literal string; like sh single quotes
+        +sSSS '"' '"' '\'       # JSON string
     )
     local -r -a predefined=(
-        -Damp='&'
-        -Dapos="'"
-        -Dgt='>'
-        -Dlt='<'
-        -Dquot='"'
+        -D amp='&'
+        -D apos="'"
+        -D gt='>'
+        -D lt='<'
+        -D quot='"'
     )
     gpp --nostdinc          \
         --warninglevel 2    \
@@ -172,11 +172,12 @@ function expand_css
     local -r -a user=( -U ''    ''   '(\W' ',\W' ')'  '(' ')' '$' '' )
     local -r -a meta=( -M '\n&' '\n' '\b'  '\b'  '\n' '(' ')' )
     local -r -a skips=(
-        +cccc '&\n' ''
-        +cccc '/*' '*/'
-        +cccc '//' '\n'
-        +ssss '"' '"' '\'
-        +ssss "'" "'" '\'
+        +cccc '&\n' ''          # continuation line (& and \n removed)
+        +cccc '/*' '*/'         # multiline comment
+        +cccc '//' '\n'         # line comment 
+        +sqqq '`' '`' '\'       # literal string; like sh single quotes
+        +ssss '"' '"' '\'       # CSS string
+        +ssss "'" "'" '\'       # CSS string
     )
     local -r -a gpp_opts=(
         --nostdinc

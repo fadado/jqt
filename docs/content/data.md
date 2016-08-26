@@ -78,7 +78,7 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 <!define euro \u20AC>
 <!define price $1 &euro;>
 
-{ "price": "&price(100);" }
+{ "price": "&price(100)" }
 ```
 
 Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
@@ -94,15 +94,15 @@ The main use of the preprocessor is to remove comments in the CPP style:
 
 Double quoted strings are also defined as skips, and backticks can be used to
 disable macro expansion (inside double quoted strings backticks are ignored).
-This table summarize all the available skips in JSON files:
+This table summarizes all the available skips in JSON files:
 
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------
 `&\n`[^1]           No                  Yes                 There is no content
 `/*` `*/`           No                  Yes                 Yes
 `//` `\n`[^2]       No                  Yes                 Yes
-`"` `"`             Yes                 No                  No
 `` ` `` `` ` ``     No                  Yes                 No
+`"` `"`             Yes                 No                  No
 
 Table: **Semantics for all JSON skips**
 

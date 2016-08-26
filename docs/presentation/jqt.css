@@ -32,9 +32,14 @@
 
 #MENU li.logo a {	// "picture"
 	font-weight: normal;
-	font-size: 160%;
+	font-size: 150%;
 	text-decoration: none;
+	color: DarkCyan;
 	background-color: inherit;
+}
+
+#MENU li.logo a:hover {	// "picture"
+	text-decoration: overline;
 }
 
 #MENU li.logo span {	// version
@@ -49,12 +54,12 @@
 
 #MENU a:hover {
 	padding: 2px;
-	background-color: gainsboro;
+	background-color: Gainsboro;
 }
 
 #MENU a.current {
 	padding: 2px;
-	background-color: gainsboro;
+	background-color: Gainsboro;
 }
 
 //

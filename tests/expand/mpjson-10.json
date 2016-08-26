@@ -1,6 +1,6 @@
 // XHTML entities
 <!define E "$1": "$2">&
 {
-    &E('price, with discount, is',88)
+    &E(`price, with discount, is`,88)
 }
 // vim:sw=4:ts=4:ai:et:syntax=javascript

@@ -131,23 +131,27 @@ be enabled or disabled.  String delimiters can be copied, or not, to the output:
 All jqt template delimited regions: {#...#}, {%...%}, {{...}} 
 ~~~
 
-This table summarize all the available template skips:
+This table summarizes all the available template skips:
 
- Delimiters         Place                   Macro expansion     Delimiters removed  Content removed
--------------       -----                   ---------------     ------------------  ---------------
-`&\n`[^1]           Template text           No                  Yes                 There is no content
-`<#` `#>`           Template text           No                  Yes                 Yes
-`'` `'`             User defined macros     No                  Yes                 No
-`"` `"`             User defined macros     Yes                 Yes                 No
-`<!--` `-->`        Template text           No                  No                  No
-`{{` `}}`           Template text           No                  No                  No
-`{%` `%}`           Template text           No                  No                  No
-`{#` `#}`           Template text           No                  No                  No
+ Delimiters         Macro expansion     Delimiters removed  Content removed
+-------------       ---------------     ------------------  ---------------
+`&\n`[^1]           No                  Yes                 There is no content
+`<#` `#>`           No                  Yes                 Yes
+`'` `'`[^2]         No                  Yes                 No
+`"` `"`[^3]         Yes                 Yes                 No
+`<!--` `-->`        No                  No                  No
+`{{` `}}`           No                  No                  No
+`{%` `%}`           No                  No                  No
+`{#` `#}`           No                  No                  No
 
 Table: **Semantics for all template skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
+
+[^2]: Only inside user defined macros.
+
+[^3]: Only inside user defined macros.
 
 ### Code snippets
 

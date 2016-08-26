@@ -118,27 +118,31 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 ```
 ~~~
 
-This table summarize all the available document skips:
+This table summarizes all the available document skips:
 
- Delimiters                         Place                   Macro expansion     Delimiters removed  Content removed
--------------                       -----                   ---------------     ------------------  ---------------
-`&\n`[^1]                           Document text           No                  Yes                 There is no content
-`<#` `#>\n`                         Document text           No                  Yes                 Yes
-`<!--` `-->`                        Document text           No                  No                  No
-`'` `'`                             User defined macros     No                  Yes                 No
-`"` `"`                             User defined macros     Yes                 Yes                 No
-`` ` `` `` ` ``                     Document text           No                  No                  No
-<code>\\n&#96;&#96;&#96;</code>[^2] Document text           No                  No                  No
-`\n~~~`[^3]                         Document text           No                  No                  No
+ Delimiters                         Macro expansion     Delimiters removed  Content removed
+-------------                       ---------------     ------------------  ---------------
+`&\n`[^1]                           No                  Yes                 There is no content
+`<#` `#>\n`                         No                  Yes                 Yes
+`'` `'`[^2]                         No                  Yes                 No
+`"` `"`[^3]                         Yes                 Yes                 No
+`<!--` `-->`                        No                  No                  No
+`` ` `` `` ` ``                     No                  No                  No
+<code>\\n&#96;&#96;&#96;</code>[^4] No                  No                  No
+`\n~~~`[^5]                         No                  No                  No
 
 Table: **Semantics for all document skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
 
-[^2]: Blocks of code fenced between two lines with three or more backticks.
+[^2]: Only inside user defined macros.
 
-[^3]: Blocks of code fenced between two lines with three or more tildes.
+[^3]: Only inside user defined macros.
+
+[^4]: Blocks of code fenced between two lines with three or more backticks.
+
+[^5]: Blocks of code fenced between two lines with three or more tildes.
 
 ### Pandoc’s Markdown
 
