@@ -1,5 +1,5 @@
 // XHTML entities
-<!define &E(k,v) "&k;": "&v;">&
+<%define &E(k,v) "&k;": "&v;">&
 {
     &E(price,88)
 }

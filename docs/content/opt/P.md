@@ -1,5 +1,5 @@
 -P LANGUAGE
-:   Expand input data with the macro-processor (LANGUAGE must be `jqt`, `md`,
+:   Expand input data with the macro-processor (*LANGUAGE* must be `jqt`, `md`,
 `json`, `css` or `css-min`).
 
 <#

@@ -72,13 +72,13 @@ Common := \
 
 # Files to "build"
 Home := index
-Pages := engine structure content data
+Pages := content data engine structure 
 Files := README.md jqt.css
 ManPage := ../jqt.1.gz
 Targets := \
 	$(ManPage) \
 	$(foreach f,$(Files),$(Destination)/$(f)) \
-	$(foreach f,$(foreach p,$(Home) $(Pages),$(p).html),$(Destination)/$(f))
+	$(foreach p,$(Home) $(Pages),$(Destination)/$(p).html)
 
 ########################################################################
 # Commands
@@ -109,24 +109,16 @@ all: $(Targets)
 	$(XHTMLValid)
 
 # Directories
-$(Meta) $(Destination):
-	mkdir $@ >/dev/null 2>&1 || true
+$(Meta) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
 
 # Metad files
 $(Meta)/config.json: config.yaml \
 | $(Meta)
 	yaml2json < $< > $@
 
-$(Meta)/snippets.pandoc: private id=^\([a-zA-Z_-]\+\)
-$(Meta)/snippets.pandoc: $(Content)/snippets.yaml \
+$(Meta)/snippets.json: $(Content)/snippets.yaml \
 | $(Meta)
-	sed '/$(id): *[>|]/{s/$(id):.*/\1: >\n  $$\1$$/;b;};/$(id): *[^#]/{s/$(id):.*/\1: $$\1$$/;b;};d;' \
-	< $< > $@
-
-$(Meta)/snippets.json: $(Content)/snippets.yaml $(Meta)/snippets.pandoc \
-| $(Meta)
-	pandoc --from markdown --to html --template=$(Meta)/snippets.pandoc $< \
-	| yaml2json > $@
+	jqt -T -- $< | yaml2json > $@
 
 # Target files
 $(Destination)/README.md: $(Assets)/README.md \
@@ -139,9 +131,8 @@ $(Destination)/index.html: $(Content)/home.md $(Common) \
 	$(info ==> $@)
 	$(JQT) -d $< $(Structure)/default.html > $@
 
-$(Destination)/engine.html: $(Content)/FLOW.MD
-$(Destination)/index.html: $(Content)/EXAMPLE.MD
-$(Destination)/template.html: $(Content)/EXAMPLE.MD
+$(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.MD $(Content)/opt/*.md
+$(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.MD
 
 define Target
 $(Destination)/$(1).html: $(Content)/$(1).md $(Structure)/$(2).html $(Common) \

@@ -49,7 +49,7 @@ and the second does the proper conversion to HTML.
 
 ### Preprocessing
 
-The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a macro processor are available,
+The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a macro call
 like `<%include "../VERSION">` will expand to he string <code><%include "../VERSION"></code>
 as you can see in this paragraph and on the top of these pages.
@@ -58,7 +58,7 @@ as you can see in this paragraph and on the top of these pages.
 
 All the power of GPP is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
-the input document. The macro syntax used by _jqt_ precedes macro names with the characters `<%`
+the input document. The macro syntax used by _jqt_ in input documents precedes macro names with the characters `<%`
 and finishes the macro calls with the character `>`.
 The more common predefined macros have this syntax:
 
@@ -135,13 +135,9 @@ Table: **Semantics for all document skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
-
 [^2]: Only inside user defined macros.
-
 [^3]: Only inside user defined macros.
-
 [^4]: Blocks of code fenced between two lines with three or more backticks.
-
 [^5]: Blocks of code fenced between two lines with three or more tildes.
 
 ### Pandoc’s Markdown

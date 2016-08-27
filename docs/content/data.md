@@ -26,6 +26,7 @@ data and influence JSON preprocessing:
 <%include "opt/I.md">
 <%include "opt/M.md">
 <%include "opt/m.md">
+<%include "opt/T.md">
 
 ## Data formats
 
@@ -38,7 +39,7 @@ JSON and merged to be the `jq` input in the render stage.
 
 Additional JSON files can be provided and are merged with front matter metadata
 to be the `jq` input in the render stage.  The files are preprocessed using
-[GPP][GPP], and all the expected options in a macro processor are available,
+[GPP][GPP], and all the expected options in a preprocessor are available,
 like defining new macros, include other files, etc.
 
 #### Macro calls
@@ -47,7 +48,7 @@ The macro syntax used by _jqt_ in JSON files is different
 for predefined macros and for user defined macros:
 
 * The predefined macro names are preceded with the characters
-  <code>&lt;!</code> and the macro calls finishes with the character `>`.
+  `<%` and the macro calls finishes with the character `>`.
 * The user defined macro names for calls without arguments are preceded with
   the character `&` and the macro calls finishes with the character `;`.
 * The user defined macro names for calls with arguments are preceded with the
@@ -57,26 +58,26 @@ for predefined macros and for user defined macros:
 The more common predefined macros have this syntax:
 
 ```
-<!defeval x y>
-<!define x y>
-<!elif expr>
-<!else>
-<!endif>
-<!eval expr>
-<!if expr>
-<!ifdef x>
-<!ifeq x y>
-<!ifndef x>
-<!ifneq x y>
-<!include file>
-<!undef x>
+<%defeval x y>
+<%define x y>
+<%elif expr>
+<%else>
+<%endif>
+<%eval expr>
+<%if expr>
+<%ifdef x>
+<%ifeq x y>
+<%ifndef x>
+<%ifneq x y>
+<%include file>
+<%undef x>
 ```
 
 Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.):
 
 ```
-<!define euro \u20AC>
-<!define price $1 &euro;>
+<%define euro \u20AC>
+<%define price $1 &euro;>
 
 { "price": "&price(100)" }
 ```
@@ -110,6 +111,8 @@ Table: **Semantics for all JSON skips**
 is, the ampersand and the newline are removed and effectively ignored).
 [^2]: This represents a newline character.
 
+## Tools
+
 ### Data conversion
 
 When preparing data inputs sometimes you need to mix files in several formats.
@@ -126,7 +129,7 @@ following utilities to convert between CSV, JSON and YAML formats:
 These utilities are filters that read standard input or a file passed as an
 argument and write to standard output.
 
-## Querying data files
+### Querying data files
 
 Sometimes you want to apply queries in the _jq_ style to CSV or YAML files,
 in the same style as _jq_ processes JSON data.
@@ -156,6 +159,15 @@ $ yq --json -c '.store.book[2]' tests/data/store.yaml
 ```
 
 Read the output of `yq --help` and `cq --help` for more information.
+
+### Process front matter
+
+When invoking `jqt` you can use the following options to extract, remove or
+test the presence of front matter data in the input document:
+
+<%include "opt/e.md">
+<%include "opt/r.md">
+<%include "opt/t.md">
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

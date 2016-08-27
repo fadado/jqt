@@ -1,5 +1,5 @@
 -M NAME:FILE
-:   Add a *FILE* in YAML or JSON format to the input metadata at the top level
+:   Add a *FILE* in YAML or JSON format to the input data at the top level
 (*NAME* is ignored but must be present and unique).
 
 <#

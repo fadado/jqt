@@ -1,5 +1,5 @@
 // XHTML entities
-<!define E "$1": "$2">&
+<%define E "$1": "$2">&
 {
     &E(`price, with discount, is`,88)
 }

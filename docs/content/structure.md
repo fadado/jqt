@@ -39,7 +39,7 @@ This is a complete template example:
 
 ### Preprocessing
 
-Templates are preprocessed using [GPP][GPP]. All the expected options in a macro processor are available,
+Templates are preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a template fragment
 like
 
@@ -150,9 +150,7 @@ Table: **Semantics for all template skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
-
 [^2]: Only inside user defined macros.
-
 [^3]: Only inside user defined macros.
 
 ### Code snippets

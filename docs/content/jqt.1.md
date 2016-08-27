@@ -8,10 +8,10 @@
 
 # SYNOPSIS
 
-| **jqt** \[options] < infile > result
-| **jqt** \[options] infile > result
-| **jqt** \[options] infile result
-| **jqt** \[**-h**|**--help**|**-V**|**--version**]
+| **jqt** [**-h** | **--help** | **-p** | **-V** | **--version**]
+| **jqt** [options] < infile > result
+| **jqt** [options] infile > result
+| **jqt** [options] infile result
 
 # DESCRIPTION
 
@@ -40,6 +40,7 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 <%include "opt/p.md">
 <%include "opt/r.md">
 <%include "opt/S.md">
+<%include "opt/T.md">
 <%include "opt/t.md">
 <%include "opt/V.md">
 

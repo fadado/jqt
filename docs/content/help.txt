@@ -1,6 +1,7 @@
 jqt - jq based web template engine [version <%include "../VERSION">]
 
-Usage: jqt [options] < infile > result\
+Usage: jqt [-h | --help | -p | -V | --version]
+       jqt [options] < infile > result\
        jqt [options] infile > result\
        jqt [options] infile result
 
@@ -21,10 +22,11 @@ Document options:
 <%include "opt/4.md">
 <%include "opt/d.md">
 
-Metadata options:
+Data options:
 
 <%include "opt/M.md">
 <%include "opt/m.md">
+<%include "opt/T.md">
 
 Debugging options:
 

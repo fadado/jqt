@@ -57,13 +57,46 @@ function mkpipe
 ########################################################################
 
 # warning: consume one line
-has_front_matter() { read -r && [[ $REPLY == '---' ]]; }
+function has_front_matter
+{
+    read -r && [[ $REPLY == '---' ]];
+}
 
 # warning: assume front matter exists
-extract_front_matter() { sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p'; }
+function extract_front_matter
+{
+    sed -n -e '1d;/^---$/q;/^\.\.\.$/q;/^#/d;p';
+}
 
 # warning: remove all YAML blocks
-remove_front_matter() { sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d'; }
+function remove_front_matter
+{
+    sed -e '/^---$/,/\(^\.\.\.$$\)\|\(^---$\)/d';
+}
+
+# Transforms MarkDown in top level scalars to HTML
+function snippets_markup
+{
+    local -r template=${TMPDIR}/template-snippets.html
+    local -r p=$(mkpipe)
+
+	sed -e '
+# for > and | blocks
+    /^\([a-zA-Z_-]\+\): *[>|]/ {
+        s/^\([a-zA-Z_-]\+\):.*/\1: >\n  $\1$/
+        b
+    }
+# simple scalars
+    /^\([a-zA-Z_-]\+\): *[^#]/ {
+        s/^\([a-zA-Z_-]\+\):.*/\1: $\1$/
+        b
+    }
+# ignore other cases
+    d
+' < $p > $template &
+
+    tee $p | pandoc --from markdown --to html --template=$template
+}
 
 ########################################################################
 # Expand sources
@@ -139,7 +172,8 @@ function expand_md
 function expand_json
 {
     local -r -a user=( -U '&' ';' '(\W' ',\W' ')' '(' ')' '$' '' )
-    local -r -a meta=( -M '<!' '>' '\b' '\b'  '>' '<' '>' )
+    local -r -a meta=( -M '<%' '>' '\b' '\b'  '>' '<' '>' )
+    #local -r -a meta=( -M '<!' '>' '\b' '\b'  '>' '<' '>' )
     local -r -a skips=(
         +sccc '&\n' '' ''       # continuation line (& and \n removed)
         +cccc '/*' '*/'         # multiline comment
@@ -221,7 +255,7 @@ function convert
         echo "import \"${IMPORTS[$module]}\" as $module;"
     done
 
-    # $M as a global metadata reference
+    # $M as a global reference to '.'
     echo '. as $M |'
 
     # convert template to script
@@ -296,6 +330,14 @@ function convert
 # Extract YAML front matter
 ########################################################################
 
+function yaml2json
+{
+    python -c '
+import sys, yaml, json
+json.dump(yaml.safe_load(sys.stdin), sys.stdout, sort_keys=False)
+sys.stdout.write("\n")'
+}
+
 # < stdin > stdout
 function fork_yaml
 {
@@ -332,7 +374,7 @@ declare -a PANDOC_OPTS=( '--from=markdown-pandoc_title_block' )
 # < stdin > stdout
 function markup
 {
-    local template=${TMPDIR}/template.html
+    local -r template=${TMPDIR}/template-document.html
 
     echo \
 '$body$
@@ -356,22 +398,14 @@ $endif$
 }
 
 ########################################################################
-# Merge document and all metadata
+# Merge document and all data
 ########################################################################
 
 declare DOCUMENT_METADATA_NAME='front'  # front matter
 declare DOCUMENT_CONTENT_NAME='body'    # body matter
 
-declare -A JSON_METADATA=() YAML_METADATA=()
-declare -A JSON_METADATA_DOT=() YAML_METADATA_DOT=()
-
-function yaml2json
-{
-    python -c '
-import sys, yaml, json
-json.dump(yaml.safe_load(sys.stdin), sys.stdout, indent=2, sort_keys=False)
-sys.stdout.write("\n")'
-}
+declare -A JSON_DATA=() YAML_DATA=() YAML_SNIPPETS=()
+declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 
 # Global objects available in jq scripts:
 #	.body
@@ -393,24 +427,29 @@ function merge
         echo "{ $DOCUMENT_CONTENT_NAME: "'$body'
         echo ", $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
         echo "+ { _id: \"${DOCUMENT_ID}\","' _toc: $toc, _highlight: $css })}'
-        # additional metadata
-        for key in "${!YAML_METADATA[@]}"; do
+        # additional data
+        for key in "${!YAML_DATA[@]}"; do
             echo "+{ $key:"
-            yaml2json < "${YAML_METADATA[$key]}"
+            < "${YAML_DATA[$key]}" yaml2json
             echo "}"
         done
-        for key in "${!YAML_METADATA_DOT[@]}"; do
+        for key in "${!YAML_DATA_DOT[@]}"; do
             echo "+"
-            yaml2json < "${YAML_METADATA_DOT[$key]}"
+            < "${YAML_DATA_DOT[$key]}" yaml2json
         done
-        for key in "${!JSON_METADATA[@]}"; do
+        for key in "${!JSON_DATA[@]}"; do
             echo "+{ $key:"
-            expand_json < "${JSON_METADATA[$key]}"
+            < "${JSON_DATA[$key]}" expand_json
             echo "}"
         done
-        for key in "${!JSON_METADATA_DOT[@]}"; do
+        for key in "${!JSON_DATA_DOT[@]}"; do
             echo "+"
-            expand_json < "${JSON_METADATA_DOT[$key]}"
+            < "${JSON_DATA_DOT[$key]}" expand_json
+        done
+        for key in "${!YAML_SNIPPETS[@]}"; do
+            echo "+{ $key:"
+            < "${YAML_SNIPPETS[$key]}" snippets_markup | yaml2json
+            echo "}"
         done
     } > $script &
 
@@ -456,13 +495,14 @@ function help
 {
     cat <<'EOF'
 jqt - jq based web template engine [version 0.1.0]
-Usage: jqt [options] < infile > result
+Usage: jqt [-h | --help | -p | -V | --version]
+       jqt [options] < infile > result
        jqt [options] infile > result
        jqt [options] infile result
 
 Some of the options include:
 
-Preprocessor options      Metadata options
+Preprocessor options      Data options
     -D NAME=VAL               -M NAME:FILE
     -I DIRECTORY              -m NAME:FILE
     -P LANGUAGE           Debugging options
@@ -546,25 +586,26 @@ EOF
 ########################################################################
 
 declare -i flagS=0 flagH=0 flagC=0
-declare -i extract=0 remove=0 front_matter=0
+declare -i extract=0 remove=0 front_matter=0 snippets=0
 declare expand=''
 
 declare opt key filename
 
-while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:CHS-: opt; do
+while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:T:CHS-: opt; do
     case $opt in
     # Generic options
         h)  help
             ;;
         V) echo "$SELF $VERSION"; exit 0
             ;;
+        p)  pandoc_options
+            ;;
     # Preprocessor options
         D)  DEFINE=( "${DEFINE[@]}" "-D$OPTARG" ) # also for all gpp uses
             ;;
         I)  GPP_PATH=( "${GPP_PATH[@]}" '-I' "$OPTARG" )
             ;;  # inserted at the right for append effect
-        P)  # now Q, next P
-            case $OPTARG in
+        P)  case $OPTARG in
                 [Cc][Ss][Ss]) expand='expand_css max' ;;
                 [Cc][Ss][Ss]-min) expand='expand_css min' ;;
                 jqt) expand='expand_jqt' ;;
@@ -592,34 +633,46 @@ while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:CHS-: opt; do
             ;;
         e)  extract=1
             ;;
-        p)  pandoc_options
-            ;;
         r)  remove=1
             ;;
         t)  front_matter=1
             ;;
-    # Metadata options
+    # Data options
         f)  DOCUMENT_METADATA_NAME=$OPTARG
             ;;
         n)  DOCUMENT_CONTENT_NAME=$OPTARG
             ;;
-        m|M)[[ $OPTARG == *:* ]] || usage "Bad format in metadata specification; expected 'key:filename'"
+        m|M)[[ $OPTARG == *:* ]] || usage "Bad format in data specification; expected 'key:filename'"
             key=${OPTARG%:*} filename=${OPTARG#*:}
             [[ -e $filename ]] || usage "File '$filename' does not exists"
             [[ $filename =~ (.*\.js(on)?)|(.*\.ya?ml) ]] ||
                 usage "File '$filename' must have a know extension (js, json, yml, yaml)"
             if [[ $opt == 'm' ]]; then
                 if [[ $filename =~ .*\.js(on)? ]]; then
-                    JSON_METADATA[$key]=$filename
+                    JSON_DATA[$key]=$filename
                 else
-                    YAML_METADATA[$key]=$filename
+                    YAML_DATA[$key]=$filename
                 fi
             elif [[ $opt == 'M' ]]; then
                 if [[ $filename =~ .*\.js(on)? ]]; then
-                    JSON_METADATA_DOT[$key]=$filename
+                    JSON_DATA_DOT[$key]=$filename
                 else
-                    YAML_METADATA_DOT[$key]=$filename
+                    YAML_DATA_DOT[$key]=$filename
                 fi
+            fi
+            ;;
+        T)  if [[ -z $OPTARG ]]; then
+                snippets=1
+            elif [[ $OPTARG == '--' ]]; then
+                snippets=1
+                break
+            else
+                [[ $OPTARG == *:* ]] || usage "Bad format in data specification; expected 'key:filename'"
+                key=${OPTARG%:*} filename=${OPTARG#*:}
+                [[ -e $filename ]] || usage "File '$filename' does not exists"
+                [[ $filename =~ (.*\.ya?ml) ]] ||
+                    usage "File '$filename' must have a know extension (yml, yaml)"
+                YAML_SNIPPETS[$key]=$filename
             fi
             ;;
     # Debug options
@@ -630,45 +683,55 @@ while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:CHS-: opt; do
         S)  flagS=1
             ;;
         -)  case $OPTARG in
-    # Generic options
-        help) help
-            ;;
-        version) echo "$SELF $VERSION"; exit 0
-            ;;
-    # Pandoc options:
-        base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        bibliography=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        citation-abbreviations=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        columns=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        csl=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        email-obfuscation=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        file-scope) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        gladtex) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        highlight-style=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        html-q-tags) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        id-prefix=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        indented-code-classes=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        jsmath|jsmath=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        katex-stylesheet=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        katex|katex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        latexmathml|latexmathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        mathjax|mathjax=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        mathml|mathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        mimetex|mimetex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        no-highlight) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        normalize) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        number-offset=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        number-sections) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        preserve-tabs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        section-divs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        tab-stop=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        toc-depth=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        webtex|webtex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        wrap=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-    # Errors
-        *)  usage "Unknown option: --$OPTARG" ;; esac
-            ;;
-        :)  usage "Expected argument for option: -$OPTARG"
+        # '--' separator and options with optional args (or error)
+            :)  case $OPTARG in
+                    -) break
+                        ;;
+                    T) snippets=1
+                        ;;
+                    *) usage "Expected argument for option: -$OPTARG"
+                        ;;
+                esac
+                ;;
+        # Generic options
+            help) help
+                ;;
+            version) echo "$SELF $VERSION"; exit 0
+                ;;
+        # Pandoc options:
+            base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            bibliography=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            citation-abbreviations=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            columns=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            csl=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            email-obfuscation=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            file-scope) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            gladtex) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            highlight-style=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            html-q-tags) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            id-prefix=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            indented-code-classes=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            jsmath|jsmath=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            katex-stylesheet=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            katex|katex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            latexmathml|latexmathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            mathjax|mathjax=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            mathml|mathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            mimetex|mimetex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            no-highlight) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            normalize) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            number-offset=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            number-sections) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            preserve-tabs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            section-divs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            tab-stop=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            toc-depth=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            webtex|webtex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+            wrap=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
+        # Errors
+            *)  usage "Unknown option: --$OPTARG"
+                ;;
+            esac
             ;;
         ?)  usage "Unknown option: -$OPTARG"
             ;;
@@ -678,11 +741,11 @@ done
 shift $((OPTIND-1)); OPTIND=1
 (( $# <= 2 )) || usage 'Expected one or two arguments'
 
-(( extract+remove+front_matter <= 1 )) || usage 'Cannot mix options: -e, -r, -t'
+(( snippets+extract+remove+front_matter <= 1 )) || usage 'Cannot mix options: -e, -r, -t'
 (( flagS+flagH+flagC <= 1 )) || usage 'Cannot mix options: -S, -H, -C'
 [[ -z $expand ]] || (( flagS+flagH+flagC  == 0 )) || usage 'Incompatible options'
-[[ -z $expand ]] || (( extract+remove+front_matter == 0 )) || usage 'Incompatible options'
-(( flagS+flagH+flagC+extract+remove+front_matter <= 1 )) || usage 'Incompatible options'
+[[ -z $expand ]] || (( snippets+extract+remove+front_matter == 0 )) || usage 'Incompatible options'
+(( flagS+flagH+flagC+snippets+extract+remove+front_matter <= 1 )) || usage 'Incompatible options'
 
 ########################################################################
 # Main
@@ -694,6 +757,7 @@ initialize
 (( $# == 2 )) && exec >| $2
 
 if   [[ -n $expand ]]; then     $expand
+elif (( snippets )); then       snippets_markup
 elif (( extract )); then        extract_front_matter
 elif (( remove )); then         remove_front_matter
 elif (( front_matter )); then   has_front_matter

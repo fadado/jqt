@@ -1,5 +1,5 @@
 /* Macros */
-<!define NAME John F.>
+<%define NAME John F.>
 {
     "firstName": "&NAME;",
     "lastName": "Kennedy",

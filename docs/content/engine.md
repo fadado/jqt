@@ -65,47 +65,130 @@ you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
 `jqt` accepts several options and can be called with zero, one or two file
 arguments.  The usage possibilities are:
 
+| **jqt** [**-h** | **--help** | **-p** | **-V** | **--version**]
 | **jqt** [_options_] < _infile_ > _result_
 | **jqt** [_options_] _infile_ > _result_
 | **jqt** [_options_] _infile_ _result_
 
 ### Options
 
-#### Preprocessor options
-
-<%include "opt/D.md">
-<%include "opt/I.md">
-<%include "opt/P.md">
-
-#### Document options
-
 <%include "opt/4.md">
+<%include "opt/C.md">
+<%include "opt/D.md">
 <%include "opt/d.md">
-<%include "opt/n.md">
-
-#### Template options
-
+<%include "opt/e.md">
+<%include "opt/f.md">
+<%include "opt/H.md">
+<%include "opt/h.md">
+<%include "opt/I.md">
 <%include "opt/i.md">
 <%include "opt/j.md">
 <%include "opt/L.md">
-
-#### Data options
-
-<%include "opt/f.md">
 <%include "opt/M.md">
 <%include "opt/m.md">
-
-#### Debugging options
-
-<%include "opt/C.md">
-<%include "opt/H.md">
-<%include "opt/S.md">
-
-#### Information options
-
-<%include "opt/h.md">
+<%include "opt/n.md">
+<%include "opt/P.md">
 <%include "opt/p.md">
+<%include "opt/r.md">
+<%include "opt/S.md">
+<%include "opt/T.md">
+<%include "opt/t.md">
 <%include "opt/V.md">
+
+## Preprocessing
+
+One distinctive feature of _jqt_ is the text expansion applied to almost
+all kind of input files.
+Also, _jqt_ can be used as a standalone
+preprocessor thanks to the `-P` option.
+
+### Kinds of preprocessing
+
+The sections about
+[templates](./structure.html#preprocessing),
+[documents](./content.html#preprocessing) and [data](./data.html#json) cover in
+detail their usage of the preprocessor.
+
+A different transformation can also be be considered a kind of preprocessing. The option
+`-T` allows the use of YAML files for collections of MarkDown snippets:
+
+<%include "opt/T.md">
+
+### CSS preprocessing
+
+As a bonus, _jqt_ can also expand CSS style sheets.  This is documented in this
+section because it is outside the _jqt_ normal processing work flow.
+
+To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
+
+<%include "opt/P.md">
+
+You can minify the CSS style sheet choosing the `css-min` option.
+The CSS minimization is not extremely aggressive, but is safe and sufficient.
+
+#### Macro calls
+
+The macro syntax used by _jqt_ in CSS files is very similar to used by the traditional
+`cpp` preprocessing of C and C++ languages, but changing the prefix character `#` by
+`&`.
+The more common predefined macros have this syntax:
+
+```
+&defeval x y
+&define x y
+&elif expr
+&else
+&endif
+&eval expr
+&if expr
+&ifdef x
+&ifeq x y
+&ifndef x
+&ifneq x y
+&include file
+&undef x
+```
+
+Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.).
+The more common used features are the inclusion on external files and definition of simple constants:
+
+```
+&include "theme.css"
+
+&define Blue #0000FF
+
+{ color: &Blue; }
+```
+
+Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+
+#### Skips
+
+The main use of the preprocessor is to remove comments in the CPP style:
+
+```
+/* Block comments */
+// Line comments
+```
+
+Quoted strings are also defined as skips, and backticks can be used to
+disable macro expansion (inside double quoted strings backticks are ignored).
+This table summarizes all the available skips in JSON files:
+
+ Delimiters         Macro expansion     Delimiters removed  Content removed
+-------------       ---------------     ------------------  ---------------
+`&\n`[^1]           No                  Yes                 There is no content
+`/*` `*/`           No                  Yes                 Yes
+`//` `\n`[^2]       No                  Yes                 Yes
+`` ` `` `` ` ``     No                  Yes                 No
+`"` `"`             No                  No                  No
+`'` `'`             No                  No                  No
+
+Table: **Semantics for all CSS skips**
+
+[^1]: An ampersand followed by a newline is treated as a line continuation (that
+is, the ampersand and the newline are removed and effectively ignored).
+[^2]: This represents a newline character.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
