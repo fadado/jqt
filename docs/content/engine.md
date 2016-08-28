@@ -1,10 +1,9 @@
 ---
-<%include "config.yaml">
 title: Operating the engine
-updated: "2016-08-17T09:50:11Z"
+updated: "2016-08-28T10:27:09Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.MD">&
+<%include "LINKS.txt">&
 
 ## General operation
 
@@ -14,7 +13,7 @@ where HTML is mixed with [_jq_][JQ] snippets to implement the transformation log
 This diagram shows how document, template and data inputs (on the left) are combined by
 _jqt_ to produce the final HTML output:
 
-<%include "FLOW.MD">
+<%include "FLOW.txt">
 
 The command `jqt` is a shell script executed by `bash`.
 The external shell commands called by `jqt` are `cat`, `gpp`, `jq`, `mkdir`,
@@ -72,28 +71,27 @@ arguments.  The usage possibilities are:
 
 ### Options
 
-<%include "opt/4.md">
-<%include "opt/C.md">
-<%include "opt/D.md">
-<%include "opt/d.md">
-<%include "opt/e.md">
-<%include "opt/f.md">
-<%include "opt/H.md">
-<%include "opt/h.md">
-<%include "opt/I.md">
-<%include "opt/i.md">
-<%include "opt/j.md">
-<%include "opt/L.md">
-<%include "opt/M.md">
-<%include "opt/m.md">
-<%include "opt/n.md">
-<%include "opt/P.md">
-<%include "opt/p.md">
-<%include "opt/r.md">
-<%include "opt/S.md">
-<%include "opt/T.md">
-<%include "opt/t.md">
-<%include "opt/V.md">
+<%include "opt/4.txt">
+<%include "opt/C.txt">
+<%include "opt/D.txt">
+<%include "opt/d.txt">
+<%include "opt/e.txt">
+<%include "opt/H.txt">
+<%include "opt/h.txt">
+<%include "opt/I.txt">
+<%include "opt/i.txt">
+<%include "opt/j.txt">
+<%include "opt/L.txt">
+<%include "opt/M.txt">
+<%include "opt/m.txt">
+<%include "opt/n.txt">
+<%include "opt/P.txt">
+<%include "opt/p.txt">
+<%include "opt/r.txt">
+<%include "opt/S.txt">
+<%include "opt/T.txt">
+<%include "opt/t.txt">
+<%include "opt/V.txt">
 
 ## Preprocessing
 
@@ -112,7 +110,7 @@ detail their usage of the preprocessor.
 A different transformation can also be be considered a kind of preprocessing. The option
 `-T` allows the use of YAML files for collections of MarkDown snippets:
 
-<%include "opt/T.md">
+<%include "opt/T.txt">
 
 ### CSS preprocessing
 
@@ -121,7 +119,7 @@ section because it is outside the _jqt_ normal processing work flow.
 
 To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
 
-<%include "opt/P.md">
+<%include "opt/P.txt">
 
 You can minify the CSS style sheet choosing the `css-min` option.
 The CSS minimization is not extremely aggressive, but is safe and sufficient.

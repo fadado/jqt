@@ -6,24 +6,24 @@
 <# Table of contents #>
   <div id="TOC">
     <p>{{.snippets."toc-title"}}</p>
-    {{.front._toc}}
+    {{.page._toc}}
   </div>
 <# Document body #>
   <div id="CONTENT">
-    {{.body}}
+    {{.page._content}}
   </div>
 >&
 <#
  #  Title in HTML head element
  #>
 <%define HEAD_TITLE
-  <title>{{.front.title}} &ndash; {{.site.title}}</title>
+  <title>{{.page.title}} &ndash; {{.site.title}}</title>
 >&
 <#
  #  Title in HTML body element
  #>
 <%define BODY_TITLE
-  <h1>{{.front.title}} &ndash; {{.snippets.title}}</h1>
+  <h1>{{.page.title}} &ndash; {{.snippets.title}}</h1>
 >&
 <#
  #  Inherit default layout

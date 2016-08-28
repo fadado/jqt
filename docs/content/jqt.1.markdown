@@ -21,28 +21,27 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 
 # OPTIONS
 
-<%include "opt/4.md">
-<%include "opt/C.md">
-<%include "opt/D.md">
-<%include "opt/d.md">
-<%include "opt/e.md">
-<%include "opt/f.md">
-<%include "opt/H.md">
-<%include "opt/h.md">
-<%include "opt/I.md">
-<%include "opt/i.md">
-<%include "opt/j.md">
-<%include "opt/L.md">
-<%include "opt/M.md">
-<%include "opt/m.md">
-<%include "opt/n.md">
-<%include "opt/P.md">
-<%include "opt/p.md">
-<%include "opt/r.md">
-<%include "opt/S.md">
-<%include "opt/T.md">
-<%include "opt/t.md">
-<%include "opt/V.md">
+<%include "opt/4.txt">
+<%include "opt/C.txt">
+<%include "opt/D.txt">
+<%include "opt/d.txt">
+<%include "opt/e.txt">
+<%include "opt/H.txt">
+<%include "opt/h.txt">
+<%include "opt/I.txt">
+<%include "opt/i.txt">
+<%include "opt/j.txt">
+<%include "opt/L.txt">
+<%include "opt/M.txt">
+<%include "opt/m.txt">
+<%include "opt/n.txt">
+<%include "opt/P.txt">
+<%include "opt/p.txt">
+<%include "opt/r.txt">
+<%include "opt/S.txt">
+<%include "opt/T.txt">
+<%include "opt/t.txt">
+<%include "opt/V.txt">
 
 # FILES
 
@@ -73,3 +72,7 @@ Copyright © 2015 Joan Josep Ordinas Rosa.
 **gpp(1)**, **jq(1)**
 
 **jqt** home page: <https://fadado.github.com/jqt/>
+
+<!--
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
+-->

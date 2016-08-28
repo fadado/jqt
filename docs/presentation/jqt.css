@@ -90,6 +90,13 @@
 }
 
 //
+.footnotes p {
+	margin: 0;
+	padding: 0;
+}
+
+
+//
 // Footer
 //
 #FOOTER div.github {

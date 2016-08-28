@@ -1,10 +1,9 @@
 ---
-<%include "config.yaml">
 title: Document structure
-updated: "2016-08-13T07:48:26Z"
+updated: "2016-08-28T10:27:09Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.MD">&
+<%include "LINKS.txt">&
 
 ## General operation
 
@@ -16,16 +15,16 @@ with the document and data inputs in the render stage to produce the
 final HTML document.
 This is described on the top of this diagram:
 
-<%include "FLOW.MD">
+<%include "FLOW.txt">
 
 When invoking `jqt` you can use the following options to modify template
 rendering:
 
-<%include "opt/D.md">
-<%include "opt/I.md">
-<%include "opt/i.md">
-<%include "opt/j.md">
-<%include "opt/L.md">
+<%include "opt/D.txt">
+<%include "opt/I.txt">
+<%include "opt/i.txt">
+<%include "opt/j.txt">
+<%include "opt/L.txt">
 
 ## Template syntax
 
@@ -35,7 +34,7 @@ values when a template is rendered and <dfn>actions</dfn> (delimited by `{%` and
 template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
 This is a complete template example:
 
-<%include "EXAMPLE.MD">&
+<%include "EXAMPLE.txt">&
 
 ### Preprocessing
 
@@ -93,7 +92,7 @@ you must put this conditional macro call:
 
 ```
 <%ifndef HEAD_TITLE>
-    <title>{{.front.title}}</title> {# default block #}
+    <title>{{.page.title}}</title> {# default block #}
 <%else><%call HEAD_TITLE><%endif>
 ```
 
@@ -101,7 +100,7 @@ And in the derived template you define a macro for the desired block, and includ
 
 ```
 <%define HEAD_TITLE
-  <title>{{.front.title}} &ndash; {{.site.title}}</title>
+  <title>{{.page.title}} &ndash; {{.site.title}}</title>
 >
 <%include "default.html">
 ```

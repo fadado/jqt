@@ -401,18 +401,17 @@ $endif$
 # Merge document and all data
 ########################################################################
 
-declare DOCUMENT_METADATA_NAME='front'  # front matter
-declare DOCUMENT_CONTENT_NAME='body'    # body matter
+declare DOCUMENT_METADATA_NAME='page'  # front matter and etc.
 
 declare -A JSON_DATA=() YAML_DATA=() YAML_SNIPPETS=()
 declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 
 # Global objects available in jq scripts:
-#	.body
-#	.front ...
-#	.front._highlight
-#	.front._id
-#	.front._toc
+#	.page ...
+#	.page._content
+#	.page._highlight
+#	.page._id
+#	.page._toc
 
 # < stdin > stdout
 function merge
@@ -423,10 +422,9 @@ function merge
 
     {   # split .
         echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
-        # front and body
-        echo "{ $DOCUMENT_CONTENT_NAME: "'$body'
-        echo ", $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
-        echo "+ { _id: \"${DOCUMENT_ID}\","' _toc: $toc, _highlight: $css })}'
+        # page
+        echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
+        echo "+ { _id: \"${DOCUMENT_ID}\","' _content: $body, _toc: $toc, _highlight: $css })}'
         # additional data
         for key in "${!YAML_DATA[@]}"; do
             echo "+{ $key:"
@@ -591,7 +589,7 @@ declare expand=''
 
 declare opt key filename
 
-while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:T:CHS-: opt; do
+while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
     case $opt in
     # Generic options
         h)  help
@@ -638,10 +636,6 @@ while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:T:CHS-: opt; do
         t)  front_matter=1
             ;;
     # Data options
-        f)  DOCUMENT_METADATA_NAME=$OPTARG
-            ;;
-        n)  DOCUMENT_CONTENT_NAME=$OPTARG
-            ;;
         m|M)[[ $OPTARG == *:* ]] || usage "Bad format in data specification; expected 'key:filename'"
             key=${OPTARG%:*} filename=${OPTARG#*:}
             [[ -e $filename ]] || usage "File '$filename' does not exists"
@@ -660,6 +654,8 @@ while getopts :hVD:I:P:L:i:j:45d:eprtf:n:m:M:T:CHS-: opt; do
                     YAML_DATA_DOT[$key]=$filename
                 fi
             fi
+            ;;
+        n)  DOCUMENT_METADATA_NAME=$OPTARG
             ;;
         T)  if [[ -z $OPTARG ]]; then
                 snippets=1

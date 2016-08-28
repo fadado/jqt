@@ -5,15 +5,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <# <%include...> is relative to the site source #>
 <meta name="generator" content="jqt v<%include "../VERSION">"/>
-<meta name='author' content='{{[.front.author[].name] | sort[]}}' />
-<meta name='dcterms.modified' content='{{.front.updated//empty}}' />
-<meta name='description' content='{{.front.description//empty}}' />
-<meta name='keywords' content='{{.front.keywords//empty}}' />
+<meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
+<meta name='dcterms.modified' content='{{.page.updated//empty}}' />
+<meta name='description' content='{{.page.description//empty}}' />
+<meta name='keywords' content='{{.page.keywords//empty}}' />
 <#
  #  CSS styles
  #>
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
-{{.front._highlight}}
+{{.page._highlight}}
 <#
 vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
 #>

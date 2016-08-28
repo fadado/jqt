@@ -1,9 +1,8 @@
 ---
-<%include "config.yaml">
-updated: "2016-08-17T09:55:33Z"
+updated: "2016-08-28T10:27:09Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.MD">&
+<%include "LINKS.txt">&
 
 Could be [_jq_][JQ] the basis for a web template engine?
 Let's explore&hellip;
@@ -49,7 +48,7 @@ script and some content and data in [JSON][JSON] format&hellip; and the magic is
 And, how do the _syntactic sugar_ looks like?  Do you think the following
 example seems to be a template?
 
-<%include "EXAMPLE.MD">&
+<%include "EXAMPLE.txt">&
 
 ### Status
 

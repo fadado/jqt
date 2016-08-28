@@ -3,21 +3,21 @@
  #>
 
 ```html
-<html lang='{{.front.lang}}'>
+<html lang='{{.page.lang//.site.lang}}'>
 <head>
-    <title>{{.front.title | gsub("<[^>]*>"; "")}}</title>
+    <title>{{.page.title | gsub("<[^>]*>"; "")}}</title>
     {# include files in preprocessing stage #}
     <%include "head.html">
     <meta name="generator" content="jqt v<%include "../VERSION">"/>
     {# optional line #}
-    <meta name='dcterms.modified' content='{{.front.updated//empty}}' />
+    <meta name='dcterms.modified' content='{{.page.updated//empty}}' />
     {# implicit loop for all authors #}
-    {% .front.author | sort[] %}<meta name='author' content='{{.}}' />
+    {% .page.author | sort[] %}<meta name='author' content='{{.}}' />
 </head>
 <body>
-    <h1>{{.front.title}}</h1>
+    <h1>{{.page.title}}</h1>
     <div id="CONTENT">
-        {{.body}}
+        {{.page._content}}
     </div>
     <%partial analytics 'UA-82432866-1'>
 </body>

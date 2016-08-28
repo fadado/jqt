@@ -1,10 +1,10 @@
 <# Default layout #>
 <%include "macros.m">&
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{.front.lang}}" xml:lang="{{.front.lang}}">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
   <head>
 <%ifndef HEAD_TITLE>&
-    <title>{{.front.title}}</title>
+    <title>{{.page.title//.site.title}}</title>
 <%else><%call HEAD_TITLE><%endif>&
 
 <%include "head.html">&
@@ -12,9 +12,8 @@
 
   <body>
     <ul id="MENU">
-      <!--{# logo #}<li class="logo"><a href="{{.site.baseURL}}">❴❴❏❵❵</a><span>v<%include "../VERSION"></span></li>-->
-      {# logo #}<li class="logo"><a href="index.html">{{.front.logo}}</a><span>v<%include "../VERSION"></span></li>
-      {% .site.menu[] %}<li><a {{if .id==$M.front._id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
+      {# logo #}<li class="logo"><a href="index.html">{{.site.logo}}</a><span>v<%include "../VERSION"></span></li>
+      {% .site.menu[] %}<li><a {{if .id==$M.page._id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
     </ul>
 
 <%ifndef BODY_TITLE>&
@@ -24,7 +23,7 @@
     <div id="BODY">
 <%ifndef BODY_BLOCK>&
       <div id="CONTENT">
-        {{.body}}
+        {{.page._content}}
       </div>
 <%else><%call BODY_BLOCK><%endif>&
     </div>

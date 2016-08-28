@@ -66,7 +66,7 @@ Common := \
 	$(Structure)/default.html \
 	$(Structure)/head.html \
 	$(Structure)/footer.html \
-	$(Content)/LINKS.MD \
+	$(Content)/LINKS.txt \
 	filters.jq \
 	macros.m \
 
@@ -131,8 +131,8 @@ $(Destination)/index.html: $(Content)/home.md $(Common) \
 	$(info ==> $@)
 	$(JQT) -d $< $(Structure)/default.html > $@
 
-$(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.MD $(Content)/opt/*.md
-$(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.MD
+$(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
+$(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
 
 define Target
 $(Destination)/$(1).html: $(Content)/$(1).md $(Structure)/$(2).html $(Common) \
@@ -148,14 +148,14 @@ $(Destination)/jqt.css: $(Presentation)/jqt.css $(Presentation)/github.css
 	jqt -P CSS-min -I$(Presentation) $< > $@
 
 # Man page
-$(ManPage): $(Content)/jqt.1.md
+$(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
 	jqt -P MarkDown -I$(Content) $<  \
 	| pandoc --standalone --from markdown --to man \
 	| gzip > $@
 
 # Help text
-/tmp/help: $(Content)/help.txt
+/tmp/help: $(Content)/help.markdown
 	jqt -P MarkDown -I$(Content) $<  \
 	| pandoc --from markdown --to plain - \
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \

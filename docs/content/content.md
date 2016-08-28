@@ -1,10 +1,9 @@
 ---
-<%include "config.yaml">
 title: Document content
-updated: "2016-08-17T10:34:16Z"
+updated: "2016-08-28T10:27:09Z"
 ---
 <%include "macros.m">&
-<%include "LINKS.MD">&
+<%include "LINKS.txt">&
 
 ## General operation
 
@@ -13,16 +12,15 @@ but before [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
-<%include "FLOW.MD">
+<%include "FLOW.txt">
 
 When invoking `jqt` you can use the following options to influence document
 conversion:
 
-<%include "opt/4.md">
-<%include "opt/D.md">
-<%include "opt/d.md">
-<%include "opt/I.md">
-<%include "opt/n.md">
+<%include "opt/4.txt">
+<%include "opt/D.txt">
+<%include "opt/d.txt">
+<%include "opt/I.txt">
 
 ## File structure
 
@@ -32,15 +30,15 @@ Document files contain MarkDown text preceded by an optional YAML front matter.
 
 Pandoc accepts YAML metadata intermixed with MarkDown content. _jqt_ 
 extracts the YAML front matter, located at the very beginning of the file,
-and injects it into the render stage under a global JSON object named `.front`.
+and injects it into the render stage under a global JSON object named `.page`.
 
 ### Body
 
 Pandoc will convert the document body to HTML,
-and _jqt_ will inject it into the render stage under a global JSON scalar named
-`.body`. If the document contains fenced code blocks specifying the language of
-the code block, the highlight code will be in the scalar `.front._css`. Also, the
-table of contents will be in the scalar `.front._toc`.
+and _jqt_ will inject it into the render stage under the global JSON scalar 
+`.page._content`. If the document contains fenced code blocks specifying the language of
+the code block, the highlight code will be in the scalar `.page._css`. Also, the
+table of contents will be in the scalar `.page._toc`.
 
 ## Document syntax
 
@@ -89,7 +87,7 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 Predefined macros and user define macros have the same call sequence:
 
 ```
-<%include "LINKS.MD">
+<%include "LINKS.txt">
 <%sc 'A title in small caps'>
 ```
 
