@@ -1,3 +1,12 @@
+Version 0.3.0:
+ - New content model
+ - Managed YAML with MarkDown snippets
+ - New top level menu
+ - Generate man pages when install
+ - Added all MP modes
+ - Macros for CSS colors
+ - Refactoring makefiles
+
 Version 0.2.0:
  - Finished site structure and minimal documentation
  - Better content sections
