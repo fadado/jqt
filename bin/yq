@@ -9,7 +9,8 @@ set -o errexit -o noglob -o nounset -o pipefail
 shopt -s expand_aliases
 
 # Script name
-declare -r SELF=${0##*/}
+declare -r SELF
+SELF="${0##*/}"
 
 # Show help
 function help {
