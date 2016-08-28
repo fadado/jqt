@@ -1,30 +1,49 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
-<title>Data model &ndash; jqt · the jq template engine</title>
+<title>jqt · Data model &ndash; jqt > the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="jqt v0.2.0"/>
+<meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
 <link rel="stylesheet" type="text/css" href="jqt.css"/>
 
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
 
 
   </head>
 
   <body>
     <ul id="MENU">
-      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.2.0</span></li>
+      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.3.0</span></li>
 <li><a  href="./engine.html">Engine</a></li>
 <li><a  href="./structure.html">Structure</a></li>
 <li><a  href="./content.html">Content</a></li>
 <li><a class='current' href="./data.html">Data</a></li>
     </ul>
 
-<h1>Data model &ndash; <em>jqt</em> · the <em>jq</em> template engine</h1>
+<h1><cite>jqt</cite> · Data model</h1>
     <div id="BODY">
   <div id="TOC">
-    <p>Table of contents</p>
+    <p>Page contents</p>
     
 <ul>
 <li><a href="#general-operation">General operation</a></li>
@@ -52,9 +71,9 @@ Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                                                                          |
                                                HTML and CSS              | 
                                                fragments                 v
-           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+
-Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|--&gt; HTML
-                      +------+   +------+   \--------&gt;+-----+         +------+    page
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+  HTML
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|-------&gt; Page
+                      +------+   +------+   \--------&gt;+-----+         +------+
                                           YAML         ^   ^
                                           front-matter |   |
                                           metadata     |   |
@@ -69,61 +88,68 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <p>When invoking <code>jqt</code> you can use the following options to define the additional input data and influence JSON preprocessing:</p>
 <dl>
 <dt>-D NAME=VAL</dt>
-<dd>Define the user macro <em>NAME</em> as equal to <em>VAL</em>.
+<dd>Defines the user macro <em>NAME</em> as equal to <em>VAL</em>.
 </dd>
 <dt>-I DIRECTORY</dt>
-<dd>Append <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
+<dd>Appends <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
 </dd>
 <dt>-M NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input data at the top level (<em>NAME</em> is ignored but must be present and unique).
+<dd>Adds a <em>FILE</em> in YAML or JSON format to the input data at the top level (<em>NAME</em> is ignored but must be present and unique).
 </dd>
 <dt>-m NAME:FILE</dt>
-<dd>Add a <em>FILE</em> in YAML or JSON format to the input data as a value of object <em>NAME</em>.
+<dd>Adds a <em>FILE</em> in YAML or JSON format to the input data as the value of object <em>NAME</em>.
 </dd>
 <dt>-n NAME</dt>
-<dd>Define the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>page</code>).
+<dd>Defines the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>page</code>).
 </dd>
 <dt>-T [NAME:FILE]</dt>
-<dd>Transforms YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, HTML output is generated.
+<dd>Transforms front matter YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, outputs a new YAML document.
 </dd>
 </dl>
 <h2 id="data-formats">Data formats</h2>
 <h3 id="yaml">YAML</h3>
-<p>Document front matter metadata and additional input YAML files are converted to JSON and merged to be the <code>jq</code> input in the render stage.</p>
+<p>Document front matter metadata and additional input YAML files are converted to JSON and merged to be the <code>jq</code> input in the render stage. No preprocessing is applied to YAML data.</p>
+<p>The front matter content is available in the global object <code>.page</code>. The object member names prefixed with the underline character (<code>_</code>) are reserved, and the following are provided:</p>
+<ul>
+<li><code>.page._content</code>: the rendered input document.</li>
+<li><code>.page._highlight</code>: CSS styles for highlighted code.</li>
+<li><code>.page._path</code>: the input document pathname as provided to <code>jqt</code>.</li>
+<li><code>.page._toc</code>: the rendered input document table of contents.</li>
+</ul>
 <h3 id="json">JSON</h3>
 <p>Additional JSON files can be provided and are merged with front matter metadata to be the <code>jq</code> input in the render stage. The files are preprocessed using <a href="https://logological.org/gpp">GPP</a>, and all the expected options in a preprocessor are available, like defining new macros, include other files, etc.</p>
 <h4 id="macro-calls">Macro calls</h4>
 <p>The macro syntax used by <em>jqt</em> in JSON files is different for predefined macros and for user defined macros:</p>
 <ul>
 <li>The predefined macro names are preceded with the characters <code>&lt;%</code> and the macro calls finishes with the character <code>&gt;</code>.</li>
-<li>The user defined macro names for calls without arguments are preceded with the character <code>&amp;</code> and the macro calls finishes with the character <code>;</code>.</li>
-<li>The user defined macro names for calls with arguments are preceded with the character <code>&amp;</code>, then followed by the character <code>(</code>, accept arguments separated by commas (<code>,</code>), and the macro calls finishes with the character <code>)</code>.</li>
+<li>The user defined macro names are preceded with the character <code>&amp;</code> and for calls without arguments the macro calls finishes with the character <code>;</code>.</li>
+<li>For calls with arguments the user defined macro names are followed by the character <code>(</code>, arguments separated by commas (<code>,</code>), and the macro calls finishes with the character <code>)</code>.</li>
 </ul>
 <p>The more common predefined macros have this syntax:</p>
-<pre><code>&lt;%defeval x y&gt;
-&lt;%define x y&gt;
-&lt;%elif expr&gt;
-&lt;%else&gt;
-&lt;%endif&gt;
-&lt;%eval expr&gt;
-&lt;%if expr&gt;
-&lt;%ifdef x&gt;
-&lt;%ifeq x y&gt;
-&lt;%ifndef x&gt;
-&lt;%ifneq x y&gt;
-&lt;%include file&gt;
-&lt;%undef x&gt;</code></pre>
-<p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.):</p>
-<pre><code>&lt;%define euro \u20AC&gt;
-&lt;%define price $1 &amp;euro;&gt;
+<pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%defeval x y&gt;
+<span class="er">&lt;</span>%define x y&gt;
+<span class="er">&lt;</span>%elif expr&gt;
+<span class="er">&lt;</span>%else&gt;
+<span class="er">&lt;</span>%endif&gt;
+<span class="er">&lt;</span>%eval expr&gt;
+<span class="er">&lt;</span>%if expr&gt;
+<span class="er">&lt;</span>%ifdef x&gt;
+<span class="er">&lt;</span>%ifeq x y&gt;
+<span class="er">&lt;</span>%ifndef x&gt;
+<span class="er">&lt;</span>%ifneq x y&gt;
+<span class="er">&lt;</span>%include file&gt;
+<span class="er">&lt;</span>%undef x&gt;</code></pre>
+<p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.), but named arguments are also possible:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="er">&lt;%define</span> <span class="er">euro</span> <span class="er">\u20AC&gt;</span>
+<span class="er">&lt;%define</span> <span class="er">price</span> <span class="er">$1</span> <span class="er">&amp;euro;&gt;</span>
 
-{ &quot;price&quot;: &quot;&amp;price(100)&quot; }</code></pre>
+<span class="fu">{</span> <span class="dt">&quot;price&quot;</span><span class="fu">:</span> <span class="st">&quot;&amp;price(100)&quot;</span> <span class="fu">}</span></code></pre>
 <p>Warning: you must read the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
 <h4 id="skips">Skips</h4>
 <p>The main use of the preprocessor is to remove comments in the CPP style:</p>
-<pre><code>/* Block comments */
-// Line comments</code></pre>
-<p>Double quoted strings are also defined as skips, and backticks can be used to disable macro expansion (inside double quoted strings backticks are ignored). This table summarizes all the available skips in JSON files:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">/* Block comments */</span>
+<span class="co">// Line comments</span></code></pre>
+<p>Double quoted strings are defined as skips, and backticks can be used to disable macro expansion (inside double quoted strings backticks are ignored). This table summarizes all the available skips in JSON files:</p>
 <table>
 <caption><strong>Semantics for all JSON skips</strong></caption>
 <thead>
@@ -185,8 +211,8 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <li><code>cq</code>, apply <code>jq</code> to CSV input files.</li>
 <li><code>yq</code>, apply <code>jq</code> to YAML input files.</li>
 </ul>
-<p>These utilities imitate at maximum the <code>jq</code> command line interface:</p>
-<pre><code>$ yq &#39;.store.book[2]&#39; tests/data/store.yaml
+<p>These utilities imitate the <code>jq</code> command line interface:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ yq <span class="st">&#39;.store.book[2]&#39;</span> tests/data/store.yaml
 ---
 author: Herman Melville
 category: fiction
@@ -194,21 +220,21 @@ isbn: 0-553-21311-3
 price: 8.99
 title: Moby Dick
 ...</code></pre>
-<p>You can also ask for JSON output:</p>
-<pre><code>$ yq --json -c &#39;.store.book[2]&#39; tests/data/store.yaml
-{&quot;category&quot;:&quot;fiction&quot;,&quot;price&quot;:8.99,&quot;author&quot;:&quot;Herman Melville&quot;,...</code></pre>
+<p>You can also preserve <code>jq</code> JSON output:</p>
+<pre class="sourceCode zsh"><code class="sourceCode zsh">$ yq --json -c <span class="st">&#39;.store.book[2]&#39;</span> tests/data/store.yaml
+{<span class="st">&quot;category&quot;</span>:<span class="st">&quot;fiction&quot;</span>,<span class="st">&quot;price&quot;</span>:8.99,<span class="st">&quot;author&quot;</span>:<span class="st">&quot;Herman Melville&quot;</span>,...</code></pre>
 <p>Read the output of <code>yq --help</code> and <code>cq --help</code> for more information.</p>
 <h3 id="process-front-matter">Process front matter</h3>
 <p>When invoking <code>jqt</code> you can use the following options to extract, remove or test the presence of front matter data in the input document:</p>
 <dl>
 <dt>-e</dt>
-<dd>Extract YAML front matter.
+<dd>Extracts and outputs the MarkDown document YAML front matter.
 </dd>
 <dt>-r</dt>
-<dd>Remove front matter from MarkDown.
+<dd>Removes the MarkDown document YAML front matter and outputs the document body.
 </dd>
 <dt>-t</dt>
-<dd>Test presence of front matter in MarkDown.
+<dd>Tests presence of front matter in MarkDown (indicated in the output status).
 </dd>
 </dl>
 <div class="footnotes">
@@ -223,7 +249,7 @@ title: Moby Dick
 
     <div id="FOOTER">
 <div style="text-align:center;">
-  <hr /> <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+  <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
 <div class="github">
