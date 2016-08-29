@@ -24,8 +24,8 @@ $(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
 endif
 
 # Paranoia
-ifeq (0,$(shell id --user))
 ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
+ifeq (0,$(shell id --user))
 $(error  Root only can make "(un)install" targets)
 endif
 SUDO := 

@@ -34,6 +34,15 @@ data and influence JSON preprocessing:
 Document front matter metadata and additional input YAML files are converted to
 JSON and merged to be the `jq` input in the render stage.
 
+The front matter content is available in the global object `.page`. The object
+member names prefixed with the underline character (`_`) are reserved, and the following
+are provided:
+
+* `.page._content`: the rendered input document.
+* `.page._highlight`: CSS styles for highlighted code.
+* `.page._path`: the input document pathname as provided to `jqt`.
+* `.page._toc`: the rendered input document table of contents.
+
 ### JSON
 
 Additional JSON files can be provided and are merged with front matter metadata

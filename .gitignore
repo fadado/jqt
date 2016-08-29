@@ -1,5 +1,5 @@
 # cache
-/docs/.jqt
+/docs/.yummy
 # output of templates expansion
 tests/generated/*.jqe
 tests/generated/*.jqs

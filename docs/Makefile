@@ -50,22 +50,22 @@ SHELL := /bin/bash
 ########################################################################
 
 # Output directories
-Meta := .jqt
+Meta := .yummy
 Destination := /tmp/jqt
 
 # Directories for input files
 Assets := ./assets
 Content := ./content
-Presentation := ./presentation
-Structure := ./structure
+Styles := ./styles
+Layouts := ./layouts
 
 # Common sources for all targets
 Common := \
 	$(Meta)/config.json \
 	$(Meta)/snippets.json \
-	$(Structure)/default.html \
-	$(Structure)/head.html \
-	$(Structure)/footer.html \
+	$(Layouts)/default.html \
+	$(Layouts)/head.html \
+	$(Layouts)/footer.html \
 	$(Content)/LINKS.txt \
 	filters.jq \
 	macros.m \
@@ -87,7 +87,7 @@ Targets := \
 # The template engine (.site and .snippets defined in the jqt call)
 JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
-	-I$(Structure) \
+	-I$(Layouts) \
 	-I$(Content) \
 	-ifilters \
 	-msite:$(Meta)/config.json \
@@ -98,6 +98,7 @@ JQTFLAGS := \
 XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
 		&& xmllint --noout --valid $(Destination)/*.html \
 		&& echo 'XHTML valid!'
+# Uncomment to disable XML validation
 #XHTMLValid := :
 
 ########################################################################
@@ -114,11 +115,11 @@ $(Meta) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
 # Metad files
 $(Meta)/config.json: config.yaml \
 | $(Meta)
-	yaml2json < $< > $@
+	yaml2json <$< >$@
 
 $(Meta)/snippets.json: $(Content)/snippets.yaml \
 | $(Meta)
-	jqt -T -- $< | yaml2json > $@
+	jqt -T -- <$< | yaml2json > $@
 
 # Target files
 $(Destination)/README.md: $(Assets)/README.md \
@@ -129,34 +130,34 @@ $(Destination)/README.md: $(Assets)/README.md \
 $(Destination)/index.html: $(Content)/home.md $(Common) \
 | $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(Structure)/default.html > $@
+	$(JQT) -d $< $(Layouts)/default.html > $@
 
 $(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
 $(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
 
 define Target
-$(Destination)/$(1).html: $(Content)/$(1).md $(Structure)/$(2).html $(Common) \
+$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html $(Common) \
 | $(Destination)
 	$$(info ==> $$@)
-	$(JQT) -d $$< $(Structure)/$(2).html > $$@
+	$(JQT) -d $$< $(Layouts)/$(2).html > $$@
 endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/jqt.css: $(Presentation)/jqt.css $(Presentation)/github.css
+$(Destination)/jqt.css: $(Styles)/jqt.css $(Styles)/github.css
 	$(info ==> $@)
-	jqt -P CSS-min -I$(Presentation) $< > $@
+	jqt -P CSS-min -I$(Styles) <$< >$@
 
 # Man page
 $(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
-	jqt -P MarkDown -I$(Content) $<  \
+	jqt -P MarkDown -I$(Content) <$<  \
 	| pandoc --standalone --from markdown --to man \
 	| gzip > $@
 
 # Help text
 /tmp/help: $(Content)/help.markdown
-	jqt -P MarkDown -I$(Content) $<  \
+	jqt -P MarkDown -I$(Content) <$<  \
 	| pandoc --from markdown --to plain - \
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
 	> $@

@@ -34,11 +34,12 @@ and injects it into the render stage under a global JSON object named `.page`.
 
 ### Body
 
-Pandoc will convert the document body to HTML,
-and _jqt_ will inject it into the render stage under the global JSON scalar 
+Pandoc converts the document body to HTML,
+and _jqt_ injects it into the render stage under the global JSON scalar 
 `.page._content`. If the document contains fenced code blocks specifying the language of
-the code block, the highlight code will be in the scalar `.page._css`. Also, the
-table of contents will be in the scalar `.page._toc`.
+the code block, the highlight code will be in the scalar `.page._highlight`. Also, the
+table of contents is available in the scalar `.page._toc`, and the path to the document
+file in the scalar `.page._path`.
 
 ## Document syntax
 

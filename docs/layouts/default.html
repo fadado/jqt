@@ -13,7 +13,7 @@
   <body>
     <ul id="MENU">
       {# logo #}<li class="logo"><a href="index.html">{{.site.logo}}</a><span>v<%include "../VERSION"></span></li>
-      {% .site.menu[] %}<li><a {{if .id==$M.page._id then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
+      {% .site.menu[] %}<li><a {{if .path==$M.page._path then "class='current'" else "" end}} href="{{.URL}}">{{.name}}</a></li>
     </ul>
 
 <%ifndef BODY_TITLE>&

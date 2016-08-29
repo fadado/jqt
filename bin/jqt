@@ -368,7 +368,7 @@ function fork_yaml
 # Markup document
 ########################################################################
 
-declare DOCUMENT='' DOCUMENT_ID='stdin' HTML_VERSION='html'
+declare DOCUMENT='(standard input)' HTML_VERSION='html'
 declare -a PANDOC_OPTS=( '--from=markdown-pandoc_title_block' )
 
 # < stdin > stdout
@@ -410,7 +410,7 @@ declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 #	.page ...
 #	.page._content
 #	.page._highlight
-#	.page._id
+#	.page._path
 #	.page._toc
 
 # < stdin > stdout
@@ -424,7 +424,7 @@ function merge
         echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
         # page
         echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
-        echo "+ { _id: \"${DOCUMENT_ID}\","' _content: $body, _toc: $toc, _highlight: $css })}'
+        echo "+ { _path: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
         # additional data
         for key in "${!YAML_DATA[@]}"; do
             echo "+{ $key:"
@@ -627,7 +627,6 @@ while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
             ;;
         d)  [[ -e $OPTARG ]] || usage "File '$OPTARG' does not exists"
             DOCUMENT=$OPTARG
-            DOCUMENT_ID=${DOCUMENT%.md}
             ;;
         e)  extract=1
             ;;
@@ -762,7 +761,7 @@ elif (( flagH )); then          expand_md | markup
 elif (( flagC )); then
     declare -r FRONT_MATTER=$(mkpipe)
     expand_md | fork_yaml $FRONT_MATTER | markup | merge $FRONT_MATTER
-elif [[ -z $DOCUMENT ]]; then
+elif [[ $DOCUMENT == '(standard input)' ]]; then
     # equivalent to flagH
     expand_md | markup
 else

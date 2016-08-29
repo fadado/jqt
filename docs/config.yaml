@@ -1,3 +1,4 @@
+---
 #
 # jqt docs configuration
 #
@@ -18,16 +19,17 @@ author:
 
 menu:
 - URL: ./engine.html
-  id: content/engine
+  path: content/engine.md
   name: Engine
 - URL: ./structure.html
-  id: content/structure
+  path: content/structure.md
   name: Structure
 - URL: ./content.html
-  id: content/content
+  path: content/content.md
   name: Content
 - URL: ./data.html
-  id: content/data
+  path: content/data.md
   name: Data
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
+...
