@@ -1,5 +1,5 @@
 -4, -5
-:   Set output HTML version (HTML4 / HTML5).
+:   Sets the output HTML version (HTML4 / HTML5).
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

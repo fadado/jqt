@@ -1,30 +1,30 @@
 ---
-title: Document structure
+title: Page structure
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include "macros.m">&
-<%include "LINKS.txt">&
+<%include macros.m>&
+<%include LINKS.txt>&
 
 ## General operation
 
-The document structure is defined with the HTML markup, and is added to the document content
-using a template.
-_jqt_ transforms templates into a [_jq_][JQ] scripts, but before 
+Web pages structure is defined by the HTML markup, and when using _jqt_ is
+added to the input content and data using a template.
+_jqt_ transforms templates into [_jq_][JQ] scripts, but before that
 [GPP][GPP] is used to preprocess them. The generated script will be combined
 with the document and data inputs in the render stage to produce the
-final HTML document.
+final HTML page.
 This is described on the top of this diagram:
 
-<%include "FLOW.txt">
+<%include FLOW.txt>
 
 When invoking `jqt` you can use the following options to modify template
 rendering:
 
-<%include "opt/D.txt">
-<%include "opt/I.txt">
-<%include "opt/i.txt">
-<%include "opt/j.txt">
-<%include "opt/L.txt">
+<%include opt/D.txt>
+<%include opt/I.txt>
+<%include opt/i.txt>
+<%include opt/j.txt>
+<%include opt/L.txt>
 
 ## Template syntax
 
@@ -34,7 +34,7 @@ values when a template is rendered and <dfn>actions</dfn> (delimited by `{%` and
 template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
 This is a complete template example:
 
-<%include "EXAMPLE.txt">&
+<%include EXAMPLE.txt>&
 
 ### Preprocessing
 
@@ -43,10 +43,10 @@ like defining new macros, include other files, etc. For example, a template frag
 like
 
 ```HTML
-<meta name="generator" content="jqt v<%include "../VERSION">"/>
+<meta name="generator" content="jqt v<%include ../VERSION>"/>
 ```
 
-will expand to the string <code>&lt;meta name="generator" content="jqt v<%include "../VERSION">"/&gt;</code>
+will expand to the string <code>&lt;meta name="generator" content="jqt v<%include ../VERSION>"/&gt;</code>
 as you can see in the internal code of this page.
 
 #### Macro calls
@@ -82,13 +82,13 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 Predefined macros and user define macros have the same call sequence:
 
 ```
-<%include "head.html">
+<%include head.html>
 <%stylesheet jqt.css>
 ```
 
 With these simple tools is possible to emulate features considered advanced in some template engines,
 like template inheritance (also known as _blocks_). For example, in the base template (assume it is named `default.html`)
-you must put this conditional macro call:
+you can put this conditional macro call to define a default title block:
 
 ```
 <%ifndef HEAD_TITLE>
@@ -96,17 +96,18 @@ you must put this conditional macro call:
 <%else><%call HEAD_TITLE><%endif>
 ```
 
-And in the derived template you define a macro for the desired block, and include the base template:
+And in the derived template you can define a new macro for the desired block,
+before include the base template:
 
 ```
 <%define HEAD_TITLE
   <title>{{.page.title}} &ndash; {{.site.title}}</title>
 >
-<%include "default.html">
+<%include default.html>
 ```
 
 In addition to GPP predefined macros _jqt_ define in the file `libjqt.m`,
-always included in the render stage, a little library of macros. The
+included in the render stage, a little macros library. The
 more useful will be perhaps `<%partial name arg...>`, to include a template
 file passing arguments to it and `<%call name arg...>`, to call a macro by name.
 
@@ -115,11 +116,12 @@ Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory
 #### Skips
 
 Some fragments of text are skipped during macro expansion, like comments,
-continuation lines and arbitrary but delimited strings of characters:
+continuation lines and delimited strings of characters:
 
 ```
 <# Block comments, removed, must end in newline (also removed) #>
-Continuation lines using an ampersand just before the newline character&
+Continuation lines using an ampersand &
+just before the newline character
 ```
 
 _Strings_ are copied to the output, but evaluation of macros inside strings can
@@ -145,7 +147,7 @@ This table summarizes all the available template skips:
 `{%` `%}`           No                  No                  No
 `{#` `#}`           No                  No                  No
 
-Table: **Semantics for all template skips**
+Table: **Semantics for all _jqt_ template skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
@@ -156,12 +158,12 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 The input text for a template is UTF-8 text with 
 intermixed snippets of _jq_ code. Snippets can be
-expressions, actions and comments.
+_expressions_, _actions_ and _comments_.
 The delimiters used by _jqt_ are as follows:
 
 Delimiters    Purpose
 ----------    -----------------------------------
-`{{ ... }}`   Expressions to evaluate and print
+`{{ ... }}`   Expressions to evaluate
 `{% ... %}`   Actions for conditional and evaluation and loops
 `{# ... #}`   Comments not included in the output
 
@@ -169,14 +171,17 @@ Table: **Delimiters used in _jqt_ templates**
 
 #### Expressions
 
-The text inside expressions and actions is normal _jq_ code, where as
+The text in expressions and actions is normal _jq_ code, where as
 a bonus, the `M$` global variable points to the `jq` JSON input (the initial `.`).
 The rules for expression evaluation are very simple:
 
 * If an expression evaluates to `empty` the whole line vanishes.
-* If an expression produces only one value the snippet is replaced with this value.
+* If an expression produces only one value the delimited snippet is replaced with this value.
 * If an expression produces multiple values the whole line is repeated multiple
   times, with the expression evaluated again each time.
+
+Warning: is a line contains two or more expressions producing multiple values a
+cartesian product is generated!
 
 #### Actions
 
@@ -184,21 +189,23 @@ There are two kinds of actions:
 
 * <dfn>One line actions</dfn>: lines beginning with optional space, followed by a
   `{%...%}` snippet and more text.
-* <dfn>Multiline actions</dfn>: first line beginning with optional space, followed by an opening `{%...%}` snippet and a newline;
-  then zero or more template lines; final line  beginning with optional space,  the ending `{% end %}` snippet and a newline.
-  Multiline actions can nest and contain expressions and one line actions.
+* <dfn>Multiline actions</dfn>: initial line prefixed with optional space,
+  followed by an opening `{%...%}` snippet and a newline character;
+  then zero or more template lines; final line prefixed with optional space,
+  the ending `{% end %}` snippet and a newline character.  Multiline actions can nest and
+  contain expressions and other actions.
 
 The evaluation rules for one line actions are as follows:
 
-* If the snippet evaluates to `empty` the whole line vanishes.
-* Otherwise, for each value produced by the snippet the text following the
+* If the delimited snippet evaluates to `empty` the whole line vanishes.
+* Otherwise, for each value produced the text following the
   snippet is evaluated with the value assigned to the dot (`.`). The initial
   dot is still available in the global variable `M$`.
 
 The evaluation rules for multiline actions are as follows:
 
 * If the opening snippet evaluates to `empty` all lines until the ending snippet disappear.
-* Otherwise, for each value produced by the opening snippet the lines until the ending snippet
+* Otherwise, for each value produced the lines until the ending snippet
   are evaluated with the value assigned to the dot (`.`). The initial dot is
   still available in the global variable `M$`.
 

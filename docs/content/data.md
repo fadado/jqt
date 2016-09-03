@@ -2,8 +2,8 @@
 title: Data model
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include "macros.m">&
-<%include "LINKS.txt">&
+<%include macros.m>&
+<%include LINKS.txt>&
 
 ## General operation
 
@@ -32,7 +32,8 @@ data and influence JSON preprocessing:
 ### YAML
 
 Document front matter metadata and additional input YAML files are converted to
-JSON and merged to be the `jq` input in the render stage.
+JSON and merged to be the `jq` input in the render stage. No preprocessing is
+applied  to YAML data.
 
 The front matter content is available in the global object `.page`. The object
 member names prefixed with the underline character (`_`) are reserved, and the following
@@ -57,10 +58,10 @@ for predefined macros and for user defined macros:
 
 * The predefined macro names are preceded with the characters
   `<%` and the macro calls finishes with the character `>`.
-* The user defined macro names for calls without arguments are preceded with
-  the character `&` and the macro calls finishes with the character `;`.
-* The user defined macro names for calls with arguments are preceded with the
-  character `&`, then followed by the character `(`, accept arguments separated by
+* The user defined macro names are preceded with
+  the character `&` and for calls without arguments the macro calls finishes with the character `;`.
+* For calls with arguments the user defined macro names are 
+  followed by the character `(`, arguments separated by
   commas (`,`), and the macro calls finishes with the character `)`.  
 
 The more common predefined macros have this syntax:
@@ -101,7 +102,7 @@ The main use of the preprocessor is to remove comments in the CPP style:
 // Line comments
 ```
 
-Double quoted strings are also defined as skips, and backticks can be used to
+Double quoted strings are defined as skips, and backticks can be used to
 disable macro expansion (inside double quoted strings backticks are ignored).
 This table summarizes all the available skips in JSON files:
 
@@ -146,7 +147,7 @@ As a wrappers to `jq` you have the following utilities shipped with _jqt_:
 * `cq`, apply `jq` to CSV input files.
 * `yq`, apply `jq` to YAML input files.
 
-These utilities imitate at maximum the `jq` command line interface:
+These utilities imitate the `jq` command line interface:
 
 ```
 $ yq '.store.book[2]' tests/data/store.yaml
@@ -159,7 +160,7 @@ title: Moby Dick
 ...
 ```
 
-You can also ask for JSON output:
+You can also preserve `jq` JSON output:
 
 ```
 $ yq --json -c '.store.book[2]' tests/data/store.yaml

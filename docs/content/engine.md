@@ -2,18 +2,18 @@
 title: Operating the engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include "macros.m">&
-<%include "LINKS.txt">&
+<%include macros.m>&
+<%include LINKS.txt>&
 
 ## General operation
 
 _jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
-[YAML][YAML] or [JSON][JSON] data into a final HTML document. The transformation is driven by a template,
+[YAML][YAML] or [JSON][JSON] data into a final HTML page. The transformation is driven by a template,
 where HTML is mixed with [_jq_][JQ] snippets to implement the transformation logic.
 This diagram shows how document, template and data inputs (on the left) are combined by
 _jqt_ to produce the final HTML output:
 
-<%include "FLOW.txt">
+<%include FLOW.txt>
 
 The command `jqt` is a shell script executed by `bash`.
 The external shell commands called by `jqt` are `cat`, `gpp`, `jq`, `mkdir`,
@@ -55,13 +55,13 @@ $ sudo make install prefix=/your/installation/path
 ```
 
 But if you choose a directory different of `/usr/local/share` for the shared data
-you must still edit the parameter `DATADIR` definition in the `bin/jqt` file.
+you must still edit by hand the parameter `DATADIR` definition in the `bin/jqt` file.
 
 ## Invoking _jqt_
 
 ### Synopsis
 
-`jqt` accepts several options and can be called with zero, one or two file
+`jqt` accepts several options and can be called with zero, one or two filename
 arguments.  The usage possibilities are:
 
 | **jqt** [**-h** | **--help** | **-p** | **-V** | **--version**]
@@ -71,32 +71,32 @@ arguments.  The usage possibilities are:
 
 ### Options
 
-<%include "opt/4.txt">
-<%include "opt/C.txt">
-<%include "opt/D.txt">
-<%include "opt/d.txt">
-<%include "opt/e.txt">
-<%include "opt/H.txt">
-<%include "opt/h.txt">
-<%include "opt/I.txt">
-<%include "opt/i.txt">
-<%include "opt/j.txt">
-<%include "opt/L.txt">
-<%include "opt/M.txt">
-<%include "opt/m.txt">
-<%include "opt/n.txt">
-<%include "opt/P.txt">
-<%include "opt/p.txt">
-<%include "opt/r.txt">
-<%include "opt/S.txt">
-<%include "opt/T.txt">
-<%include "opt/t.txt">
-<%include "opt/V.txt">
+<%include opt/4.txt>
+<%include opt/C.txt>
+<%include opt/D.txt>
+<%include opt/d.txt>
+<%include opt/e.txt>
+<%include opt/H.txt>
+<%include opt/h.txt>
+<%include opt/I.txt>
+<%include opt/i.txt>
+<%include opt/j.txt>
+<%include opt/L.txt>
+<%include opt/M.txt>
+<%include opt/m.txt>
+<%include opt/n.txt>
+<%include opt/P.txt>
+<%include opt/p.txt>
+<%include opt/r.txt>
+<%include opt/S.txt>
+<%include opt/T.txt>
+<%include opt/t.txt>
+<%include opt/V.txt>
 
 ## Preprocessing
 
 One distinctive feature of _jqt_ is the text expansion applied to almost
-all kind of input files.
+all kinds of input files.
 Also, _jqt_ can be used as a standalone
 preprocessor thanks to the `-P` option.
 
@@ -107,27 +107,27 @@ The sections about
 [documents](./content.html#preprocessing) and [data](./data.html#json) cover in
 detail their usage of the preprocessor.
 
-A different transformation can also be be considered a kind of preprocessing. The option
+_jqt_ offers a transformation that can also be be considered a kind of preprocessing. The option
 `-T` allows the use of YAML files for collections of MarkDown snippets:
 
-<%include "opt/T.txt">
+<%include opt/T.txt>
 
 ### CSS preprocessing
 
 As a bonus, _jqt_ can also expand CSS style sheets.  This is documented in this
-section because it is outside the _jqt_ normal processing work flow.
+section because it is outside the normal _jqt_ processing work flow.
 
 To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
 
-<%include "opt/P.txt">
+<%include opt/P.txt>
 
 You can minify the CSS style sheet choosing the `css-min` option.
 The CSS minimization is not extremely aggressive, but is safe and sufficient.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ in CSS files is very similar to used by the traditional
-`cpp` preprocessing of C and C++ languages, but changing the prefix character `#` by
+The macro syntax used by _jqt_ in CSS files is very similar to the syntax used by the traditional
+preprocessing of C and C++ languages, but changing the prefix character `#` by
 `&`.
 The more common predefined macros have this syntax:
 
@@ -148,11 +148,10 @@ The more common predefined macros have this syntax:
 ```
 
 Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.).
-The more common used features are the inclusion on external files and definition of simple constants:
+The more used features are the inclusion on external files and the definition of simple constants:
 
 ```
-&include "theme.css"
-
+&include theme.css
 &define Blue #0000FF
 
 { color: &Blue; }
@@ -170,8 +169,8 @@ The main use of the preprocessor is to remove comments in the CPP style:
 ```
 
 Quoted strings are also defined as skips, and backticks can be used to
-disable macro expansion (inside double quoted strings backticks are ignored).
-This table summarizes all the available skips in JSON files:
+disable macro expansion (inside quoted strings backticks are ignored).
+This table summarizes all the available skips in CSS files:
 
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------

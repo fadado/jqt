@@ -1,5 +1,5 @@
 -L DIRECTORY
-:   Append *DIRECTORY* to the end of the jq list of directories to be searched
+:   Appends *DIRECTORY* to the end of the jq list of directories to be searched
 for included and imported modules.
 
 <#

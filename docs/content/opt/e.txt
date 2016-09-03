@@ -1,5 +1,5 @@
 -e
-:    Extract YAML front matter.
+:    Extracts and outputs the MarkDown document YAML front matter.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

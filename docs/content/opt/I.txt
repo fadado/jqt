@@ -1,5 +1,5 @@
 -I DIRECTORY
-:   Append *DIRECTORY* to the end of the preprocessor list of directories to be
+:   Appends *DIRECTORY* to the end of the preprocessor list of directories to be
 searched for include files.
 
 <#

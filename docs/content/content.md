@@ -1,26 +1,26 @@
 ---
-title: Document content
+title: Authored content
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include "macros.m">&
-<%include "LINKS.txt">&
+<%include macros.m>&
+<%include LINKS.txt>&
 
 ## General operation
 
 _jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using Pandoc,
-but before [GPP][GPP] is used to preprocess them. Pandoc's output
+but before that [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
-<%include "FLOW.txt">
+<%include FLOW.txt>
 
 When invoking `jqt` you can use the following options to influence document
 conversion:
 
-<%include "opt/4.txt">
-<%include "opt/D.txt">
-<%include "opt/d.txt">
-<%include "opt/I.txt">
+<%include opt/4.txt>
+<%include opt/D.txt>
+<%include opt/d.txt>
+<%include opt/I.txt>
 
 ## File structure
 
@@ -28,22 +28,21 @@ Document files contain MarkDown text preceded by an optional YAML front matter.
 
 ### Front matter
 
-Pandoc accepts YAML metadata intermixed with MarkDown content. _jqt_ 
-extracts the YAML front matter, located at the very beginning of the file,
-and injects it into the render stage under a global JSON object named `.page`.
+_jqt_ extracts the YAML front matter, located at the very beginning of the file,
+and injcontent. ects it into the render stage under a global JSON object named `.page`.
 
 ### Body
 
 Pandoc converts the document body to HTML,
 and _jqt_ injects it into the render stage under the global JSON scalar 
 `.page._content`. If the document contains fenced code blocks specifying the language of
-the code block, the highlight code will be in the scalar `.page._highlight`. Also, the
-table of contents is available in the scalar `.page._toc`, and the path to the document
+the code block, the related highlight CSS code will be in the scalar `.page._highlight`. Also, the
+HTML table of contents is available in the scalar `.page._toc`, and the path to the document
 file in the scalar `.page._path`.
 
 ## Document syntax
 
-The document conversion has two stages. In the first text is preprocessed,
+Document's conversion has two stages. In the first the text is preprocessed,
 and the second does the proper conversion to HTML.
 
 ### Preprocessing
@@ -57,7 +56,7 @@ as you can see in this paragraph and on the top of these pages.
 
 All the power of GPP is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
-the input document. The macro syntax used by _jqt_ in input documents precedes macro names with the characters `<%`
+the input MarkDown document. The macro syntax used by _jqt_ in input documents precedes macro names with the characters `<%`
 and finishes the macro calls with the character `>`.
 The more common predefined macros have this syntax:
 
@@ -88,7 +87,7 @@ Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2
 Predefined macros and user define macros have the same call sequence:
 
 ```
-<%include "LINKS.txt">
+<%include LINKS.txt>
 <%sc 'A title in small caps'>
 ```
 
@@ -101,7 +100,8 @@ continuation lines and arbitrary but delimited strings of characters:
 
 ```
 <# Block comments, removed, must end in newline (also removed) #>
-Continuation lines using an ampersand just before the newline character&
+Continuation lines using an ampersand &
+just before the newline character
 ```
 
 _Strings_ are copied to the output, but evaluation of macros inside strings can
@@ -130,7 +130,7 @@ This table summarizes all the available document skips:
 <code>\\n&#96;&#96;&#96;</code>[^4] No                  No                  No
 `\n~~~`[^5]                         No                  No                  No
 
-Table: **Semantics for all document skips**
+Table: **Semantics for all MarkDown document skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
@@ -142,9 +142,10 @@ is, the ampersand and the newline are removed and effectively ignored).
 ### Pandoc’s Markdown
 
 _jqt_ accept as input format the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
-variant, with the title block extension disabled, and produces transitional
-HTML.  When running `jqt` the following Pandoc long options can be specified in
-the command line and will be forwarded to `pandoc`:
+variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
+disabled, and produces transitional HTML.  When running `jqt` the following
+Pandoc long options can be specified in
+the command line and will be forwarded untouched to `pandoc`:
 
 ```
     --base-header-level=NUMBER                        --latexmathml[=URL]

@@ -1,5 +1,5 @@
 -r
-:    Remove front matter from MarkDown.
+:    Removes the MarkDown document YAML front matter and outputs the document body.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

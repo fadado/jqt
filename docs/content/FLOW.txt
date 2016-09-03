@@ -9,9 +9,9 @@ Template +----------->|expand|-->|convert|-------------------------------+
                                                                          |
                                                HTML and CSS              | 
                                                fragments                 v
-           MarkDown   +------+   +------+   /-------->+-----+  JSON   +------+
-Document +----------->|expand|-->|markup|--+          |merge|-------->|render|--> HTML
-                      +------+   +------+   \-------->+-----+         +------+    page
+           MarkDown   +------+   +------+   /-------->+-----+  JSON   +------+  HTML
+Document +----------->|expand|-->|markup|--+          |merge|-------->|render|-------> Page
+                      +------+   +------+   \-------->+-----+         +------+
                                           YAML         ^   ^
                                           front-matter |   |
                                           metadata     |   |
