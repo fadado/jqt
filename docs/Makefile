@@ -119,7 +119,7 @@ $(Meta)/config.json: config.yaml \
 
 $(Meta)/snippets.json: $(Content)/snippets.yaml \
 | $(Meta)
-	jqt -T -- <$< | yaml2json > $@
+	jqt -T <$< | yaml2json > $@
 
 # Target files
 $(Destination)/README.md: $(Assets)/README.md \

@@ -677,16 +677,20 @@ while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
             ;;
         S)  flagS=1
             ;;
+    # Errors and -T without argument
+        :)  case $OPTARG in
+                T) snippets=1
+                    ;;
+                *) usage "Expected argument for option: -$OPTARG"
+                    ;;
+            esac
+            ;;
+        \?)  usage "Unknown option: -$OPTARG"
+            ;;
+    # Long options
         -)  case $OPTARG in
-        # '--' separator and options with optional args (or error)
-            :)  case $OPTARG in
-                    -) break
-                        ;;
-                    T) snippets=1
-                        ;;
-                    *) usage "Expected argument for option: -$OPTARG"
-                        ;;
-                esac
+        # '--' end options
+            :) break
                 ;;
         # Generic options
             help) help
@@ -724,12 +728,10 @@ while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
             webtex|webtex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
             wrap=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
         # Errors
-            *)  usage "Unknown option: --$OPTARG"
+            *) usage "Unknown option: --$OPTARG"
                 ;;
-            esac
-            ;;
-        ?)  usage "Unknown option: -$OPTARG"
-            ;;
+        esac # end case --*
+        ;;
     esac
 done
 
