@@ -40,6 +40,34 @@ the code block, the related highlight CSS code will be in the scalar `.page._hig
 HTML table of contents is available in the scalar `.page._toc`, and the path to the document
 file in the scalar `.page._path`.
 
+### MarkDown snippets
+
+`jqt` `-T` option allows the use of YAML files for collections of MarkDown snippets:
+
+<%include opt/T.txt>
+
+This feature can be used to collect multiple text snippets in only one file.
+The MarkDown can be transformed to HTML and put in a new YAML or JSON file
+with a command like this:
+
+```zsh
+jqt -T -- text.yaml | yaml2json > snippets.json
+```
+
+Then this converted file can be loaded by `jqt` in succesive calls:
+
+```zsh
+jqt -m snippets:snippets.json ...
+```
+
+Template files can expand the snippets without never containing raw content:
+
+```HTML
+<h1>{{.snippets.title}}</h1>
+```
+
+This allows the absolute separation of structure and content, as it should be.
+
 ## Document syntax
 
 Document's conversion has two stages. In the first the text is preprocessed,
@@ -56,9 +84,9 @@ as you can see in this paragraph and on the top of these pages.
 
 All the power of GPP is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
-the input MarkDown document. The macro syntax used by _jqt_ in input documents precedes macro names with the characters `<%`
-and finishes the macro calls with the character `>`.
-The more common predefined macros have this syntax:
+the input MarkDown document. The macro syntax used by _jqt_ in input documents
+precedes macro names with the characters `<%` and finishes the macro calls with
+the character `>`.  The more common predefined macros have this syntax:
 
 ```
 <%defeval x y>

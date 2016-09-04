@@ -52,8 +52,18 @@ example seems to be a template?
 
 ### Status
 
-If you want to learn to use _jqt_,  [read this documentation][JQT]
-and [install _jqt_](./engine.html#installation).
+This site is built using _jqt_, and is itself in his implementation a kind of
+tutorial about _jqt_.
+If you want to learn to use _jqt_ [install _jqt_](./engine.html#installation) and
+read all the different site sections:
+
+* [Template engine](./engine.html)
+* [Page structure](./structure.html)
+* [Authoring content](./content.html)
+* [Data model](./data.html)
+
+And don't forget to study the source code under the [docs directory](https://github.com/fadado/jqt/tree/master/docs)!
+
 _jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
 development. Please, use the project [GitHub repository][REPO] features if you

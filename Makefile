@@ -113,7 +113,7 @@ install:
 uninstall:
 	$(SUDO) rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
 	$(SUDO) rm --verbose --force -- $(mandir)/man1/jqt.1.gz
-	test -d $(datadir)/$(project) \
+	test -d $(datadir)/$(project)					  \
 	&& $(SUDO) rm --verbose --force --recursive $(datadir)/$(project) \
 	|| true
 

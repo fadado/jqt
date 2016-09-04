@@ -15,17 +15,17 @@ rendering the template. Also, `jqt` accepts additional data files in the command
 in [YAML][YAML] or [JSON][JSON] format to be merged with
 the document front matter. This is described on the bottom of this diagram:
 
-<%include "FLOW.txt">
+<%include FLOW.txt>
 
 When invoking `jqt` you can use the following options to define the additional input
 data and influence JSON preprocessing:
 
-<%include "opt/D.txt">
-<%include "opt/I.txt">
-<%include "opt/M.txt">
-<%include "opt/m.txt">
-<%include "opt/n.txt">
-<%include "opt/T.txt">
+<%include opt/D.txt>
+<%include opt/I.txt>
+<%include opt/M.txt>
+<%include opt/m.txt>
+<%include opt/n.txt>
+<%include opt/T.txt>
 
 ## Data formats
 
@@ -174,9 +174,9 @@ Read the output of `yq --help` and `cq --help` for more information.
 When invoking `jqt` you can use the following options to extract, remove or
 test the presence of front matter data in the input document:
 
-<%include "opt/e.txt">
-<%include "opt/r.txt">
-<%include "opt/t.txt">
+<%include opt/e.txt>
+<%include opt/r.txt>
+<%include opt/t.txt>
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -5,7 +5,7 @@ updated: "2016-08-28T10:27:09Z"
 <%include macros.m>&
 <%include LINKS.txt>&
 
-## General operation
+## Engine implementation
 
 _jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
 [YAML][YAML] or [JSON][JSON] data into a final HTML page. The transformation is driven by a template,
@@ -105,16 +105,18 @@ preprocessor thanks to the `-P` option.
 The sections about
 [templates](./structure.html#preprocessing),
 [documents](./content.html#preprocessing) and [data](./data.html#json) cover in
-detail their usage of the preprocessor.
+detail their usage of the preprocessor for _jqt_ templates, MarkDown documents
+and JSON data files.
 
-_jqt_ offers a transformation that can also be be considered a kind of preprocessing. The option
-`-T` allows the use of YAML files for collections of MarkDown snippets:
+_jqt_ also offers an standalone CSS preprocessor, and a transformation that can
+also be be considered a kind of preprocessing. The option `-T` allows the use
+of YAML files for collections of MarkDown snippets:
 
 <%include opt/T.txt>
 
 ### CSS preprocessing
 
-As a bonus, _jqt_ can also expand CSS style sheets.  This is documented in this
+_jqt_ can also expand CSS style sheets.  This is documented in this
 section because it is outside the normal _jqt_ processing work flow.
 
 To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
@@ -175,8 +177,9 @@ This table summarizes all the available skips in CSS files:
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------
 `&\n`[^1]           No                  Yes                 There is no content
+`\\n`[^2]           No                  Yes                 There is no content
 `/*` `*/`           No                  Yes                 Yes
-`//` `\n`[^2]       No                  Yes                 Yes
+`//` `\n`[^3]       No                  Yes                 Yes
 `` ` `` `` ` ``     No                  Yes                 No
 `"` `"`             No                  No                  No
 `'` `'`             No                  No                  No
@@ -185,7 +188,9 @@ Table: **Semantics for all CSS skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
-[^2]: This represents a newline character.
+[^2]: A backslash followed by a newline is treated as a line continuation (that
+is, the backslash and the newline are removed and effectively ignored).
+[^3]: This represents a newline character.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

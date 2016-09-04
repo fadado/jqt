@@ -61,14 +61,14 @@ Layouts := ./layouts
 
 # Common sources for all targets
 Common := \
-	$(Meta)/config.json \
-	$(Meta)/snippets.json \
-	$(Layouts)/default.html \
-	$(Layouts)/head.html \
-	$(Layouts)/footer.html \
-	$(Content)/LINKS.txt \
-	filters.jq \
-	macros.m \
+	$(Meta)/config.json		\
+	$(Meta)/snippets.json		\
+	$(Layouts)/default.html		\
+	$(Layouts)/head.html		\
+	$(Layouts)/footer.html		\
+	$(Content)/LINKS.txt		\
+	filters.jq			\
+	macros.m			\
 
 # Files to "build"
 Home := index
@@ -76,9 +76,9 @@ Pages := content data engine structure
 Files := README.md jqt.css
 ManPage := ../jqt.1.gz
 Targets := \
-	$(ManPage) \
-	$(foreach f,$(Files),$(Destination)/$(f)) \
-	$(foreach p,$(Home) $(Pages),$(Destination)/$(p).html)
+	$(foreach f,$(Files),$(Destination)/$(f))		\
+	$(foreach p,$(Home) $(Pages),$(Destination)/$(p).html)	\
+	$(ManPage)						\
 
 ########################################################################
 # Commands
@@ -87,15 +87,15 @@ Targets := \
 # The template engine (.site and .snippets defined in the jqt call)
 JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
-	-I$(Layouts) \
-	-I$(Content) \
-	-ifilters \
-	-msite:$(Meta)/config.json \
-	-msnippets:$(Meta)/snippets.json \
-	--toc-depth=4 \
+	-I$(Layouts)				\
+	-I$(Content)				\
+	-ifilters				\
+	-msite:$(Meta)/config.json		\
+	-msnippets:$(Meta)/snippets.json	\
+	--toc-depth=4				\
 
 # Validate output pages (disable or redefine as you like)
-XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
+XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml			 \
 		&& xmllint --noout --valid $(Destination)/*.html \
 		&& echo 'XHTML valid!'
 # Uncomment to disable XML validation
@@ -150,28 +150,29 @@ $(Destination)/jqt.css: $(Styles)/jqt.css $(Styles)/github.css
 
 # Man page (to be build without callig `jqt`!)
 GPP_MD := \
-	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' '' \
-	-M '<%' '>' '\B' '\B' '\W>' '<' '>' \
-	+sccc '&\n' '' '' \
-	+sccc '<\#' '\#>\n' '' \
-	+siqi "'" "'" '\' \
-	+siQi '"' '"' '\' \
-	+ssss '<!--' '-->' '' \
-	+ssss '`'  '`' '' \
-	+ssss '\n```' '\n```' '' \
-	+ssss '\n~~~' '\n~~~' '' \
+	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
+	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
+	+sccc '&\n' '' ''				\
+	+sccc '\\n' '' ''				\
+	+sccc '<\#' '\#>\n' ''				\
+	+siqi "'" "'" '\'				\
+	+siQi '"' '"' '\'				\
+	+ssss '<!--' '-->' ''				\
+	+ssss '`'  '`' ''				\
+	+ssss '\n```' '\n```' ''			\
+	+ssss '\n~~~' '\n~~~' ''			\
     
 $(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
-	gpp $(GPP_MD) -I$(Content) <$<  \
-	| pandoc --standalone --from markdown --to man \
+	gpp $(GPP_MD) -I$(Content) <$<			\
+	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
 
 # Help text
 /tmp/help: $(Content)/help.markdown
-	jqt -P MarkDown -I$(Content) <$<  \
-	| pandoc --from markdown --to plain - \
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /' \
+	jqt -P MarkDown -I$(Content) <$<				\
+	| pandoc --from markdown --to plain -				\
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
 	> $@
 
 ########################################################################

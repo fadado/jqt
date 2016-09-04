@@ -207,6 +207,7 @@ function expand_css
     local -r -a meta=( -M '\n&' '\n' '\b'  '\b'  '\n' '(' ')' )
     local -r -a skips=(
         +cccc '&\n' ''          # continuation line (& and \n removed)
+        +cccc '\\n' ''          # continuation line (\ and \n removed)
         +cccc '/*' '*/'         # multiline comment
         +cccc '//' '\n'         # line comment 
         +sqqq '`' '`' '\'       # literal string; like sh single quotes
