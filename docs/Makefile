@@ -148,10 +148,22 @@ $(Destination)/jqt.css: $(Styles)/jqt.css $(Styles)/github.css
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 
-# Man page
+# Man page (to be build without callig `jqt`!)
+GPP_MD := \
+	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' '' \
+	-M '<%' '>' '\B' '\B' '\W>' '<' '>' \
+	+sccc '&\n' '' '' \
+	+sccc '<\#' '\#>\n' '' \
+	+siqi "'" "'" '\' \
+	+siQi '"' '"' '\' \
+	+ssss '<!--' '-->' '' \
+	+ssss '`'  '`' '' \
+	+ssss '\n```' '\n```' '' \
+	+ssss '\n~~~' '\n~~~' '' \
+    
 $(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
-	jqt -P MarkDown -I$(Content) <$<  \
+	gpp $(GPP_MD) -I$(Content) <$<  \
 	| pandoc --standalone --from markdown --to man \
 	| gzip > $@
 
