@@ -1,0 +1,29 @@
+
+
+.message {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+
+.success {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+  border-color: green;
+}
+
+.error {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+  border-color: red;
+}
+
+.warning {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+  border-color: yellow;
+}
+

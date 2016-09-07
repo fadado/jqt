@@ -1,3 +1,0 @@
-Lorem Ipsum
-<!-- <%MACRO> -->
-

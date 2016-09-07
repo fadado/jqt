@@ -1,0 +1,24 @@
+&define{message}{
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333&
+}
+
+.message {
+  &message;
+}
+
+.success {
+  &message;
+  border-color: green;
+}
+
+.error {
+  &message;
+  border-color: red;
+}
+
+.warning {
+  &message;
+  border-color: yellow;
+}

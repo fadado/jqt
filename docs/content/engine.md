@@ -129,32 +129,33 @@ The CSS minimization is not extremely aggressive, but is safe and sufficient.
 #### Macro calls
 
 The macro syntax used by _jqt_ in CSS files is very similar to the syntax used by the traditional
-preprocessing of C and C++ languages, but changing the prefix character `#` by
+TeX language macro processor, but changing the prefix character `\\` by
 `&`.
 The more common predefined macros have this syntax:
 
 ```
-&defeval x y
-&define x y
-&elif expr
+&defeval{x}{y}
+&define{x}{y}
+&elif{expr}
 &else
 &endif
-&eval expr
-&if expr
-&ifdef x
-&ifeq x y
-&ifndef x
-&ifneq x y
-&include file
-&undef x
+&eval{expr}
+&if{expr}
+&ifdef{x}
+&ifeq{x}{y}
+&ifndef{x}
+&ifneq{x}{y}
+&include{file}
+&undef{x}
 ```
 
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.).
+Inside macro definitions argument references are prefixed by an ampersand (`&1`, `&2`, etc.),
+but named arguments are also possible.
 The more used features are the inclusion on external files and the definition of simple constants:
 
 ```
-&include theme.css
-&define Blue #0000FF
+&include{theme.css}
+&define{Blue}{#0000FF}
 
 { color: &Blue; }
 ```
@@ -177,19 +178,17 @@ This table summarizes all the available skips in CSS files:
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------
 `&\n`[^1]           No                  Yes                 There is no content
-`\\n`[^2]           No                  Yes                 There is no content
-`/*` `*/`           No                  Yes                 Yes
+`/*` `*/`[^2]       Yes/No              No/Yes              No/Yes
 `//` `\n`[^3]       No                  Yes                 Yes
 `` ` `` `` ` ``     No                  Yes                 No
-`"` `"`             No                  No                  No
-`'` `'`             No                  No                  No
+`"` `"`             Yes                 No                  No
+`'` `'`             Yes                 No                  No
 
 Table: **Semantics for all CSS skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
-[^2]: A backslash followed by a newline is treated as a line continuation (that
-is, the backslash and the newline are removed and effectively ignored).
+[^2]: Multiline comments are expanded and preserved when not minifying CSS.
 [^3]: This represents a newline character.
 
 <#

@@ -1,9 +1,0 @@
-
-{
-    "comment1": "/* this is not a comment",
-    "comment2": "this is not a comment */",
-    "comment3": "/* this is not a comment */",
-    "comment4": "/* this /* not a comment */",
-    "comment5": "/* this */ not a comment */"
-}
-

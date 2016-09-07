@@ -1,0 +1,11 @@
+.container { width: 100%; }
+
+article[role="main"] {
+  float: left;
+  width: &eval{(100 * 600) / 960}%;
+}
+
+aside[role="complementary"] {
+  float: right;
+  width: &eval{(100 * 300) / 960}%;
+}

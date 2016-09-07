@@ -1,0 +1,12 @@
+&define{content}{
+  background-color: black;
+  color: white;
+  &1&
+}
+
+div {
+  &content{
+      font-size: 12px;
+      font-style: italic;&
+  }
+}

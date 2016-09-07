@@ -203,16 +203,15 @@ function expand_json
 function expand_css
 {
     local -r minify=$1
-    local -r -a user=( -U ''    ''   '(\W' ',\W' ')'  '(' ')' '$' '' )
-    local -r -a meta=( -M '\n&' '\n' '\b'  '\b'  '\n' '(' ')' )
+    local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '&' '' )
+    local -r -a meta=( -M '&' '' '{\W' '}{\W' '}' '{' '}' )
     local -r -a skips=(
         +cccc '&\n' ''          # continuation line (& and \n removed)
-        +cccc '\\n' ''          # continuation line (\ and \n removed)
-        +cccc '/*' '*/'         # multiline comment
         +cccc '//' '\n'         # line comment 
+                                # multiline comment: see below
         +sqqq '`' '`' '\'       # literal string; like sh single quotes
-        +ssss '"' '"' '\'       # CSS string
-        +ssss "'" "'" '\'       # CSS string
+        +sSSS '"' '"' '\'       # CSS string
+        +sSSS "'" "'" '\'       # CSS string
     )
     local -r -a gpp_opts=(
         --nostdinc
@@ -224,10 +223,12 @@ function expand_css
         "${DEFINE[@]}"
     )
     if [[ $minify == 'min' ]]; then
-        gpp "${gpp_opts[@]}" \
+        # +cccc '/*' '*/' # removed multiline comment
+        gpp "${gpp_opts[@]}" +cccc '/*' '*/' \
         | sed 's/^[ \t]\+//;s/[ \t]$//;/^$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
     else
-        gpp "${gpp_opts[@]}"
+        # +cSSS '/*' '*/' # expanded multiline comment
+        gpp "${gpp_opts[@]}" +sSSS '/*' '*/' ''
     fi
     echo    # always generate almost one line!!!
 }

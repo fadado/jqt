@@ -1,0 +1,8 @@
+&define{font_stack}{Helvetica, sans_serif}
+&define{primary_color}{#333}
+
+// A rule
+body {
+	font: 100% &font_stack;
+	color: &primary_color;
+}

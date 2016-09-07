@@ -1,0 +1,18 @@
+&define{&linx{link}{visit}{hover}{active}}{
+  a {
+    color: &link;
+  }
+  a:visited {
+    color: &visit;
+  }
+  a:hover {
+    color: &hover;   
+  }
+  a:active {
+    color: &active;
+  }
+}
+
+SEL {
+  &linx{red}{green}{blue}{yellow}
+}

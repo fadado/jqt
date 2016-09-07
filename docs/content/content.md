@@ -104,7 +104,8 @@ the character `>`.  The more common predefined macros have this syntax:
 <%undef x>
 ```
 
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.):
+Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
+but named arguments are also possible:
 
 ```
 <%define sc

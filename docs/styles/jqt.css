@@ -2,10 +2,10 @@
  * Web site styles
  **********************************************************************/
 
-&include "csscolors.m"
+&include{csscolors.m}
 
 // GitHub style
-&include "github.css"
+&include{github.css}
 
 //
 // Menu bar
@@ -34,7 +34,7 @@
 	font-weight: normal;
 	font-size: 150%;
 	text-decoration: none;
-	color: DarkCyan;
+	color: &DarkCyan;
 	background-color: inherit;
 }
 
@@ -54,12 +54,12 @@
 
 #MENU a:hover {
 	padding: 2px;
-	background-color: Gainsboro;
+	background-color: &Gainsboro;
 }
 
 #MENU a.current {
 	padding: 2px;
-	background-color: Gainsboro;
+	background-color: &Gainsboro;
 }
 
 //

@@ -97,7 +97,7 @@ all: check
 .PHONY: clean clobber install uninstall
 
 clean:
-	rm -f tests/generated/* jqt.1.gz
+	rm -f tests/*/generated/* jqt.1.gz
 
 clobber: clean
 
@@ -166,8 +166,8 @@ $(eval $(call TestJQT,syntax))
 #
 # Test macro expansion
 #
-.PHONY: test-expand test-mpjqt
-test-expand: test-mpjqt test-mpmd test-mpjson
+.PHONY: test-expand test-mpjqt test-mpmd test-mpjson test-mpcss
+test-expand: test-mpjqt test-mpmd test-mpjson test-mpcss
 
 define TestMacroExpand
 # Run one example
@@ -184,6 +184,7 @@ endef
 $(eval $(call TestMacroExpand,jqt,mpjqt))
 $(eval $(call TestMacroExpand,md,mpmd))
 $(eval $(call TestMacroExpand,json,mpjson))
+$(eval $(call TestMacroExpand,css,mpcss))
 
 #
 # Test file format conversions
