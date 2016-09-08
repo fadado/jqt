@@ -1,0 +1,59 @@
+//
+// Menu bar
+//
+#MENU {
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  font-size: 120%;
+
+  border-bottom:4px solid &ColorPrimary;
+  margin-bottom:1em;
+}
+
+#MENU li {
+  display: inline;
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+#MENU li.logo {
+  display: inline;
+  margin-right: 0;
+  margin-left:0;
+}
+
+#MENU li.logo a { // "picture"
+  font-weight: normal;
+  font-size: 150%;
+  text-decoration: none;
+  color: &DarkCyan;
+  background-color: inherit;
+}
+
+#MENU li.logo a:hover { // "picture"
+  color: #4183c4;
+}
+
+#MENU li.logo span {  // version
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#MENU a {
+  padding: 2px;
+  outline: none;
+}
+
+#MENU a:hover {
+  padding: 2px;
+  background-color: &Gainsboro;
+}
+
+#MENU a.current {
+  padding: 2px;
+  background-color: &Gainsboro;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

@@ -1,0 +1,24 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Blockquote
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+blockquote {
+  border-left: 0.3rem solid &ColorQuaternary;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1rem 1.5rem;
+}
+
+blockquote *:last-child {
+  margin: 0;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

@@ -1,0 +1,33 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Base
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  color: &ColorSecondary;
+  font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-size: 1.6em;
+  font-weight: 300;
+  letter-spacing: .01em;
+  line-height: 1.6;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: inherit;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

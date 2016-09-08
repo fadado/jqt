@@ -17,13 +17,13 @@
  #  Title in HTML head element
  #>
 <%define HEAD_TITLE
-  <title>{{.page.title}} &ndash; {{.site.title}}</title>
+  <title>jqt · {{.page.title}} &ndash; {{.site.title}}</title>
 >&
 <#
  #  Title in HTML body element
  #>
 <%define BODY_TITLE
-  <h1>{{.page.title}} &ndash; {{.snippets.title}}</h1>
+  <h1><cite>jqt</cite> · {{.page.title}}</h1>
 >&
 <#
  #  Inherit default layout

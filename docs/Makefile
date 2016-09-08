@@ -144,7 +144,7 @@ endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/jqt.css: $(Styles)/jqt.css $(Styles)/github.css
+$(Destination)/jqt.css: $(Styles)/*.css $(Styles)/sheet/*.css
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 

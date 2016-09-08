@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
   <head>
 <%ifndef HEAD_TITLE>&
-    <title>{{.page.title//.site.title}}</title>
+    <title>jqt · {{.page.title//.site.title}}</title>
 <%else><%call HEAD_TITLE><%endif>&
 
 <%include "head.html">&
@@ -17,7 +17,7 @@
     </ul>
 
 <%ifndef BODY_TITLE>&
-    <h1>{{.snippets.title}}</h1>
+  <h1>{{.site.title}}</h1>
 <%else><%call BODY_TITLE><%endif>&
 
     <div id="BODY">

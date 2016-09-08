@@ -66,7 +66,7 @@ for predefined macros and for user defined macros:
 
 The more common predefined macros have this syntax:
 
-```
+```HTML
 <%defeval x y>
 <%define x y>
 <%elif expr>
@@ -85,7 +85,7 @@ The more common predefined macros have this syntax:
 Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
 but named arguments are also possible:
 
-```
+```JSON
 <%define euro \u20AC>
 <%define price $1 &euro;>
 
@@ -98,7 +98,7 @@ Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory
 
 The main use of the preprocessor is to remove comments in the CPP style:
 
-```
+```CPP
 /* Block comments */
 // Line comments
 ```
@@ -150,7 +150,7 @@ As a wrappers to `jq` you have the following utilities shipped with _jqt_:
 
 These utilities imitate the `jq` command line interface:
 
-```
+```zsh
 $ yq '.store.book[2]' tests/data/store.yaml
 ---
 author: Herman Melville
@@ -163,7 +163,7 @@ title: Moby Dick
 
 You can also preserve `jq` JSON output:
 
-```
+```zsh
 $ yq --json -c '.store.book[2]' tests/data/store.yaml
 {"category":"fiction","price":8.99,"author":"Herman Melville",...
 ```

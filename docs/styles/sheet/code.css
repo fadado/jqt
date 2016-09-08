@@ -1,0 +1,36 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Code
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+code {
+  background: &ColorTertiary;
+  border-radius: .4rem;
+  font-size: 86%;
+  padding: .2rem .5rem;
+  margin: 0 .2rem;
+  white-space: nowrap;
+}
+
+pre {
+  background: &ColorTertiary;
+  border-left: 0.3rem solid &ColorPrimary;
+  font-family: 'Menlo', 'Consolas', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Monaco', monospace;
+}
+
+pre > code {
+  background: transparent;
+  border-radius: 0;
+  display: block;
+  padding: 1rem 1.5rem;
+  white-space: pre;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

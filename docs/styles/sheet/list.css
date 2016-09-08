@@ -1,0 +1,51 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// List
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+dl,
+ol,
+ul {
+  margin-top: 0;
+  padding-left: 0;
+}
+
+dl dl,
+dl ul,
+dl ol,
+ol dl,
+ol ul,
+ol ol,
+ul dl,
+ul ul,
+ul ol {
+  font-size: 90%;
+  margin: 1.5rem 0 1.5rem 3.0rem;
+}
+
+dl {
+  list-style: none;
+}
+
+ul {
+  list-style: circle inside;
+}
+
+ol {
+  list-style: decimal inside;
+}
+
+dt,
+dd,
+li {
+  margin-bottom: 1.0rem;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

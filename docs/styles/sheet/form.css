@@ -1,0 +1,82 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Form
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+&define{_inputs}{
+  input[type='email']&1,
+  input[type='number']&1,
+  input[type='password']&1,
+  input[type='search']&1,
+  input[type='tel']&1,
+  input[type='text']&1,
+  input[type='url']&1,
+  textarea,
+  select
+}
+
+&_inputs{} {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0.1rem solid &ColorQuaternary;
+  border-radius: .4rem;
+  box-shadow: none;
+  height: 3.8rem;
+  padding: .6rem 1.0rem;
+  width: 100%;
+}
+
+&_inputs{:focus} {
+  border: 0.1rem solid &ColorPrimary;
+  outline: 0;
+}
+
+select {
+  padding: 0.6rem 3rem 0.6rem 1rem;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAyOSAxNCIgd2lkdGg9IjI5Ij48cGF0aCBmaWxsPSIjZDFkMWQxIiBkPSJNOS40IDMuNmw1IDcgNS4yLTciLz48L3N2Zz4=) center right no-repeat;
+}
+
+select:focus {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAyOSAxNCIgd2lkdGg9IjI5Ij48cGF0aCBmaWxsPSIjOWI0ZGNmIiBkPSJNMTkuNiAzLjZIOS40bDUgNyIvPjwvc3ZnPg==);
+}
+
+textarea {
+  padding-bottom: .6rem;
+  padding-top: .6rem;
+  min-height: 6.5rem;
+}
+
+label,
+legend {
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: .5rem;
+}
+
+fieldset {
+  border-width: 0;
+  padding: 0;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  display: inline;
+}
+
+.label-inline {
+  font-weight: normal;
+  display: inline-block;
+  margin-left: .5rem;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

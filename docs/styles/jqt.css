@@ -1,111 +1,94 @@
 /***********************************************************************
- * Web site styles
+ * Base modules
  **********************************************************************/
 
-&include{csscolors.m}
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic");
 
-// GitHub style
-&include{github.css}
+&include{sheet/csscolors.m}
+&include{sheet/normalize.css}
 
-//
-// Menu bar
-//
-#MENU {
-	margin: 0;
-	padding: 0;
-	text-transform: lowercase;
-	font-variant: small-caps;
-	font-size: 120%;
+/***********************************************************************
+ * Milligram modules
+ **********************************************************************/
+
+// Parameters
+&define{ColorInitial}{&Ivory}
+&define{ColorPrimary}{&DarkCyan}
+&define{ColorSecondary}{&Black}
+&define{ColorTertiary}{&WhiteSmoke}
+&define{ColorQuaternary}{&LightGrey}
+
+// Modules
+&include{sheet/color.css}
+&include{sheet/base.css}
+&include{sheet/typography.css}
+&include{sheet/spacing.css}
+&include{sheet/blockquote.css}
+&include{sheet/code.css}
+&include{sheet/link.css}
+&include{sheet/list.css}
+&include{sheet/table.css}
+&include{sheet/divider.css}
+&include{sheet/image.css}
+
+//&include{sheet/button.css}
+//&include{sheet/form.css}
+//&include{sheet/grid.css}
+//&include{sheet/utility.css}
+
+// Post-fixes
+dt { font-weight: bold; }
+pre { font-size: 1.4rem;}
+body { margin: 1rem; }
+
+/***********************************************************************
+ * Media
+ **********************************************************************/
+
+/* Larger than mobile */
+@media screen and (min-width: 400px) {
+  body {
+      margin: 5px auto;
+  }
 }
 
-#MENU li {
-	display: inline;
-	margin-left: 1em;
-	font-weight: bold;
+/* Larger than phablet (also point when grid becomes active) */
+@media screen and (min-width: 550px) {
+  body {
+      margin: 10px auto;
+  }
 }
 
-#MENU li.logo {
-	display: inline;
-	margin-right: 0;
-	margin-left:0;
+/* Larger than tablet */
+@media screen and (min-width: 750px) {
+    body {
+        width: 76rem;
+    }
 }
 
-#MENU li.logo a {	// "picture"
-	font-weight: normal;
-	font-size: 150%;
-	text-decoration: none;
-	color: &DarkCyan;
-	background-color: inherit;
+/* Larger than desktop */
+@media screen and (min-width: 1000px) {
 }
 
-#MENU li.logo a:hover {	// "picture"
-	color: #4183c4;
+/* Larger than Desktop HD */
+@media screen and (min-width: 1200px) {
 }
 
-#MENU li.logo span {	// version
-	font-size: 12px;
-	font-weight: bold;
-}
+/***********************************************************************
+// Pandoc fixes
+ **********************************************************************/
 
-#MENU a {
-	padding: 2px;
-	outline: none;
-}
-
-#MENU a:hover {
-	padding: 2px;
-	background-color: &Gainsboro;
-}
-
-#MENU a.current {
-	padding: 2px;
-	background-color: &Gainsboro;
-}
-
-//
-// Table of contents
-//
-#TOC {
-	font-family: sans-serif;
-	font-size: 90%;
-	width: 20em;
-	margin: 2em auto 2em auto;
-	padding: 0 2em;
-	border: 3px solid grey;
-	text-align: center;
-}
-
-#TOC p {
-	font-weight: bold;
-	border-bottom: 1px solid black;
-}
-
-#TOC ul {
-	list-style-type: square;
-	text-align: left;
-}
-
-#TOC li {
-	margin: 0;
-}
-
-//
 .footnotes p {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
+/***********************************************************************
+ * Theme
+ **********************************************************************/
 
-//
-// Footer
-//
-#FOOTER div.github {
-	font-family: sans-serif;
-	color: #4183c4;
-	text-align: center;
-}
-#FOOTER div.github a {
-	font-variant: small-caps;
-}
+&include{menu.css}
+&include{toc.css}
+&include{footer.css}
 
-// vim:ts=4:sw=4:ai:noet:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

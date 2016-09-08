@@ -153,7 +153,7 @@ Inside macro definitions argument references are prefixed by an ampersand (`&1`,
 but named arguments are also possible.
 The more used features are the inclusion on external files and the definition of simple constants:
 
-```
+```CSS
 &include{theme.css}
 &define{Blue}{#0000FF}
 
@@ -166,7 +166,7 @@ Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory
 
 The main use of the preprocessor is to remove comments in the CPP style:
 
-```
+```CPP
 /* Block comments */
 // Line comments
 ```

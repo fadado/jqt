@@ -1,0 +1,20 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Divider
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+hr {
+  border: 0;
+  border-top: 0.1rem solid &ColorTertiary;
+  margin-bottom: 3.5rem;
+  margin-top: 3.0rem;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

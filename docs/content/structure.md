@@ -55,7 +55,7 @@ The macro syntax used by _jqt_ precedes macro names with the characters `<%`
 and finishes the macro calls with the character `>`.
 The more common predefined macros have this syntax:
 
-```
+```HTML
 <%defeval x y>
 <%define x y>
 <%elif expr>
@@ -74,7 +74,7 @@ The more common predefined macros have this syntax:
 Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
 but named arguments are also possible:
 
-```
+```HTML
 <%define stylesheet
     <link rel="stylesheet" type="text/css" href="$1"/>
 >
@@ -82,7 +82,7 @@ but named arguments are also possible:
 
 Predefined macros and user define macros have the same call sequence:
 
-```
+```HTML
 <%include head.html>
 <%stylesheet jqt.css>
 ```
@@ -91,7 +91,7 @@ With these simple tools is possible to emulate features considered advanced in s
 like template inheritance (also known as _blocks_). For example, in the base template (assume it is named `default.html`)
 you can put this conditional macro call to define a default title block:
 
-```
+```HTML
 <%ifndef HEAD_TITLE>
     <title>{{.page.title}}</title> {# default block #}
 <%else><%call HEAD_TITLE><%endif>
@@ -100,7 +100,7 @@ you can put this conditional macro call to define a default title block:
 And in the derived template you can define a new macro for the desired block,
 before include the base template:
 
-```
+```HTML
 <%define HEAD_TITLE
   <title>{{.page.title}} &ndash; {{.site.title}}</title>
 >
@@ -119,7 +119,7 @@ Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory
 Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and delimited strings of characters:
 
-```
+```HTML
 <# Block comments, removed, must end in newline (also removed) #>
 Continuation lines using an ampersand &
 just before the newline character
@@ -128,7 +128,7 @@ just before the newline character
 _Strings_ are copied to the output, but evaluation of macros inside strings can
 be enabled or disabled.  String delimiters can be copied, or not, to the output:
 
-~~~
+~~~HTML
 <!-- XML comments -->
 <%sc 'Single quoted strings, only available in user defined macro calls'>
 <%sc "Double quoted strings, only available in user defined macro calls'>

@@ -1,0 +1,120 @@
+// Adapted from:
+/*!
+ * Milligram v1.1.0
+ * http://milligram.github.io
+ *
+ * Copyright (c) 2016 CJ Patoilo
+ * Licensed under the MIT license
+*/
+
+// Button
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+&define{_button}{
+  .button&1,
+  button&1
+}
+
+&define{_button2}{
+  &_button{&1:hover},
+  &_button{&1:focus}
+}
+
+&define{_input}{
+  input[type='button']&1,
+  input[type='reset']&1,
+  input[type='submit']&1
+}
+
+&define{_input2}{
+  &_input{&1:hover},
+  &_input{&1:focus}
+}
+
+&_button,
+&_input {
+  background-color: &ColorPrimary;
+  border: 0.1rem solid &ColorPrimary;
+  border-radius: .4rem;
+  color: &ColorInitial;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  height: 3.8rem;
+  letter-spacing: .1rem;
+  line-height: 3.8rem;
+  padding: 0 3.0rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+&_button2,
+&_input2 {
+  background-color: &ColorSecondary;
+  border-color: &ColorSecondary;
+  color: &ColorInitial;
+  outline: 0;
+}
+
+&_button{.button-disabled},
+&_button{[disabled]},
+&_input{.button-disabled},
+&_input{[disabled]} {
+  opacity: .5;
+  cursor: default;
+}
+
+&_button2{.button-disabled},
+&_button2{[disabled]},
+&_input2{.button-disabled},
+&_input2{[disabled]} {
+  background-color: &ColorPrimary;
+  border-color: &ColorPrimary;
+}
+
+&_button{.button-outline},
+&_input{.button-outline} {
+  color: &ColorPrimary;
+  background-color: transparent;
+}
+
+&_button2{.button-outline},
+&_input2{.button-outline} {
+  color: &ColorSecondary;
+  background-color: transparent;
+  border-color: &ColorSecondary;
+}
+
+&_button2{.button-outline.button-disabled},
+&_button2{.button-outline[disabled]},
+&_input2{.button-outline.button-disabled},
+&_input2{.button-outline[disabled]} {
+  color: &ColorPrimary;
+  border-color: inherit;
+}
+
+&_button{.button-clear},
+&_input{.button-clear} {
+  color: &ColorPrimary;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+&_button2{.button-clear},
+&_input2{.button-clear} {
+  color: &ColorSecondary;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+&_button2{button-clear.button-disabled},
+&_button2{button-clear[disabled]},
+&_input2{.button-clear.button-disabled},
+&_input2{.button-clear[disabled]} {
+  color: &ColorPrimary;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
