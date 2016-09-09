@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-<title>jqt · Data model &ndash; jqt > the jq template engine</title>
+<head>
+<title>jqt · Data model &ndash; jqt, the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
-<link rel="stylesheet" type="text/css" href="jqt.css"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
 
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -29,21 +29,31 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 
-  </head>
+</head>
 
-  <body>
-    <ul id="MENU">
-      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.3.0</span></li>
-<li><a  href="./engine.html">Engine</a></li>
-<li><a  href="./structure.html">Structure</a></li>
-<li><a  href="./content.html">Content</a></li>
-<li><a class='current' href="./data.html">Data</a></li>
-    </ul>
+<body>
+<div class="#_Header">
+<span class="Logo"><a href="index.html">❴❴❏❵❵</a><span class="Version">v0.3.0</span></span>
+<ol class="MenuBar">
+<li class='MenuBar_item '>
+<a href="./engine.html">Engine</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./structure.html">Structure</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./content.html">Content</a>
+</li>
+<li class='MenuBar_item -active'>
+<a href="./data.html">Data</a>
+</li>
+</ol>
+</div>
 
+<div class="#_Body">
 <h1><cite>jqt</cite> · Data model</h1>
-    <div id="BODY">
-  <div id="TOC">
-    <p>Page contents</p>
+<div class="#_Body_panel -side-right Toc">
+<p class="Toc_title">Page contents</p>
     
 <ul>
 <li><a href="#general-operation">General operation</a></li>
@@ -61,30 +71,30 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul></li>
 </ul>
 
-  </div>
-  <div id="CONTENT">
-    <h2 id="general-operation">General operation</h2>
+</div>
+<div class="Content">
+<h2 id="general-operation">General operation</h2>
 <p><em>jqt</em> is designed to combine one template with one <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> document and a <a href="https://en.wikipedia.org/wiki/Data_model">data model</a> to produce the final HTML result. To define the data model you can provide metadata in the document front matter to be inserted when rendering the template. Also, <code>jqt</code> accepts additional data files in the command line in <a href="http://yaml.org/">YAML</a> or <a href="http://json.org/">JSON</a> format to be merged with the document front matter. This is described on the bottom of this diagram:</p>
+<div id="flowhack" class="clearfix">
+
+</div>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
-                                                                         |
-                                               HTML and CSS              | 
-                                               fragments                 v
-           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+  HTML
-Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|-------&gt; Page
+                                             HTML and CSS                | 
+                                             fragments                   v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+ HTML
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|------&gt; Page
                       +------+   +------+   \--------&gt;+-----+         +------+
-                                          YAML         ^   ^
-                                          front-matter |   |
-                                          metadata     |   |
+                                             YAML      ^   ^
+                                             metadata  |   |
            JSON       +------+                         |   |
          +-----------&gt;|expand|-------------------------+   |
-    Data              +------+                             |
+    Data   YAML       +------+                             |
          +-------------------------------------------------+
-           YAML                                            |
-                                 +------+                  |
+           YAML snippets         +------+                  |
          +----------------------&gt;|markup|------------------+
-           YAML snippets         +------+</code></pre>
+                                 +------+</code></pre>
 <p>When invoking <code>jqt</code> you can use the following options to define the additional input data and influence JSON preprocessing:</p>
 <dl>
 <dt>-D NAME=VAL</dt>
@@ -245,21 +255,21 @@ title: Moby Dick
 </ol>
 </div>
 
-  </div>    </div>
+</div>    </div>
 
-    <div id="FOOTER">
-<div style="text-align:center;">
-  <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+<div class="#_Footer">
+<div class="License">
+<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
-<div class="github">
-  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-    <a href="https://github.com/fadado/jqt/releases">releases</a>
-  ❳</div>
+<ol class="Repository">
+<li class="Repository_section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+</ol>
 
-    </div>
+</div>
 
 <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -269,7 +279,7 @@ title: Moby Dick
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
 </script>
-  </body>
+</body>
 </html>
 
 

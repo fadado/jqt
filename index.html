@@ -1,13 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-    <title>jqt · Welcome</title>
-
+<head>
+<title>jqt · Welcome &ndash; jqt, the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
-<link rel="stylesheet" type="text/css" href="jqt.css"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
 
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -30,22 +29,32 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 
-  </head>
+</head>
 
-  <body>
-    <ul id="MENU">
-      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.3.0</span></li>
-<li><a  href="./engine.html">Engine</a></li>
-<li><a  href="./structure.html">Structure</a></li>
-<li><a  href="./content.html">Content</a></li>
-<li><a  href="./data.html">Data</a></li>
-    </ul>
+<body>
+<div class="#_Header">
+<span class="Logo"><a href="index.html">❴❴❏❵❵</a><span class="Version">v0.3.0</span></span>
+<ol class="MenuBar">
+<li class='MenuBar_item '>
+<a href="./engine.html">Engine</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./structure.html">Structure</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./content.html">Content</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./data.html">Data</a>
+</li>
+</ol>
+</div>
 
-  <h1>jqt > the jq template engine</h1>
+<div class="#_Body">
+<h1><cite>jqt</cite>, the <em>jq</em> template engine</h1>
 
-    <div id="BODY">
-      <div id="CONTENT">
-        <p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the basis for a web template engine? Let's explore…</p>
+<div class="Content">
+<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the basis for a web template engine? Let's explore…</p>
 <h2 id="jq"><em>jq</em></h2>
 <p><em>jq</em> have nice features like string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following simple strings, in a <em>jq</em> program, separated with the comma operator:</p>
 <h3 id="simple-expansion">Simple expansion</h3>
@@ -61,21 +70,21 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>And, how do the <em>syntactic sugar</em> looks like? Do you think the following example seems to be a template?</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.page.lang//.site.lang}}&#39;</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
-    <span class="kw">&lt;title&gt;</span>{{.page.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;title&gt;</span>{{.page.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
     {# include files in preprocessing stage #}
-    <span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
-    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
+<span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
+<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
     {# optional line #}
-    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.page.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
+<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.page.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
     {# implicit loop for all authors #}
     {% .page.author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
-    <span class="kw">&lt;h1&gt;</span>{{.page.title}}<span class="kw">&lt;/h1&gt;</span>
-    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
+<span class="kw">&lt;h1&gt;</span>{{.page.title}}<span class="kw">&lt;/h1&gt;</span>
+<span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
         {{.page._content}}
-    <span class="kw">&lt;/div&gt;</span>
-    <span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
+<span class="kw">&lt;/div&gt;</span>
+<span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></code></pre>
 <h3 id="status">Status</h3>
@@ -89,22 +98,22 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>And don't forget to study the source code under the <a href="https://github.com/fadado/jqt/tree/master/docs">docs directory</a>!</p>
 <p><em>jqt</em> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
 
-      </div>
-    </div>
+</div>
+</div>
 
-    <div id="FOOTER">
-<div style="text-align:center;">
-  <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+<div class="#_Footer">
+<div class="License">
+<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
-<div class="github">
-  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-    <a href="https://github.com/fadado/jqt/releases">releases</a>
-  ❳</div>
+<ol class="Repository">
+<li class="Repository_section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+</ol>
 
-    </div>
+</div>
 
 <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -114,6 +123,6 @@ code > span.er { color: #ff0000; font-weight: bold; }
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
 </script>
-  </body>
+</body>
 </html>
 

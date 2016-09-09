@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-<title>jqt · Template engine &ndash; jqt > the jq template engine</title>
+<head>
+<title>jqt · Template engine &ndash; jqt, the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
-<link rel="stylesheet" type="text/css" href="jqt.css"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
 
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -29,24 +29,34 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 
-  </head>
+</head>
 
-  <body>
-    <ul id="MENU">
-      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.3.0</span></li>
-<li><a class='current' href="./engine.html">Engine</a></li>
-<li><a  href="./structure.html">Structure</a></li>
-<li><a  href="./content.html">Content</a></li>
-<li><a  href="./data.html">Data</a></li>
-    </ul>
+<body>
+<div class="#_Header">
+<span class="Logo"><a href="index.html">❴❴❏❵❵</a><span class="Version">v0.3.0</span></span>
+<ol class="MenuBar">
+<li class='MenuBar_item -active'>
+<a href="./engine.html">Engine</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./structure.html">Structure</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./content.html">Content</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./data.html">Data</a>
+</li>
+</ol>
+</div>
 
+<div class="#_Body">
 <h1><cite>jqt</cite> · Template engine</h1>
-    <div id="BODY">
-  <div id="TOC">
-    <p>Page contents</p>
+<div class="#_Body_panel -side-right Toc">
+<p class="Toc_title">Page contents</p>
     
 <ul>
-<li><a href="#engine-implementation">Engine implementation</a></li>
+<li><a href="#implementation">Implementation</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#invoking-jqt">Invoking <em>jqt</em></a><ul>
 <li><a href="#synopsis">Synopsis</a></li>
@@ -61,30 +71,30 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul></li>
 </ul>
 
-  </div>
-  <div id="CONTENT">
-    <h2 id="engine-implementation">Engine implementation</h2>
+</div>
+<div class="Content">
+<h2 id="implementation">Implementation</h2>
 <p><em>jqt</em> orchestrates several shell utilities to transform <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> text and <a href="http://yaml.org/">YAML</a> or <a href="http://json.org/">JSON</a> data into a final HTML page. The transformation is driven by a template, where HTML is mixed with <a href="https://stedolan.github.io/jq/"><em>jq</em></a> snippets to implement the transformation logic. This diagram shows how document, template and data inputs (on the left) are combined by <em>jqt</em> to produce the final HTML output:</p>
+<div id="flowhack" class="clearfix">
+
+</div>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
-                                                                         |
-                                               HTML and CSS              | 
-                                               fragments                 v
-           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+  HTML
-Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|-------&gt; Page
+                                             HTML and CSS                | 
+                                             fragments                   v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+ HTML
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|------&gt; Page
                       +------+   +------+   \--------&gt;+-----+         +------+
-                                          YAML         ^   ^
-                                          front-matter |   |
-                                          metadata     |   |
+                                             YAML      ^   ^
+                                             metadata  |   |
            JSON       +------+                         |   |
          +-----------&gt;|expand|-------------------------+   |
-    Data              +------+                             |
+    Data   YAML       +------+                             |
          +-------------------------------------------------+
-           YAML                                            |
-                                 +------+                  |
+           YAML snippets         +------+                  |
          +----------------------&gt;|markup|------------------+
-           YAML snippets         +------+</code></pre>
+                                 +------+</code></pre>
 <p>The command <code>jqt</code> is a shell script executed by <code>bash</code>. The external shell commands called by <code>jqt</code> are <code>cat</code>, <code>gpp</code>, <code>jq</code>, <code>mkdir</code>, <code>mkfifo</code>, <code>pandoc</code>, <code>python</code>, <code>rm</code>, <code>sed</code>, <code>sleep</code> and <code>tee</code>.</p>
 <p><code>jqt</code> has been tested with <a href="https://www.gnu.org/software/bash/">Bash 4.3</a>, <a href="https://www.gnu.org/software/sed/">GNU sed 4.2</a>, <a href="https://logological.org/gpp">GPP 2.24</a>, <a href="https://stedolan.github.io/jq/">jq 1.5</a> and <a href="http://pandoc.org/">Pandoc 1.13</a>. A small Python snippet is used which depends on the modules <code>json</code> (introduced with <a href="https://docs.python.org/2.6/">Python 2.6</a>) and <code>yaml</code> (<a href="http://pyyaml.org/">PyYAML</a> implementation). The project uses <a href="https://www.gnu.org/software/make/">GNU Make</a> on several development activities, but <code>make</code> is not necessary to run <code>jqt</code>.</p>
 <h2 id="installation">Installation</h2>
@@ -271,21 +281,21 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
 </ol>
 </div>
 
-  </div>    </div>
+</div>    </div>
 
-    <div id="FOOTER">
-<div style="text-align:center;">
-  <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+<div class="#_Footer">
+<div class="License">
+<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
-<div class="github">
-  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-    <a href="https://github.com/fadado/jqt/releases">releases</a>
-  ❳</div>
+<ol class="Repository">
+<li class="Repository_section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+</ol>
 
-    </div>
+</div>
 
 <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -295,7 +305,7 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
 </script>
-  </body>
+</body>
 </html>
 
 

@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-  <head>
-<title>jqt · Page structure &ndash; jqt > the jq template engine</title>
+<head>
+<title>jqt · Page structure &ndash; jqt, the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
-<link rel="stylesheet" type="text/css" href="jqt.css"/>
+<link rel="stylesheet" type="text/css" href="style.css"/>
 
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -29,21 +29,31 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 
 
-  </head>
+</head>
 
-  <body>
-    <ul id="MENU">
-      <li class="logo"><a href="index.html">❴❴❏❵❵</a><span>v0.3.0</span></li>
-<li><a  href="./engine.html">Engine</a></li>
-<li><a class='current' href="./structure.html">Structure</a></li>
-<li><a  href="./content.html">Content</a></li>
-<li><a  href="./data.html">Data</a></li>
-    </ul>
+<body>
+<div class="#_Header">
+<span class="Logo"><a href="index.html">❴❴❏❵❵</a><span class="Version">v0.3.0</span></span>
+<ol class="MenuBar">
+<li class='MenuBar_item '>
+<a href="./engine.html">Engine</a>
+</li>
+<li class='MenuBar_item -active'>
+<a href="./structure.html">Structure</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./content.html">Content</a>
+</li>
+<li class='MenuBar_item '>
+<a href="./data.html">Data</a>
+</li>
+</ol>
+</div>
 
+<div class="#_Body">
 <h1><cite>jqt</cite> · Page structure</h1>
-    <div id="BODY">
-  <div id="TOC">
-    <p>Page contents</p>
+<div class="#_Body_panel -side-right Toc">
+<p class="Toc_title">Page contents</p>
     
 <ul>
 <li><a href="#general-operation">General operation</a></li>
@@ -59,30 +69,30 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul></li>
 </ul>
 
-  </div>
-  <div id="CONTENT">
-    <h2 id="general-operation">General operation</h2>
+</div>
+<div class="Content">
+<h2 id="general-operation">General operation</h2>
 <p>Web pages structure is defined by the HTML markup, and when using <em>jqt</em> is added to the input content and data using a template. <em>jqt</em> transforms templates into <a href="https://stedolan.github.io/jq/"><em>jq</em></a> scripts, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. The generated script will be combined with the document and data inputs in the render stage to produce the final HTML page. This is described on the top of this diagram:</p>
+<div id="flowhack" class="clearfix">
+
+</div>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
-                                                                         |
-                                               HTML and CSS              | 
-                                               fragments                 v
-           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+  HTML
-Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|-------&gt; Page
+                                             HTML and CSS                | 
+                                             fragments                   v
+           MarkDown   +------+   +------+   /--------&gt;+-----+  JSON   +------+ HTML
+Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|render|------&gt; Page
                       +------+   +------+   \--------&gt;+-----+         +------+
-                                          YAML         ^   ^
-                                          front-matter |   |
-                                          metadata     |   |
+                                             YAML      ^   ^
+                                             metadata  |   |
            JSON       +------+                         |   |
          +-----------&gt;|expand|-------------------------+   |
-    Data              +------+                             |
+    Data   YAML       +------+                             |
          +-------------------------------------------------+
-           YAML                                            |
-                                 +------+                  |
+           YAML snippets         +------+                  |
          +----------------------&gt;|markup|------------------+
-           YAML snippets         +------+</code></pre>
+                                 +------+</code></pre>
 <p>When invoking <code>jqt</code> you can use the following options to modify template rendering:</p>
 <dl>
 <dt>-D NAME=VAL</dt>
@@ -105,21 +115,21 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <p>A template is a text file with intermixed snippets of <em>jq</em> code. Snippets can be <dfn>expressions</dfn> (delimited by <code>{{</code> and <code>}}</code>), which get replaced with values when a template is rendered and <dfn>actions</dfn> (delimited by <code>{%</code> and <code>%}</code>), which control the logic of the template. Comments (delimited by <code>{#</code> and <code>#}</code>) are ignored and not copied to the output. This is a complete template example:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.page.lang//.site.lang}}&#39;</span><span class="kw">&gt;</span>
 <span class="kw">&lt;head&gt;</span>
-    <span class="kw">&lt;title&gt;</span>{{.page.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;title&gt;</span>{{.page.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
     {# include files in preprocessing stage #}
-    <span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
-    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
+<span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
+<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
     {# optional line #}
-    <span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.page.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
+<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.page.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
     {# implicit loop for all authors #}
     {% .page.author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
 <span class="kw">&lt;/head&gt;</span>
 <span class="kw">&lt;body&gt;</span>
-    <span class="kw">&lt;h1&gt;</span>{{.page.title}}<span class="kw">&lt;/h1&gt;</span>
-    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
+<span class="kw">&lt;h1&gt;</span>{{.page.title}}<span class="kw">&lt;/h1&gt;</span>
+<span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
         {{.page._content}}
-    <span class="kw">&lt;/div&gt;</span>
-    <span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
+<span class="kw">&lt;/div&gt;</span>
+<span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></code></pre>
 <h3 id="preprocessing">Preprocessing</h3>
@@ -143,18 +153,18 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <span class="er">&lt;</span>%undef x&gt;</code></pre>
 <p>Inside macro definitions argument references are prefixed by a dollar (<code>$1</code>, <code>$2</code>, etc.), but named arguments are also possible:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%define stylesheet
-    <span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> href=</span><span class="st">&quot;$1&quot;</span><span class="kw">/&gt;</span>
+<span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> href=</span><span class="st">&quot;$1&quot;</span><span class="kw">/&gt;</span>
 &gt;</code></pre>
 <p>Predefined macros and user define macros have the same call sequence:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%include head.html&gt;
 <span class="er">&lt;</span>%stylesheet jqt.css&gt;</code></pre>
 <p>With these simple tools is possible to emulate features considered advanced in some template engines, like template inheritance (also known as <em>blocks</em>). For example, in the base template (assume it is named <code>default.html</code>) you can put this conditional macro call to define a default title block:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%ifndef HEAD_TITLE&gt;
-    <span class="kw">&lt;title&gt;</span>{{.page.title}}<span class="kw">&lt;/title&gt;</span> {# default block #}
+<span class="kw">&lt;title&gt;</span>{{.page.title}}<span class="kw">&lt;/title&gt;</span> {# default block #}
 <span class="er">&lt;</span>%else&gt;<span class="er">&lt;</span>%call HEAD_TITLE&gt;<span class="er">&lt;</span>%endif&gt;</code></pre>
 <p>And in the derived template you can define a new macro for the desired block, before include the base template:</p>
 <pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%define HEAD_TITLE
-  <span class="kw">&lt;title&gt;</span>{{.page.title}} <span class="dv">&amp;ndash;</span> {{.site.title}}<span class="kw">&lt;/title&gt;</span>
+<span class="kw">&lt;title&gt;</span>{{.page.title}} <span class="dv">&amp;ndash;</span> {{.site.title}}<span class="kw">&lt;/title&gt;</span>
 &gt;
 <span class="er">&lt;</span>%include default.html&gt;</code></pre>
 <p>In addition to GPP predefined macros <em>jqt</em> define in the file <code>libjqt.m</code>, included in the render stage, a little macros library. The more useful will be perhaps <code>&lt;%partial name arg...&gt;</code>, to include a template file passing arguments to it and <code>&lt;%call name arg...&gt;</code>, to call a macro by name.</p>
@@ -289,21 +299,21 @@ All jqt template delimited regions: {#...#}, {%...%}, {{...}} </code></pre>
 </ol>
 </div>
 
-  </div>    </div>
+</div>    </div>
 
-    <div id="FOOTER">
-<div style="text-align:center;">
-  <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+<div class="#_Footer">
+<div class="License">
+<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
-<div class="github">
-  ❲ <a href="https://github.com/fadado/jqt">code</a> ❘
-    <a href="https://github.com/fadado/jqt/issues">issues</a> ❘
-    <a href="https://github.com/fadado/jqt/wiki">wiki</a> ❘
-    <a href="https://github.com/fadado/jqt/releases">releases</a>
-  ❳</div>
+<ol class="Repository">
+<li class="Repository_section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="Repository_section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+</ol>
 
-    </div>
+</div>
 
 <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -313,7 +323,7 @@ All jqt template delimited regions: {#...#}, {%...%}, {{...}} </code></pre>
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
 </script>
-  </body>
+</body>
 </html>
 
 
