@@ -2,6 +2,8 @@
  # Flow diagram
  #>
 
+###### {.clearfix}
+
 ```
            jqt        +------+   +-------+  jq script
 Template +----------->|expand|-->|convert|-------------------------------+

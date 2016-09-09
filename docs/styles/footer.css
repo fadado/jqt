@@ -3,9 +3,9 @@
 //
 
 #FOOTER {
-  border-top:4px solid &ColorPrimary;
-  padding-top:.5em;
-  margin-top:1em;
+  border-top: 4px solid &ColorQuaternary;
+  padding-top: .5em;
+  margin-top: 1em;
 }
 
 #FOOTER div.github {

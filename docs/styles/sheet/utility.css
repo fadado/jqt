@@ -18,11 +18,13 @@
   float: left;
 }
 
-.clearfix {
-  *zoom: 1;
-}
+// IE6 hack
+//.clearfix {
+//  *zoom: 1;
+//}
 
-.clearfix:after, .clearfix:before {
+.clearfix:after,
+.clearfix:before {
   content: '';
   display: table;
 }

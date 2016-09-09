@@ -28,18 +28,25 @@
 &include{sheet/link.css}
 &include{sheet/list.css}
 &include{sheet/table.css}
-&include{sheet/divider.css}
-&include{sheet/image.css}
+&include{sheet/utility.css}
 
+//&include{sheet/image.css}
+//&include{sheet/divider.css}
 //&include{sheet/button.css}
 //&include{sheet/form.css}
 //&include{sheet/grid.css}
-//&include{sheet/utility.css}
 
 // Post-fixes
 dt { font-weight: bold; }
 pre { font-size: 1.4rem;}
 body { margin: 1rem; }
+
+// Hacks
+h6.clearfix {
+  margin:0;
+  padding:0;
+  font-size:0px;
+}
 
 /***********************************************************************
  * Media

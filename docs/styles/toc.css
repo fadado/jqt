@@ -2,18 +2,18 @@
 // Table of contents
 //
 #TOC {
-  font-size: 90%;
+  font-size: 80%;
   width: 20em;
-  margin: 2em auto 2em auto;
-  padding: 0 2em;
-  border: 3px solid grey;
+  margin: 1em 0 1em 1em;
+  padding: 0 1em;
+  border: 3px solid &ColorQuaternary;
   text-align: center;
 }
 
 #TOC p {
   font-weight: bold;
-  border-bottom: 1px solid black;
-  margin-bottom:0.5em;
+  border-bottom: 1px solid &ColorQuaternary;
+  margin-bottom: 0.5em;
 }
 
 #TOC ul {

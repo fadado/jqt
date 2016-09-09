@@ -73,7 +73,7 @@ Common := \
 # Files to "build"
 Home := index
 Pages := content data engine structure 
-Files := README.md jqt.css
+Files := README.md style.css
 ManPage := ../jqt.1.gz
 Targets := \
 	$(foreach f,$(Files),$(Destination)/$(f))		\
@@ -144,7 +144,7 @@ endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/jqt.css: $(Styles)/*.css $(Styles)/sheet/*.css
+$(Destination)/style.css: $(Styles)/*.css $(Styles)/sheet/*.css
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 

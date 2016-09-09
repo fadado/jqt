@@ -1,6 +1,7 @@
 //
 // Menu bar
 //
+
 #MENU {
   margin: 0;
   padding: 0;
@@ -8,8 +9,8 @@
   font-variant: small-caps;
   font-size: 120%;
 
-  border-bottom:4px solid &ColorPrimary;
-  margin-bottom:1em;
+  border-bottom: 4px solid &ColorQuaternary;
+  margin-bottom: 1em;
 }
 
 #MENU li {
@@ -21,7 +22,7 @@
 #MENU li.logo {
   display: inline;
   margin-right: 0;
-  margin-left:0;
+  margin-left: 0;
 }
 
 #MENU li.logo a { // "picture"

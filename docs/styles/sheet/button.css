@@ -10,6 +10,7 @@
 // Button
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
+// Macros
 &define{_button}{
   .button&1,
   button&1
@@ -31,8 +32,18 @@
   &_input{&1:focus}
 }
 
-&_button,
-&_input {
+&define{_both}{
+  &_button{&1},
+  &_input{&1}
+}
+
+&define{_both2}{
+  &_button2{&1},
+  &_input2{&1}
+}
+
+// Rules
+&_both {
   background-color: &ColorPrimary;
   border: 0.1rem solid &ColorPrimary;
   border-radius: .4rem;
@@ -51,69 +62,56 @@
   white-space: nowrap;
 }
 
-&_button2,
-&_input2 {
+&_both2 {
   background-color: &ColorSecondary;
   border-color: &ColorSecondary;
   color: &ColorInitial;
   outline: 0;
 }
 
-&_button{.button-disabled},
-&_button{[disabled]},
-&_input{.button-disabled},
-&_input{[disabled]} {
+&_both{.button-disabled},
+&_both{[disabled]} {
   opacity: .5;
   cursor: default;
 }
 
-&_button2{.button-disabled},
-&_button2{[disabled]},
-&_input2{.button-disabled},
-&_input2{[disabled]} {
+&_both2{.button-disabled},
+&_both2{[disabled]} {
   background-color: &ColorPrimary;
   border-color: &ColorPrimary;
 }
 
-&_button{.button-outline},
-&_input{.button-outline} {
+&_both{.button-outline} {
   color: &ColorPrimary;
   background-color: transparent;
 }
 
-&_button2{.button-outline},
-&_input2{.button-outline} {
+&_both2{.button-outline} {
   color: &ColorSecondary;
   background-color: transparent;
   border-color: &ColorSecondary;
 }
 
-&_button2{.button-outline.button-disabled},
-&_button2{.button-outline[disabled]},
-&_input2{.button-outline.button-disabled},
-&_input2{.button-outline[disabled]} {
+&_both2{.button-outline.button-disabled},
+&_both2{.button-outline[disabled]} {
   color: &ColorPrimary;
   border-color: inherit;
 }
 
-&_button{.button-clear},
-&_input{.button-clear} {
+&_both{.button-clear} {
   color: &ColorPrimary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_button2{.button-clear},
-&_input2{.button-clear} {
+&_both2{.button-clear} {
   color: &ColorSecondary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_button2{button-clear.button-disabled},
-&_button2{button-clear[disabled]},
-&_input2{.button-clear.button-disabled},
-&_input2{.button-clear[disabled]} {
+&_both2{.button-clear.button-disabled},
+&_both2{.button-clear[disabled]} {
   color: &ColorPrimary;
 }
 
