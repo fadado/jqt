@@ -2,17 +2,23 @@
 // Footer
 //
 
-#FOOTER {
+.Footer {
   border-top: 4px solid &ColorQuaternary;
-  padding-top: .5em;
-  margin-top: 1em;
 }
 
-#FOOTER div.github {
+.Footer_license {
+  text-align:center;
+}
+
+.Footer_license > p {
+  margin-bottom: 0;
+}
+
+.GitHubMenu  {
 	text-align: center;
 }
 
-#FOOTER div.github a {
+.GitHubMenu_section  {
 	font-variant: small-caps;
   font-weight: bold;
 }

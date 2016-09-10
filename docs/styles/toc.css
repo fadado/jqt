@@ -1,30 +1,33 @@
 //
 // Table of contents
 //
-#TOC {
+
+.Toc {
+  float: right;
   font-size: 80%;
   width: 20em;
   margin: 1em 0 1em 1em;
   padding: 0 1em;
   border: 3px solid &ColorQuaternary;
   text-align: center;
+  font-weight: bold;
 }
 
-#TOC p {
+.Toc_title {
   font-weight: bold;
   border-bottom: 1px solid &ColorQuaternary;
   margin-bottom: 0.5em;
 }
 
-#TOC ul {
+.Toc ul {
   font-size: inherit;
   margin-top: 0;
   margin-bottom: 0;
-  list-style-type: square;
   text-align: left;
+  list-style-type: square;
 }
 
-#TOC li {
+.Toc li {
   margin: 0;
 }
 

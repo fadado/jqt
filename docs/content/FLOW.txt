@@ -8,23 +8,20 @@
            jqt        +------+   +-------+  jq script
 Template +----------->|expand|-->|convert|-------------------------------+
                       +------+   +-------+                               |
-                                                                         |
-                                               HTML and CSS              | 
-                                               fragments                 v
-           MarkDown   +------+   +------+   /-------->+-----+  JSON   +------+  HTML
-Document +----------->|expand|-->|markup|--+          |merge|-------->|render|-------> Page
+                                             HTML and CSS                | 
+                                             fragments                   v
+           MarkDown   +------+   +------+   /-------->+-----+  JSON   +------+ HTML
+Document +----------->|expand|-->|markup|--+          |merge|-------->|render|------> Page
                       +------+   +------+   \-------->+-----+         +------+
-                                          YAML         ^   ^
-                                          front-matter |   |
-                                          metadata     |   |
+                                             YAML      ^   ^
+                                             metadata  |   |
            JSON       +------+                         |   |
          +----------->|expand|-------------------------+   |
-    Data              +------+                             |
+    Data   YAML       +------+                             |
          +-------------------------------------------------+
-           YAML                                            |
-                                 +------+                  |
+           YAML snippets         +------+                  |
          +---------------------->|markup|------------------+
-           YAML snippets         +------+
+                                 +------+
 ```
 
 <#

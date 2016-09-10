@@ -4,20 +4,14 @@
  #>
 <%define BODY_BLOCK
 <# Table of contents #>
-  <div id="TOC" class="float-right">
-    <p>{{.snippets."toc-title"}}</p>
+  <div class="Toc">
+    <p class="Toc_title">{{.snippets."toc-title"}}</p>
     {{.page._toc}}
   </div>
 <# Document body #>
-  <div id="CONTENT">
+  <div class="Content">
     {{.page._content}}
   </div>
->&
-<#
- #  Title in HTML head element
- #>
-<%define HEAD_TITLE
-  <title>jqt · {{.page.title}} &ndash; {{.site.title}}</title>
 >&
 <#
  #  Title in HTML body element

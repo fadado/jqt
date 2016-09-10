@@ -4,8 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic");
 
-&include{sheet/csscolors.m}
-&include{sheet/normalize.css}
+&include{sheet/canvas.m}
 
 /***********************************************************************
  * Milligram modules
@@ -39,13 +38,11 @@
 // Post-fixes
 dt { font-weight: bold; }
 pre { font-size: 1.4rem;}
-body { margin: 1rem; }
 
 // Hacks
 h6.clearfix {
-  margin:0;
-  padding:0;
-  font-size:0px;
+  visibility: hidden;
+  margin: 0; padding: 0; font-size: 0px;
 }
 
 /***********************************************************************
@@ -82,6 +79,14 @@ h6.clearfix {
 }
 
 /***********************************************************************
+ * jqt theme
+ **********************************************************************/
+
+&include{menu.css}
+&include{toc.css}
+&include{footer.css}
+
+/***********************************************************************
 // Pandoc fixes
  **********************************************************************/
 
@@ -89,13 +94,5 @@ h6.clearfix {
   margin: 0;
   padding: 0;
 }
-
-/***********************************************************************
- * Theme
- **********************************************************************/
-
-&include{menu.css}
-&include{toc.css}
-&include{footer.css}
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
