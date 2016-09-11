@@ -7,11 +7,13 @@
  * Licensed under the MIT license
 */
 
+// Provides the same styles as milligram
+
+&include{sheet/color.css}
 &include{sheet/base.css}
 &include{sheet/blockquote.css}
 &include{sheet/button.css}
 &include{sheet/code.css}
-&include{sheet/color.css}
 &include{sheet/divider.css}
 &include{sheet/form.css}
 &include{sheet/grid.css}

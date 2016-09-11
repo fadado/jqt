@@ -2,9 +2,7 @@
  * Base modules
  **********************************************************************/
 
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic");
-
-&include{sheet/canvas.m}
+&include{new/default.css}
 
 /***********************************************************************
  * Milligram modules
@@ -18,36 +16,50 @@
 &define{ColorQuaternary}{&LightGrey}
 
 // Modules
-&include{sheet/color.css}
-&include{sheet/base.css}
-&include{sheet/typography.css}
-&include{sheet/spacing.css}
-&include{sheet/blockquote.css}
-&include{sheet/code.css}
-&include{sheet/link.css}
-&include{sheet/list.css}
-&include{sheet/table.css}
-&include{sheet/utility.css}
+&include{new/base.css}
+&include{new/spacing.css}
+&include{new/typography.css}
 
-//&include{sheet/image.css}
-//&include{sheet/divider.css}
-//&include{sheet/button.css}
-//&include{sheet/form.css}
-//&include{sheet/grid.css}
+// Optional modules
+&include{new/link.css}
+&include{new/blockquote.css}
+&include{new/code.css}
+&include{new/list.css}
+&include{new/table.css}
+&include{new/utility.css}
 
-// Post-fixes
-dt { font-weight: bold; }
-pre { font-size: 1.4rem;}
+//&include{new/image.css}
+//&include{new/divider.css}
+//&include{new/form.css}
+//&include{new/button.css}
+//&include{new/grid.css}
 
-// Hacks
-h6.clearfix {
+/***********************************************************************
+ * Hacks
+ **********************************************************************/
+
+div.flowhack {
   visibility: hidden;
-  margin: 0; padding: 0; font-size: 0px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 0;
+  line-height: 0;
+}
+
+div.flowhack + pre {
+  font-size: 1.4rem;
 }
 
 /***********************************************************************
  * Media
  **********************************************************************/
+
+@media screen and (max-width: 800px) {
+  body {
+      padding: 1rem;
+  }
+}
 
 /* Larger than mobile */
 @media screen and (min-width: 400px) {
@@ -65,31 +77,36 @@ h6.clearfix {
 
 /* Larger than tablet */
 @media screen and (min-width: 750px) {
-    body {
-        width: 76rem;
-    }
+  body {
+      width: 76rem;
+  }
 }
 
 /* Larger than desktop */
-@media screen and (min-width: 1000px) {
-}
+//@media screen and (min-width: 1000px) { }
 
 /* Larger than Desktop HD */
-@media screen and (min-width: 1200px) {
-}
+//@media screen and (min-width: 1200px) { }
 
 /***********************************************************************
  * jqt theme
  **********************************************************************/
 
+body {
+  background-color: &ColorInitial;
+}
+
 &include{menu.css}
 &include{toc.css}
 &include{footer.css}
 
-/***********************************************************************
 // Pandoc fixes
- **********************************************************************/
-
+.footnotes ol {
+  list-style: decimal outside;
+}
+.footnotes li {
+  margin-left: 1em;
+}
 .footnotes p {
   margin: 0;
   padding: 0;

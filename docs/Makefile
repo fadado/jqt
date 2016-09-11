@@ -64,7 +64,7 @@ Common := \
 	$(Meta)/config.json		\
 	$(Meta)/snippets.json		\
 	$(Layouts)/default.html		\
-	$(Layouts)/head.html		\
+	$(Layouts)/meta.html		\
 	$(Layouts)/footer.html		\
 	$(Content)/LINKS.txt		\
 	filters.jq			\
@@ -144,7 +144,7 @@ endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/style.css: $(Styles)/*.css $(Styles)/sheet/*.css
+$(Destination)/style.css: $(Styles)/*.css $(Styles)/new/*.css
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 

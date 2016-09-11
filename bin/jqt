@@ -472,7 +472,8 @@ function render
     jq  "${JQ_PATH[@]}" \
         '--raw-output'  \
         '--from-file'   \
-        "$script"
+        "$script"       \
+    | sed -e 's/^[ \t]\+</</g;s/>[ \t]\+$/>/g'  # minify HTML
 }
 
 ########################################################################

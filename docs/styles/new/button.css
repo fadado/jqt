@@ -11,20 +11,21 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 // Macros
+
 &define{_button}{
   .button&1,
   button&1
-}
-
-&define{_button2}{
-  &_button{&1:hover},
-  &_button{&1:focus}
 }
 
 &define{_input}{
   input[type='button']&1,
   input[type='reset']&1,
   input[type='submit']&1
+}
+
+&define{_button2}{
+  &_button{&1:hover},
+  &_button{&1:focus}
 }
 
 &define{_input2}{
@@ -43,6 +44,7 @@
 }
 
 // Rules
+
 &_both {
   background-color: &ColorPrimary;
   border: 0.1rem solid &ColorPrimary;

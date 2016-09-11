@@ -18,18 +18,18 @@
   float: left;
 }
 
-// IE6 hack
+// JJOR: disable old IE6 hack
 //.clearfix {
 //  *zoom: 1;
 //}
 
-.clearfix:after,
-.clearfix:before {
+.clearfix::after, // JJOR: use :: for pseudo-elements
+.clearfix::before {
   content: '';
   display: table;
 }
 
-.clearfix:after {
+.clearfix::after {
   clear: both;
 }
 

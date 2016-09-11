@@ -5,7 +5,7 @@ updated: "2016-08-28T10:27:09Z"
 <%include macros.m>&
 <%include LINKS.txt>&
 
-## Engine implementation
+## Implementation
 
 _jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
 [YAML][YAML] or [JSON][JSON] data into a final HTML page. The transformation is driven by a template,

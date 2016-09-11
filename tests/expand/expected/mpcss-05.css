@@ -1,7 +1,6 @@
 
 
-SEL {
-  a {
+a {
     color: red;
   }
   a:visited {
@@ -14,5 +13,4 @@ SEL {
     color: yellow;
   }
 
-}
 

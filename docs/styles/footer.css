@@ -6,11 +6,11 @@
   border-top: 4px solid &ColorQuaternary;
 }
 
-.Footer_license {
+.Footer .Footer_license {
   text-align:center;
 }
 
-.Footer_license > p {
+.Footer .Footer_license > p {
   margin-bottom: 0;
 }
 
@@ -18,7 +18,7 @@
 	text-align: center;
 }
 
-.GitHubMenu_section  {
+.GitHubMenu > a  {
 	font-variant: small-caps;
   font-weight: bold;
 }

@@ -8,11 +8,7 @@
   font-variant: small-caps;
   text-transform: lowercase;
   border-bottom: 4px solid &ColorQuaternary;
-  outline: none;
-}
-
-.MenuBar a {
-  padding: 4px;
+  list-style: none;
 }
 
 .MenuBar_logo {
@@ -30,15 +26,16 @@
 
 .MenuBar_item {
   display: inline;
-  margin: 0 1rem;
   font-size: 120%;
   font-weight: bold;
 }
 
-.MenuBar_item-active,
-.MenuBar a:hover {
-  color: &ColorPrimary;
-  background-color: &ColorTertiary;
+.MenuBar_item:not(:last-child) {
+  margin: 0 1rem;
+}
+
+.MenuBar_item.-active > a {
+  text-decoration: underline;
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
