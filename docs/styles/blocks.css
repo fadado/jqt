@@ -1,0 +1,167 @@
+////////////////////////////////////////////////////////////////////////
+// Layout
+////////////////////////////////////////////////////////////////////////
+
+&define{HorizontalRule}{ 0.4rem solid &ColorTertiary }
+
+/***********************************************************************
+** Header
+***********************************************************************/
+
+.\#_Header {
+  border-bottom: &HorizontalRule;
+}
+
+/***********************************************************************
+** Body
+***********************************************************************/
+
+/*
+.\#_Body {
+}
+*/
+
+.\#_Body_panel {
+  border: 0.3rem solid &ColorQuaternary;
+}
+
+.\#_Body_panel.-side-right {
+  float: right;
+  margin: 0 0 0 1rem;
+}
+
+/*
+.\#_Body_panel.-side-left {
+  float: left;
+  margin: 0 1rem 0 0;
+}
+*/
+
+/***********************************************************************
+** Footer
+***********************************************************************/
+
+.\#_Footer {
+  border-top: &HorizontalRule;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Logo
+////////////////////////////////////////////////////////////////////////
+
+.Logo {
+  font-size: 2.6rem;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Version
+////////////////////////////////////////////////////////////////////////
+
+.Version {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+////////////////////////////////////////////////////////////////////////
+// MenuBar
+////////////////////////////////////////////////////////////////////////
+
+.MenuBar {
+  display: inline;
+  padding: 0;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  list-style: none;
+}
+
+.MenuBar_item {
+  display: inline;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.MenuBar_item:first-child {
+  margin-left: 1rem;
+}
+
+.MenuBar_item:not(:last-child) {
+  margin-right: 2rem;
+}
+
+.MenuBar_item.-active > a {
+  text-decoration: underline;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Toc
+////////////////////////////////////////////////////////////////////////
+
+.Toc {
+  width: 16em;
+  padding: 0 1em;
+  text-align: center;
+  font-size: 80%;
+  font-weight: bold;
+}
+
+.Toc_title {
+  margin-bottom: 0.5em;
+  border-bottom: 0.1rem solid &ColorQuaternary;
+  font-weight: bold;
+}
+
+.Toc ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: square;
+  font-size: inherit;
+  text-align: left;
+}
+
+.Toc li {
+  margin: 0;
+}
+
+////////////////////////////////////////////////////////////////////////
+// License
+////////////////////////////////////////////////////////////////////////
+
+.License {
+  text-align: center;
+}
+
+.License > p {
+  margin-bottom: 0;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Repository
+////////////////////////////////////////////////////////////////////////
+
+.Repository  {
+	text-align: center;
+  list-style: none;
+}
+
+.Repository_section  {
+  display: inline;
+	font-variant: small-caps;
+  font-weight: bold;
+}
+
+.Repository_section:first-child:before  {
+  content: "❲";
+  color: &ColorSecondary;
+}
+
+.Repository_section:not(last-child):after  {
+  content: "❘";
+  color: &ColorSecondary;
+}
+
+.Repository_section:last-child:after  {
+  content: "❳";
+  color: &ColorSecondary;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
