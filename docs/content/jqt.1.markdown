@@ -69,7 +69,7 @@ Copyright © 2015 Joan Josep Ordinas Rosa.
 
 # SEE ALSO
 
-**gpp(1)**, **jq(1)**
+**gpp(1)**, **jq(1)**, **pandoc(1)**
 
 **jqt** home page: <https://fadado.github.com/jqt/>
 
