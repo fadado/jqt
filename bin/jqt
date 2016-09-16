@@ -199,6 +199,19 @@ function expand_json
     echo    # always generate almost one line!!!
 }
 
+css_min2()
+{
+	sed '
+# join rules in one big line
+/[^@]\+{$/,/}$/ {
+	:loop
+	N;
+	/}$/! b loop
+	s/\n//g
+}
+'
+
+}
 # < stdin > stdout
 function expand_css
 {
@@ -225,14 +238,29 @@ function expand_css
     if [[ $minify == 'min' ]]; then
         # +cccc '/*' '*/' # removed multiline comment
         gpp "${gpp_opts[@]}" +cccc '/*' '*/' \
-        | sed 's/^[ \t]\+//;s/[ \t]$//;/^$/d;s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g'
+        | sed '
+# trim spaces
+s/^[ \t]\+//
+s/[ \t]\+$//
+# delete empty lines
+/^$/d
+# remove more spaces
+s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g
+' | sed '
+# join rules in one big line
+/[^@]\+{$/,/}$/ {
+	:loop
+	N;
+	/}$/! b loop
+	s/\n//g
+}
+'
     else
         # +cSSS '/*' '*/' # expanded multiline comment
         gpp "${gpp_opts[@]}" +sSSS '/*' '*/' ''
     fi
     echo    # always generate almost one line!!!
 }
-
 
 ########################################################################
 # Convert template to script
