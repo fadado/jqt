@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html id="content-content" xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>jqt · Authoring content &ndash; jqt, the jq template engine</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="jqt v0.3.0"/>
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 <meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
-<link rel="stylesheet" type="text/css" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="styles.css"/>
 
 <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -31,30 +31,33 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 </head>
 
-<body>
-<div class="#_Header">
-<span class="Logo"><a href="index.html">❴❴❏❵❵</a><span class="Version">v0.3.0</span></span>
-<ol class="MenuBar">
-<li class='MenuBar_item '>
+<body class="#container">
+<div class="#header">
+<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo::version">v0.3.0</span></span>
+
+
+<ol class="menu-bar">
+<li class='menu-bar::item '>
 <a href="./engine.html">Engine</a>
 </li>
-<li class='MenuBar_item '>
+<li class='menu-bar::item '>
 <a href="./structure.html">Structure</a>
 </li>
-<li class='MenuBar_item -active'>
+<li class='menu-bar::item menu-bar::item!active'>
 <a href="./content.html">Content</a>
 </li>
-<li class='MenuBar_item '>
+<li class='menu-bar::item '>
 <a href="./data.html">Data</a>
 </li>
 </ol>
+
 </div>
 
-<div class="#_Body">
+<div class="#body">
 <h1><cite>jqt</cite> · Authoring content</h1>
-<div class="#_Body_panel -side-right Toc">
-<p class="Toc_title">Page contents</p>
-    
+<div class="#panel #panel!side-right toc">
+<p class="toc::title">Page contents</p>
+  
 <ul>
 <li><a href="#general-operation">General operation</a></li>
 <li><a href="#file-structure">File structure</a><ul>
@@ -72,7 +75,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul>
 
 </div>
-<div class="Content">
+
+
+<div class="#content">
 <h2 id="general-operation">General operation</h2>
 <p><em>jqt</em> transforms <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> documents to HTML using Pandoc, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. Pandoc's output is then merged with the <a href="http://yaml.org/">YAML</a> front matter metadata and other input data before be sended to the render stage. This is described on the middle of this diagram:</p>
 <div id="flowhack" class="clearfix">
@@ -154,7 +159,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <span class="kw">&lt;span</span><span class="ot"> style=</span><span class="st">&quot;font-variant:small-caps;&quot;</span><span class="kw">&gt;</span>$1<span class="kw">&lt;/span&gt;</span>
 &gt;</code></pre>
 <p>Predefined macros and user define macros have the same call sequence:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%include LINKS.txt&gt;
+<pre class="sourceCode html"><code class="sourceCode html"><span class="er">&lt;</span>%include content/LINKS.txt&gt;
 <span class="er">&lt;</span>%sc &#39;A title in small caps&#39;&gt;</code></pre>
 <p>Warning: you must read the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
 <h4 id="skips">Skips</h4>
@@ -260,19 +265,23 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 </ol>
 </div>
 
-</div>    </div>
+</div>
 
-<div class="#_Footer">
-<div class="License">
+</div>
+
+<div class="#footer">
+<div class="license">
 <p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
 
 </div>
-<ol class="Repository">
-<li class="Repository_section"><a href="https://github.com/fadado/jqt">code</a></li>
-<li class="Repository_section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
-<li class="Repository_section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
-<li class="Repository_section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+
+<ol class="repository">
+<li class="repository::section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="repository::section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="repository::section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="repository::section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
 </ol>
+
 
 </div>
 
