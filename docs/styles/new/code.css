@@ -14,19 +14,17 @@ code {
   background: &ColorTertiary;
   border-radius: .4rem;
   font-size: 86%;
-  padding: .2rem .5rem;
   margin: 0 .2rem;
+  padding: .2rem .5rem;
   white-space: nowrap;
 }
 
 pre {
   background: &ColorTertiary;
   border-left: 0.3rem solid &ColorPrimary;
-  font-family: 'Menlo', 'Consolas', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Monaco', monospace;
 }
 
 pre > code {
-  background: transparent;
   border-radius: 0;
   display: block;
   padding: 1rem 1.5rem;

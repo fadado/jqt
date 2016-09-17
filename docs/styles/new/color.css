@@ -15,7 +15,7 @@
 &endif
 
 &ifndef{ColorPrimary}
-&define{ColorPrimary}{#9B4DcA}
+&define{ColorPrimary}{#9B4DCA}
 &endif
 
 &ifndef{ColorSecondary}
@@ -28,6 +28,10 @@
 
 &ifndef{ColorQuaternary}
 &define{ColorQuaternary}{#D1D1D1}
+&endif
+
+&ifndef{ColorQuinary}
+&define{ColorQuinary}{#E1E1E1}
 &endif
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

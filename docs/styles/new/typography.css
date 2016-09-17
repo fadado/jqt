@@ -22,8 +22,14 @@ p {
   margin-top: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 300;
+	letter-spacing: -.1rem;
   margin-bottom: calc(&TypographyScale * 2.0rem);
   margin-top: 0;  // calc(&TypographyScale * 0)
 }
@@ -43,7 +49,8 @@ h1, h2, h3, h4, h5, h6 {
 &_heading{h5}{1.8rem}{-0.5rem}{ 1.5}
 &_heading{h6}{1.6rem}{ 0.0rem}{ 1.4}
 
-@media (min-width: 40rem) {
+// Larger than mobile screen
+@media (min-width: 40rem) {  // Safari desktop has a bug using `rem`, but Safari mobile works
   h1 { font-size: calc(&TypographyScale * 5.0rem); }
   h2 { font-size: calc(&TypographyScale * 4.2rem); }
   h3 { font-size: calc(&TypographyScale * 3.6rem); }

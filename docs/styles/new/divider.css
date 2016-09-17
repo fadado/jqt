@@ -13,8 +13,7 @@
 hr {
   border: 0;
   border-top: 0.1rem solid &ColorTertiary;
-  margin-bottom: calc(&SpacingScale * 3.5rem);
-  margin-top: calc(&SpacingScale  * 3.0rem);
+  margin: calc(&SpacingScale * 3.0rem) 0;
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

@@ -20,19 +20,17 @@
 &include{new/base.css}
 &include{new/spacing.css}
 &include{new/typography.css}
-
-// Optional modules
-&include{new/link.css}
 &include{new/blockquote.css}
 &include{new/code.css}
+&include{new/link.css}
 &include{new/list.css}
 &include{new/table.css}
-&include{new/utility.css}
 &include{new/divider.css}
+&include{new/grid.css}
+&include{new/utility.css}
 //&include{new/image.css}
 //&include{new/form.css}
 //&include{new/button.css}
-//&include{new/grid.css}
 
 /***********************************************************************
  * Hacks
@@ -55,32 +53,14 @@
  * Media
  **********************************************************************/
 
-@media screen and (max-width: 800px) {
-  body {
-      padding: 1rem;
-  }
-}
-
 /* Larger than mobile */
-@media screen and (min-width: 400px) {
-  body {
-      margin: 5px auto;
-  }
-}
+//@media screen and (min-width: 400px) { }
 
 /* Larger than phablet (also point when grid becomes active) */
-@media screen and (min-width: 550px) {
-  body {
-      margin: 10px auto;
-  }
-}
+//@media screen and (min-width: 550px) { }
 
 /* Larger than tablet */
-@media screen and (min-width: 750px) {
-  body {
-      width: 76rem;
-  }
-}
+//@media screen and (min-width: 750px) { }
 
 /* Larger than desktop */
 //@media screen and (min-width: 1000px) { }
@@ -92,11 +72,21 @@
  * jqt theme
  **********************************************************************/
 
+body.Container {
+  max-width: 800px;
+}
+
 body {
   background-color: &ColorInitial;
 }
 
-// Pandoc fixes
+h2:target::after,
+h3:target::after,
+h4:target::after {
+  content: " §";
+  color: &ColorQuaternary;
+  font-family: serif;
+}
 
 td {
   font-size: 90%;
@@ -105,15 +95,25 @@ td {
 
 dt {
   margin-bottom: 0.1em;
+  font-weight: bold;
+}
+
+
+ul {
+  list-style-type: square;
+  list-style-position: outside;
+  margin-left: 1em;
+}
+
+pre > code {
+  font-family: "Liberation Mono", FreeMono, "Nimbus Mono L", monospace;
 }
 
 .footnotes ol {
-  list-style: decimal outside;
+  list-style-type: decimal;
+  list-style-position: outside;
   line-height: 1.3;
   font-size: 90%;
-}
-
-.footnotes li {
   margin-left: 1em;
 }
 

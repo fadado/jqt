@@ -5,25 +5,31 @@
 &include{new/normalize.css}
 &include{new/colornames.css}
 
-// Not defined by Milligram
+&define{B}{.&1}
+&define{BE}{.&1_&2}
+&define{BM}{.&1-&2,.&1.-&2}
+&define{BEM}{.&1_&2-&3,.&1_&2.-&3}
 
-dt { font-weight: bold; }
+&define{LB}{.\#_&1}
+&define{LBE}{.\#_&1_&2}
+&define{LBM}{.\#_&1-&2,.\#_&1.-&2}
+&define{LBEM}{.\#_&1_&2-&3,.\#_&1_&2.-&3}
 
-// All available modules
-//&include{new/color.css} (included by base.css)
+// All available modules (first must be included color.css)
 //&include{new/base.css}
-//&include{new/spacing.css}
-//&include{new/typography.css}
-//&include{new/link.css}
 //&include{new/blockquote.css}
+//&include{new/button.css}
 //&include{new/code.css}
-//&include{new/list.css}
-//&include{new/table.css}
-//&include{new/utility.css}
-//&include{new/image.css}
+//&include{new/color.css}
 //&include{new/divider.css}
 //&include{new/form.css}
-//&include{new/button.css}
 //&include{new/grid.css}
+//&include{new/image.css}
+//&include{new/link.css}
+//&include{new/list.css}
+//&include{new/spacing.css}
+//&include{new/table.css}
+//&include{new/typography.css}
+//&include{new/utility.css}
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

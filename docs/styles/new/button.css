@@ -1,4 +1,4 @@
-// Adapted from:
+// Adapted (with some renaming experiments) from:
 /*!
  * Milligram v1.1.0
  * http://milligram.github.io
@@ -12,40 +12,22 @@
 
 // Macros
 
-&define{_button}{
-  .button&1,
-  button&1
-}
-
-&define{_input}{
+&define{_buttons}{
+  .Button&1,
+  button&1,
   input[type='button']&1,
   input[type='reset']&1,
   input[type='submit']&1
 }
 
-&define{_button2}{
-  &_button{&1:hover},
-  &_button{&1:focus}
-}
-
-&define{_input2}{
-  &_input{&1:hover},
-  &_input{&1:focus}
-}
-
-&define{_both}{
-  &_button{&1},
-  &_input{&1}
-}
-
-&define{_both2}{
-  &_button2{&1},
-  &_input2{&1}
+&define{_buttons_active}{
+  &_buttons{&1:hover},
+  &_buttons{&1:focus}
 }
 
 // Rules
 
-&_both {
+&_buttons {
   background-color: &ColorPrimary;
   border: 0.1rem solid &ColorPrimary;
   border-radius: .4rem;
@@ -64,56 +46,56 @@
   white-space: nowrap;
 }
 
-&_both2 {
+&_buttons_active {
   background-color: &ColorSecondary;
   border-color: &ColorSecondary;
   color: &ColorInitial;
   outline: 0;
 }
 
-&_both{.button-disabled},
-&_both{[disabled]} {
-  opacity: .5;
+&_buttons{.Button-disabled},
+&_buttons{[disabled]} {
   cursor: default;
+  opacity: .5;
 }
 
-&_both2{.button-disabled},
-&_both2{[disabled]} {
+&_buttons_active{.Button-disabled},
+&_buttons_active{[disabled]} {
   background-color: &ColorPrimary;
   border-color: &ColorPrimary;
 }
 
-&_both{.button-outline} {
-  color: &ColorPrimary;
+&_buttons{.Button-outline} {
   background-color: transparent;
+  color: &ColorPrimary;
 }
 
-&_both2{.button-outline} {
-  color: &ColorSecondary;
+&_buttons_active{.Button-outline} {
   background-color: transparent;
   border-color: &ColorSecondary;
+  color: &ColorSecondary;
 }
 
-&_both2{.button-outline.button-disabled},
-&_both2{.button-outline[disabled]} {
+&_buttons_active{.Button-outline.Button-disabled},
+&_buttons_active{.Button-outline[disabled]} {
   color: &ColorPrimary;
   border-color: inherit;
 }
 
-&_both{.button-clear} {
+&_buttons{.Button-clear} {
   color: &ColorPrimary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_both2{.button-clear} {
+&_buttons_active{.Button-clear} {
   color: &ColorSecondary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_both2{.button-clear.button-disabled},
-&_both2{.button-clear[disabled]} {
+&_buttons_active{.Button-clear.Button-disabled},
+&_buttons_active{.Button-clear[disabled]} {
   color: &ColorPrimary;
 }
 

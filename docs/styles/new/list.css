@@ -10,42 +10,27 @@
 // List
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-dl,
-ol,
-ul {
+&define{_lists}{&1 dl, &1 ol, &1 ul}
+
+&_lists{} {
+  list-style: none;
   margin-top: 0;
   padding-left: 0;
 }
 
-dl dl,
-dl ul,
-dl ol,
-ol dl,
-ol ul,
-ol ol,
-ul dl,
-ul ul,
-ul ol {
+&_lists{dl},
+&_lists{ol},
+&_lists{ul} {
   font-size: 90%;
   margin: 1.5rem 0 1.5rem 3.0rem;
-}
-
-dl {
-  list-style: none;
-}
-
-ul {
-  list-style: circle inside;
 }
 
 ol {
   list-style: decimal inside;
 }
 
-dt,
-dd,
-li {
-  margin-bottom: 1.0rem;
+ul {
+  list-style: circle inside;
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

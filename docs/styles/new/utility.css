@@ -10,27 +10,20 @@
 // Utility
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
+// Clear a float with .clearfix
+.clearfix::after {
+  clear: both;
+  content: ' ';  // The space content is one way to avoid an Opera bug.
+  display: table;
+}
+
+// Float either direction
 .float-right {
   float: right;
 }
 
 .float-left {
   float: left;
-}
-
-// JJOR: disable old IE6 hack
-//.clearfix {
-//  *zoom: 1;
-//}
-
-.clearfix::after, // JJOR: use :: for pseudo-elements
-.clearfix::before {
-  content: '';
-  display: table;
-}
-
-.clearfix::after {
-  clear: both;
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
