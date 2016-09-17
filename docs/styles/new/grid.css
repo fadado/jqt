@@ -84,7 +84,7 @@
 
 &define{_offset}{
   .row .column.column-offset-&1 {
-    margin-left: &2;
+  margin-left: &2;
   }
 }
 &_offset{10}{10%}

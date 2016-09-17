@@ -10,6 +10,7 @@
 
 .\#_Header {
   border-bottom: &HorizontalRule;
+  margin-bottom: 1.5rem;
 }
 
 /***********************************************************************
@@ -116,6 +117,7 @@
   list-style-type: square;
   font-size: inherit;
   text-align: left;
+  line-height: 1.4;
 }
 
 .Toc li {
@@ -150,17 +152,17 @@
 }
 
 .Repository_section:first-child:before  {
-  content: "❲";
+  content: "❲ ";
   color: &ColorSecondary;
 }
 
 .Repository_section:not(last-child):after  {
-  content: "❘";
+  content: " ❘ ";
   color: &ColorSecondary;
 }
 
 .Repository_section:last-child:after  {
-  content: "❳";
+  content: " ❳";
   color: &ColorSecondary;
 }
 

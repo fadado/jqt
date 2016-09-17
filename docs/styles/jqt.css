@@ -11,7 +11,12 @@
 &define{ColorTertiary}{&WhiteSmoke}
 &define{ColorQuaternary}{&LightGrey}
 
+&define{Scale}{1}
+&define{SpacingScale}{0.5}
+&define{TypographyScale}{0.7}
+
 // Milligran modules
+&include{new/color.css}
 &include{new/base.css}
 &include{new/spacing.css}
 &include{new/typography.css}
@@ -23,8 +28,8 @@
 &include{new/list.css}
 &include{new/table.css}
 &include{new/utility.css}
+&include{new/divider.css}
 //&include{new/image.css}
-//&include{new/divider.css}
 //&include{new/form.css}
 //&include{new/button.css}
 //&include{new/grid.css}
@@ -92,8 +97,20 @@ body {
 }
 
 // Pandoc fixes
+
+td {
+  font-size: 90%;
+  padding: 0.8rem 1.0rem;
+}
+
+dt {
+  margin-bottom: 0.1em;
+}
+
 .footnotes ol {
   list-style: decimal outside;
+  line-height: 1.3;
+  font-size: 90%;
 }
 
 .footnotes li {

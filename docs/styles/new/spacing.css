@@ -7,19 +7,27 @@
  * Licensed under the MIT license
 */
 
+&ifndef{SpacingScale}
+&ifdef{Scale}
+&define{SpacingScale}{&Scale}
+&else
+&define{SpacingScale}{1.0}
+&endif
+&endif
+
 // Spacing
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 .button,
 button {
-  margin-bottom: 1.0rem;
+  margin-bottom: calc(&SpacingScale * 1.0rem);
 }
 
 input,
 textarea,
 select,
 fieldset {
-  margin-bottom: 1.5rem;
+  margin-bottom: calc(&SpacingScale * 1.5rem);
 }
 
 pre,
@@ -31,7 +39,7 @@ p,
 ul,
 ol,
 form {
-  margin-bottom: 2.5rem;
+  margin-bottom: calc(&SpacingScale  * 2.5rem);
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
