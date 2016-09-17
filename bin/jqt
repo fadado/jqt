@@ -245,7 +245,7 @@ s/[ \t]\+$//
 # delete empty lines
 /^$/d
 # remove more spaces
-s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g
+s/[\t ]*\([{}:,;>~]\)[\t ]*/\1/g
 ' | sed '
 # join rules in one big line
 /[^@]\+{$/,/}$/ {
@@ -259,7 +259,6 @@ s/[\t ]*\([{}:,;>+~]\)[\t ]*/\1/g
         # +cSSS '/*' '*/' # expanded multiline comment
         gpp "${gpp_opts[@]}" +sSSS '/*' '*/' ''
     fi
-    echo    # always generate almost one line!!!
 }
 
 ########################################################################

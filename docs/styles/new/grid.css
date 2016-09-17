@@ -1,4 +1,4 @@
-// Adapted from:
+// Adapted (with some renaming experiments) from:
 /*!
  * Milligram v1.1.0
  * http://milligram.github.io
@@ -10,7 +10,8 @@
 // Grid
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-.container {
+// .Container is main centered wrapper with a max width of 112.0rem (1120px)
+&BEM{Container} {
   margin: 0 auto;
   max-width: 112.0rem;
   padding: 0 2.0rem;
@@ -18,51 +19,59 @@
   width: 100%;
 }
 
-.row {
+// Using flexbox for the grid, inspired by Philip Walton:
+// http://philipwalton.github.io/solved-by-flexbox/demos/grids/
+// By default each .Column within a .Row will evenly take up
+// available width, and the height of each .Column with take
+// up the height of the tallest .Column in the same .Row
+&BEM{Row} {
   display: flex;
   flex-direction: column;
   padding: 0;
   width: 100%;
 }
 
-.row.row-wrap {
+&BEM{Row}{}{noPadding} {
+  padding: 0;
+}
+
+&BEM{Row}{}{noPadding}{> &BEM{Column}} {
+  padding: 0;
+}
+
+&BEM{Row}{}{wrap} {
   flex-wrap: wrap;
 }
 
-.row.row-no-padding {
-  padding: 0;
-}
-
-.row.row-no-padding > .column {
-  padding: 0;
-}
-
-.row.row-top {
+// Vertically Align Columns
+// .Row-align-* vertically aligns every .Column in the .Row
+&BEM{Row}{}{align-top} {
   -ms-grid-row-align: flex-start;
-      align-items: flex-start;
+         align-items: flex-start;
 }
 
-.row.row-bottom {
+&BEM{Row}{}{align-bottom} {
   -ms-grid-row-align: flex-end;
-      align-items: flex-end;
+         align-items: flex-end;
 }
 
-.row.row-center {
+&BEM{Row}{}{align-center} {
   -ms-grid-row-align: center;
-      align-items: center;
+         align-items: center;
 }
 
-.row.row-stretch {
+&BEM{Row}{}{align-stretch} {
   -ms-grid-row-align: stretch;
       align-items: stretch;
 }
 
-.row.row-baseline {
+&BEM{Row}{}{align-baseline} {
   -ms-grid-row-align: baseline;
       align-items: baseline;
 }
 
-.row .column {
+// JJOR: original = .Row .Col..., removed .Row
+&BEM{Column} {
   display: block;
   flex: 1;
   margin-left: 0;
@@ -70,60 +79,74 @@
   width: 100%;
 }
 
-.row .column .col-top {
-  align-self: flex-start;
-}
-
-.row .column .col-bottom {
-  align-self: flex-end;
-}
-
-.row .column .col-center {
-  align-self: center;
-}
-
-&define{_offset}{
-  .row .column.column-offset-&1 {
-  margin-left: &2;
+// Column Offsets
+&define{_col_offset}{
+// JJOR: original = .Row .Col..., removed .Row
+  &BEM{Column}{}{offset-&1} {
+    margin-left: &2;
   }
 }
-&_offset{10}{10%}
-&_offset{20}{20%}
-&_offset{25}{25%}
-&_offset{33}{33.3333%}
-&_offset{34}{33.3333%}
-&_offset{50}{50%}
-&_offset{66}{66.6666%}
-&_offset{67}{66.6666%}
-&_offset{75}{75%}
-&_offset{80}{80%}
-&_offset{90}{90%}
 
-&define{_column}{
-  .row .column.column-&1 {
+&_col_offset{10}{10%}
+&_col_offset{20}{20%}
+&_col_offset{25}{25%}
+&_col_offset{33}{33.3333%}
+&_col_offset{34}{33.3333%}
+&_col_offset{50}{50%}
+&_col_offset{66}{66.6666%}
+&_col_offset{67}{66.6666%}
+&_col_offset{75}{75%}
+&_col_offset{80}{80%}
+&_col_offset{90}{90%}
+
+// Explicit Column Percent Sizes
+// By default each grid column will evenly distribute
+// across the grid. However, you can specify individual
+// columns to take up a certain size of the available area
+&define{_col_size}{
+// JJOR: original = .Row .Col..., removed .Row
+  &BEM{Column}{}{size-&1} {
     flex: 0 0 &2;
     max-width: &2;
   }
 }
-&_column{10}{10%}
-&_column{20}{20%}
-&_column{25}{25%}
-&_column{33}{33.3333%}
-&_column{34}{33.3333%}
-&_column{50}{50%}
-&_column{66}{66.6666%}
-&_column{67}{66.6666%}
-&_column{75}{75%}
-&_column{80}{80%}
-&_column{90}{90%}
 
-@media (min-width: 40rem) {
-  .row {
+&_col_size{10}{10%}
+&_col_size{20}{20%}
+&_col_size{25}{25%}
+&_col_size{33}{33.3333%}
+&_col_size{34}{33.3333%}
+&_col_size{50}{50%}
+&_col_size{66}{66.6666%}
+&_col_size{67}{66.6666%}
+&_col_size{75}{75%}
+&_col_size{80}{80%}
+&_col_size{90}{90%}
+
+// .Column-align-* vertically aligns an individual .Column
+// JJOR: original = .C .C-m (bug?), changed to .C.C-m
+// JJOR: original = .Row .Col..., removed .Row
+&BEM{Column}{}{align-top} {
+  align-self: flex-start;
+}
+
+&BEM{Column}{}{align-bottom} {
+  align-self: flex-end;
+}
+
+&BEM{Column}{}{align-center} {
+  align-self: center;
+}
+
+// Larger than mobile screen
+@media (min-width: 40rem) { // Safari desktop has a bug using `rem`, but Safari mobile works
+  &BEM{Row} {
     flex-direction: row;
     margin-left: -1.0rem;
     width: calc(100% + 2.0rem);
   }
-  .row .column {
+  // JJOR: original = .Row .Col..., removed .Row
+  &BEM{Column} {
     margin-bottom: inherit;
     padding: 0 1.0rem;
   }

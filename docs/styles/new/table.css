@@ -14,20 +14,19 @@ table {
   width: 100%;
 }
 
-th,
-td {
-  border-bottom: .1rem solid #E1E1E1;
+&define{_cells}{th&1, td&1}
+
+&_cells{} {
+  border-bottom: .1rem solid &ColorQuinary;
   padding: 1.2rem 1.5rem;
   text-align: left;
 }
 
-th:first-child,
-td:first-child {
+&_cells{:first-child} {
   padding-left: 0;
 }
 
-th:last-child,
-td:last-child {
+&_cells{:last-child} {
   padding-right: 0;
 }
 

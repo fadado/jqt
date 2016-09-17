@@ -2,13 +2,13 @@
 // Layout
 ////////////////////////////////////////////////////////////////////////
 
-&define{HorizontalRule}{ 0.4rem solid &ColorTertiary }
+&define{HorizontalRule}{0.4rem solid &ColorTertiary}
 
 /***********************************************************************
 ** Header
 ***********************************************************************/
 
-.\#_Header {
+&BEM{\#_Header} {
   border-bottom: &HorizontalRule;
   margin-bottom: 1.5rem;
 }
@@ -17,22 +17,17 @@
 ** Body
 ***********************************************************************/
 
-/*
-.\#_Body {
-}
-*/
-
-.\#_Body_panel {
+&BEM{\#_Panel} {
   border: 0.3rem solid &ColorQuaternary;
 }
 
-.\#_Body_panel.-side-right {
+&BEM{\#_Panel}{}{side-right} {
   float: right;
   margin: 0 0 0 1rem;
 }
 
 /*
-.\#_Body_panel.-side-left {
+&BEM{\#_Panel}{}{side-left} {
   float: left;
   margin: 0 1rem 0 0;
 }
@@ -42,7 +37,7 @@
 ** Footer
 ***********************************************************************/
 
-.\#_Footer {
+&BEM{\#_Footer} {
   border-top: &HorizontalRule;
 }
 
@@ -50,7 +45,7 @@
 // Logo
 ////////////////////////////////////////////////////////////////////////
 
-.Logo {
+&BEM{Logo} {
   font-size: 2.6rem;
 }
 
@@ -58,7 +53,7 @@
 // Version
 ////////////////////////////////////////////////////////////////////////
 
-.Version {
+&BEM{Version} {
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -67,7 +62,7 @@
 // MenuBar
 ////////////////////////////////////////////////////////////////////////
 
-.MenuBar {
+&BEM{MenuBar} {
   display: inline;
   padding: 0;
   font-variant: small-caps;
@@ -75,21 +70,21 @@
   list-style: none;
 }
 
-.MenuBar_item {
+&BEM{MenuBar}{item} {
   display: inline;
   font-size: 120%;
   font-weight: bold;
 }
 
-.MenuBar_item:first-child {
+&BEM{MenuBar}{item}:first-child {
   margin-left: 1rem;
 }
 
-.MenuBar_item:not(:last-child) {
+&BEM{MenuBar}{item}:not(:last-child) {
   margin-right: 2rem;
 }
 
-.MenuBar_item.-active > a {
+&BEM{MenuBar}{item}{active}{> a} {
   text-decoration: underline;
 }
 
@@ -97,21 +92,20 @@
 // Toc
 ////////////////////////////////////////////////////////////////////////
 
-.Toc {
+&BEM{Toc} {
   width: 16em;
   padding: 0 1em;
   text-align: center;
   font-size: 80%;
-  font-weight: bold;
 }
 
-.Toc_title {
+&BEM{Toc}{title} {
   margin-bottom: 0.5em;
   border-bottom: 0.1rem solid &ColorQuaternary;
   font-weight: bold;
 }
 
-.Toc ul {
+&BEM{Toc} ul {
   margin-top: 0;
   margin-bottom: 0;
   list-style-type: square;
@@ -120,7 +114,7 @@
   line-height: 1.4;
 }
 
-.Toc li {
+&BEM{Toc} li {
   margin: 0;
 }
 
@@ -128,11 +122,11 @@
 // License
 ////////////////////////////////////////////////////////////////////////
 
-.License {
+&BEM{License} {
   text-align: center;
 }
 
-.License > p {
+&BEM{License} > p {
   margin-bottom: 0;
 }
 
@@ -140,28 +134,28 @@
 // Repository
 ////////////////////////////////////////////////////////////////////////
 
-.Repository  {
+&BEM{Repository}  {
 	text-align: center;
   list-style: none;
 }
 
-.Repository_section  {
+&BEM{Repository}{section}  {
   display: inline;
 	font-variant: small-caps;
   font-weight: bold;
 }
 
-.Repository_section:first-child:before  {
+&BEM{Repository}{section}:first-child:before  {
   content: "❲ ";
   color: &ColorSecondary;
 }
 
-.Repository_section:not(last-child):after  {
+&BEM{Repository}{section}:not(last-child):after  {
   content: " ❘ ";
   color: &ColorSecondary;
 }
 
-.Repository_section:last-child:after  {
+&BEM{Repository}{section}:last-child:after  {
   content: " ❳";
   color: &ColorSecondary;
 }
