@@ -5,15 +5,10 @@
 &include{new/normalize.css}
 &include{new/colornames.css}
 
-&define{B}{.&1}
-&define{BE}{.&1_&2}
-&define{BM}{.&1-&2,.&1.-&2}
-&define{BEM}{.&1_&2-&3,.&1_&2.-&3}
+&define{Esep}{__}
+&define{Msep}{_}
 
-&define{LB}{.\#_&1}
-&define{LBE}{.\#_&1_&2}
-&define{LBM}{.\#_&1-&2,.\#_&1.-&2}
-&define{LBEM}{.\#_&1_&2-&3,.\#_&1_&2.-&3}
+&define{BEM}{.&1&ifneq{&2}{}&Esep&2&endif&ifneq{&3}{}&Msep&3 &4,.&1&ifneq{&2}{}&Esep&2&endif.&Msep&3 &4&endif}
 
 // All available modules (first must be included color.css)
 //&include{new/base.css}

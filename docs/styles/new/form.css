@@ -72,7 +72,7 @@ input[type='radio'] {
   display: inline;
 }
 
-&BM{Label}{inline} {
+&BEM{Label}{}{inline} {
   display: inline-block;
   font-weight: normal;
   margin-left: .5rem;

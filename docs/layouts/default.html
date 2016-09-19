@@ -8,18 +8,18 @@
   </head>
 
   <body class="Container">
-    <div class="#_Header">
+    <div class="#Header">
       <span class="Logo"><a href="index.html">{{.site.logo}}</a><span class="Version">v<%include ../VERSION></span></span>
       <ol class="MenuBar">
 {% .site.menu[] %}
-        <li class='MenuBar_item {{if .path==$M.page._path then "-active" else "" end}}'>
+        <li class='MenuBar__item {{if .path==$M.page._path then "_active" else "" end}}'>
           <a href="{{.URL}}">{{.name}}</a>
         </li>
 {% end %}
       </ol>
     </div>
 
-    <div class="#_Body">
+    <div class="#Body">
 <%ifndef BODY_TITLE>&
       <h1>{{.snippets.title}}</h1>
 <%else><%call BODY_TITLE><%endif>&
@@ -31,7 +31,7 @@
 <%else><%call BODY_BLOCK><%endif>&
     </div>
 
-    <div class="#_Footer">
+    <div class="#Footer">
 <%include "footer.html">
     </div>
 
