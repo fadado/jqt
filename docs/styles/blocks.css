@@ -8,7 +8,7 @@
 ** Header
 ***********************************************************************/
 
-&BEM{\#Header} {
+&BEM{#Header} {
   border-bottom: &HorizontalRule;
   margin-bottom: 1.5rem;
 }
@@ -17,17 +17,17 @@
 ** Body
 ***********************************************************************/
 
-&BEM{\#Panel} {
+&BEM{#Panel} {
   border: 0.3rem solid &ColorQuaternary;
 }
 
-&BEM{\#Panel}{}{side-right} {
+&BEM{#Panel}{}{side-right} {
   float: right;
   margin: 0 0 0 1rem;
 }
 
 /*
-&BEM{\#Panel}{}{side-left} {
+&BEM{#Panel}{}{side-left} {
   float: left;
   margin: 0 1rem 0 0;
 }
@@ -37,7 +37,7 @@
 ** Footer
 ***********************************************************************/
 
-&BEM{\#Footer} {
+&BEM{#Footer} {
   border-top: &HorizontalRule;
 }
 
@@ -70,21 +70,21 @@
   list-style: none;
 }
 
-&BEM{MenuBar}{item} {
+&BEM{MenuBar}{Item} {
   display: inline;
   font-size: 120%;
   font-weight: bold;
 }
 
-&BEM{MenuBar}{item}:first-child {
+&BEM{MenuBar}{Item}:first-child {
   margin-left: 1rem;
 }
 
-&BEM{MenuBar}{item}:not(:last-child) {
+&BEM{MenuBar}{Item}:not(:last-child) {
   margin-right: 2rem;
 }
 
-&BEM{MenuBar}{item}{active}{> a} {
+&BEM{MenuBar}{Item}{active}{> a} {
   text-decoration: underline;
 }
 
@@ -99,7 +99,7 @@
   font-size: 80%;
 }
 
-&BEM{Toc}{title} {
+&BEM{Toc}{Title} {
   margin-bottom: 0.5em;
   border-bottom: 0.1rem solid &ColorQuaternary;
   font-weight: bold;
@@ -139,23 +139,23 @@
   list-style: none;
 }
 
-&BEM{Repository}{section}  {
+&BEM{Repository}{Section}  {
   display: inline;
 	font-variant: small-caps;
   font-weight: bold;
 }
 
-&BEM{Repository}{section}:first-child:before  {
+&BEM{Repository}{Section}:first-child:before  {
   content: "❲ ";
   color: &ColorSecondary;
 }
 
-&BEM{Repository}{section}:not(last-child):after  {
+&BEM{Repository}{Section}:not(last-child):after  {
   content: " ❘ ";
   color: &ColorSecondary;
 }
 
-&BEM{Repository}{section}:last-child:after  {
+&BEM{Repository}{Section}:last-child:after  {
   content: " ❳";
   color: &ColorSecondary;
 }

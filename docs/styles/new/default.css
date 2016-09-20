@@ -8,9 +8,11 @@
 &define{Esep}{__}
 &define{Msep}{_}
 
-&define{BEM}{.&1&ifneq{&2}{}&Esep&2&endif&ifneq{&3}{}&Msep&3 &4,.&1&ifneq{&2}{}&Esep&2&endif.&Msep&3 &4&endif}
+&define{B}{.&if{&1 =~ [A-Za-z_-]*}&1&else\&1&endif}
+&define{E}{&ifneq{&1}{}&Esep&1&endif}
+&define{BEM}{&B{&1}&E{&2}&ifneq{&3}{}&Msep&3 &4,&B{&1}&E{&2}.&Msep&3 &4&endif}
 
-// All available modules (first must be included color.css)
+// All available modules (color.css must be included the first)
 //&include{new/base.css}
 //&include{new/blockquote.css}
 //&include{new/button.css}

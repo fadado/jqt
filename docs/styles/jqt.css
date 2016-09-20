@@ -8,12 +8,12 @@
 &define{ColorInitial}{&White}
 &define{ColorPrimary}{&DarkCyan}
 &define{ColorSecondary}{&Black}
-&define{ColorTertiary}{&WhiteSmoke}
+&define{ColorTertiary}{&LightGrey}
 &define{ColorQuaternary}{&LightGrey}
 
 &define{Scale}{1}
-&define{SpacingScale}{0.5}
-&define{TypographyScale}{0.7}
+&define{SpacingScale}{0.7}
+&define{TypographyScale}{0.8}
 
 // Milligran modules
 &include{new/color.css}

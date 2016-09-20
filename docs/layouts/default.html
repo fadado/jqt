@@ -12,7 +12,7 @@
       <span class="Logo"><a href="index.html">{{.site.logo}}</a><span class="Version">v<%include ../VERSION></span></span>
       <ol class="MenuBar">
 {% .site.menu[] %}
-        <li class='MenuBar__item {{if .path==$M.page._path then "_active" else "" end}}'>
+        <li class='MenuBar__Item {{if .path==$M.page._path then "_active" else "" end}}'>
           <a href="{{.URL}}">{{.name}}</a>
         </li>
 {% end %}
