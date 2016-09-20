@@ -1,5 +1,5 @@
 /***********************************************************************
- * Base modules
+ * Milligram theme
  **********************************************************************/
 
 &include{new/default.css}
@@ -33,23 +33,6 @@
 //&include{new/button.css}
 
 /***********************************************************************
- * Hacks
- **********************************************************************/
-
-#flowhack {
-  border: 0;
-  font-size: 0;
-  line-height: 0;
-  margin: 0;
-  padding: 0;
-  visibility: hidden;
-}
-
-#flowhack + pre {
-  font-size: 1.4rem;
-}
-
-/***********************************************************************
  * Media
  **********************************************************************/
 
@@ -67,6 +50,23 @@
 
 /* Larger than Desktop HD */
 //@media screen and (min-width: 1200px) { }
+
+/***********************************************************************
+ * Hacks
+ **********************************************************************/
+
+#flowhack {
+  border: 0;
+  font-size: 0;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+}
+
+#flowhack + pre {
+  font-size: 1.4rem;
+}
 
 /***********************************************************************
  * jqt theme
@@ -98,13 +98,12 @@ dt {
   font-weight: bold;
 }
 
-
 ul {
   list-style-type: square;
 }
 
 pre > code {
-  font-family: "Liberation Mono", FreeMono, "Nimbus Mono L", monospace;
+  font-family: "Liberation Mono", "Nimbus Mono L", monospace;
 }
 
 .footnotes ol {
@@ -119,6 +118,26 @@ pre > code {
   margin: 0;
   padding: 0;
 }
+
+.Content > blockquote:first-child {
+  float: right;
+  margin: 0 0 0 auto;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-width: 20em;
+  font-family: "Liberation Serif", "Times New Roman", Times, serif;
+}
+.Content > blockquote:first-child > p {
+  margin: 0;
+  padding: 0;
+}
+.Content > blockquote:first-child > p + p {
+  text-align: right;
+}
+
+/***********************************************************************
+ * Blocks
+ **********************************************************************/
 
 &include{blocks.css}
 

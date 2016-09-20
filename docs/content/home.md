@@ -5,6 +5,10 @@ updated: "2016-08-28T10:27:09Z"
 <%include macros.m>&
 <%include LINKS.txt>&
 
+> Editing is a rewording activity.
+>
+> _Alan J. Perlis_
+
 Could be [_jq_][JQ] the basis for a web template engine?
 Let's explore&hellip;
 
