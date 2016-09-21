@@ -4,12 +4,12 @@
  #>
 <%define BODY_BLOCK
 <# Table of contents #>
-  <div class="#Panel _side-right Toc">
-    <p class="Toc__Title">{{.snippets."toc-title"}}</p>
+  <div class="#panel --side-right toc">
+    <p class="toc__title">{{.snippets."toc-title"}}</p>
     {{.page._toc}}
   </div>
 <# Document body #>
-  <div class="Content">
+  <div class="#content">
     {{.page._content}}
   </div>
 >&

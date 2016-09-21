@@ -8,7 +8,7 @@
 ** Header
 ***********************************************************************/
 
-&BEM{#Header} {
+&BEM{#header} {
   border-bottom: &HorizontalRule;
   margin-bottom: 1.5rem;
 }
@@ -17,17 +17,17 @@
 ** Body
 ***********************************************************************/
 
-&BEM{#Panel} {
+&BEM{#panel} {
   border: 0.3rem solid &ColorQuaternary;
 }
 
-&BEM{#Panel}{}{side-right} {
+&BEM{#panel}{}{side-right} {
   float: right;
   margin: 0 0 0 1rem;
 }
 
 /*
-&BEM{#Panel}{}{side-left} {
+&BEM{#panel}{}{side-left} {
   float: left;
   margin: 0 1rem 0 0;
 }
@@ -37,7 +37,7 @@
 ** Footer
 ***********************************************************************/
 
-&BEM{#Footer} {
+&BEM{#footer} {
   border-top: &HorizontalRule;
 }
 
@@ -45,7 +45,7 @@
 // Logo
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{Logo} {
+&BEM{logo} {
   font-size: 2.6rem;
 }
 
@@ -53,16 +53,16 @@
 // Version
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{Version} {
+&BEM{version} {
   font-size: 1.2rem;
   font-weight: bold;
 }
 
 ////////////////////////////////////////////////////////////////////////
-// MenuBar
+// Menu Bar
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{MenuBar} {
+&BEM{menu-bar} {
   display: inline;
   padding: 0;
   font-variant: small-caps;
@@ -70,21 +70,21 @@
   list-style: none;
 }
 
-&BEM{MenuBar}{Item} {
+&BEM{menu-bar}{item} {
   display: inline;
   font-size: 120%;
   font-weight: bold;
 }
 
-&BEM{MenuBar}{Item}:first-child {
+&BEM{menu-bar}{item}:first-child {
   margin-left: 1rem;
 }
 
-&BEM{MenuBar}{Item}:not(:last-child) {
+&BEM{menu-bar}{item}:not(:last-child) {
   margin-right: 2rem;
 }
 
-&BEM{MenuBar}{Item}{active}{> a} {
+&BEM{menu-bar}{item}{active}{> a} {
   text-decoration: underline;
 }
 
@@ -92,20 +92,20 @@
 // Toc
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{Toc} {
+&BEM{toc} {
   width: 16em;
   padding: 0 1em;
   text-align: center;
   font-size: 80%;
 }
 
-&BEM{Toc}{Title} {
+&BEM{toc}{title} {
   margin-bottom: 0.5em;
   border-bottom: 0.1rem solid &ColorQuaternary;
   font-weight: bold;
 }
 
-&BEM{Toc} ul {
+&BEM{toc} ul {
   margin-top: 0;
   margin-bottom: 0;
   list-style-type: square;
@@ -114,7 +114,7 @@
   line-height: 1.4;
 }
 
-&BEM{Toc} li {
+&BEM{toc} li {
   margin: 0;
 }
 
@@ -122,11 +122,11 @@
 // License
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{License} {
+&BEM{license} {
   text-align: center;
 }
 
-&BEM{License} > p {
+&BEM{license} > p {
   margin-bottom: 0;
 }
 
@@ -134,28 +134,28 @@
 // Repository
 ////////////////////////////////////////////////////////////////////////
 
-&BEM{Repository}  {
+&BEM{repository}  {
 	text-align: center;
   list-style: none;
 }
 
-&BEM{Repository}{Section}  {
+&BEM{repository}{section}  {
   display: inline;
 	font-variant: small-caps;
   font-weight: bold;
 }
 
-&BEM{Repository}{Section}:first-child:before  {
+&BEM{repository}{section}:first-child:before  {
   content: "❲ ";
   color: &ColorSecondary;
 }
 
-&BEM{Repository}{Section}:not(last-child):after  {
+&BEM{repository}{section}:not(last-child):after  {
   content: " ❘ ";
   color: &ColorSecondary;
 }
 
-&BEM{Repository}{Section}:last-child:after  {
+&BEM{repository}{section}:last-child:after  {
   content: " ❳";
   color: &ColorSecondary;
 }

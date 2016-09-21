@@ -6,7 +6,7 @@
 &include{new/colornames.css}
 
 &define{Esep}{__}
-&define{Msep}{_}
+&define{Msep}{-\-}
 
 &define{B}{.&if{&1 =~ [A-Za-z_-]*}&1&else\&1&endif}
 &define{E}{&ifneq{&1}{}&Esep&1&endif}

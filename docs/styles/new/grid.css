@@ -10,8 +10,8 @@
 // Grid
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// .Container is main centered wrapper with a max width of 112.0rem (1120px)
-&BEM{Container} {
+// .container is main centered wrapper with a max width of 112.0rem (1120px)
+&BEM{#container} {
   margin: 0 auto;
   max-width: 112.0rem;
   padding: 0 2.0rem;
@@ -21,57 +21,57 @@
 
 // Using flexbox for the grid, inspired by Philip Walton:
 // http://philipwalton.github.io/solved-by-flexbox/demos/grids/
-// By default each .Column within a .Row will evenly take up
-// available width, and the height of each .Column with take
-// up the height of the tallest .Column in the same .Row
-&BEM{Row} {
+// By default each .column within a .row will evenly take up
+// available width, and the height of each .column with take
+// up the height of the tallest .column in the same .row
+&BEM{#row} {
   display: flex;
   flex-direction: column;
   padding: 0;
   width: 100%;
 }
 
-&BEM{Row}{}{noPadding} {
+&BEM{#row}{}{noPadding} {
   padding: 0;
 }
 
-&BEM{Row}{}{noPadding}{> &BEM{Column}} {
+&BEM{#row}{}{noPadding}{> &BEM{#column}} {
   padding: 0;
 }
 
-&BEM{Row}{}{wrap} {
+&BEM{#row}{}{wrap} {
   flex-wrap: wrap;
 }
 
 // Vertically Align Columns
-// .Row-align-* vertically aligns every .Column in the .Row
-&BEM{Row}{}{align-top} {
+// .row-align-* vertically aligns every .column in the .row
+&BEM{#row}{}{align-top} {
   -ms-grid-row-align: flex-start;
          align-items: flex-start;
 }
 
-&BEM{Row}{}{align-bottom} {
+&BEM{#row}{}{align-bottom} {
   -ms-grid-row-align: flex-end;
          align-items: flex-end;
 }
 
-&BEM{Row}{}{align-center} {
+&BEM{#row}{}{align-center} {
   -ms-grid-row-align: center;
          align-items: center;
 }
 
-&BEM{Row}{}{align-stretch} {
+&BEM{#row}{}{align-stretch} {
   -ms-grid-row-align: stretch;
       align-items: stretch;
 }
 
-&BEM{Row}{}{align-baseline} {
+&BEM{#row}{}{align-baseline} {
   -ms-grid-row-align: baseline;
       align-items: baseline;
 }
 
-// JJOR: original = .Row .Col..., removed .Row
-&BEM{Column} {
+// JJOR: original = .row .col..., removed .row
+&BEM{#column} {
   display: block;
   flex: 1;
   margin-left: 0;
@@ -81,8 +81,8 @@
 
 // Column Offsets
 &define{_col_offset}{
-// JJOR: original = .Row .Col..., removed .Row
-  &BEM{Column}{}{offset-&1} {
+// JJOR: original = .row .col..., removed .row
+  &BEM{#column}{}{offset-&1} {
     margin-left: &2;
   }
 }
@@ -104,8 +104,8 @@
 // across the grid. However, you can specify individual
 // columns to take up a certain size of the available area
 &define{_col_size}{
-// JJOR: original = .Row .Col..., removed .Row
-  &BEM{Column}{}{size-&1} {
+// JJOR: original = .row .Col..., removed .row
+  &BEM{#column}{}{size-&1} {
     flex: 0 0 &2;
     max-width: &2;
   }
@@ -123,30 +123,30 @@
 &_col_size{80}{80%}
 &_col_size{90}{90%}
 
-// .Column-align-* vertically aligns an individual .Column
+// .column-align-* vertically aligns an individual .column
 // JJOR: original = .C .C-m (bug?), changed to .C.C-m
-// JJOR: original = .Row .Col..., removed .Row
-&BEM{Column}{}{align-top} {
+// JJOR: original = .row .Col..., removed .row
+&BEM{#column}{}{align-top} {
   align-self: flex-start;
 }
 
-&BEM{Column}{}{align-bottom} {
+&BEM{#column}{}{align-bottom} {
   align-self: flex-end;
 }
 
-&BEM{Column}{}{align-center} {
+&BEM{#column}{}{align-center} {
   align-self: center;
 }
 
 // Larger than mobile screen
 @media (min-width: 40rem) { // Safari desktop has a bug using `rem`, but Safari mobile works
-  &BEM{Row} {
+  &BEM{#row} {
     flex-direction: row;
     margin-left: -1.0rem;
     width: calc(100% + 2.0rem);
   }
-  // JJOR: original = .Row .Col..., removed .Row
-  &BEM{Column} {
+  // JJOR: original = .row .Col..., removed .row
+  &BEM{#column} {
     margin-bottom: inherit;
     padding: 0 1.0rem;
   }

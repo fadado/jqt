@@ -7,31 +7,31 @@
 <%include "meta.html">&
   </head>
 
-  <body class="Container">
-    <div class="#Header">
-      <span class="Logo"><a href="index.html">{{.site.logo}}</a><span class="Version">v<%include ../VERSION></span></span>
-      <ol class="MenuBar">
+  <body class="#container">
+    <div class="#header">
+      <span class="logo"><a href="index.html">{{.site.logo}}</a><span class="version">v<%include ../VERSION></span></span>
+      <ol class="menu-bar">
 {% .site.menu[] %}
-        <li class='MenuBar__Item {{if .path==$M.page._path then "_active" else "" end}}'>
+        <li class='menu-bar__item {{if .path==$M.page._path then "--active" else "" end}}'>
           <a href="{{.URL}}">{{.name}}</a>
         </li>
 {% end %}
       </ol>
     </div>
 
-    <div class="#Body">
+    <div class="#body">
 <%ifndef BODY_TITLE>&
       <h1>{{.snippets.title}}</h1>
 <%else><%call BODY_TITLE><%endif>&
 
 <%ifndef BODY_BLOCK>&
-      <div class="Content">
+      <div class="#content">
         {{.page._content}}
       </div>
 <%else><%call BODY_BLOCK><%endif>&
     </div>
 
-    <div class="#Footer">
+    <div class="#footer">
 <%include "footer.html">
     </div>
 

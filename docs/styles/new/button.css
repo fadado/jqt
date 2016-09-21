@@ -13,7 +13,7 @@
 // Macros
 
 &define{_buttons}{
-  .Button&1,
+  .button&1,
   button&1,
   input[type='button']&1,
   input[type='reset']&1,
@@ -53,49 +53,49 @@
   outline: 0;
 }
 
-&_buttons{.Button-disabled},
+&_buttons{.button--disabled},
 &_buttons{[disabled]} {
   cursor: default;
   opacity: .5;
 }
 
-&_buttons_active{.Button-disabled},
+&_buttons_active{.button--disabled},
 &_buttons_active{[disabled]} {
   background-color: &ColorPrimary;
   border-color: &ColorPrimary;
 }
 
-&_buttons{.Button-outline} {
+&_buttons{.button--outline} {
   background-color: transparent;
   color: &ColorPrimary;
 }
 
-&_buttons_active{.Button-outline} {
+&_buttons_active{.button--outline} {
   background-color: transparent;
   border-color: &ColorSecondary;
   color: &ColorSecondary;
 }
 
-&_buttons_active{.Button-outline.Button-disabled},
-&_buttons_active{.Button-outline[disabled]} {
+&_buttons_active{.button--outline.button--disabled},
+&_buttons_active{.button--outline[disabled]} {
   color: &ColorPrimary;
   border-color: inherit;
 }
 
-&_buttons{.Button-clear} {
+&_buttons{.button--clear} {
   color: &ColorPrimary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_buttons_active{.Button-clear} {
+&_buttons_active{.button--clear} {
   color: &ColorSecondary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_buttons_active{.Button-clear.Button-disabled},
-&_buttons_active{.Button-clear[disabled]} {
+&_buttons_active{.button--clear.button--disabled},
+&_buttons_active{.button--clear[disabled]} {
   color: &ColorPrimary;
 }
 
