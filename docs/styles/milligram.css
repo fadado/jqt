@@ -1,0 +1,33 @@
+/***********************************************************************
+ * Milligram theme
+ **********************************************************************/
+
+// Parameters
+&define{ColorInitial}{&White}
+&define{ColorPrimary}{&DarkCyan}
+&define{ColorSecondary}{&Black}
+&define{ColorTertiary}{&LightGrey}
+&define{ColorQuaternary}{&LightGrey}
+
+&define{Scale}{1}
+&define{SpacingScale}{0.7}
+&define{TypographyScale}{0.8}
+
+// Modules
+&include{new/color.css}
+&include{new/base.css}
+&include{new/spacing.css}
+&include{new/typography.css}
+&include{new/blockquote.css}
+&include{new/code.css}
+&include{new/link.css}
+&include{new/list.css}
+&include{new/table.css}
+&include{new/divider.css}
+&include{new/grid.css}
+&include{new/utility.css}
+//&include{new/image.css}
+//&include{new/form.css}
+//&include{new/button.css}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

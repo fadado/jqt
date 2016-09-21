@@ -1,55 +1,11 @@
 /***********************************************************************
- * Milligram theme
+ * jqt
  **********************************************************************/
 
 &include{new/default.css}
-
-// Parameters
-&define{ColorInitial}{&White}
-&define{ColorPrimary}{&DarkCyan}
-&define{ColorSecondary}{&Black}
-&define{ColorTertiary}{&LightGrey}
-&define{ColorQuaternary}{&LightGrey}
-
-&define{Scale}{1}
-&define{SpacingScale}{0.7}
-&define{TypographyScale}{0.8}
-
-// Milligran modules
-&include{new/color.css}
-&include{new/base.css}
-&include{new/spacing.css}
-&include{new/typography.css}
-&include{new/blockquote.css}
-&include{new/code.css}
-&include{new/link.css}
-&include{new/list.css}
-&include{new/table.css}
-&include{new/divider.css}
-&include{new/grid.css}
-&include{new/utility.css}
-//&include{new/image.css}
-//&include{new/form.css}
-//&include{new/button.css}
-
-/***********************************************************************
- * Media
- **********************************************************************/
-
-/* Larger than mobile */
-//@media screen and (min-width: 400px) { }
-
-/* Larger than phablet (also point when grid becomes active) */
-//@media screen and (min-width: 550px) { }
-
-/* Larger than tablet */
-//@media screen and (min-width: 750px) { }
-
-/* Larger than desktop */
-//@media screen and (min-width: 1000px) { }
-
-/* Larger than Desktop HD */
-//@media screen and (min-width: 1200px) { }
+&include{milligram.css}
+&include{media.css}
+&include{blocks.css}
 
 /***********************************************************************
  * Hacks
@@ -69,7 +25,7 @@
 }
 
 /***********************************************************************
- * jqt theme
+ * Content
  **********************************************************************/
 
 body.Container {
@@ -119,6 +75,12 @@ pre > code {
   padding: 0;
 }
 
+/***********************************************************************
+ * Pages specific
+ **********************************************************************/
+
+// TODO: posar id en <html...
+
 .Content > blockquote:first-child {
   float: right;
   margin: 0 0 0 auto;
@@ -134,11 +96,5 @@ pre > code {
 .Content > blockquote:first-child > p + p {
   text-align: right;
 }
-
-/***********************************************************************
- * Blocks
- **********************************************************************/
-
-&include{blocks.css}
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
