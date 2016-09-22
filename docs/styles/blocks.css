@@ -19,6 +19,7 @@
 
 &BEM{#panel} {
   border: 0.3rem solid &ColorQuaternary;
+  border-radius: 0.4rem;
 }
 
 &BEM{#panel}{}{side-right} {

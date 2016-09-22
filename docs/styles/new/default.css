@@ -6,8 +6,8 @@
 &include{new/colornames.css}
 
 &define{B}{.&if{&1 =~ [A-Za-z_-]*}&1&else\&1&endif}
-&define{E}{&ifneq{&1}{}__&1&endif}
-&define{BEM}{&B{&1}&E{&2}&ifneq{&3}{}--&3 &4,&B{&1}&E{&2}.-\-&3 &4&endif}
+&define{E}{&ifneq{&1}{}\:\:&1&endif}
+&define{BEM}{&B{&1}&E{&2}&ifneq{&3}{}\!&3 &4,&B{&1}&E{&2}.\!&3 &4&endif}
 
 // All available modules (color.css must be included the first)
 //&include{new/base.css}

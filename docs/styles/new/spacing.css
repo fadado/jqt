@@ -42,7 +42,7 @@ p,
 pre,
 table,
 ul {
-  margin-bottom: calc(&SpacingScale  * 2.5rem);
+  margin-bottom: calc(&SpacingScale * 2.5rem);
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

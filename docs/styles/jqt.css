@@ -6,10 +6,17 @@
 &include{milligram.css}
 &include{media.css}
 &include{blocks.css}
+&include{content.css}
 
-/***********************************************************************
- * Hacks
- **********************************************************************/
+html {
+  background-color: &ColorInitial;
+}
+
+&BEM{#container} {
+  max-width: 800px;
+}
+
+// Hacks
 
 #flowhack {
   border: 0;
@@ -22,81 +29,8 @@
 
 #flowhack + pre {
   font-size: 1.4rem;
-}
-
-/***********************************************************************
- * Content
- **********************************************************************/
-
-&BEM{#container} {
-  max-width: 800px;
-}
-
-body {
-  background-color: &ColorInitial;
-}
-
-h2:target::after,
-h2:target::after,
-h4:target::after {
-  content: " §";
-  color: &ColorQuaternary;
-  font-family: serif;
-}
-
-td {
-  font-size: 90%;
-  padding: 0.8rem 1.0rem;
-}
-
-dt {
-  margin-bottom: 0.1em;
-  font-weight: bold;
-}
-
-ul {
-  list-style-type: square;
-}
-
-pre > code {
-  font-family: "Liberation Mono", "Nimbus Mono L", monospace;
-}
-
-.footnotes ol {
-  list-style-type: decimal;
-  list-style-position: outside;
-  line-height: 1.3;
-  font-size: 90%;
-  margin-left: 1.1em;
-}
-
-.footnotes p {
-  margin: 0;
-  padding: 0;
-}
-
-/***********************************************************************
- * Page specific
- **********************************************************************/
-
-// TODO: posar id en <html...
-
-&BEM{#content} > blockquote:first-child {
-  float: right;
-  margin: 0 0 0 auto;
-  padding-top: 0;
-  padding-bottom: 0;
-  max-width: 20em;
-  font-family: "Liberation Serif", "Times New Roman", Times, serif;
-}
-
-&BEM{#content} > blockquote:first-child > p {
-  margin: 0;
-  padding: 0;
-}
-
-&BEM{#content} > blockquote:first-child > p + p {
-  text-align: right;
+  border: 0.3rem solid &ColorQuinary;
+  border-radius: 1rem;
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
