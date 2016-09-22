@@ -31,11 +31,11 @@
   width: 100%;
 }
 
-&BEM{#row}{}{noPadding} {
+&BEM{#row}{}{no-padding} {
   padding: 0;
 }
 
-&BEM{#row}{}{noPadding}{> &BEM{#column}} {
+&BEM{#row}{}{no-padding}{> &BEM{#column}} {
   padding: 0;
 }
 
@@ -104,7 +104,7 @@
 // across the grid. However, you can specify individual
 // columns to take up a certain size of the available area
 &define{_col_size}{
-// JJOR: original = .row .Col..., removed .row
+// JJOR: original = .row .col..., removed .row
   &BEM{#column}{}{size-&1} {
     flex: 0 0 &2;
     max-width: &2;
@@ -125,7 +125,7 @@
 
 // .column-align-* vertically aligns an individual .column
 // JJOR: original = .C .C-m (bug?), changed to .C.C-m
-// JJOR: original = .row .Col..., removed .row
+// JJOR: original = .row .col..., removed .row
 &BEM{#column}{}{align-top} {
   align-self: flex-start;
 }
@@ -145,7 +145,7 @@
     margin-left: -1.0rem;
     width: calc(100% + 2.0rem);
   }
-  // JJOR: original = .row .Col..., removed .row
+  // JJOR: original = .row .col..., removed .row
   &BEM{#column} {
     margin-bottom: inherit;
     padding: 0 1.0rem;

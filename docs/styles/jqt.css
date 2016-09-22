@@ -28,7 +28,7 @@
  * Content
  **********************************************************************/
 
-body.\#container {
+&BEM{#container} {
   max-width: 800px;
 }
 
@@ -76,12 +76,12 @@ pre > code {
 }
 
 /***********************************************************************
- * Pages specific
+ * Page specific
  **********************************************************************/
 
 // TODO: posar id en <html...
 
-.\#content > blockquote:first-child {
+&BEM{#content} > blockquote:first-child {
   float: right;
   margin: 0 0 0 auto;
   padding-top: 0;
@@ -89,11 +89,13 @@ pre > code {
   max-width: 20em;
   font-family: "Liberation Serif", "Times New Roman", Times, serif;
 }
-.\#content > blockquote:first-child > p {
+
+&BEM{#content} > blockquote:first-child > p {
   margin: 0;
   padding: 0;
 }
-.\#content > blockquote:first-child > p + p {
+
+&BEM{#content} > blockquote:first-child > p + p {
   text-align: right;
 }
 
