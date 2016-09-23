@@ -9,7 +9,9 @@
 
   <body class="#container">
     <div class="#header">
-      <span class="logo"><a href="index.html">{{.site.logo}}</a><span class="version">v<%include ../VERSION></span></span>
+
+      <span class="logo"><a href="index.html">{{.site.logo}}</a><span class="logo::version">v<%include ../VERSION></span></span>
+
       <ol class="menu-bar">
 {% .site.menu[] %}
         <li class='menu-bar::item {{if .path==$M.page._path then "menu-bar::item!active" else "" end}}'>
@@ -17,6 +19,7 @@
         </li>
 {% end %}
       </ol>
+
     </div>
 
     <div class="#body">
