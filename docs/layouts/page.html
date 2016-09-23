@@ -3,15 +3,8 @@
  #  Main page block for content
  #>
 <%define BODY_BLOCK
-<# Table of contents #>
-  <div class="#panel #panel!side-right toc">
-    <p class="toc::title">{{.snippets."toc-title"}}</p>
-    {{.page._toc}}
-  </div>
-<# Document body #>
-  <div class="#content">
-    {{.page._content}}
-  </div>
+  <%include blocks/toc/markup.html>
+  <%include blocks/content/markup.html>
 >&
 <#
  #  Title in HTML body element
@@ -22,7 +15,7 @@
 <#
  #  Inherit default layout
  #>
-<%include "default.html">
+<%include layouts/default.html>
 <#
 vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
 #>

@@ -3,7 +3,7 @@ title: Welcome
 updated: "2016-08-28T10:27:09Z"
 ---
 <%include macros.m>&
-<%include LINKS.txt>&
+<%include content/LINKS.txt>&
 
 > _Editing is a rewording activity._\
 > &ndash; _Alan J. Perlis_
@@ -52,7 +52,7 @@ script and some content and data in [JSON][JSON] format&hellip; and the magic is
 And, how do the _syntactic sugar_ looks like?  Do you think the following
 example seems to be a template?
 
-<%include EXAMPLE.txt>&
+<%include content/EXAMPLE.txt>&
 
 ### Status
 

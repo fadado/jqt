@@ -21,27 +21,27 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 
 # OPTIONS
 
-<%include opt/4.txt>
-<%include opt/C.txt>
-<%include opt/D.txt>
-<%include opt/d.txt>
-<%include opt/e.txt>
-<%include opt/H.txt>
-<%include opt/h.txt>
-<%include opt/I.txt>
-<%include opt/i.txt>
-<%include opt/j.txt>
-<%include opt/L.txt>
-<%include opt/M.txt>
-<%include opt/m.txt>
-<%include opt/n.txt>
-<%include opt/P.txt>
-<%include opt/p.txt>
-<%include opt/r.txt>
-<%include opt/S.txt>
-<%include opt/T.txt>
-<%include opt/t.txt>
-<%include opt/V.txt>
+<%include content/opt/4.txt>
+<%include content/opt/C.txt>
+<%include content/opt/D.txt>
+<%include content/opt/d.txt>
+<%include content/opt/e.txt>
+<%include content/opt/H.txt>
+<%include content/opt/h.txt>
+<%include content/opt/I.txt>
+<%include content/opt/i.txt>
+<%include content/opt/j.txt>
+<%include content/opt/L.txt>
+<%include content/opt/M.txt>
+<%include content/opt/m.txt>
+<%include content/opt/n.txt>
+<%include content/opt/P.txt>
+<%include content/opt/p.txt>
+<%include content/opt/r.txt>
+<%include content/opt/S.txt>
+<%include content/opt/T.txt>
+<%include content/opt/t.txt>
+<%include content/opt/V.txt>
 
 # FILES
 

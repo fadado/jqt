@@ -7,38 +7,38 @@ Usage: jqt [-h | --help | -p | -V | --version]
 
 Preprocessor options:
 
-<%include opt/D.txt>
-<%include opt/I.txt>
-<%include opt/P.txt>
+<%include content/opt/D.txt>
+<%include content/opt/I.txt>
+<%include content/opt/P.txt>
 
 Template options:
 
-<%include opt/L.txt>
-<%include opt/i.txt>
-<%include opt/j.txt>
+<%include content/opt/L.txt>
+<%include content/opt/i.txt>
+<%include content/opt/j.txt>
 
 Document options:
 
-<%include opt/4.txt>
-<%include opt/d.txt>
+<%include content/opt/4.txt>
+<%include content/opt/d.txt>
 
 Data options:
 
-<%include opt/M.txt>
-<%include opt/m.txt>
-<%include opt/T.txt>
+<%include content/opt/M.txt>
+<%include content/opt/m.txt>
+<%include content/opt/T.txt>
 
 Debugging options:
 
-<%include opt/C.txt>
-<%include opt/H.txt>
-<%include opt/S.txt>
+<%include content/opt/C.txt>
+<%include content/opt/H.txt>
+<%include content/opt/S.txt>
 
 Information options:
 
-<%include opt/h.txt>
-<%include opt/p.txt>
-<%include opt/V.txt>
+<%include content/opt/h.txt>
+<%include content/opt/p.txt>
+<%include content/opt/V.txt>
 
 See the manpage for full documentation and more options.
 

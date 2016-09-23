@@ -1,40 +1,40 @@
-/***********************************************************************
- * Content
- **********************************************************************/
+////////////////////////////////////////////////////////////////////////
+// Content
+////////////////////////////////////////////////////////////////////////
 
-&BEM{#content} h2:target::after,
-&BEM{#content} h2:target::after,
-&BEM{#content} h4:target::after {
+&BEM{$content} h2:target::after,
+&BEM{$content} h2:target::after,
+&BEM{$content} h4:target::after {
   content: " §";
   color: &ColorQuaternary;
   font-family: serif;
 }
 
-&BEM{#content} td {
+&BEM{$content} td {
   font-size: 90%;
   padding: 0.8rem 1.0rem;
 }
 
-&BEM{#content} caption {
+&BEM{$content} caption {
   border-top: .1rem solid &ColorQuinary;
   border-bottom: .1rem solid &ColorQuinary;
 }
 
-&BEM{#content} dt {
+&BEM{$content} dt {
   margin-bottom: 0.1em;
   font-weight: bold;
 }
 
-&BEM{#content} ul {
+&BEM{$content} ul {
   list-style-type: square;
 }
 
-&BEM{#content} pre {
+&BEM{$content} pre {
   font-family: "Liberation Mono", "Nimbus Mono L", monospace;
   border-radius: 0.4rem;
 }
 
-&BEM{#content} .footnotes ol {
+&BEM{$content} .footnotes ol {
   list-style-type: decimal;
   list-style-position: outside;
   line-height: 1.3;
@@ -42,14 +42,14 @@
   margin-left: 1.1em;
 }
 
-&BEM{#content} .footnotes p {
+&BEM{$content} .footnotes p {
   margin: 0;
   padding: 0;
 }
 
 // Page specific
 
-html#content-home &BEM{#content} > blockquote:first-child {
+html#content-home &BEM{$content} > blockquote:first-child {
   float: right;
   margin: 0 0 0 auto;
   padding-top: 0;

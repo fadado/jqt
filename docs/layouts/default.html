@@ -1,44 +1,35 @@
 <# Default layout #>
-<%include "macros.m">&
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%include macros.m>&
 <html id="{{.page._id}}" xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
   <head>
+<#
+ #  Meta elements
+ #>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="jqt v<%include ../VERSION>"/>
+    <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
+    <meta name='dcterms.modified' content='{{.page.updated//empty}}' />
+    <meta name='description' content='{{.page.description//empty}}' />
+    <meta name='keywords' content='{{.page.keywords//empty}}' />
+<#
+ #  Document title
+ #>
     <title>jqt · {{.page.title}} &ndash; {{.site.title}}</title>
-<%include "meta.html">&
+<#
+ #  CSS styles
+ #>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    {{.page._highlight}}
   </head>
-
+<#
+ #  Document body
+ #>
   <body class="#container">
-    <div class="#header">
-
-      <span class="logo"><a href="index.html">{{.site.logo}}</a><span class="logo::version">v<%include ../VERSION></span></span>
-
-      <ol class="menu-bar">
-{% .site.menu[] %}
-        <li class='menu-bar::item {{if .path==$M.page._path then "menu-bar::item!active" else "" end}}'>
-          <a href="{{.URL}}">{{.name}}</a>
-        </li>
-{% end %}
-      </ol>
-
-    </div>
-
-    <div class="#body">
-<%ifndef BODY_TITLE>&
-      <h1>{{.snippets.title}}</h1>
-<%else><%call BODY_TITLE><%endif>&
-
-<%ifndef BODY_BLOCK>&
-      <div class="#content">
-        {{.page._content}}
-      </div>
-<%else><%call BODY_BLOCK><%endif>&
-    </div>
-
-    <div class="#footer">
-<%include "footer.html">
-    </div>
-
-<%partial analytics 'UA-82432866-1'>&
+    <%include blocks/header/markup.html>&
+    <%include blocks/body/markup.html>&
+    <%include blocks/footer/markup.html>&
+    <%partial analytics 'UA-82432866-1'>&
   </body>
 </html>
 <#

@@ -1,0 +1,13 @@
+////////////////////////////////////////////////////////////////////////
+// Header
+////////////////////////////////////////////////////////////////////////
+
+// shared with footer
+&define{HorizontalRule}{0.4rem solid &ColorTertiary}
+
+&BEM{#header} {
+  border-bottom: &HorizontalRule;
+  margin-bottom: 1.5rem;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

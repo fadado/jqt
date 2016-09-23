@@ -3,7 +3,7 @@ title: Authoring content
 updated: "2016-08-28T10:27:09Z"
 ---
 <%include macros.m>&
-<%include LINKS.txt>&
+<%include content/LINKS.txt>&
 
 ## General operation
 
@@ -12,15 +12,15 @@ but before that [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
-<%include FLOW.txt>
+<%include content/FLOW.txt>
 
 When invoking `jqt` you can use the following options to influence document
 conversion:
 
-<%include opt/4.txt>
-<%include opt/D.txt>
-<%include opt/d.txt>
-<%include opt/I.txt>
+<%include content/opt/4.txt>
+<%include content/opt/D.txt>
+<%include content/opt/d.txt>
+<%include content/opt/I.txt>
 
 ## File structure
 
@@ -44,7 +44,7 @@ file in the scalar `.page._path`.
 
 `jqt` `-T` option allows the use of YAML files for collections of MarkDown snippets:
 
-<%include opt/T.txt>
+<%include content/opt/T.txt>
 
 This feature can be used to collect multiple text snippets in only one file.
 The MarkDown can be transformed to HTML and put in a new YAML or JSON file
@@ -116,7 +116,7 @@ but named arguments are also possible:
 Predefined macros and user define macros have the same call sequence:
 
 ```HTML
-<%include LINKS.txt>
+<%include content/LINKS.txt>
 <%sc 'A title in small caps'>
 ```
 

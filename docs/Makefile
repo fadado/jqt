@@ -55,6 +55,7 @@ Destination := /tmp/jqt
 
 # Directories for input files
 Assets := ./assets
+Blocks := ./blocks
 Content := ./content
 Styles := ./styles
 Layouts := ./layouts
@@ -63,9 +64,8 @@ Layouts := ./layouts
 Common := \
 	$(Meta)/config.json		\
 	$(Meta)/snippets.json		\
+	$(Blocks)/*/markup.html		\
 	$(Layouts)/default.html		\
-	$(Layouts)/meta.html		\
-	$(Layouts)/footer.html		\
 	$(Content)/LINKS.txt		\
 	filters.jq			\
 	macros.m			\
@@ -73,7 +73,7 @@ Common := \
 # Files to "build"
 Home := index
 Pages := content data engine structure 
-Files := README.md style.css
+Files := README.md styles.css
 ManPage := ../jqt.1.gz
 Targets := \
 	$(foreach f,$(Files),$(Destination)/$(f))		\
@@ -87,8 +87,7 @@ Targets := \
 # The template engine (.site and .snippets defined in the jqt call)
 JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
-	-I$(Layouts)				\
-	-I$(Content)				\
+	-I./					\
 	-ifilters				\
 	-msite:$(Meta)/config.json		\
 	-msnippets:$(Meta)/snippets.json	\
@@ -144,7 +143,7 @@ endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/style.css: $(Styles)/*.css $(Styles)/new/*.css
+$(Destination)/styles.css: $(Styles)/main.css $(Styles)/*.css $(Styles)/new/*.css $(Blocks)/*/*style.css
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 

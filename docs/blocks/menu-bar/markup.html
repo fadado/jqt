@@ -1,0 +1,13 @@
+<#######################################################################
+ # Menu Bar
+ ######################################################################>
+<ol class="menu-bar">
+{% .site.menu[] %}
+  <li class='menu-bar__item {{if .path==$M.page._path then "menu-bar__item_active" else "" end}}'>
+    <a href="{{.URL}}">{{.name}}</a>
+  </li>
+{% end %}
+</ol>
+<#
+vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
+#>

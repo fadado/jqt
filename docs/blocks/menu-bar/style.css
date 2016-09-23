@@ -1,0 +1,31 @@
+////////////////////////////////////////////////////////////////////////
+// Menu Bar
+////////////////////////////////////////////////////////////////////////
+
+&BEM{menu-bar} {
+  display: inline;
+  padding: 0;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  list-style: none;
+}
+
+&BEM{menu-bar}{item} {
+  display: inline;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+&BEM{menu-bar}{item}:first-child {
+  margin-left: 1rem;
+}
+
+&BEM{menu-bar}{item}:not(:last-child) {
+  margin-right: 2rem;
+}
+
+&BEM{menu-bar}{item}{active}{> a} {
+  text-decoration: underline;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

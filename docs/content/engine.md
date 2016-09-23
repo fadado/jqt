@@ -3,7 +3,7 @@ title: Template engine
 updated: "2016-08-28T10:27:09Z"
 ---
 <%include macros.m>&
-<%include LINKS.txt>&
+<%include content/LINKS.txt>&
 
 ## Implementation
 
@@ -13,7 +13,7 @@ where HTML is mixed with [_jq_][JQ] snippets to implement the transformation log
 This diagram shows how document, template and data inputs (on the left) are combined by
 _jqt_ to produce the final HTML output:
 
-<%include FLOW.txt>
+<%include content/FLOW.txt>
 
 The command `jqt` is a shell script executed by `bash`.
 The external shell commands called by `jqt` are `cat`, `gpp`, `jq`, `mkdir`,
@@ -71,27 +71,27 @@ arguments.  The usage possibilities are:
 
 ### Options
 
-<%include opt/4.txt>
-<%include opt/C.txt>
-<%include opt/D.txt>
-<%include opt/d.txt>
-<%include opt/e.txt>
-<%include opt/H.txt>
-<%include opt/h.txt>
-<%include opt/I.txt>
-<%include opt/i.txt>
-<%include opt/j.txt>
-<%include opt/L.txt>
-<%include opt/M.txt>
-<%include opt/m.txt>
-<%include opt/n.txt>
-<%include opt/P.txt>
-<%include opt/p.txt>
-<%include opt/r.txt>
-<%include opt/S.txt>
-<%include opt/T.txt>
-<%include opt/t.txt>
-<%include opt/V.txt>
+<%include content/opt/4.txt>
+<%include content/opt/C.txt>
+<%include content/opt/D.txt>
+<%include content/opt/d.txt>
+<%include content/opt/e.txt>
+<%include content/opt/H.txt>
+<%include content/opt/h.txt>
+<%include content/opt/I.txt>
+<%include content/opt/i.txt>
+<%include content/opt/j.txt>
+<%include content/opt/L.txt>
+<%include content/opt/M.txt>
+<%include content/opt/m.txt>
+<%include content/opt/n.txt>
+<%include content/opt/P.txt>
+<%include content/opt/p.txt>
+<%include content/opt/r.txt>
+<%include content/opt/S.txt>
+<%include content/opt/T.txt>
+<%include content/opt/t.txt>
+<%include content/opt/V.txt>
 
 ## Preprocessing
 
@@ -112,7 +112,7 @@ _jqt_ also offers an standalone CSS preprocessor, and a transformation that can
 also be be considered a kind of preprocessing. The option `-T` allows the use
 of YAML files for collections of MarkDown snippets:
 
-<%include opt/T.txt>
+<%include content/opt/T.txt>
 
 ### CSS preprocessing
 
@@ -121,7 +121,7 @@ section because it is outside the normal _jqt_ processing work flow.
 
 To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
 
-<%include opt/P.txt>
+<%include content/opt/P.txt>
 
 You can minify the CSS style sheet choosing the `css-min` option.
 The CSS minimization is not extremely aggressive, but is safe and sufficient.
