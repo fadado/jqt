@@ -87,6 +87,7 @@ Targets := \
 # The template engine (.site and .snippets defined in the jqt call)
 JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
+	-4 					\
 	-I./					\
 	-ifilters				\
 	-msite:$(Meta)/config.json		\
@@ -94,8 +95,8 @@ JQTFLAGS := \
 	--toc-depth=4				\
 
 # Validate output pages (disable or redefine as you like)
-XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml			 \
-		&& xmllint --noout --valid $(Destination)/*.html \
+XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
+		&& xmllint --nonet --noout --valid $(Destination)/*.html \
 		&& echo 'XHTML valid!'
 # Uncomment to disable XML validation
 #XHTMLValid := :
