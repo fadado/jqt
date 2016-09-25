@@ -6,7 +6,7 @@ updated: "2016-08-28T10:27:09Z"
 <%include content/LINKS.txt>&
 
 > _Editing is a rewording activity._\
-> &ndash; _Alan J. Perlis_
+> — _Alan J. Perlis_
 
 Could be [_jq_][JQ] the basis for a web template engine?
 Let's explore&hellip;

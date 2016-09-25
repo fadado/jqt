@@ -87,19 +87,12 @@ Targets := \
 # The template engine (.site and .snippets defined in the jqt call)
 JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
-	-4 					\
+	-5 					\
 	-I./					\
 	-ifilters				\
 	-msite:$(Meta)/config.json		\
 	-msnippets:$(Meta)/snippets.json	\
 	--toc-depth=4				\
-
-# Validate output pages (disable or redefine as you like)
-XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
-		&& xmllint --nonet --noout --valid $(Destination)/*.html \
-		&& echo 'XHTML valid!'
-# Uncomment to disable XML validation
-#XHTMLValid := :
 
 ########################################################################
 # Rules
@@ -107,7 +100,16 @@ XHTMLValid := test -f /etc/xml/xhtml1-dtds.xml \
 
 # Main
 all: $(Targets)
-	$(XHTMLValid)
+
+# Validation with vnu.jar
+VNU := /usr/local/vnu/vnu.jar
+valid: all
+	xmlwf $(Destination)/*.html
+	java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
+
+lint: all
+	xmlwf $(Destination)/*.html
+	java -jar $(VNU) --format text $(Destination)/*.html
 
 # Directories
 $(Meta) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true

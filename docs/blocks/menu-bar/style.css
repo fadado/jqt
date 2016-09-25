@@ -24,7 +24,8 @@
   margin-right: 2rem;
 }
 
-&BEM{menu-bar}{item}{active} > a {
+&BEM{menu-bar}{item}{current} > a,
+&MOD{menu-bar}{item}{current} > a {
   text-decoration: underline;
 }
 

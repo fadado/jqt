@@ -2,7 +2,7 @@
  # Flow diagram
  #>
 
-<div class="_clearfix" id="flowhack"></div>
+<div class="%clearfix" id="flowhack"></div>
 
 ```
            jqt        +------+   +-------+  jq script

@@ -102,7 +102,7 @@ before include the base template:
 
 ```HTML
 <%define HEAD_TITLE
-  <title>{{.page.title}} &ndash; {{.site.title}}</title>
+  <title>{{.page.title}} – {{.site.title}}</title>
 >
 <%include default.html>
 ```

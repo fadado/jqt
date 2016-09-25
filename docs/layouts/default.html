@@ -1,21 +1,23 @@
 <# Default layout #>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%include macros.m>&
+<!DOCTYPE html>
+<!-- this document uses polyglot markup (well formed XHTML5)  -->
 <html id="{{.page._id}}" xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
   <head>
 <#
  #  Meta elements
  #>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="generator" content="jqt v<%include ../VERSION>"/>
+    <meta charset="utf-8" />
+    <meta name="generator" content="jqt v<%include ../VERSION>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
-    <meta name='dcterms.modified' content='{{.page.updated//empty}}' />
+    <meta name='dcterms.date' content='{{.page.updated//empty}}' />
     <meta name='description' content='{{.page.description//empty}}' />
     <meta name='keywords' content='{{.page.keywords//empty}}' />
 <#
  #  Document title
  #>
-    <title>jqt · {{.page.title}} &ndash; {{.site.title}}</title>
+    <title>jqt · {{.page.title}} – {{.site.title}}</title>
 <#
  #  CSS styles
  #>

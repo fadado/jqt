@@ -413,9 +413,9 @@ $toc$
 $endif$
 <!--JQT-->
 $if(highlighting-css)$
-<style type="text/css">
+<style type="text/css">/*<![CDATA[*/
 $highlighting-css$
-</style>
+/*]]>*/</style>
 $endif$
 ' > $template
 
@@ -423,7 +423,12 @@ $endif$
             --to=$HTML_VERSION      \
             --table-of-contents     \
             --template=$template    \
-            --output='-'
+            --output='-'            \
+    | sed -e '
+s/tr class="header"/tr/
+s/tr class="odd"/tr/
+s/tr class="even"/tr/
+'
 }
 
 ########################################################################

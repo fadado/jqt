@@ -11,21 +11,21 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 // Clear a float with ._clearfix
-// JJOR: prefixed as hack
-._clearfix::after {
+// JJOR: prefixed
+&SEL{%clearfix}::after {
   clear: both;
   content: ' ';  // The space content is one way to avoid an Opera bug.
   display: table;
 }
 
 // Float either direction
-// JJOR: disabled
-//.float-right {
-//  float: right;
-//}
+// JJOR: prefixed
+&SEL{%float-right} {
+  float: right;
+}
 
-//.float-left {
-//  float: left;
-//}
+&SEL{%float-left} {
+  float: left;
+}
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

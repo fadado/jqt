@@ -7,13 +7,15 @@
   border-radius: 0.4rem;
 }
 
-&BEM{#panel}{}{side-right} {
+&BEM{#panel}{}{side-right},
+&MOD{#panel}{}{side-right} {
   float: right;
   margin: 0 0 0 1rem;
 }
 
 /*
-&BEM{#panel}{}{side-left} {
+&BEM{#panel}{}{side-left},
+&MOD{#panel}{}{side-left} {
   float: left;
   margin: 0 1rem 0 0;
 }
