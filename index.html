@@ -1,14 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<!-- this document uses polyglot markup (well formed XHTML5)  -->
 <html id="content-home" xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>jqt · Welcome &ndash; jqt, the jq template engine</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="jqt v0.3.0"/>
+<meta charset="utf-8" />
+<title>jqt · Welcome to jqt</title>
+<meta name='description' content='Could be jq the basis for a web template engine?' />
+<meta name='keywords' content='jqt, jq, template engine' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
+<meta name="generator" content="jqt v0.4.0" />
+<meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 <link rel="stylesheet" type="text/css" href="styles.css"/>
-
-<style type="text/css">
+    
+<style type="text/css">/*<![CDATA[*/
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
@@ -26,39 +30,40 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style>
+/*]]>*/</style>
 
 
 </head>
-
 <body class="#container">
-<div class="#header">
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo::version">v0.3.0</span></span>
-
+<header class="#header">
+<nav>
+<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.4.0</span></span>
 
 <ol class="menu-bar">
-<li class='menu-bar::item '>
+<li class='menu-bar__item menu-bar__item--current'>
+<a href="./index.html">Home</a>
+</li>
+<li class='menu-bar__item '>
 <a href="./engine.html">Engine</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./structure.html">Structure</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./content.html">Content</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./data.html">Data</a>
 </li>
 </ol>
+</nav>
+</header>
 
-</div>
-
-<div class="#body">
-<h1><cite>jqt</cite>, the <em>jq</em> template engine</h1>
-
-<div class="#content">
+<main class="#body">
+<article class="$content">
+<h1 id="welcome">Welcome</h1>
 <blockquote>
-<p><em>Editing is a rewording activity.</em><br />– <em>Alan J. Perlis</em></p>
+<p><em>Editing is a rewording activity.</em><br />— <em>Alan J. Perlis</em></p>
 </blockquote>
 <p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the basis for a web template engine? Let's explore…</p>
 <h2 id="jq"><em>jq</em></h2>
@@ -94,7 +99,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="kw">&lt;/body&gt;</span>
 <span class="kw">&lt;/html&gt;</span></code></pre>
 <h3 id="status">Status</h3>
-<p>This site is built using <em>jqt</em>, and is itself in his implementation a kind of tutorial about <em>jqt</em>. If you want to learn to use <em>jqt</em> <a href="./engine.html#installation">install <em>jqt</em></a> and read all the different site sections:</p>
+<p>This site is built using <em>jqt</em>, and is itself in his implementation a kind of tutorial about <em>jqt</em>.</p>
+<p>If you want to learn to use <em>jqt</em> <a href="./engine.html#installation">install <em>jqt</em></a> and read all the different site sections:</p>
 <ul>
 <li><a href="./engine.html">Template engine</a></li>
 <li><a href="./structure.html">Page structure</a></li>
@@ -104,35 +110,32 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>And don't forget to study the source code under the <a href="https://github.com/fadado/jqt/tree/master/docs">docs directory</a>!</p>
 <p><em>jqt</em> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
 
-</div>
+</article>
 
+</main>
 
-</div>
+<footer class="#footer">
+<section class="license">
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
-<div class="#footer">
-<div class="license">
-<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
-
-</div>
-
+</section>
 <ol class="repository">
-<li class="repository::section"><a href="https://github.com/fadado/jqt">code</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
 </ol>
 
+</footer>
 
-</div>
-
-<script type="text/javascript">
+<script type="text/javascript">/*<![CDATA[*/
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
-</script>
+/*]]>*/</script>
 </body>
 </html>
 

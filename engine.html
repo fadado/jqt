@@ -1,14 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<!-- this document uses polyglot markup (well formed XHTML5)  -->
 <html id="content-engine" xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>jqt · Template engine &ndash; jqt, the jq template engine</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="jqt v0.3.0"/>
+<meta charset="utf-8" />
+<title>jqt · The jqt template engine</title>
+<meta name='description' content='jqt orchestrates several shell utilities to transform MarkDown text and YAML or JSON data into a final HTML page.' />
+<meta name='keywords' content='jqt, jq, YAML, gpp, preprocessing, template engine' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name='dcterms.modified' content='2016-08-28T10:27:09Z' />
+<meta name="generator" content="jqt v0.4.0" />
+<meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 <link rel="stylesheet" type="text/css" href="styles.css"/>
-
-<style type="text/css">
+    
+<style type="text/css">/*<![CDATA[*/
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
@@ -26,39 +30,41 @@ code > span.ot { color: #007020; }
 code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
-</style>
+/*]]>*/</style>
 
 
 </head>
-
 <body class="#container">
-<div class="#header">
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo::version">v0.3.0</span></span>
-
+<header class="#header">
+<nav>
+<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.4.0</span></span>
 
 <ol class="menu-bar">
-<li class='menu-bar::item menu-bar::item!active'>
+<li class='menu-bar__item '>
+<a href="./index.html">Home</a>
+</li>
+<li class='menu-bar__item menu-bar__item--current'>
 <a href="./engine.html">Engine</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./structure.html">Structure</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./content.html">Content</a>
 </li>
-<li class='menu-bar::item '>
+<li class='menu-bar__item '>
 <a href="./data.html">Data</a>
 </li>
 </ol>
+</nav>
+</header>
 
-</div>
-
-<div class="#body">
-<h1><cite>jqt</cite> · Template engine</h1>
-<div class="#panel #panel!side-right toc">
-<p class="toc::title">Page contents</p>
+<main class="#body">
+<nav class="#panel -side-right toc">
+<p class="toc__title">Page contents</p>
   
 <ul>
+<li><a href="#template-engine">Template engine</a><ul>
 <li><a href="#implementation">Implementation</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#invoking-jqt">Invoking <em>jqt</em></a><ul>
@@ -72,17 +78,24 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#skips">Skips</a></li>
 </ul></li>
 </ul></li>
+</ul></li>
 </ul>
 
-</div>
+</nav>
 
 
-<div class="#content">
+<article class="$content">
+<h1 id="template-engine">Template engine</h1>
+<p>As the <a href="https://en.wikipedia.org/wiki/Template_processor">Wikipedia says</a>, <q><i>a template engine is software designed to combine one or more templates with a data model to produce one or more result documents</i></q>. <em>jqt</em> fully satisfies this definition.</p>
 <h2 id="implementation">Implementation</h2>
 <p><em>jqt</em> orchestrates several shell utilities to transform <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> text and <a href="http://yaml.org/">YAML</a> or <a href="http://json.org/">JSON</a> data into a final HTML page. The transformation is driven by a template, where HTML is mixed with <a href="https://stedolan.github.io/jq/"><em>jq</em></a> snippets to implement the transformation logic. This diagram shows how document, template and data inputs (on the left) are combined by <em>jqt</em> to produce the final HTML output:</p>
-<div id="flowhack" class="clearfix">
+<div id="flowhack" class="%clearfix">
 
 </div>
+<figure style="margin:0; padding:0;">
+<figcaption style="text-align:center; font-weight: bold;">
+jqt workflow
+</figcaption>
 <pre><code>           jqt        +------+   +-------+  jq script
 Template +-----------&gt;|expand|--&gt;|convert|-------------------------------+
                       +------+   +-------+                               |
@@ -100,6 +113,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
            YAML snippets         +------+                  |
          +----------------------&gt;|markup|------------------+
                                  +------+</code></pre>
+</figure>
 <p>The command <code>jqt</code> is a shell script executed by <code>bash</code>. The external shell commands called by <code>jqt</code> are <code>cat</code>, <code>gpp</code>, <code>jq</code>, <code>mkdir</code>, <code>mkfifo</code>, <code>pandoc</code>, <code>python</code>, <code>rm</code>, <code>sed</code>, <code>sleep</code> and <code>tee</code>.</p>
 <p><code>jqt</code> has been tested with <a href="https://www.gnu.org/software/bash/">Bash 4.3</a>, <a href="https://www.gnu.org/software/sed/">GNU sed 4.2</a>, <a href="https://logological.org/gpp">GPP 2.24</a>, <a href="https://stedolan.github.io/jq/">jq 1.5</a> and <a href="http://pandoc.org/">Pandoc 1.13</a>. A small Python snippet is used which depends on the modules <code>json</code> (introduced with <a href="https://docs.python.org/2.6/">Python 2.6</a>) and <code>yaml</code> (<a href="http://pyyaml.org/">PyYAML</a> implementation). The project uses <a href="https://www.gnu.org/software/make/">GNU Make</a> on several development activities, but <code>make</code> is not necessary to run <code>jqt</code>.</p>
 <h2 id="installation">Installation</h2>
@@ -182,25 +196,32 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
 <dt>-V, --version</dt>
 <dd>Displays version information.
 </dd>
+<dt>-w</dt>
+<dd>Build the data model without input document, only from JSON and YAML input files.
+</dd>
 </dl>
 <h2 id="preprocessing">Preprocessing</h2>
 <p>One distinctive feature of <em>jqt</em> is the text expansion applied to almost all kinds of input files. Also, <em>jqt</em> can be used as a standalone preprocessor thanks to the <code>-P</code> option.</p>
 <h3 id="kinds-of-preprocessing">Kinds of preprocessing</h3>
 <p>The sections about <a href="./structure.html#preprocessing">templates</a>, <a href="./content.html#preprocessing">documents</a> and <a href="./data.html#json">data</a> cover in detail their usage of the preprocessor for <em>jqt</em> templates, MarkDown documents and JSON data files.</p>
-<p><em>jqt</em> also offers an standalone CSS preprocessor, and a transformation that can also be be considered a kind of preprocessing. The option <code>-T</code> allows the use of YAML files for collections of MarkDown snippets:</p>
+<details>
+<summary> <em>jqt</em> also offers an standalone CSS preprocessor, and a transformation that can also be be considered a kind of preprocessing. The option <code>-T</code> allows the use of YAML files for collections of MarkDown snippets: </summary>
 <dl>
 <dt>-T [NAME:FILE]</dt>
 <dd>Transforms front matter YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, outputs a new YAML document.
 </dd>
 </dl>
+</details>
 <h3 id="css-preprocessing">CSS preprocessing</h3>
 <p><em>jqt</em> can also expand CSS style sheets. This is documented in this section because it is outside the normal <em>jqt</em> processing work flow.</p>
-<p>To enable CSS preprocessing the <code>-P</code> option must be used with the <code>css</code> or <code>css-min</code> options:</p>
+<details>
+<summary> To enable CSS preprocessing the <code>-P</code> option must be used with the <code>css</code> or <code>css-min</code> options: </summary>
 <dl>
 <dt>-P LANGUAGE</dt>
 <dd>Expands input file with the macro-processor (<em>LANGUAGE</em> can be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
 </dd>
 </dl>
+</details>
 <p>You can minify the CSS style sheet choosing the <code>css-min</code> option. The CSS minimization is not extremely aggressive, but is safe and sufficient.</p>
 <h4 id="macro-calls">Macro calls</h4>
 <p>The macro syntax used by <em>jqt</em> in CSS files is very similar to the syntax used by the traditional TeX language macro processor, but changing the prefix character <code>\\</code> by <code>&amp;</code>. The more common predefined macros have this syntax:</p>
@@ -231,89 +252,88 @@ $<span class="kw"> [[</span> <span class="ot">$PATH</span> =~ /usr/local/bin<spa
 <table>
 <caption><strong>Semantics for all CSS skips</strong></caption>
 <thead>
-<tr class="header">
-<th align="center">Delimiters</th>
-<th align="left">Macro expansion</th>
-<th align="left">Delimiters removed</th>
-<th align="left">Content removed</th>
+<tr>
+<th style="text-align: center;">Delimiters</th>
+<th style="text-align: left;">Macro expansion</th>
+<th style="text-align: left;">Delimiters removed</th>
+<th style="text-align: left;">Content removed</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="center"><code>&amp;\n</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
-<td align="left">No</td>
-<td align="left">Yes</td>
-<td align="left">There is no content</td>
+<tr>
+<td style="text-align: center;"><code>&amp;\n</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">There is no content</td>
 </tr>
-<tr class="even">
-<td align="center"><code>/*</code> <code>*/</code><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
-<td align="left">Yes/No</td>
-<td align="left">No/Yes</td>
-<td align="left">No/Yes</td>
+<tr>
+<td style="text-align: center;"><code>/*</code> <code>*/</code><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
+<td style="text-align: left;">Yes/No</td>
+<td style="text-align: left;">No/Yes</td>
+<td style="text-align: left;">No/Yes</td>
 </tr>
-<tr class="odd">
-<td align="center"><code>//</code> <code>\n</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></td>
-<td align="left">No</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
+<tr>
+<td style="text-align: center;"><code>//</code> <code>\n</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Yes</td>
 </tr>
-<tr class="even">
-<td align="center"><code>`</code> <code>`</code></td>
-<td align="left">No</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
+<tr>
+<td style="text-align: center;"><code>`</code> <code>`</code></td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">No</td>
 </tr>
-<tr class="odd">
-<td align="center"><code>&quot;</code> <code>&quot;</code></td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<tr>
+<td style="text-align: center;"><code>&quot;</code> <code>&quot;</code></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">No</td>
 </tr>
-<tr class="even">
-<td align="center"><code>'</code> <code>'</code></td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<tr>
+<td style="text-align: center;"><code>'</code> <code>'</code></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">No</td>
 </tr>
 </tbody>
 </table>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>An ampersand followed by a newline is treated as a line continuation (that is, the ampersand and the newline are removed and effectively ignored).<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>Multiline comments are expanded and preserved when not minifying CSS.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>This represents a newline character.<a href="#fnref3">↩</a></p></li>
 </ol>
-</div>
+</section>
 
-</div>
+</article>
 
-</div>
 
-<div class="#footer">
-<div class="license">
-<p>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</p>
+</main>
 
-</div>
+<footer class="#footer">
+<section class="license">
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
+</section>
 <ol class="repository">
-<li class="repository::section"><a href="https://github.com/fadado/jqt">code</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
-<li class="repository::section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt">code</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
+<li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
 </ol>
 
+</footer>
 
-</div>
-
-<script type="text/javascript">
+<script type="text/javascript">/*<![CDATA[*/
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-82432866-1', 'auto');
   ga('send', 'pageview');
-</script>
+/*]]>*/</script>
 </body>
 </html>
 
