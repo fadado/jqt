@@ -1,3 +1,22 @@
+Version 0.4.0:
+ - XHTMl5
+ - New CSS module
+ - More border-radius
+ - Polished names
+ - More modular CSS
+ - Better macro BEM, with escape
+ - Macro BEM
+ - Renamed some classes
+ - Added scaling parameters
+ - Better CSS minify
+ - Referencing pandoc
+ - Going to BEM
+ - Floating TOC
+ - Migrating to a new sheet style system
+ - New CSS preprocessor
+ - Fix: chicken egg problem #2
+ - Revised english
+
 Version 0.3.0:
  - New content model
  - Managed YAML with MarkDown snippets
