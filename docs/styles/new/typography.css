@@ -59,4 +59,7 @@ h6 {
   h6 { font-size: calc(&TypographyScale * 1.5rem); }
 }
 
+// JJOR
+q { quotes: "“" "”" "‘" "’"; }
+
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

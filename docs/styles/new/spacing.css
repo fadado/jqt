@@ -34,13 +34,14 @@ textarea {
 }
 
 blockquote,
+details,  // JJOR
 dl,
 figure,
 form,
 ol,
 p,
 pre,
-summary,
+summary,  // JJOR
 table,
 ul {
   margin-bottom: calc(&SpacingScale * 2.5rem);

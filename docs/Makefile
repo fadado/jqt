@@ -129,10 +129,10 @@ $(Destination)/README.md: $(Assets)/README.md \
 	$(info ==> $@)
 	cp $< $@
 
-DETAILS := sed \
-	-e 's/^<p><details><\/p>/<details>/' \
-	-e 's/^<p><\/details><\/p>/<\/details>/' \
-	-e 's/^<p><summary>/<summary>/' \
+DETAILS := sed					\
+	-e 's/^<p><details><\/p>/<details>/'	\
+	-e 's/^<p><\/details><\/p>/<\/details>/'\
+	-e 's/^<p><summary>/<summary>/'		\
 	-e 's/<\/summary><\/p>/<\/summary>/'
 
 $(Destination)/index.html: $(Content)/home.md $(Common) \
