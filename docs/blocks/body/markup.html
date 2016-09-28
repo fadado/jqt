@@ -1,7 +1,7 @@
 <#######################################################################
  # Body
  ######################################################################>
-<section class="#body">
+<main class="#body">
   <%ifndef BODY_TITLE>&
     <h1>{{.snippets.title}}</h1>
   <%else>&
@@ -12,7 +12,7 @@
   <%else>&
     <%call BODY_BLOCK>
   <%endif>&
-</section>
+</main>
 <#
 vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
 #>
