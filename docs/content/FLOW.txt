@@ -4,6 +4,8 @@
 
 <div class="%clearfix" id="flowhack"></div>
 
+<figure style="margin:0; padding:0;">
+<figcaption style="text-align:center; font-weight: bold;">jqt workflow</figcaption>
 ```
            jqt        +------+   +-------+  jq script
 Template +----------->|expand|-->|convert|-------------------------------+
@@ -23,6 +25,7 @@ Document +----------->|expand|-->|markup|--+          |merge|-------->|render|--
          +---------------------->|markup|------------------+
                                  +------+
 ```
+</figure>
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

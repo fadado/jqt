@@ -14,13 +14,19 @@ to the render stage.  This is described on the middle of this diagram:
 
 <%include content/FLOW.txt>
 
-When invoking `jqt` you can use the following options to influence document
+<details>
+
+<summary>
+When invoking `jqt` you can use the `-4`, `-5`, `-D`, `-d`, and `-I`  options to influence document
 conversion:
+</summary>
 
 <%include content/opt/4.txt>
 <%include content/opt/D.txt>
 <%include content/opt/d.txt>
 <%include content/opt/I.txt>
+
+</details>
 
 ## File structure
 
@@ -42,9 +48,15 @@ file in the scalar `.page._path`.
 
 ### MarkDown snippets
 
+<details>
+
+<summary>
 `jqt` `-T` option allows the use of YAML files for collections of MarkDown snippets:
+</summary>
 
 <%include content/opt/T.txt>
+
+</details>
 
 This feature can be used to collect multiple text snippets in only one file.
 The MarkDown can be transformed to HTML and put in a new YAML or JSON file

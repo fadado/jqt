@@ -17,14 +17,20 @@ This is described on the top of this diagram:
 
 <%include content/FLOW.txt>
 
-When invoking `jqt` you can use the following options to modify template
+<details>
+
+<summary>
+When invoking `jqt` you can use the `-D`, `-I`, `-i`, `-j` and `-L` options to modify template
 rendering:
+</summary>
 
 <%include content/opt/D.txt>
 <%include content/opt/I.txt>
 <%include content/opt/i.txt>
 <%include content/opt/j.txt>
 <%include content/opt/L.txt>
+
+</details>
 
 ## Template syntax
 

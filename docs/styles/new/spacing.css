@@ -40,6 +40,7 @@ form,
 ol,
 p,
 pre,
+summary,
 table,
 ul {
   margin-bottom: calc(&SpacingScale * 2.5rem);

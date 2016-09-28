@@ -17,8 +17,12 @@ the document front matter. This is described on the bottom of this diagram:
 
 <%include content/FLOW.txt>
 
-When invoking `jqt` you can use the following options to define the additional input
+<details>
+
+<summary>
+When invoking `jqt` you can use the `-D`, `-I`, `-M`, `-m`, `-n` and `-T` options to define the additional input
 data and influence JSON preprocessing:
+</summary>
 
 <%include content/opt/D.txt>
 <%include content/opt/I.txt>
@@ -26,6 +30,8 @@ data and influence JSON preprocessing:
 <%include content/opt/m.txt>
 <%include content/opt/n.txt>
 <%include content/opt/T.txt>
+
+</details>
 
 ## Data formats
 
@@ -172,12 +178,18 @@ Read the output of `yq --help` and `cq --help` for more information.
 
 ### Process front matter
 
-When invoking `jqt` you can use the following options to extract, remove or
+<details>
+
+<summary>
+When invoking `jqt` you can use the `-e`, `-r` and `-t` options to extract, remove or
 test the presence of front matter data in the input document:
+</summary>
 
 <%include content/opt/e.txt>
 <%include content/opt/r.txt>
 <%include content/opt/t.txt>
+
+</details>
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

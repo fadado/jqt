@@ -108,20 +108,32 @@ The sections about
 detail their usage of the preprocessor for _jqt_ templates, MarkDown documents
 and JSON data files.
 
+<details>
+
+<summary>
 _jqt_ also offers an standalone CSS preprocessor, and a transformation that can
 also be be considered a kind of preprocessing. The option `-T` allows the use
 of YAML files for collections of MarkDown snippets:
+</summary>
 
 <%include content/opt/T.txt>
+
+</details>
 
 ### CSS preprocessing
 
 _jqt_ can also expand CSS style sheets.  This is documented in this
 section because it is outside the normal _jqt_ processing work flow.
 
+<details>
+
+<summary>
 To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
+</summary>
 
 <%include content/opt/P.txt>
+
+</details>
 
 You can minify the CSS style sheet choosing the `css-min` option.
 The CSS minimization is not extremely aggressive, but is safe and sufficient.

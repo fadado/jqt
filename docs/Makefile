@@ -129,10 +129,16 @@ $(Destination)/README.md: $(Assets)/README.md \
 	$(info ==> $@)
 	cp $< $@
 
+DETAILS := sed \
+	-e 's/^<p><details><\/p>/<details>/' \
+	-e 's/^<p><\/details><\/p>/<\/details>/' \
+	-e 's/^<p><summary>/<summary>/' \
+	-e 's/<\/summary><\/p>/<\/summary>/'
+
 $(Destination)/index.html: $(Content)/home.md $(Common) \
 | $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(Layouts)/default.html > $@
+	$(JQT) -d $< $(Layouts)/default.html | $(DETAILS) > $@
 
 $(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
 $(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
@@ -141,7 +147,7 @@ define Target
 $(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html $(Common) \
 | $(Destination)
 	$$(info ==> $$@)
-	$(JQT) -d $$< $(Layouts)/$(2).html > $$@
+	$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
 endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
