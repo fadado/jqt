@@ -8,19 +8,22 @@
  #  Meta elements
  #>
     <meta charset="utf-8" />
-    <meta name="generator" content="jqt v<%include ../VERSION>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
-    <meta name='dcterms.date' content='{{.page.updated//empty}}' />
+<#
+ #  Document title and related metadata
+ #>
+    <title>jqt · {{.page.title}}</title>
     <meta name='description' content='{{.page.description//empty}}' />
     <meta name='keywords' content='{{.page.keywords//empty}}' />
+    <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
 <#
- #  Document title
+ #  More metadata
  #>
-    <title>jqt · {{.page.title}} – {{.site.title}}</title>
+    <meta name="generator" content="jqt v<%include ../VERSION>" />
+    <meta name='dcterms.date' content='{{.page.updated//empty}}' />
 <#
- #  CSS styles
+ #  Presentation
  #>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="styles.css"/>
     {{.page._highlight}}
   </head>

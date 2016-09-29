@@ -1,9 +1,13 @@
 ---
-title: Welcome
+title: Welcome to jqt
+description: Could be jq the basis for a web template engine?
+keywords:  jqt, jq, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
 <%include macros.m>&
 <%include content/LINKS.txt>&
+
+# Welcome
 
 > _Editing is a rewording activity._\
 > — _Alan J. Perlis_

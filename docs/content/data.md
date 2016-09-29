@@ -1,9 +1,13 @@
 ---
-title: Data model
+title: Managing the data model with jqt
+description: jqt combines one template with one MarkDown document and a data model.
+keywords:  jqt, JSON, YAML, gpp, preprocessing, data model
 updated: "2016-08-28T10:27:09Z"
 ---
 <%include macros.m>&
 <%include content/LINKS.txt>&
+
+# Data model
 
 ## General operation
 

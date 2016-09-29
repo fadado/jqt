@@ -2,11 +2,6 @@
  # Body
  ######################################################################>
 <main class="#body">
-  <%ifndef BODY_TITLE>&
-    <h1>{{.snippets.title}}</h1>
-  <%else>&
-    <%call BODY_TITLE>
-  <%endif>&
   <%ifndef BODY_BLOCK>&
     <%include blocks/content/markup.html>&
   <%else>&
