@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 &BEM{toc} {
-  width: 16em;
+  max-width: 20em;
   padding: 0 1em;
   text-align: center;
   font-size: 80%;

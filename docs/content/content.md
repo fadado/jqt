@@ -193,21 +193,35 @@ Pandoc long options can be specified in
 the command line and will be forwarded untouched to `pandoc`:
 
 ```
---base-header-level=NUMBER                        --latexmathml[=URL]
---bibliography=FILE                               --mathjax[=URL]
---citation-abbreviations=FILE                     --mathml[=URL]
---columns=NUMBER                                  --mimetex[=URL]
---csl=FILE                                        --no-highlight
---email-obfuscation=none|javascript|references    --normalize
---file-scope                                      --number-offset=NUMBER[,NUMBER,...]
---gladtex                                         --number-sections
---highlight-style=STYLE                           --preserve-tabs
---html-q-tags                                     --section-divs
---id-prefix=STRING                                --tab-stop=NUMBER
---indented-code-classes=CLASSES                   --toc-depth=NUMBER
---jsmath[=URL]                                    --webtex[=URL]
---katex[=URL]                                     --wrap=[auto|none|preserve]
+--base-header-level=NUMBER
+--bibliography=FILE
+--citation-abbreviations=FILE
+--columns=NUMBER
+--csl=FILE
+--email-obfuscation=none|javascript|references
+--file-scope
+--gladtex
+--highlight-style=STYLE
+--html-q-tags
+--id-prefix=STRING
+--indented-code-classes=CLASSES
+--jsmath[=URL]
+--katex[=URL]
 --katex-stylesheet
+--latexmathml[=URL]
+--mathjax[=URL]
+--mathml[=URL]
+--mimetex[=URL]
+--no-highlight
+--normalize
+--number-offset=NUMBER[,NUMBER,...]
+--number-sections
+--preserve-tabs
+--section-divs
+--tab-stop=NUMBER
+--toc-depth=NUMBER
+--webtex[=URL]
+--wrap=[auto|none|preserve]
 ```
 
 <#

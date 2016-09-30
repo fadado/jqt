@@ -9,4 +9,10 @@
   border-top: &HorizontalRule;
 }
 
+@media print {
+  &BEM{#footer} {
+    display: none;
+  }
+}
+
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

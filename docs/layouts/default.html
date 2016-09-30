@@ -8,21 +8,15 @@
  #  Meta elements
  #>
     <meta charset="utf-8" />
-<#
- #  Document title and related metadata
- #>
+<# Document title and related metadata #>
     <title>jqt · {{.page.title}}</title>
     <meta name='description' content='{{.page.description//empty}}' />
     <meta name='keywords' content='{{.page.keywords//empty}}' />
     <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
-<#
- #  More metadata
- #>
+<# More metadata #>
     <meta name="generator" content="jqt v<%include ../VERSION>" />
     <meta name='dcterms.date' content='{{.page.updated//empty}}' />
-<#
- #  Presentation
- #>
+<# Presentation #>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="styles.css"/>
     {{.page._highlight}}

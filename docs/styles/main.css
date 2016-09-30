@@ -17,12 +17,13 @@
 &include{blocks/license/style.css}
 &include{blocks/repository/style.css}
 
-html {
-  background-color: &ColorInitial;
-}
-
-body&BEM{#container} {
-  max-width: 800px;
+@media screen {
+  html {
+    background-color: &ColorInitial;
+  }
+  body&BEM{#container} {
+    max-width: 800px;
+  }
 }
 
 // Hacks
@@ -40,6 +41,12 @@ figure > pre {
   border: 0.3rem solid &ColorQuinary;
   border-radius: 1rem;
   font-size: 1.4rem;
+}
+
+@media print {
+  figure > pre {
+    font-size: 1.2rem;
+  }
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
