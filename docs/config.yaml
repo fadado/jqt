@@ -18,6 +18,9 @@ author:
   name: Joan Josep Ordinas Rosa
 
 menu:
+- URL: ./index.html
+  path: content/home.md
+  name: Home
 - URL: ./engine.html
   path: content/engine.md
   name: Engine

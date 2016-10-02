@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Managing the data model with jqt
 description: jqt combines one template with one MarkDown document and a data model.
 keywords:  jqt, JSON, YAML, gpp, preprocessing, data model
@@ -8,6 +9,10 @@ updated: "2016-08-28T10:27:09Z"
 <%include content/LINKS.txt>&
 
 # Data model
+
+The simplest page always resides on a website, where there is a complex web of
+relationships between pages… as we have to imagine these relationships, we need
+a way to represent them: this is the data model.
 
 ## General operation
 

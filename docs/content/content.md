@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Authoring content in jqt using MarkDown
 description: jqt transforms MarkDown documents to HTML using Pandoc.
 keywords:  jqt, markdown, pandoc, gpp, preprocessing, authoring content
@@ -8,6 +9,10 @@ updated: "2016-08-28T10:27:09Z"
 <%include content/LINKS.txt>&
 
 # Authoring content
+
+Authors must be freed from any concern regarding the presentation of his
+writings, and his dedication to its structure must be the essential minimum:
+_MarkDown_ promises and delivers exactly this.
 
 ## General operation
 

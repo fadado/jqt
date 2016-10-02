@@ -138,7 +138,7 @@ DETAILS := sed					\
 $(Destination)/index.html: $(Content)/home.md $(Common) \
 | $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(Layouts)/default.html | $(DETAILS) > $@
+	$(JQT) -d $< $(Layouts)/default.html > $@
 
 $(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
 $(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt

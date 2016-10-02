@@ -1,4 +1,5 @@
 ---
+layout: page
 title: Defining the page structure with jqt
 description: Web pages structure is defined by the HTML markup.
 keywords:  jqt, jq, gpp, preprocessing, template engine
@@ -8,6 +9,9 @@ updated: "2016-08-28T10:27:09Z"
 <%include content/LINKS.txt>&
 
 # Page structure
+
+The same content can be delivered to the Web in different structured formats, and the
+transformation of that content in the final pages must be completely automatic.
 
 ## General operation
 
