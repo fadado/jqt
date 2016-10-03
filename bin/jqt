@@ -451,19 +451,28 @@ declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 # < stdin > stdout
 function merge
 {
-    local front_matter=$1
-    local key
+    local front_matter key id
+    local -i without_document=0
+    if [[ $1 == '-w' ]]; then
+        without_document=1
+    else
+        front_matter=$1
+    fi
     local -r script=$(mkpipe)
 
-    local id=${DOCUMENT//\//-}
-    id=${id#-}
-    id=${id%.*}
+    {   if (( without_document )); then
+            echo '{}' # dummy object
+        else
+            id=${DOCUMENT//\//-}
+            id=${id#-}
+            id=${id%.*}
+            # split .
+            echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
+            # page
+            echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $front_matter
+            echo "+ { _id: \"$id\", _path: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
+        fi
 
-    {   # split .
-        echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
-        # page
-        echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $FRONT_MATTER
-        echo "+ { _id: \"$id\", _path: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
         # additional data
         for key in "${!YAML_DATA[@]}"; do
             echo "+{ $key:"
@@ -490,9 +499,14 @@ function merge
         done
     } > $script &
 
-    jq  --raw-input \
-        --slurp     \
-        --from-file $script
+    if (( without_document )); then
+        jq  --null-input    \
+            --from-file $script
+    else
+        jq  --raw-input     \
+            --slurp         \
+            --from-file $script
+    fi
 }
 
 ########################################################################
@@ -624,12 +638,12 @@ EOF
 ########################################################################
 
 declare -i flagS=0 flagH=0 flagC=0
-declare -i extract=0 remove=0 front_matter=0 snippets=0
+declare -i extract=0 remove=0 front_matter=0 snippets=0 without_document=0
 declare expand=''
 
 declare opt key filename
 
-while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
+while getopts :hVD:I:P:L:i:j:45d:weprtn:m:M:T:CHS-: opt; do
     case $opt in
     # Generic options
         h)  help
@@ -673,6 +687,8 @@ while getopts :hVD:I:P:L:i:j:45d:eprtn:m:M:T:CHS-: opt; do
         r)  remove=1
             ;;
         t)  front_matter=1
+            ;;
+        w)  without_document=1
             ;;
     # Data options
         m|M)[[ $OPTARG == *:* ]] || usage "Bad format in data specification; expected 'key:filename'"
@@ -803,7 +819,7 @@ elif (( flagH )); then          expand_md | markup
 elif (( flagC )); then
     declare -r FRONT_MATTER=$(mkpipe)
     expand_md | fork_yaml $FRONT_MATTER | markup | merge $FRONT_MATTER
-elif [[ $DOCUMENT == '(standard input)' ]]; then
+elif (( !without_document )) && [[ $DOCUMENT == '(standard input)' ]]; then
     # equivalent to flagH
     expand_md | markup
 else
@@ -813,14 +829,18 @@ else
     | convert                   \
     > $RENDER_SCRIPT &
 
-    # process document
-    declare -r FRONT_MATTER=$(mkpipe)
-    < $DOCUMENT                 \
-      expand_md                 \
-    | fork_yaml $FRONT_MATTER   \
-    | markup                    \
-    | merge $FRONT_MATTER       \
-    | render $RENDER_SCRIPT
+    if (( without_document )); then
+        merge -w | render $RENDER_SCRIPT
+    else
+        # process document
+        declare -r FRONT_MATTER=$(mkpipe)
+        < $DOCUMENT                 \
+        expand_md                   \
+        | fork_yaml $FRONT_MATTER   \
+        | markup                    \
+        | merge $FRONT_MATTER       \
+        | render $RENDER_SCRIPT
+    fi
 fi
 
 exit 0

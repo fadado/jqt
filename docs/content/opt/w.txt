@@ -1,0 +1,5 @@
+-w
+:   Build the data model without input document, only from JSON and YAML input files.
+<#
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
+#>

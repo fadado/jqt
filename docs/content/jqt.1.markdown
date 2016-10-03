@@ -42,6 +42,7 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 <%include content/opt/T.txt>
 <%include content/opt/t.txt>
 <%include content/opt/V.txt>
+<%include content/opt/w.txt>
 
 # FILES
 

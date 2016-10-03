@@ -102,6 +102,7 @@ arguments.  The usage possibilities are:
 <%include content/opt/T.txt>
 <%include content/opt/t.txt>
 <%include content/opt/V.txt>
+<%include content/opt/w.txt>
 
 ## Preprocessing
 

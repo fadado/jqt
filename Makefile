@@ -146,9 +146,9 @@ define TestJQT
 test-$(1)-%.jqt:
 	echo "==> jqt: $$(subst test-,,$$(basename $$@))"
 	if test -e tests/jqt/$$(subst test-,,$$(basename $$@)).json; then \
-	    jqt -ifilters -Ltests/jqt/filters -Mtop:tests/jqt/$$(subst test-,,$$(basename $$@)).json -dtests/jqt/md-00.md tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
+	    jqt -ifilters -Ltests/jqt/filters -Mtop:tests/jqt/$$(subst test-,,$$(basename $$@)).json -w tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
 	else \
-	    jqt -ifilters -Ltests/jqt/filters -dtests/jqt/md-00.md tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
+	    jqt -ifilters -Ltests/jqt/filters -w tests/jqt/$$(subst test-,,$$@) tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt; \
 	fi
 	diff tests/jqt/expected/$$(subst test-,,$$(basename $$@)).txt tests/jqt/generated/$$(subst test-,,$$(basename $$@)).txt
 # Run one example named without file suffix

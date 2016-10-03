@@ -21,6 +21,7 @@ Document options:
 
 <%include content/opt/4.txt>
 <%include content/opt/d.txt>
+<%include content/opt/w.txt>
 
 Data options:
 
