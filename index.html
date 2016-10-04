@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <!-- this document uses polyglot markup (well formed XHTML5)  -->
-<html id="content-home" xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html id="index" xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+
 <meta charset="utf-8" />
+
 <title>jqt · Welcome to jqt</title>
 <meta name='description' content='Could be jq the basis for a web template engine?' />
 <meta name='keywords' content='jqt, jq, template engine' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
-<meta name="generator" content="jqt v0.4.0" />
+
+<meta name="generator" content="jqt v0.5.0" />
 <meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
+
+<link rel="shortcut icon" href="favicon.ico"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 <link rel="stylesheet" type="text/css" href="styles.css"/>
     
@@ -34,40 +39,45 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 
 </head>
+
 <body class="#container">
 <header class="#header">
 <nav>
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.4.0</span></span>
-
+<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.0</span></span>
 <ol class="menu-bar">
-<li class='menu-bar__item menu-bar__item--current'>
-<a href="./index.html">Home</a>
+<li class='menu-bar__item menu-bar__item_current'>
+<a href="index.html">Home</a>
 </li>
 <li class='menu-bar__item '>
-<a href="./engine.html">Engine</a>
+<a href="engine.html">Engine</a>
 </li>
 <li class='menu-bar__item '>
-<a href="./structure.html">Structure</a>
+<a href="structure.html">Structure</a>
 </li>
 <li class='menu-bar__item '>
-<a href="./content.html">Content</a>
+<a href="content.html">Content</a>
 </li>
 <li class='menu-bar__item '>
-<a href="./data.html">Data</a>
+<a href="data.html">Data</a>
 </li>
 </ol>
 </nav>
 </header>
-
 <main class="#body">
 <article class="$content">
 <h1 id="welcome">Welcome</h1>
-<blockquote>
-<p><em>Editing is a rewording activity.</em><br />— <em>Alan J. Perlis</em></p>
+<!--
+> _Editing is a rewording activity._\
+> — _Alan J. Perlis_
+-->
+<blockquote class="page-quote">
+<p>
+<em>Editing is a rewording activity.</em><br/>— <em>Alan J. Perlis</em>
+</p>
 </blockquote>
-<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the basis for a web template engine? Let's explore…</p>
+<p>Could be <a href="https://stedolan.github.io/jq/"><em>jq</em></a> the basis for a web template engine? Let’s explore…</p>
 <h2 id="jq"><em>jq</em></h2>
-<p><em>jq</em> have nice features like string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following simple strings, in a <em>jq</em> program, separated with the comma operator:</p>
+<p><a href="https://stedolan.github.io/jq/"><em>jq</em></a> have nice features like string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following interpolation strings, in a <a href="https://stedolan.github.io/jq/"><em>jq</em></a> program, separated with the comma operator:</p>
 <h3 id="simple-expansion">Simple expansion</h3>
 <pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;title&gt;</span>\(.title)<span class="kw">&lt;/title&gt;</span>&quot;, ...</code></pre>
 <h3 id="conditional-expansion">Conditional expansion</h3>
@@ -75,48 +85,47 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h3 id="repeated-expansion">Repeated expansion</h3>
 <pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.author[])&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</code></pre>
 <p>In these examples the strings expand, vanish, or multiply without any explicit <code>if</code> or <code>for</code>!</p>
-<h2 id="jqt"><em>jqt</em></h2>
-<p>To write <em>jq</em> scripts using strings with interpolations is not the idea we have for a template language. We need some syntactic sugar, and this is provided by <em>jqt</em>: you write templates in a very fashionable style, the templates are translated into a <em>jq</em> script and then <code>jq</code> is feed with the created script and some content and data in <a href="http://json.org/">JSON</a> format… and the magic is done!</p>
+<h2 id="jqt"><cite>jqt</cite></h2>
+<p>To write <a href="https://stedolan.github.io/jq/"><em>jq</em></a> scripts using strings with interpolations is not the idea we have for a template language. We need some syntactic sugar, and this is provided by <cite>jqt</cite>: you write templates in a very fashionable style, the templates are translated into a <a href="https://stedolan.github.io/jq/"><em>jq</em></a> script and then <code>jq</code> is feed with the created script and some content and data in <a href="http://json.org/">JSON</a> format… and the magic is done!</p>
 <h3 id="syntactic-sugar">Syntactic sugar</h3>
 <p>And, how do the <em>syntactic sugar</em> looks like? Do you think the following example seems to be a template?</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;html</span><span class="ot"> lang=</span><span class="st">&#39;{{.page.lang//.site.lang}}&#39;</span><span class="kw">&gt;</span>
-<span class="kw">&lt;head&gt;</span>
-<span class="kw">&lt;title&gt;</span>{{.page.title | gsub(&quot;<span class="er">&lt;</span>[^&gt;]*&gt;&quot;; &quot;&quot;)}}<span class="kw">&lt;/title&gt;</span>
-    {# include files in preprocessing stage #}
-<span class="er">&lt;</span>%include &quot;head.html&quot;&gt;
-<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&quot;generator&quot;</span><span class="ot"> content=</span><span class="st">&quot;jqt v</span><span class="er">&lt;</span><span class="st">%include &quot;</span><span class="er">../VERSION&quot;</span><span class="kw">&gt;</span>&quot;/&gt;
-    {# optional line #}
-<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;dcterms.modified&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.page.updated//empty}}&#39;</span> <span class="kw">/&gt;</span>
-    {# implicit loop for all authors #}
-    {% .page.author | sort[] %}<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;{{.}}&#39;</span> <span class="kw">/&gt;</span>
-<span class="kw">&lt;/head&gt;</span>
-<span class="kw">&lt;body&gt;</span>
-<span class="kw">&lt;h1&gt;</span>{{.page.title}}<span class="kw">&lt;/h1&gt;</span>
-<span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;CONTENT&quot;</span><span class="kw">&gt;</span>
+<pre><code>&lt;html lang=&#39;{{.page.lang//.site.lang}}&#39;&gt;
+&lt;head&gt;
+    &lt;title&gt;{{.page.title | gsub(&quot;&lt;[^&gt;]*&gt;&quot;; &quot;&quot;)}}&lt;/title&gt;
+    {# include files in preprocessing stage: #}
+    &lt;%include &quot;head.html&quot;&gt;
+    &lt;meta name=&quot;generator&quot; content=&quot;jqt v&lt;%include &quot;../VERSION&quot;&gt;&quot;/&gt;
+    {# optional line: #}
+    &lt;meta name=&#39;dcterms.modified&#39; content=&#39;{{.page.updated//empty}}&#39; /&gt;
+    {# implicit loop for all authors: #}
+    {% .page.author | sort[] %}&lt;meta name=&#39;author&#39; content=&#39;{{.}}&#39; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;{{.page.title}}&lt;/h1&gt;
+    &lt;div id=&quot;CONTENT&quot;&gt;
         {{.page._content}}
-<span class="kw">&lt;/div&gt;</span>
-<span class="er">&lt;</span>%partial analytics &#39;UA-82432866-1&#39;&gt;
-<span class="kw">&lt;/body&gt;</span>
-<span class="kw">&lt;/html&gt;</span></code></pre>
+    &lt;/div&gt;
+    {# macro calls: #}
+    &lt;%partial analytics &#39;UA-82432866-1&#39;&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 <h3 id="status">Status</h3>
-<p>This site is built using <em>jqt</em>, and is itself in his implementation a kind of tutorial about <em>jqt</em>.</p>
-<p>If you want to learn to use <em>jqt</em> <a href="./engine.html#installation">install <em>jqt</em></a> and read all the different site sections:</p>
+<p>This site is built using <cite>jqt</cite>, and is itself in his implementation a kind of tutorial about <cite>jqt</cite>. If you want to learn how to use <cite>jqt</cite> see all the different sections of this site:</p>
 <ul>
 <li><a href="./engine.html">Template engine</a></li>
 <li><a href="./structure.html">Page structure</a></li>
 <li><a href="./content.html">Authoring content</a></li>
 <li><a href="./data.html">Data model</a></li>
 </ul>
-<p>And don't forget to study the source code under the <a href="https://github.com/fadado/jqt/tree/master/docs">docs directory</a>!</p>
-<p><em>jqt</em> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
+<p>And don’t forget to study this documentation source code in the repository <a href="https://github.com/fadado/jqt/tree/master/docs"><code>docs</code></a> directory!</p>
+<p><cite>jqt</cite> is developed under the <em>Fedora</em> Linux distribution, and a lot of portability issues are expected at this stage of development. Please, use the project <a href="https://github.com/fadado/jqt">GitHub repository</a> features if you want to collaborate or send any kind of questions.</p>
 
 </article>
-
 </main>
 
 <footer class="#footer">
 <section class="license">
-<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the MIT license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
 </section>
 <ol class="repository">
@@ -125,9 +134,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
 </ol>
-
 </footer>
-
 <script type="text/javascript">/*<![CDATA[*/
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -138,4 +145,5 @@ code > span.er { color: #ff0000; font-weight: bold; }
 /*]]>*/</script>
 </body>
 </html>
+
 
