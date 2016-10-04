@@ -18,6 +18,7 @@
 &SEL{$content} caption {
   border-top:    .1rem solid &ColorQuinary;
   border-bottom: .1rem solid &ColorQuinary;
+  font-weight: bold;
 }
 
 &SEL{$content} dt {
@@ -45,6 +46,27 @@
 &SEL{$content} .footnotes p {
   margin:  0;
   padding: 0;
+}
+
+&SEL{$content} summary {
+  cursor: zoom-in;
+  outline: none;
+}
+
+&SEL{$content} details[open] > summary {
+  cursor: zoom-out;
+}
+
+&SEL{$content} figure > pre {
+  border: 0.3rem solid &ColorQuinary;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+}
+
+@media print {
+  &SEL{$content} figure > pre {
+    font-size: 1.2rem;
+  }
 }
 
 // Page specific

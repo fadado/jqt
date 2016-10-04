@@ -2,9 +2,7 @@
  # Flow diagram
  #>
 
-<div class="%clearfix" id="flowhack"></div>
-
-<figure style="margin:0; padding:0;">
+<figure style="margin:0; padding:0;clear:both;">
 <figcaption style="text-align:center; font-weight: bold;">jqt workflow</figcaption>
 ```
            jqt        +------+   +-------+  jq script
