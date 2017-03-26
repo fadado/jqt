@@ -14,13 +14,13 @@ updated: "2016-08-28T10:27:09Z"
 > — _Alan J. Perlis_
 
 Could be [_jq_][JQ] the basis for a web template engine?
-Let's explore&hellip;
+Let’s explore&hellip;
 
 ## _jq_
 
 _jq_ have nice features like string interpolation and implicit backtracking.
 Mixed with the help of some syntactic sugar a powerful template engine appear.
-Imagine the following simple strings, in a _jq_ program,
+Imagine the following interpolation strings, in a _jq_ program,
 separated with the comma operator:
 
 ### Simple expansion
@@ -64,15 +64,16 @@ example seems to be a template?
 This site is built using _jqt_, and is itself in his implementation a kind of
 tutorial about _jqt_.
 
-If you want to learn to use _jqt_ [install _jqt_](./engine.html#installation) and
-read all the different site sections:
+If you want to learn how to use _jqt_ [install _jqt_](./engine.html#installation) and
+see all the different sections of the site:
 
 * [Template engine](./engine.html)
 * [Page structure](./structure.html)
 * [Authoring content](./content.html)
 * [Data model](./data.html)
 
-And don't forget to study the source code under the [docs directory](https://github.com/fadado/jqt/tree/master/docs)!
+And don’t forget to study this site source code in the repository
+[`docs` directory](https://github.com/fadado/jqt/tree/master/docs)!
 
 _jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of

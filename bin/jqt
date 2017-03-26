@@ -2,7 +2,7 @@
 
 # jqt - jq based web template engine
 
-declare -r VERSION='0.3.0'
+declare -r VERSION='0.4.0'
 declare -r DATADIR='/usr/local/share'
 
 declare -r SELF=${0##*/}
@@ -34,22 +34,24 @@ function mkpipe
 {
     local -r LOCK="${TMPDIR}/mkpipe-lock"
     local -i i=0
+
+    # seize lock
     until { : > $LOCK; } 2>/dev/null; do
         sleep 0.01;
         i+=1
         (( i < 100 )) || {
-            echo 1>&2 "$SELF: Bored waiting a lock to open"
+            echo 1>&2 "$SELF: Bored waiting to open a lock"
             kill -s TERM $$ || kill -s KILL $$
         }
     done
-
-    local n="${TMPDIR}/$RANDOM"
-    while [[ -e $n ]]; do n="${TMPDIR}/$RANDOM"; done
-    mkfifo --mode 600 $n
-
+    # protected section
+    local name="${TMPDIR}/$RANDOM"
+    while [[ -e $name ]]; do name="${TMPDIR}/$RANDOM"; done
+    mkfifo --mode 600 $name
+    # release lock
     rm -f $LOCK
 
-    echo -n $n
+    echo -n $name
 }
 
 ########################################################################
@@ -199,19 +201,6 @@ function expand_json
     echo    # always generate almost one line!!!
 }
 
-css_min2()
-{
-	sed '
-# join rules in one big line
-/[^@]\+{$/,/}$/ {
-	:loop
-	N;
-	/}$/! b loop
-	s/\n//g
-}
-'
-
-}
 # < stdin > stdout
 function expand_css
 {
@@ -572,63 +561,38 @@ EOF
 
 function pandoc_options
 {
-    cat <<EOF
-Pandoc options:
-    --base-header-level=NUMBER                        --latexmathml[=URL]
-    --bibliography=FILE                               --mathjax[=URL]
-    --citation-abbreviations=FILE                     --mathml[=URL]
-    --columns=NUMBER                                  --mimetex[=URL]
-    --csl=FILE                                        --no-highlight
-    --email-obfuscation=none|javascript|references    --normalize
-    --file-scope                                      --number-offset=NUMBER[,NUMBER,...]
-    --gladtex                                         --number-sections
-    --highlight-style=STYLE                           --preserve-tabs
-    --html-q-tags                                     --section-divs
-    --id-prefix=STRING                                --tab-stop=NUMBER
-    --indented-code-classes=CLASSES                   --toc-depth=NUMBER
-    --jsmath[=URL]                                    --webtex[=URL]
-    --katex[=URL]                                     --wrap=[auto|none|preserve]
-    --katex-stylesheet
+echo 'Pandoc options:'
+    cat <<'EOF' | pr -e --omit-pagination --indent=4 --width=100 --columns=2
+--base-header-level=NUMBER
+--bibliography=FILE
+--citation-abbreviations=FILE
+--columns=NUMBER
+--csl=FILE
+--email-obfuscation=none|javascript|references
+--file-scope
+--gladtex
+--highlight-style=STYLE
+--html-q-tags
+--id-prefix=STRING
+--indented-code-classes=CLASSES
+--jsmath[=URL]
+--katex[=URL]
+--katex-stylesheet
+--latexmathml[=URL]
+--mathjax[=URL]
+--mathml[=URL]
+--mimetex[=URL]
+--no-highlight
+--normalize
+--number-offset=NUMBER[,NUMBER,...]
+--number-sections
+--preserve-tabs
+--section-divs
+--tab-stop=NUMBER
+--toc-depth=NUMBER
+--webtex[=URL]
+--wrap=[auto|none|preserve]'
 EOF
-    exit
-
-    # !!!
-    local opt
-
-    echo 'Pandoc options:'
-    for opt in \
-        '--base-header-level=NUMBER' \
-        '--bibliography=FILE' \
-        '--citation-abbreviations=FILE' \
-        '--columns=NUMBER' \
-        '--csl=FILE' \
-        '--email-obfuscation=none|javascript|references' \
-        '--file-scope' \
-        '--gladtex' \
-        '--highlight-style=STYLE' \
-        '--html-q-tags' \
-        '--id-prefix=STRING' \
-        '--indented-code-classes=CLASSES' \
-        '--jsmath[=URL]' \
-        '--katex[=URL]' \
-        '--katex-stylesheet' \
-        '--latexmathml[=URL]' \
-        '--mathjax[=URL]' \
-        '--mathml[=URL]' \
-        '--mimetex[=URL]' \
-        '--no-highlight' \
-        '--normalize' \
-        '--number-offset=NUMBER[,NUMBER,...]' \
-        '--number-sections' \
-        '--preserve-tabs' \
-        '--section-divs' \
-        '--tab-stop=NUMBER' \
-        '--toc-depth=NUMBER' \
-        '--webtex[=URL]' \
-        '--wrap=[auto|none|preserve]'
-    do echo "$opt"
-    done | pr -e --omit-pagination --indent=4 --width=100 --columns=2
-
     exit 0
 }
 

@@ -3,7 +3,7 @@
 _jqt_ is a web template engine that uses [_jq_](https://stedolan.github.io/jq/) as expression language.
 
 If you want to learn to use _jqt_, read the documentation at
-<https://fadado.github.io/jqt/>. This documentation is generated using _jqt_ from the `docs/`
+<https://fadado.github.io/jqt/>. The documentation is generated using _jqt_ in the `docs`
 folder of this repository.
 
 The tools used in the implementation of _jqt_ are:

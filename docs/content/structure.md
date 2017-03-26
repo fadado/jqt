@@ -18,7 +18,7 @@ transformation of that content in the final pages must be completely automatic.
 Web pages structure is defined by the HTML markup, and using _jqt_ it is
 added to the input content and data using a template.
 _jqt_ transforms templates into [_jq_][JQ] scripts, but before that
-[GPP][GPP] is used to preprocess them. The generated script will be combined
+[`gpp`][GPP] is used to preprocess them. The generated script will be combined
 with the document and data inputs in the render stage to produce the
 final HTML page.
 This is described on the top of this diagram:
@@ -52,7 +52,7 @@ This is a complete template example:
 
 ### Preprocessing
 
-Templates are preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
+Templates are preprocessed using [`gpp`][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a template fragment
 like
 
@@ -107,7 +107,7 @@ you can put this conditional macro call to define a default title block:
 
 ```HTML
 <%ifndef HEAD_TITLE>
-    <title>{{.page.title}}</title> {# default block #}
+    <title>{{.page.title}}</title> <# default block #>
 <%else><%call HEAD_TITLE><%endif>
 ```
 
@@ -121,12 +121,12 @@ before include the base template:
 <%include default.html>
 ```
 
-In addition to GPP predefined macros _jqt_ define in the file `libjqt.m`,
+In addition to `gpp` predefined macros _jqt_ define in the file `libjqt.m`,
 included in the render stage, a little macros library. The
 more useful will be perhaps `<%partial name arg...>`, to include a template
 file passing arguments to it and `<%call name arg...>`, to call a macro by name.
 
-Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
@@ -145,7 +145,7 @@ be enabled or disabled.  String delimiters can be copied, or not, to the output:
 ~~~HTML
 <!-- XML comments -->
 <%sc 'Single quoted strings, only available in user defined macro calls'>
-<%sc "Double quoted strings, only available in user defined macro calls'>
+<%sc "Double quoted strings, only available in user defined macro calls">
 All jqt template delimited regions: {#...#}, {%...%}, {{...}} 
 ~~~
 
@@ -179,7 +179,7 @@ The delimiters used by _jqt_ are as follows:
 Delimiters    Purpose
 ----------    -----------------------------------
 `{{ ... }}`   Expressions to evaluate
-`{% ... %}`   Actions for conditional and evaluation and loops
+`{% ... %}`   Actions for conditional evaluation and loops
 `{# ... #}`   Comments not included in the output
 
 Table: **Delimiters used in _jqt_ templates**
@@ -187,7 +187,7 @@ Table: **Delimiters used in _jqt_ templates**
 #### Expressions
 
 The text in expressions and actions is normal _jq_ code, where as
-a bonus, the `M$` global variable points to the `jq` JSON input (the initial `.`).
+a bonus, the `$M` global variable points to the `jq` JSON input (the initial `.`).
 The rules for expression evaluation are very simple:
 
 * If an expression evaluates to `empty` the whole line vanishes.
@@ -195,7 +195,7 @@ The rules for expression evaluation are very simple:
 * If an expression produces multiple values the whole line is repeated multiple
   times, with the expression evaluated again each time.
 
-Warning: is a line contains two or more expressions producing multiple values a
+Warning: if a line contains two or more expressions producing multiple values a
 cartesian product is generated!
 
 #### Actions
@@ -215,14 +215,14 @@ The evaluation rules for one line actions are as follows:
 * If the delimited snippet evaluates to `empty` the whole line vanishes.
 * Otherwise, for each value produced the text following the
   snippet is evaluated with the value assigned to the dot (`.`). The initial
-  dot is still available in the global variable `M$`.
+  dot is still available in the global variable `$M`.
 
 The evaluation rules for multiline actions are as follows:
 
 * If the opening snippet evaluates to `empty` all lines until the ending snippet disappear.
 * Otherwise, for each value produced the lines until the ending snippet
   are evaluated with the value assigned to the dot (`.`). The initial dot is
-  still available in the global variable `M$`.
+  still available in the global variable `$M`.
 
 <# Warning: raw blocks are not documented because they are CONTENT! #>
 

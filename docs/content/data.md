@@ -11,7 +11,7 @@ updated: "2016-08-28T10:27:09Z"
 # Data model
 
 The simplest page always resides on a website, where there is a complex web of
-relationships between pages… as we have to imagine these relationships, we need
+relationships between pages. As we have to imagine these relationships, we need
 a way to represent them: this is the data model.
 
 ## General operation
@@ -44,9 +44,9 @@ data and influence JSON preprocessing:
 
 ## Data formats
 
-### YAML
+### YAML and JSON
 
-Document front matter metadata and additional input YAML files are converted to
+Documents front matter metadata and additional input YAML files are converted to
 JSON and merged to be the `jq` input in the render stage. No preprocessing is
 applied  to YAML data.
 
@@ -59,12 +59,13 @@ are provided:
 * `.page._path`: the input document pathname as provided to `jqt`.
 * `.page._toc`: the rendered input document table of contents.
 
-### JSON
-
 Additional JSON files can be provided and are merged with front matter metadata
-to be the `jq` input in the render stage.  The files are preprocessed using
-[GPP][GPP], and all the expected options in a preprocessor are available,
-like defining new macros, include other files, etc.
+to be the `jq` input in the render stage.
+
+### JSON preprocessing
+
+JSON files are preprocessed using [GPP][GPP], and all the expected options in a
+preprocessor are available, like defining new macros, include other files, etc.
 
 #### Macro calls
 
@@ -107,7 +108,7 @@ but named arguments are also possible:
 { "price": "&price(100)" }
 ```
 
-Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
@@ -158,7 +159,7 @@ argument and write to standard output.
 
 Sometimes you want to apply queries in the _jq_ style to CSV or YAML files,
 in the same style as _jq_ processes JSON data.
-As a wrappers to `jq` you have the following utilities shipped with _jqt_:
+As wrappers to `jq` you have the following utilities shipped with _jqt_:
 
 * `cq`, apply `jq` to CSV input files.
 * `yq`, apply `jq` to YAML input files.
@@ -183,7 +184,7 @@ $ yq --json -c '.store.book[2]' tests/data/store.yaml
 {"category":"fiction","price":8.99,"author":"Herman Melville",...
 ```
 
-Read the output of `yq --help` and `cq --help` for more information.
+See the output of `yq --help` and `cq --help` for more information.
 
 ### Process front matter
 

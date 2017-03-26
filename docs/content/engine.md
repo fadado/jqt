@@ -47,16 +47,16 @@ $ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
 ```
 
 After clone or [download](https://github.com/fadado/jqt/releases) _jqt_ you can
-install it by hand executing a few orders on the _jqt_ top directory:
+manually install it executing a few commands on the _jqt_ top directory:
 
 ```zsh
 $ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
 $ sudo cp bin/* /usr/local/bin
 $ sudo cp share/* /usr/local/share/jqt
-$ [[ $PATH =~ /usr/local/bin ]] || echo 'You must edit your PATH'
+$ [[ $PATH =~ /usr/local/bin ]] || echo 'Add /usr/local/bin to your PATH'
 ```
 
-If you know how to use `make` please read the `Makefile` located in the _jqt_
+If you know how to use `make` please see the `Makefile` located in the _jqt_
 top directory and run `make install` if you agree with the things that will
 happen. You can also change the installation directory:
 
@@ -106,24 +106,25 @@ arguments.  The usage possibilities are:
 
 ## Preprocessing
 
-One distinctive feature of _jqt_ is the text expansion applied to almost
+One distinctive feature of _jqt_ is the text expansion, using `gpp`, applied to almost
 all kinds of input files.
 Also, _jqt_ can be used as a standalone
 preprocessor thanks to the `-P` option.
 
-### Kinds of preprocessing
+### Files preprocessed
 
-The sections about
-[templates](./structure.html#preprocessing),
-[documents](./content.html#preprocessing) and [data](./data.html#json) cover in
-detail their usage of the preprocessor for _jqt_ templates, MarkDown documents
-and JSON data files.
+The pages about templates, documents and data cover in
+detail the usage of the preprocessor for
+[_jqt_ templates](./structure.html#preprocessing),
+[MarkDown documents](./content.html#preprocessing)
+and [JSON data files](./data.html#json).  _jqt_ can also expand CSS style sheets;  this is documented
+in the following section because it is outside the normal _jqt_ processing work flow.
 
 <details>
 
 <summary>
-_jqt_ also offers an standalone CSS preprocessor, and a transformation that can
-also be be considered a kind of preprocessing. The option `-T` allows the use
+_jqt_ offers also a transformation that can also be considered a kind of preprocessing.
+The option `-T` allows the use
 of YAML files for collections of MarkDown snippets:
 </summary>
 
@@ -133,8 +134,7 @@ of YAML files for collections of MarkDown snippets:
 
 ### CSS preprocessing
 
-_jqt_ can also expand CSS style sheets.  This is documented in this
-section because it is outside the normal _jqt_ processing work flow.
+_jqt_ offers an standalone CSS preprocessor. Macros can be defined, files included, etc.
 
 <details>
 
@@ -147,7 +147,7 @@ To enable CSS preprocessing the `-P` option must be used with the `css` or `css-
 </details>
 
 You can minify the CSS style sheet choosing the `css-min` option.
-The CSS minimization is not extremely aggressive, but is safe and sufficient.
+The CSS minimization is not extremely aggressive, but is safe and fast.
 
 #### Macro calls
 
@@ -183,11 +183,13 @@ The more used features are the inclusion on external files and the definition of
 { color: &Blue; }
 ```
 
-Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
-The main use of the preprocessor is to remove comments in the CPP style:
+Some fragments of text are skipped during macro expansion, like comments and
+other delimited strings of characters.  One use of the preprocessor is to
+remove in CSS files comments in the style of C and C++ languages:
 
 ```CPP
 /* Block comments */

@@ -44,11 +44,11 @@ Document files contain MarkDown text preceded by an optional YAML front matter.
 ### Front matter
 
 _jqt_ extracts the YAML front matter, located at the very beginning of the file,
-and injcontent. ects it into the render stage under a global JSON object named `.page`.
+and injects it into the render stage under a global JSON object named `.page`.
 
 ### Body
 
-Pandoc converts the document body to HTML,
+Pandoc translates the document body to HTML,
 and _jqt_ injects it into the render stage under the global JSON scalar 
 `.page._content`. If the document contains fenced code blocks specifying the language of
 the code block, the related highlight CSS code will be in the scalar `.page._highlight`. Also, the
@@ -141,7 +141,7 @@ Predefined macros and user define macros have the same call sequence:
 <%sc 'A title in small caps'>
 ```
 
-Warning: you must read the [GPP manual][GPPMAN] if you want to know all the gory details.
+Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
@@ -155,12 +155,13 @@ just before the newline character
 ```
 
 _Strings_ are copied to the output, but evaluation of macros inside strings can
-be enabled or disabled.  String delimiters can be copied, or not, to the output:
+be enabled or disabled depending on the type of string.  Also, string delimiters can
+be copied, or not, to the output:
 
 ~~~HTML
 <!-- XML comments -->
 <%sc 'Single quoted strings, only available in user defined macro calls'>
-<%sc "Double quoted strings, only available in user defined macro calls'>
+<%sc "Double quoted strings, only available in user defined macro calls">
 Inline code `inside backticks`
 ```
 Fenced code blocks with tildes (~~~) or backticks (```)
@@ -193,7 +194,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 _jqt_ accept as input format the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
 variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
-disabled, and produces transitional HTML.  When running `jqt` the following
+disabled, and produces by default transitional HTML.  When running `jqt` the following
 Pandoc long options can be specified in
 the command line and will be forwarded untouched to `pandoc`:
 
