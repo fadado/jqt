@@ -20,7 +20,8 @@ if [[ -f VERSION ]]; then
     echo 1>&2 "Current version : $CURRENT_VERSION"
     set -- ${CURRENT_VERSION//./ }
     declare -i V_MAJOR=$1 V_MINOR=$2 V_PATCH=$3
-    V_MINOR+=1; V_PATCH=0
+    V_MINOR+=1
+    V_PATCH=0
     declare -r SUGGESTED_VERSION="$V_MAJOR.$V_MINOR.$V_PATCH"
     read 1>&2 -p "Enter a version number [$SUGGESTED_VERSION]: "
     [[ -z $REPLY ]] && NEXT_VERSION=$SUGGESTED_VERSION
@@ -31,7 +32,8 @@ if [[ -f VERSION ]]; then
         echo -e '\n'
         cat CHANGES
     } > /tmp/$$-changes
-    cp /tmp/$$-changes CHANGES; rm /tmp/$$-changes
+    cp /tmp/$$-changes CHANGES
+    rm /tmp/$$-changes
     git add CHANGES VERSION
     git commit -m "Version bump to $NEXT_VERSION"
     git tag -a -m "Tagging version $NEXT_VERSION" "v$NEXT_VERSION"

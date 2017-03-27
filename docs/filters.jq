@@ -8,4 +8,4 @@ def striptags:
     gsub("<[^>]*>"; "")
 ;
 
-# vim:ai:sw=4:ts=4:et:syntax=jq
+# vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

@@ -8,14 +8,14 @@
 }
 
 &BEM{#panel}{}{side-right},
-&MOD{#panel}{}{side-right} {
+&CHAIN{#panel}{}{side-right} {
   float: right;
   margin: 0 0 0 1rem;
 }
 
 /*
 &BEM{#panel}{}{side-left},
-&MOD{#panel}{}{side-left} {
+&CHAIN{#panel}{}{side-left} {
   float: left;
   margin: 0 1rem 0 0;
 }

@@ -175,7 +175,6 @@ function expand_json
 {
     local -r -a user=( -U '&' ';' '(\W' ',\W' ')' '(' ')' '$' '' )
     local -r -a meta=( -M '<%' '>' '\b' '\b'  '>' '<' '>' )
-    #local -r -a meta=( -M '<!' '>' '\b' '\b'  '>' '<' '>' )
     local -r -a skips=(
         +sccc '&\n' '' ''       # continuation line (& and \n removed)
         +cccc '/*' '*/'         # multiline comment
@@ -254,7 +253,7 @@ s/[\t ]*\([{}:,;>~]\)[\t ]*/\1/g
 # Convert template to script
 ########################################################################
 
-declare -A IMPORTS=( [jqt]='libjqt' )
+declare -A IMPORTS=()
 declare -A INCLUDES=()
 
 # < stdin > stdout

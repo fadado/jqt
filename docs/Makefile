@@ -54,10 +54,10 @@ Meta := .yummy
 Destination := /tmp/jqt
 
 # Directories for input files
-Assets := ./assets
-Blocks := ./blocks
+Assets  := ./assets
+Blocks  := ./blocks
 Content := ./content
-Styles := ./styles
+Styles  := ./styles
 Layouts := ./layouts
 
 # Common sources for all targets
@@ -114,7 +114,7 @@ lint: all
 # Directories
 $(Meta) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
 
-# Metad files
+# Meta files
 $(Meta)/config.json: config.yaml \
 | $(Meta)
 	yaml2json <$< >$@

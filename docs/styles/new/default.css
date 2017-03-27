@@ -15,15 +15,15 @@
 
 // Chained modifier
 // .B.-M, .B__E.-M
-&define{MOD}{&SEL{&1}&ifneq{&2}{}__&2&endif.-&3}
+&define{CHAIN}{&SEL{&1}&ifneq{&2}{}__&2&endif.-&3}
 
 // Hack
 // ._N
 &define{HACK}{._&if{&1 =~ [A-Za-z_-]*}&1&else\&1&endif}
 
 // Naming conventions:
-//  component, block, module    &BEM &MOD
-//  #object, #layout            &BEM &MOD
+//  component, block, module    &BEM &CHAIN
+//  #object, #layout            &BEM &CHAIN
 //  %utility                    &SEL
 //  $scope                      &SEL
 //  ^theme                      &SEL

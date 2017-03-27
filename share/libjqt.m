@@ -1,5 +1,7 @@
 <#
- # libjqt GPP macros
+ # JQT macros
+ #
+ # Included in template and document expansion
  #>
 <# Quote character, only for this file #>
 <%mode quote "\\">&
