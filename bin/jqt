@@ -173,8 +173,8 @@ function expand_md
 # < stdin > stdout
 function expand_json
 {
-    local -r -a user=( -U '&' ';' '(\W' ',\W' ')' '(' ')' '$' '' )
-    local -r -a meta=( -M '<%' '>' '\b' '\b'  '>' '<' '>' )
+    local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '$' '' )
+    local -r -a meta=( -M '&' '' '{\W' '}{\W' '}' '{' '}' )
     local -r -a skips=(
         +sccc '&\n' '' ''       # continuation line (& and \n removed)
         +cccc '/*' '*/'         # multiline comment

@@ -2,3 +2,5 @@
 /docs/.yummy
 # man pages
 jqt.1.gz
+# other
+*.swp

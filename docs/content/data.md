@@ -69,43 +69,36 @@ preprocessor are available, like defining new macros, include other files, etc.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ in JSON files is different
-for predefined macros and for user defined macros:
-
-* The predefined macro names are preceded with the characters
-  `<%` and the macro calls finishes with the character `>`.
-* The user defined macro names are preceded with
-  the character `&` and for calls without arguments the macro calls finishes with the character `;`.
-* For calls with arguments the user defined macro names are 
-  followed by the character `(`, arguments separated by
-  commas (`,`), and the macro calls finishes with the character `)`.  
-
+The macro syntax used by _jqt_ in JSON files is very similar to the syntax used by the traditional
+TeX language macro processor, but changing the prefix character `\\` by
+`&`.
 The more common predefined macros have this syntax:
 
-```HTML
-<%defeval x y>
-<%define x y>
-<%elif expr>
-<%else>
-<%endif>
-<%eval expr>
-<%if expr>
-<%ifdef x>
-<%ifeq x y>
-<%ifndef x>
-<%ifneq x y>
-<%include file>
-<%undef x>
+```
+&defeval{x}{y}
+&define{x}{y}
+&elif{expr}
+&else
+&endif
+&eval{expr}
+&if{expr}
+&ifdef{x}
+&ifeq{x}{y}
+&ifndef{x}
+&ifneq{x}{y}
+&include{file}
+&undef{x}
 ```
 
 Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
-but named arguments are also possible:
+but named arguments are also possible.
+The more used features are the inclusion on external files and the definition of simple constants:
 
 ```JSON
-<%define euro \u20AC>
-<%define price $1 &euro;>
+&define{eur}{\u20AC}
+&define{price}{$1 &euro}
 
-{ "price": "&price(100)" }
+{ "price": "&price{100}" }
 ```
 
 Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.

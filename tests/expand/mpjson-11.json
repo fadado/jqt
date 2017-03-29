@@ -1,6 +1,6 @@
 // XHTML entities
-<%define &E(k,v) "&k;": "&v;">&
+&define{&E{k}{v}}{"&k": "&v"}&
 {
-    &E(price,88)
+    &E{price}{88}
 }
 // vim:sw=4:ts=4:ai:et:syntax=javascript

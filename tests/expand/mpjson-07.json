@@ -1,16 +1,16 @@
 /* Macros; continuation lines */
-<%define address &
+&define{address}{&
 "streetAddress": "21 2nd Street",&
 "city": "New York",&
 "state": "NY",&
 "postalCode": "10021"&
->
+}
 { "husband":
     {
         "firstName": "John",
         "lastName": "Smith",
         "age": 25,
-        "address": {&address;},
+        "address": {&address},
         "gender": {
             "type": "male"
         }
@@ -20,7 +20,7 @@
         "firstName": "Mary",
         "lastName": "Smith",
         "age": 26,
-        "address": {&address;},
+        "address": {&address},
         "gender": {
             "type": "female"
         }

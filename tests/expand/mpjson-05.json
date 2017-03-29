@@ -1,15 +1,15 @@
 /* Macros */
-<%define address
+&define{address}{
     "streetAddress": "21 2nd Street",
     "city": "New York",
     "state": "NY",
     "postalCode": "10021"
->
+}
 {
   "firstName": "John",
   "lastName": "Smith",
   "age": 25,
-  "address": { &address; },
+  "address": { &address },
   "phoneNumber": [
     {
       "type": "home",

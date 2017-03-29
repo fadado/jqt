@@ -1,7 +1,7 @@
 /* Macros */
-<%define NAME John F.>
+&define{NAME}{John F.}
 {
-    "firstName": "&NAME;",
+    "firstName": "&NAME",
     "lastName": "Kennedy",
     "age": 25,
     "gender": { "type": "male" }
