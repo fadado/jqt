@@ -105,9 +105,10 @@ as you can see in this paragraph and on the top of these pages.
 
 All the power of GPP is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
-the input MarkDown document. The macro syntax used by _jqt_ in input documents
+the input MarkDown document. The macro syntax used by _jqt_ in templates and input documents
 precedes macro names with the characters `<%` and finishes the macro calls with
-the character `>`.  The more common predefined macros have this syntax:
+the character `>`. 
+Here are some of the predefined macros:
 
 ```HTML
 <%defeval x y>
@@ -168,7 +169,7 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 ```
 ~~~
 
-This table summarizes all the available document skips:
+This table summarizes all the available skips:
 
  Delimiters                         Macro expansion     Delimiters removed  Content removed
 -------------                       ---------------     ------------------  ---------------

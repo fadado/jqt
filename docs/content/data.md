@@ -62,17 +62,17 @@ are provided:
 Additional JSON files can be provided and are merged with front matter metadata
 to be the `jq` input in the render stage.
 
-### JSON preprocessing
+### Preprocessing
 
 JSON files are preprocessed using [GPP][GPP], and all the expected options in a
 preprocessor are available, like defining new macros, include other files, etc.
+CSS files are also preprocessed with the same macros syntax used in JSON files.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ in JSON files is very similar to the syntax used by the traditional
-TeX language macro processor, but changing the prefix character `\\` by
-`&`.
-The more common predefined macros have this syntax:
+The macro syntax used by _jqt_ in JSON and CSS files is very similar to the syntax used by the traditional
+TeX language macro processor, but changing the prefix character `\\` by `&`.
+Here are some of the predefined macros:
 
 ```
 &defeval{x}{y}
@@ -95,17 +95,26 @@ but named arguments are also possible.
 The more used features are the inclusion on external files and the definition of simple constants:
 
 ```JSON
+// JSON example
 &define{eur}{\u20AC}
 &define{price}{$1 &euro}
 
 { "price": "&price{100}" }
 ```
 
+```CSS
+// CSS example
+&include{theme.css}
+&define{Blue}{#0000FF}
+
+{ color: &Blue; }
+```
+
 Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
 
 #### Skips
 
-The main use of the preprocessor is to remove comments in the CPP style:
+One use of the preprocessor is to remove comments in the C and C++ languages style:
 
 ```CPP
 /* Block comments */
@@ -114,7 +123,7 @@ The main use of the preprocessor is to remove comments in the CPP style:
 
 Double quoted strings are defined as skips, and backticks can be used to
 disable macro expansion (inside double quoted strings backticks are ignored).
-This table summarizes all the available skips in JSON files:
+This table summarizes all the available skips:
 
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------
@@ -123,12 +132,33 @@ This table summarizes all the available skips in JSON files:
 `//` `\n`[^2]       No                  Yes                 Yes
 `` ` `` `` ` ``     No                  Yes                 No
 `"` `"`             Yes                 No                  No
+`'` `'`[^3]         Yes                 No                  No
 
-Table: **Semantics for all JSON skips**
+Table: **Semantics for all JSON and CSS skips**
+
+Observe that single quote strings are defined only for CSS files.
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
 [^2]: This represents a newline character.
+[^3]: Only for CSS files.
+
+#### CSS preprocessor
+
+_jqt_ offers an standalone CSS preprocessor. Macros can be defined, files included, etc.
+
+<details>
+
+<summary>
+To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
+</summary>
+
+<%include content/opt/P.txt>
+
+</details>
+
+You can minify the CSS style sheet choosing the `css-min` option.
+The CSS minimization is not extremely aggressive, but is safe and fast.
 
 ## Tools
 

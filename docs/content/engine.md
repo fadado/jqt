@@ -111,14 +111,10 @@ all kinds of input files.
 Also, _jqt_ can be used as a standalone
 preprocessor thanks to the `-P` option.
 
-### Files preprocessed
-
-The pages about templates, documents and data cover in
-detail the usage of the preprocessor for
-[_jqt_ templates](./structure.html#preprocessing),
+_jqt_ uses two different syntaxes for macros, one for
+[_jqt_ templates](./structure.html#preprocessing) and
 [MarkDown documents](./content.html#preprocessing)
-and [JSON data files](./data.html#json).  _jqt_ can also expand CSS style sheets;  this is documented
-in the following section because it is outside the normal _jqt_ processing work flow.
+and another for [JSON and CSS](./data.html#preprocessing) files. 
 
 <details>
 
@@ -131,90 +127,6 @@ of YAML files for collections of MarkDown snippets:
 <%include content/opt/T.txt>
 
 </details>
-
-### CSS preprocessing
-
-_jqt_ offers an standalone CSS preprocessor. Macros can be defined, files included, etc.
-
-<details>
-
-<summary>
-To enable CSS preprocessing the `-P` option must be used with the `css` or `css-min` options:
-</summary>
-
-<%include content/opt/P.txt>
-
-</details>
-
-You can minify the CSS style sheet choosing the `css-min` option.
-The CSS minimization is not extremely aggressive, but is safe and fast.
-
-#### Macro calls
-
-The macro syntax used by _jqt_ in CSS files is very similar to the syntax used by the traditional
-TeX language macro processor, but changing the prefix character `\\` by
-`&`.
-The more common predefined macros have this syntax:
-
-```
-&defeval{x}{y}
-&define{x}{y}
-&elif{expr}
-&else
-&endif
-&eval{expr}
-&if{expr}
-&ifdef{x}
-&ifeq{x}{y}
-&ifndef{x}
-&ifneq{x}{y}
-&include{file}
-&undef{x}
-```
-
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
-but named arguments are also possible.
-The more used features are the inclusion on external files and the definition of simple constants:
-
-```CSS
-&include{theme.css}
-&define{Blue}{#0000FF}
-
-{ color: &Blue; }
-```
-
-Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory details.
-
-#### Skips
-
-Some fragments of text are skipped during macro expansion, like comments and
-other delimited strings of characters.  One use of the preprocessor is to
-remove in CSS files comments in the style of C and C++ languages:
-
-```CPP
-/* Block comments */
-// Line comments
-```
-
-Quoted strings are also defined as skips, and backticks can be used to
-disable macro expansion (inside quoted strings backticks are ignored).
-This table summarizes all the available skips in CSS files:
-
- Delimiters         Macro expansion     Delimiters removed  Content removed
--------------       ---------------     ------------------  ---------------
-`&\n`[^1]           No                  Yes                 There is no content
-`/*` `*/`[^2]       Yes/No              No/Yes              No/Yes
-`//` `\n`[^3]       No                  Yes                 Yes
-`` ` `` `` ` ``     No                  Yes                 No
-`"` `"`             Yes                 No                  No
-`'` `'`             Yes                 No                  No
-
-Table: **Semantics for all CSS skips**
-
-[^1]: An ampersand followed by a newline is treated as a line continuation (that
-is, the ampersand and the newline are removed and effectively ignored).
-[^2]: Multiline comments are expanded and preserved when not minifying CSS.
-[^3]: This represents a newline character.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

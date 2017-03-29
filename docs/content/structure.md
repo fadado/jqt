@@ -65,9 +65,9 @@ as you can see in the internal code of this page.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ precedes macro names with the characters `<%`
+The macro syntax used by _jqt_ in templates and MarkDown documents precedes macro names with the characters `<%`
 and finishes the macro calls with the character `>`.
-The more common predefined macros have this syntax:
+Here are some of the predefined macros:
 
 ```HTML
 <%defeval x y>
@@ -149,7 +149,7 @@ be enabled or disabled.  String delimiters can be copied, or not, to the output:
 All jqt template delimited regions: {#...#}, {%...%}, {{...}} 
 ~~~
 
-This table summarizes all the available template skips:
+This table summarizes all the available skips:
 
  Delimiters         Macro expansion     Delimiters removed  Content removed
 -------------       ---------------     ------------------  ---------------
