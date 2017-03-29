@@ -35,10 +35,10 @@ h6 {
 }
 
 &define{_heading}{
-  &1 {
-    font-size: calc(&TypographyScale * &2);
-    letter-spacing: &3;
-    line-height: &4;
+  $1 {
+    font-size: calc(&TypographyScale * $2);
+    letter-spacing: $3;
+    line-height: $4;
   }
 }
 

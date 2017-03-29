@@ -14,7 +14,7 @@ table {
   width: 100%;
 }
 
-&define{_cells}{th&1, td&1}
+&define{_cells}{th$1, td$1}
 
 &_cells{} {
   border-bottom: .1rem solid &ColorQuinary;

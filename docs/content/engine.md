@@ -172,7 +172,7 @@ The more common predefined macros have this syntax:
 &undef{x}
 ```
 
-Inside macro definitions argument references are prefixed by an ampersand (`&1`, `&2`, etc.),
+Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
 but named arguments are also possible.
 The more used features are the inclusion on external files and the definition of simple constants:
 

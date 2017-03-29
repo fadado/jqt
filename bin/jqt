@@ -204,7 +204,7 @@ function expand_json
 function expand_css
 {
     local -r minify=$1
-    local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '&' '' )
+    local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '$' '' )
     local -r -a meta=( -M '&' '' '{\W' '}{\W' '}' '{' '}' )
     local -r -a skips=(
         +cccc '&\n' ''          # continuation line (& and \n removed)

@@ -11,13 +11,13 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 &define{_input}{
-  input[type='email']&1,
-  input[type='number']&1,
-  input[type='password']&1,
-  input[type='search']&1,
-  input[type='tel']&1,
-  input[type='text']&1,
-  input[type='url']&1,
+  input[type='email']$1,
+  input[type='number']$1,
+  input[type='password']$1,
+  input[type='search']$1,
+  input[type='tel']$1,
+  input[type='text']$1,
+  input[type='url']$1,
   textarea,
   select
 }

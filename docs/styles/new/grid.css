@@ -82,8 +82,8 @@
 // Column Offsets
 &define{_col_offset}{
 // JJOR: original = .row .col..., removed .row
-  &BEM{#column}{}{offset-&1} {
-    margin-left: &2;
+  &BEM{#column}{}{offset-$1} {
+    margin-left: $2;
   }
 }
 
@@ -105,9 +105,9 @@
 // columns to take up a certain size of the available area
 &define{_col_size}{
 // JJOR: original = .row .col..., removed .row
-  &BEM{#column}{}{size-&1} {
-    flex: 0 0 &2;
-    max-width: &2;
+  &BEM{#column}{}{size-$1} {
+    flex: 0 0 $2;
+    max-width: $2;
   }
 }
 

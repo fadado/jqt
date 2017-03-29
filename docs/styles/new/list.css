@@ -10,7 +10,7 @@
 // List
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-&define{_lists}{&1 dl, &1 ol, &1 ul}
+&define{_lists}{$1 dl, $1 ol, $1 ul}
 
 &_lists{} {
   list-style: none;

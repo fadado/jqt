@@ -1,7 +1,7 @@
 &define{content}{
   background-color: black;
   color: white;
-  &1&
+  $1&
 }
 
 div {

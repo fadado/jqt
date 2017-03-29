@@ -13,16 +13,16 @@
 // Macros
 
 &define{_buttons}{
-  .button&1,
-  button&1,
-  input[type='button']&1,
-  input[type='reset']&1,
-  input[type='submit']&1
+  .button$1,
+  button$1,
+  input[type='button']$1,
+  input[type='reset']$1,
+  input[type='submit']$1
 }
 
 &define{_buttons_active}{
-  &_buttons{&1:hover},
-  &_buttons{&1:focus}
+  &_buttons{$1:hover},
+  &_buttons{$1:focus}
 }
 
 // Rules
