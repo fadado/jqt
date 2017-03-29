@@ -115,6 +115,34 @@ _jqt_ uses two different syntaxes for macros, one for
 [_jqt_ templates](./structure.html#preprocessing) and
 [MarkDown documents](./content.html#preprocessing)
 and another for [JSON and CSS](./data.html#preprocessing) files. 
+The following table summarizes the syntax of macro calls:
+
+                            JQT and MarkDown    JSON and CSS
+---------------             ----------------    ----------------
+Macro calls                 `<%m>`              `&m`
+                            `<%m x y>`          `&m{x}{y}`
+Macro arguments             `$1`...`$9`         `$1`...`$9`
+Interpolation in arguments  `" "`
+Escapes in arguments        `' '`
+
+Table: **Summary of macro syntax**
+
+The following table summarizes the syntax of text skips:
+
+                    JQT templates   MarkDown content        JSON documents  CSS stylesheets
+------------------  -------------   ----------------        --------------  ---------------
+Continuation lines  `&`             `&`                     `&`             `&`
+Block comment       `<# #>`         `<# #>`                 `/* */`         `/* */`
+Line comment                                                `//`            `//`
+Verbatim copy       `<!-- -->`      `<!-- -->`
+                                    `` ` ` ``
+                                    `\n~~~` (also backticks)
+Escape                                                      `` ` ` ``       `` ` ` ``
+String              `{% %}`                                 `" "`           `" "`
+                    `{{ }}`                                                 `' '`
+                    `{# #}`
+
+Table: **Summary of text skips**
 
 <details>
 

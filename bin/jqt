@@ -124,7 +124,7 @@ function expand_jqt
     # Comments and strings
     local -r -a skips=(
         +sccc '&\n' '' ''           # continuation line (& and \n removed)
-        +sccc '<#' '#>\n' ''        # multiline comment, must end in \n
+        +sccc '<#' '#>' ''          # multiline comment
         +siqi "'" "'" ''            # literal string; like sh single quotes
         +siQi '"' '"' ''            # interpolated string; like sh double quotes
         +ssss '<!--' '-->' ''       # preserved XML comments
@@ -151,7 +151,7 @@ function expand_md
     local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>' )
     local -r -a skips=(
         +sccc '&\n' '' ''           # continuation line (& and \n removed)
-        +sccc '<#' '#>\n' ''        # multiline comment, must end in \n
+        +sccc '<#' '#>' ''          # multiline comment
         +siqi "'" "'" '\'           # literal string; like sh single quotes
         +siQi '"' '"' '\'           # interpolated string; like sh double quotes
         +ssss '<!--' '-->' ''       # preserved XML comments
