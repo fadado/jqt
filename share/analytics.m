@@ -2,7 +2,7 @@
  # Usage: <%partial analytics UA-82432866-1>
  #
  # $1: analytics UA
- #>
+ #>&
 <script type="text/javascript">/*<![CDATA[*/
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -25,7 +25,7 @@
         s.parentNode.insertBefore(ga, s);
     })();
 </script>
-#>
+#>&
 <# LAST VERSION
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -37,7 +37,7 @@
   ga('send', 'pageview');
 
 </script>
-#>
+#>&
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=html
-#>
+#>&

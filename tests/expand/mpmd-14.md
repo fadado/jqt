@@ -1,4 +1,4 @@
-<# skip section: code section #>
+<# skip section: code section #>&
 <%define MACRO Lorem Ipsum>&
 <%MACRO>
 ```

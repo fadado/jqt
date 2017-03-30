@@ -1,4 +1,4 @@
-<# examples from GPM paper #>
+<# examples from GPM paper #>&
 <%define A A$1A>&
 <%define B B<%A X$1X>B>&
 <%define APA P$1$1P>&
@@ -33,4 +33,4 @@ Q[[<%A C>]]R
 	BAX<%A X>XAB
 	Q<%R>
 	Q[<%A C>]R
-#>
+#>&

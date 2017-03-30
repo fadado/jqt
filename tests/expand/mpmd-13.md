@@ -1,4 +1,4 @@
-<# skip section: XML comment #>
+<# skip section: XML comment #>&
 <%define MACRO Lorem Ipsum>&
 <%MACRO>
 <!-- <%MACRO> -->

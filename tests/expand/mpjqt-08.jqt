@@ -1,4 +1,4 @@
-<# recursion #>
+<# recursion #>&
 <%define countdown
 <%if $1>&
 $1...
