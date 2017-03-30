@@ -46,6 +46,8 @@ software _jqt_ needs:
 $ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
 ```
 
+### Manual install
+
 After clone or [download](https://github.com/fadado/jqt/releases) _jqt_ you can
 manually install it executing a few commands on the _jqt_ top directory:
 
@@ -55,6 +57,8 @@ $ sudo cp bin/* /usr/local/bin
 $ sudo cp share/* /usr/local/share/jqt
 $ [[ $PATH =~ /usr/local/bin ]] || echo 'Add /usr/local/bin to your PATH'
 ```
+
+### _Make_ install
 
 If you know how to use `make` please see the `Makefile` located in the _jqt_
 top directory and run `make install` if you agree with the things that will
@@ -106,7 +110,7 @@ arguments.  The usage possibilities are:
 
 ## Preprocessing
 
-One distinctive feature of _jqt_ is the text expansion, using `gpp`, applied to almost
+One distinctive feature of _jqt_ is the text expansion, using [`gpp`][GPP], applied to almost
 all kinds of input files.
 Also, _jqt_ can be used as a standalone
 preprocessor thanks to the `-P` option.
@@ -121,7 +125,7 @@ The following table summarizes the syntax of macro calls:
 ---------------             ----------------    ----------------
 Macro calls                 `<%m>`              `&m`
                             `<%m x y>`          `&m{x}{y}`
-Macro arguments             `$1`...`$9`         `$1`...`$9`
+Macro parameters            `$1`...`$9`         `$1`...`$9`
 Interpolation in arguments  `" "`
 Escapes in arguments        `' '`
 
@@ -143,18 +147,6 @@ String              `{% %}`                                 `" "`           `" "
                     `{# #}`
 
 Table: **Summary of text skips**
-
-<details>
-
-<summary>
-_jqt_ offers also a transformation that can also be considered a kind of preprocessing.
-The option `-T` allows the use
-of YAML files for collections of MarkDown snippets:
-</summary>
-
-<%include content/opt/T.txt>
-
-</details>
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

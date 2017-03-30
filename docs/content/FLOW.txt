@@ -1,6 +1,6 @@
 <#
  # Flow diagram
- #>
+ #>&
 
 <figure style="margin:0; padding:0;clear:both;">
 <figcaption style="text-align:center; font-weight: bold;">jqt workflow</figcaption>
@@ -17,9 +17,9 @@ Document +----------->|expand|-->|markup|--+          |merge|-------->|render|--
                                              metadata  |   |
            JSON       +------+                         |   |
          +----------->|expand|-------------------------+   |
-    Data   YAML       +------+                             |
-         +-------------------------------------------------+
-           YAML snippets         +------+                  |
+    Data   YAML       +------+                             |     CSS  +------+ 
+         +-------------------------------------------------+    +---->|expand|------> Style
+           YAML snippets         +------+                  |          +------+
          +---------------------->|markup|------------------+
                                  +------+
 ```
@@ -27,4 +27,4 @@ Document +----------->|expand|-->|markup|--+          |merge|-------->|render|--
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
-#>
+#>&

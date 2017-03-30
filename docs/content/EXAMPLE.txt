@@ -1,17 +1,17 @@
 <#
  # Template example
- #>
+ #>&
 
-```html
+```
 <html lang='{{.page.lang//.site.lang}}'>
 <head>
     <title>{{.page.title | gsub("<[^>]*>"; "")}}</title>
-    {# include files in preprocessing stage #}
+    {# include files in preprocessing stage: #}
     <%include "head.html">
     <meta name="generator" content="jqt v<%include "../VERSION">"/>
-    {# optional line #}
+    {# optional line: #}
     <meta name='dcterms.modified' content='{{.page.updated//empty}}' />
-    {# implicit loop for all authors #}
+    {# implicit loop for all authors: #}
     {% .page.author | sort[] %}<meta name='author' content='{{.}}' />
 </head>
 <body>
@@ -19,6 +19,7 @@
     <div id="CONTENT">
         {{.page._content}}
     </div>
+    {# macro calls: #}
     <%partial analytics 'UA-82432866-1'>
 </body>
 </html>
@@ -26,4 +27,4 @@
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
-#>
+#>&

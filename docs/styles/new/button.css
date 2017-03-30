@@ -53,49 +53,49 @@
   outline: 0;
 }
 
-&_buttons{.button--disabled},
+&_buttons{.button_disabled},
 &_buttons{[disabled]} {
   cursor: default;
   opacity: .5;
 }
 
-&_buttons_active{.button--disabled},
+&_buttons_active{.button_disabled},
 &_buttons_active{[disabled]} {
   background-color: &ColorPrimary;
   border-color: &ColorPrimary;
 }
 
-&_buttons{.button--outline} {
+&_buttons{.button_outline} {
   background-color: transparent;
   color: &ColorPrimary;
 }
 
-&_buttons_active{.button--outline} {
+&_buttons_active{.button_outline} {
   background-color: transparent;
   border-color: &ColorSecondary;
   color: &ColorSecondary;
 }
 
-&_buttons_active{.button--outline.button--disabled},
-&_buttons_active{.button--outline[disabled]} {
+&_buttons_active{.button_outline.button_disabled},
+&_buttons_active{.button_outline[disabled]} {
   color: &ColorPrimary;
   border-color: inherit;
 }
 
-&_buttons{.button--clear} {
+&_buttons{.button_clear} {
   color: &ColorPrimary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_buttons_active{.button--clear} {
+&_buttons_active{.button_clear} {
   color: &ColorSecondary;
   background-color: transparent;
   border-color: transparent;
 }
 
-&_buttons_active{.button--clear.button--disabled},
-&_buttons_active{.button--clear[disabled]} {
+&_buttons_active{.button_clear.button_disabled},
+&_buttons_active{.button_clear[disabled]} {
   color: &ColorPrimary;
 }
 

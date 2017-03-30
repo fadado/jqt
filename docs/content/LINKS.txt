@@ -1,6 +1,6 @@
 <#
  # Global links
-#>
+#>&
 
 [JQT]: https://fadado.github.io/jqt/
 [JQ]: https://stedolan.github.io/jq/
@@ -17,4 +17,4 @@
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
-#>
+#>&

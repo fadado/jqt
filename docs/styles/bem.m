@@ -7,8 +7,8 @@
 &define{SEL}{.&if{$1 =~ [A-Za-z_-]*}$1&else\$1&endif}
 
 // Block, element, modifier
-// .B, .B--M, .B__E, .B__E--M
-&define{BEM}{&SEL{$1}&ifneq{$2}{}__$2&endif&ifneq{$3}{}--$3&endif}
+// .B, .B_M, .B__E, .B__E_M
+&define{BEM}{&SEL{$1}&ifneq{$2}{}__$2&endif&ifneq{$3}{}_$3&endif}
 
 // Chained modifier
 // .B.-M, .B__E.-M

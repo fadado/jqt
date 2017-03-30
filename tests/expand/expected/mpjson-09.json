@@ -1,0 +1,10 @@
+
+
+
+{
+    "firstName": "Mister John F.",
+    "lastName": "Kennedy",
+    "age": 25,
+    "gender": { "type": "male" }
+}
+

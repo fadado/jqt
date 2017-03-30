@@ -17,7 +17,7 @@ _MarkDown_ promises and delivers exactly this.
 ## General operation
 
 _jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using Pandoc,
-but before that [GPP][GPP] is used to preprocess them. Pandoc's output
+but before that [`gpp`][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
@@ -60,7 +60,8 @@ file in the scalar `.page._path`.
 <details>
 
 <summary>
-`jqt` `-T` option allows the use of YAML files for collections of MarkDown snippets:
+_jqt_ offers also a transformation that can also be considered a kind of preprocessing.
+The option `-T` allows the use of YAML files for collections of MarkDown snippets:
 </summary>
 
 <%include content/opt/T.txt>
@@ -96,21 +97,21 @@ and the second does the proper conversion to HTML.
 
 ### Preprocessing
 
-The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
+The MarkDown input content is preprocessed using [`gpp`][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a macro call
 like `<%include "../VERSION">` will expand to he string <code><%include "../VERSION"></code>
 as you can see in this paragraph and on the top of these pages.
 
 #### Macro calls
 
-All the power of GPP is available to help you when
+All the power of [GPP][GPP] is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
 the input MarkDown document. The macro syntax used by _jqt_ in templates and input documents
 precedes macro names with the characters `<%` and finishes the macro calls with
 the character `>`. 
 Here are some of the predefined macros:
 
-```HTML
+```
 <%defeval x y>
 <%define x y>
 <%elif expr>
@@ -126,10 +127,10 @@ Here are some of the predefined macros:
 <%undef x>
 ```
 
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
-but named arguments are also possible:
+Inside macro definitions parameters are prefixed by a dollar (`$1`, `$2`, etc.),
+but named parameters are also possible:
 
-```HTML
+```
 <%define sc
     <span style="font-variant:small-caps;">$1</span>
 >
@@ -137,7 +138,7 @@ but named arguments are also possible:
 
 Predefined macros and user define macros have the same call sequence:
 
-```HTML
+```
 <%include content/LINKS.txt>
 <%sc 'A title in small caps'>
 ```
@@ -149,7 +150,7 @@ Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory 
 Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and arbitrary but delimited strings of characters:
 
-```HTML
+```
 <# Block comments, removed, must end in newline (also removed) #>
 Continuation lines using an ampersand &
 just before the newline character
@@ -159,7 +160,7 @@ _Strings_ are copied to the output, but evaluation of macros inside strings can
 be enabled or disabled depending on the type of string.  Also, string delimiters can
 be copied, or not, to the output:
 
-~~~HTML
+~~~
 <!-- XML comments -->
 <%sc 'Single quoted strings, only available in user defined macro calls'>
 <%sc "Double quoted strings, only available in user defined macro calls">
@@ -193,7 +194,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 ### Pandoc’s Markdown
 
-_jqt_ accept as input format the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
+_jqt_ accept as input format for documents the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
 variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
 disabled, and produces by default transitional HTML.  When running `jqt` the following
 Pandoc long options can be specified in

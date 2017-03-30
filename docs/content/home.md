@@ -18,9 +18,9 @@ Let’s explore&hellip;
 
 ## _jq_
 
-_jq_ have nice features like string interpolation and implicit backtracking.
+[_jq_][JQ] have nice features like string interpolation and implicit backtracking.
 Mixed with the help of some syntactic sugar a powerful template engine appear.
-Imagine the following interpolation strings, in a _jq_ program,
+Imagine the following interpolation strings, in a [_jq_][JQ] program,
 separated with the comma operator:
 
 ### Simple expansion
@@ -46,10 +46,10 @@ explicit `if` or `for`!
 
 ## _jqt_
 
-To write _jq_ scripts using strings with interpolations is not the idea we have
+To write [_jq_][JQ] scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided by
 _jqt_: you write templates in a very fashionable style, the templates
-are translated into a _jq_ script and then `jq` is feed with the created
+are translated into a [_jq_][JQ] script and then `jq` is feed with the created
 script and some content and data in [JSON][JSON] format&hellip; and the magic is done!
 
 ### Syntactic sugar
@@ -64,8 +64,8 @@ example seems to be a template?
 This site is built using _jqt_, and is itself in his implementation a kind of
 tutorial about _jqt_.
 
-If you want to learn how to use _jqt_ [install _jqt_](./engine.html#installation) and
-see all the different sections of the site:
+If you want to learn how to use _jqt_ [install it](./engine.html#installation) and
+see all the different sections of this site:
 
 * [Template engine](./engine.html)
 * [Page structure](./structure.html)

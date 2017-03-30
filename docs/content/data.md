@@ -44,6 +44,8 @@ data and influence JSON preprocessing:
 
 ## Data formats
 
+_jqt_ accepts metadata in [YAML][YAML] and [JSON][JSON] formats.
+
 ### YAML and JSON
 
 Documents front matter metadata and additional input YAML files are converted to
@@ -64,14 +66,14 @@ to be the `jq` input in the render stage.
 
 ### Preprocessing
 
-JSON files are preprocessed using [GPP][GPP], and all the expected options in a
+JSON files are preprocessed using [`gpp`][GPP], and all the expected options in a
 preprocessor are available, like defining new macros, include other files, etc.
 CSS files are also preprocessed with the same macros syntax used in JSON files.
 
 #### Macro calls
 
 The macro syntax used by _jqt_ in JSON and CSS files is very similar to the syntax used by the traditional
-TeX language macro processor, but changing the prefix character `\\` by `&`.
+TeX language macro processor, but changing the prefix character `\` by `&`.
 Here are some of the predefined macros:
 
 ```
@@ -90,11 +92,11 @@ Here are some of the predefined macros:
 &undef{x}
 ```
 
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
-but named arguments are also possible.
+Inside macro definitions numeric parameters are prefixed by a dollar (`$1`, `$2`, etc.),
+but named parameters, prefixed with the `&` character, are also possible.
 The more used features are the inclusion on external files and the definition of simple constants:
 
-```JSON
+```
 // JSON example
 &define{eur}{\u20AC}
 &define{price}{$1 &euro}
@@ -102,7 +104,7 @@ The more used features are the inclusion on external files and the definition of
 { "price": "&price{100}" }
 ```
 
-```CSS
+```
 // CSS example
 &include{theme.css}
 &define{Blue}{#0000FF}

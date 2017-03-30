@@ -42,7 +42,7 @@ rendering:
 
 ## Template syntax
 
-A template is a text file with intermixed snippets of _jq_ code. Snippets can be
+A template is a text file with intermixed snippets of [_jq_][JQ] code. Snippets can be
 <dfn>expressions</dfn> (delimited by `{{` and `}}`), which get replaced with
 values when a template is rendered and <dfn>actions</dfn> (delimited by `{%` and `%}`), which control the logic of the
 template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
@@ -69,7 +69,7 @@ The macro syntax used by _jqt_ in templates and MarkDown documents precedes macr
 and finishes the macro calls with the character `>`.
 Here are some of the predefined macros:
 
-```HTML
+```
 <%defeval x y>
 <%define x y>
 <%elif expr>
@@ -85,10 +85,10 @@ Here are some of the predefined macros:
 <%undef x>
 ```
 
-Inside macro definitions argument references are prefixed by a dollar (`$1`, `$2`, etc.),
-but named arguments are also possible:
+Inside macro definitions parameters are prefixed by a dollar (`$1`, `$2`, etc.),
+but named parameters are also possible:
 
-```HTML
+```
 <%define stylesheet
     <link rel="stylesheet" type="text/css" href="$1"/>
 >
@@ -96,7 +96,7 @@ but named arguments are also possible:
 
 Predefined macros and user define macros have the same call sequence:
 
-```HTML
+```
 <%include head.html>
 <%stylesheet jqt.css>
 ```
@@ -105,7 +105,7 @@ With these simple tools is possible to emulate features considered advanced in s
 like template inheritance (also known as _blocks_). For example, in the base template (assume it is named `default.html`)
 you can put this conditional macro call to define a default title block:
 
-```HTML
+```
 <%ifndef HEAD_TITLE>
     <title>{{.page.title}}</title> {# default block #}
 <%else><%call HEAD_TITLE><%endif>
@@ -114,14 +114,14 @@ you can put this conditional macro call to define a default title block:
 And in the derived template you can define a new macro for the desired block,
 before include the base template:
 
-```HTML
+```
 <%define HEAD_TITLE
   <title>{{.page.title}} – {{.site.title}}</title>
 >
 <%include default.html>
 ```
 
-In addition to `gpp` predefined macros _jqt_ define in the file `libjqt.m`,
+In addition to [GPP][GPP] predefined macros _jqt_ define in the file `libjqt.m`,
 included in the render stage, a little macros library. The
 more useful will be perhaps `<%partial name arg...>`, to include a template
 file passing arguments to it and `<%call name arg...>`, to call a macro by name.
@@ -133,7 +133,7 @@ Warning: you must see the [GPP manual][GPPMAN] if you want to know all the gory 
 Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and delimited strings of characters:
 
-```HTML
+```
 <# Block comments, removed, must end in newline (also removed) #>
 Continuation lines using an ampersand &
 just before the newline character
@@ -171,10 +171,9 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 ### Code snippets
 
-The input text for a template is UTF-8 text with 
-intermixed snippets of _jq_ code. Snippets can be
-_expressions_, _actions_ and _comments_.
-The delimiters used by _jqt_ are as follows:
+The input text for a template is UTF-8 text with intermixed snippets of [_jq_][JQ] 
+code. Snippets can be _expressions_, _actions_ and _comments_.  The delimiters
+used by _jqt_ are as follows:
 
 Delimiters    Purpose
 ----------    -----------------------------------
@@ -186,7 +185,7 @@ Table: **Delimiters used in _jqt_ templates**
 
 #### Expressions
 
-The text in expressions and actions is normal _jq_ code, where as
+The text in expressions and actions is normal [_jq_][JQ] code, where as
 a bonus, the `$M` global variable points to the `jq` JSON input (the initial `.`).
 The rules for expression evaluation are very simple:
 
@@ -205,7 +204,8 @@ There are two kinds of actions:
 * <dfn>One line actions</dfn>: lines beginning with optional space, followed by a
   `{%...%}` snippet and more text.
 * <dfn>Multiline actions</dfn>: initial line prefixed with optional space,
-  followed by an opening `{%...%}` snippet and a newline character;
+  followed by an opening `{%...%}` snippet and a newline character
+  immediately after the character `}`;
   then zero or more template lines; final line prefixed with optional space,
   the ending `{% end %}` snippet and a newline character.  Multiline actions can nest and
   contain expressions and other actions.
