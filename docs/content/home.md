@@ -5,7 +5,7 @@ description: Could be jq the basis for a web template engine?
 keywords:  jqt, jq, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros.m>&
+<%include macros/markup.m>&
 <%include content/LINKS.txt>&
 
 # Welcome

@@ -5,7 +5,7 @@ description: Web pages structure is defined by the HTML markup.
 keywords:  jqt, jq, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros.m>&
+<%include macros/markup.m>&
 <%include content/LINKS.txt>&
 
 # Page structure

@@ -5,7 +5,7 @@ description: jqt transforms MarkDown documents to HTML using Pandoc.
 keywords:  jqt, markdown, pandoc, gpp, preprocessing, authoring content
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros.m>&
+<%include macros/markup.m>&
 <%include content/LINKS.txt>&
 
 # Authoring content
