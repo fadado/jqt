@@ -111,7 +111,7 @@ declare -a GPP_PATH=( "-I${DATADIR}/jqt" )
 function expand_jqt
 {
     # File to load before input file (only one allowed)
-    local -r lib="libjqt.m"
+    local -r lib="lib.jqt.m"
 
     # Macros
     local -r -a user=( -U '<%' '>' '\B' '\B' '\W>' '<' '>' '$' '' )
@@ -146,7 +146,7 @@ function expand_jqt
 # < stdin > stdout
 function expand_md
 {
-    local -r lib="libjqt.m"
+    local -r lib="lib.md.m"
     local -r -a user=( -U '<%' '>' '\B' '\B' '\W>' '<' '>' '$' '' )
     local -r -a meta=( -M '<%' '>' '\B' '\B' '\W>' '<' '>' )
     local -r -a skips=(
@@ -173,6 +173,7 @@ function expand_md
 # < stdin > stdout
 function expand_json
 {
+    local -r lib="lib.json.m"
     local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '$' '' )
     local -r -a meta=( -M '&' '' '{\W' '}{\W' '}' '{' '}' )
     local -r -a skips=(
@@ -196,13 +197,15 @@ function expand_json
         "${meta[@]}"        \
         "${skips[@]}"       \
         "${GPP_PATH[@]}"    \
-        "${DEFINE[@]}"
+        "${DEFINE[@]}"      \
+        --include "$lib"
     echo    # always generate almost one line!!!
 }
 
 # < stdin > stdout
 function expand_css
 {
+    local -r lib="lib.css.m"
     local -r minify=$1
     local -r -a user=( -U '&' '' '{\W' '}{\W' '}' '{' '}' '$' '' )
     local -r -a meta=( -M '&' '' '{\W' '}{\W' '}' '{' '}' )
@@ -222,6 +225,7 @@ function expand_css
         "${skips[@]}"
         "${GPP_PATH[@]}"
         "${DEFINE[@]}"
+        --include "$lib"
     )
     if [[ $minify == 'min' ]]; then
         # +cccc '/*' '*/' # removed multiline comment

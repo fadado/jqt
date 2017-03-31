@@ -110,7 +110,7 @@ arguments.  The usage possibilities are:
 
 ## Preprocessing
 
-One distinctive feature of _jqt_ is the text expansion, using [`gpp`][GPP], applied to almost
+One distinctive feature of _jqt_ is the text expansion, using [GPP][GPP], applied to almost
 all kinds of input files.
 Also, _jqt_ can be used as a standalone
 preprocessor thanks to the `-P` option.
@@ -127,7 +127,7 @@ Macro calls                 `<%m>`              `&m`
                             `<%m x y>`          `&m{x}{y}`
 Macro parameters            `$1`...`$9`         `$1`...`$9`
 Interpolation in arguments  `" "`
-Escapes in arguments        `' '`
+Escape in arguments         `' '`
 
 Table: **Summary of macro syntax**
 
@@ -138,15 +138,19 @@ The following table summarizes the syntax of text skips:
 Continuation lines  `&`             `&`                     `&`             `&`
 Block comment       `<# #>`         `<# #>`                 `/* */`         `/* */`
 Line comment                                                `//`            `//`
-Verbatim copy       `<!-- -->`      `<!-- -->`
+Bypass[^1]          `<!-- -->`      `<!-- -->`
                                     `` ` ` ``
                                     `\n~~~` (also backticks)
-Escape                                                      `` ` ` ``       `` ` ` ``
-String              `{% %}`                                 `" "`           `" "`
+Escape[^2]                                                  `` ` ` ``       `` ` ` ``
+String[^3]          `{% %}`                                 `" "`           `" "`
                     `{{ }}`                                                 `' '`
                     `{# #}`
 
 Table: **Summary of text skips**
+
+[^1]: Text copied verbatim.
+[^2]: Quotes removed, text no expanded.
+[^3]: Quotes not removed, text expanded.
 
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

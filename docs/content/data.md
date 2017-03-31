@@ -66,7 +66,7 @@ to be the `jq` input in the render stage.
 
 ### Preprocessing
 
-JSON files are preprocessed using [`gpp`][GPP], and all the expected options in a
+JSON files are preprocessed using [GPP][GPP], and all the expected options in a
 preprocessor are available, like defining new macros, include other files, etc.
 CSS files are also preprocessed with the same macros syntax used in JSON files.
 

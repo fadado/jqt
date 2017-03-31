@@ -18,7 +18,7 @@ transformation of that content in the final pages must be completely automatic.
 Web pages structure is defined by the HTML markup, and using _jqt_ it is
 added to the input content and data using a template.
 _jqt_ transforms templates into [_jq_][JQ] scripts, but before that
-[`gpp`][GPP] is used to preprocess them. The generated script will be combined
+[GPP][GPP] is used to preprocess them. The generated script will be combined
 with the document and data inputs in the render stage to produce the
 final HTML page.
 This is described on the top of this diagram:
@@ -52,7 +52,7 @@ This is a complete template example:
 
 ### Preprocessing
 
-Templates are preprocessed using [`gpp`][GPP]. All the expected options in a preprocessor are available,
+Templates are preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a template fragment
 like
 
@@ -121,8 +121,8 @@ before include the base template:
 <%include default.html>
 ```
 
-In addition to [GPP][GPP] predefined macros _jqt_ define in the file `libjqt.m`,
-included in the render stage, a little macros library. The
+In addition to [GPP][GPP] predefined macros _jqt_ define some macros to be
+included in the render stage. The
 more useful will be perhaps `<%partial name arg...>`, to include a template
 file passing arguments to it and `<%call name arg...>`, to call a macro by name.
 
