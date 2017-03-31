@@ -1,3 +1,25 @@
+Version 0.5.0:
+ - Version bump to 0.5.0
+ - Segregated common macros library
+ - General edition
+ - Fixed EOL on comments
+ - Segregated BEM macros
+ - Added syntax tables
+ - Unified documentation for JSON and CSS macros
+ - Migrated JSON macro syntax
+ - CSS macros sigil changed to $
+ - Reorganized .jq filters
+ - Minor editions
+ - Joined arg and value lines
+ - New normalize.css
+ - Implemented -w
+ - Added paragraph after main heading
+ - Print styles
+ - Better metadata
+ - small footer
+ - details
+ - main element
+
 Version 0.4.0:
  - XHTMl5
  - New CSS module

@@ -35,8 +35,8 @@ if [[ -f VERSION ]]; then
     cp /tmp/$$-changes CHANGES
     rm /tmp/$$-changes
     git add CHANGES VERSION
-    sed -i "s/^declare -r VERSION=/&'$NEXT_VERSION'"
-    git commit -m "Version bump to $NEXT_VERSION"
+    sed -i "s/^declare -r VERSION=/&'$NEXT_VERSION'/" bin/jqt
+    git commit -am "Version bump to $NEXT_VERSION"
     git tag -a -m "Tagging version $NEXT_VERSION" "v$NEXT_VERSION"
     [[ $PUSH == yes ]] && git push origin --tags
 else
