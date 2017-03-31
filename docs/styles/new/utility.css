@@ -10,7 +10,7 @@
 // Utility
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// Clear a float with ._clearfix
+// Clear a float with .%clearfix
 // JJOR: prefixed
 &SEL{%clearfix}::after {
   clear: both;

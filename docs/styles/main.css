@@ -22,7 +22,7 @@
   html {
     background-color: &ColorInitial;
   }
-  body&BEM{#container} {
+  body&SEL{#container} {
     max-width: 800px;
   }
 }
