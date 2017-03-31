@@ -36,41 +36,6 @@ and `yaml` ([PyYAML](http://pyyaml.org/) implementation).
 The project uses [GNU Make][MAKE] on several development activities, but `make`
 is not necessary to run `jqt`.
 
-## Installation
-
-Under a recent <%cite Fedora> <%cite Linux> distribution most of the commands
-used by _jqt_ are installed by default. The following command will install all the extra
-software _jqt_ needs:
-
-```zsh
-$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
-```
-
-### Manual install
-
-After clone or [download](https://github.com/fadado/jqt/releases) _jqt_ you can
-manually install it executing a few commands on the _jqt_ top directory:
-
-```zsh
-$ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
-$ sudo cp bin/* /usr/local/bin
-$ sudo cp share/* /usr/local/share/jqt
-$ [[ $PATH =~ /usr/local/bin ]] || echo 'Add /usr/local/bin to your PATH'
-```
-
-### _Make_ install
-
-If you know how to use `make` please see the `Makefile` located in the _jqt_
-top directory and run `make install` if you agree with the things that will
-happen. You can also change the installation directory:
-
-```zsh
-$ sudo make install prefix=/your/installation/path
-```
-
-But if you choose a directory different of `/usr/local/share` for the shared data
-you must still edit by hand the parameter `DATADIR` definition in the `bin/jqt` file.
-
 ## Invoking _jqt_
 
 ### Synopsis

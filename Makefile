@@ -109,6 +109,7 @@ install:
 	$(SUDO) install --verbose --compare --mode 555 bin/* $(bindir)
 	$(SUDO) install --verbose --compare --mode 644 share/* $(datadir)/$(project)
 	$(SUDO) install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
+	$(SUDO) sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
 
 uninstall:
 	$(SUDO) rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
@@ -120,6 +121,7 @@ uninstall:
 # Show targets
 .PHONY: help
 help:
+	echo 'Usage: make TARGET [parameter=value...]'
 	echo 'Targets:';					\
 	$(MAKE) --print-data-base --just-print 2>&1		\
 	| grep -v '^[mM]akefile'				\
@@ -127,6 +129,11 @@ help:
 	| sort --unique						\
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
+	echo 'Default parameters:';				\
+	echo '    prefix    = /usr/local';			\
+	echo '    bindir    = /usr/local/bin';			\
+	echo '    datadir   = /usr/local/share';		\
+	echo '    mandir    = /usr/local/share/man'
 
 ########################################################################
 # Tests

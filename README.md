@@ -2,10 +2,6 @@
 
 _jqt_ is a web template engine that uses [_jq_](https://stedolan.github.io/jq/) as expression language.
 
-If you want to learn to use _jqt_, read the documentation at
-<https://fadado.github.io/jqt/>. The documentation is generated using _jqt_ in the `docs`
-folder of this repository.
-
 The tools used in the implementation of _jqt_ are:
 
 * [jq](https://stedolan.github.io/jq/), a lightweight and flexible command-line JSON processor.
@@ -13,6 +9,9 @@ The tools used in the implementation of _jqt_ are:
 * [Pandoc](http://pandoc.org/), a universal document converter.
 * [Bash](https://www.gnu.org/software/bash/), [sed](https://www.gnu.org/software/sed/) and other shell tools.
 
+If you want to learn how to use _jqt_ consult the documentation at
+<https://fadado.github.io/jqt/>. The documentation is generated using _jqt_ in
+the [`docs`](./docs/) folder of this repository.
 If you are interested in _jq_ you can see also [JBOL](https://fadado.github.io/jbol/),
 a related project with a collection of modules for the _jq_ language.
 
@@ -41,6 +40,36 @@ are:
 * `uninstall`: remove installed files from the system directories.
 
 * `help`:  list all targets defined in the Makefile.
+
+### Installation
+
+In systems with the GNU software installed tools as [Bash](https://www.gnu.org/software/bash/),
+[sed](https://www.gnu.org/software/sed/) and other shell tools are installed by default.
+To use _jqt_ you must install additional tools like [GPP](https://logological.org/gpp)
+or [Pandoc](http://pandoc.org/); for example, in recent _Fedora Linux_ distributions
+the following command will install all the extra software _jqt_ needs:
+
+```zsh
+$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
+```
+
+To install _jqt_ simply run `make install` on the _jqt_ repository top
+directory. If don’t like to install into the `/usr/local` system directory you
+can change the destination directory:
+
+```zsh
+$ sudo make install prefix=/your/installation/path
+```
+
+Alternatively you can install _jqt_ manually executing a few commands on the
+_jqt_ top directory:
+
+```zsh
+$ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
+$ sudo cp bin/* /usr/local/bin
+$ sudo cp share/* /usr/local/share/jqt
+$ [[ $PATH =~ /usr/local/bin ]] || echo 'Add /usr/local/bin to your PATH'
+```
 
 ### Scripts
 

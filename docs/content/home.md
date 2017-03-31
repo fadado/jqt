@@ -63,17 +63,15 @@ example seems to be a template?
 
 This site is built using _jqt_, and is itself in his implementation a kind of
 tutorial about _jqt_.
-
-If you want to learn how to use _jqt_ [install it](./engine.html#installation) and
-see all the different sections of this site:
+If you want to learn how to use _jqt_ see all the different sections of this site:
 
 * [Template engine](./engine.html)
 * [Page structure](./structure.html)
 * [Authoring content](./content.html)
 * [Data model](./data.html)
 
-And don’t forget to study this site source code in the repository
-[`docs` directory](https://github.com/fadado/jqt/tree/master/docs)!
+And don’t forget to study this documentation source code in the repository
+[`docs`](https://github.com/fadado/jqt/tree/master/docs) directory!
 
 _jqt_ is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
