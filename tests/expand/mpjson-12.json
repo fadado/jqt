@@ -1,0 +1,9 @@
+// Macros
+&define{T}{Mister }&
+{
+    "firstName": "&T&_{}John F.",
+    "lastName": "Kennedy",
+    "age": 25,
+    "gender": { "type": "male" }
+}
+// vim:sw=4:ts=4:ai:et:syntax=javascript

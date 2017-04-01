@@ -142,7 +142,7 @@ just before the newline character
 _Strings_ are copied to the output, but evaluation of macros inside strings can
 be enabled or disabled.  String delimiters can be copied, or not, to the output:
 
-~~~HTML
+~~~
 <!-- XML comments -->
 <%sc 'Single quoted strings, only available in user defined macro calls'>
 <%sc "Double quoted strings, only available in user defined macro calls">
