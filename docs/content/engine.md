@@ -5,7 +5,7 @@ description: jqt orchestrates several shell utilities to transform MarkDown text
 keywords:  jqt, jq, YAML, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros/markup.m>&
+<%include content/markup.m>&
 <%include content/LINKS.txt>&
 
 # Template engine
@@ -13,15 +13,15 @@ updated: "2016-08-28T10:27:09Z"
 As the [Wikipedia says](https://en.wikipedia.org/wiki/Template_processor),
 <q><i>a template engine is
 software designed to combine one or more templates with a data model to produce
-one or more result documents</i></q>. _jqt_ fully satisfies this definition.
+one or more result documents</i></q>. <%cite jqt> fully satisfies this definition.
 
 ## Implementation
 
-_jqt_ orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
+<%cite jqt> orchestrates several shell utilities to transform [MarkDown][MARKDOWN] text and
 [YAML][YAML] or [JSON][JSON] data into a final HTML page. The transformation is driven by a template,
 where HTML is mixed with [_jq_][JQ] snippets to implement the transformation logic.
 This diagram shows how document, template and data inputs (on the left) are combined by
-_jqt_ to produce the final HTML output:
+<%cite jqt> to produce the final HTML output:
 
 <%include content/FLOW.txt>
 
@@ -36,7 +36,7 @@ and `yaml` ([PyYAML](http://pyyaml.org/) implementation).
 The project uses [GNU Make][MAKE] on several development activities, but `make`
 is not necessary to run `jqt`.
 
-## Invoking _jqt_
+## Invoking <%cite jqt>
 
 ### Synopsis
 
@@ -75,13 +75,13 @@ arguments.  The usage possibilities are:
 
 ## Preprocessing
 
-One distinctive feature of _jqt_ is the text expansion, using [GPP][GPP], applied to almost
+One distinctive feature of <%cite jqt> is the text expansion, using [GPP][GPP], applied to almost
 all kinds of input files.
-Also, _jqt_ can be used as a standalone
+Also, <%cite jqt> can be used as a standalone
 preprocessor thanks to the `-P` option.
 
-_jqt_ uses two different syntaxes for macros, one for
-[_jqt_ templates](./structure.html#preprocessing) and
+<%cite jqt> uses two different syntaxes for macros, one for
+[<%cite jqt> templates](./structure.html#preprocessing) and
 [MarkDown documents](./content.html#preprocessing)
 and another for [JSON and CSS](./data.html#preprocessing) files. 
 The following table summarizes the syntax of macro calls:

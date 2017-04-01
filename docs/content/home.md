@@ -5,7 +5,7 @@ description: Could be jq the basis for a web template engine?
 keywords:  jqt, jq, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros/markup.m>&
+<%include content/markup.m>&
 <%include content/LINKS.txt>&
 
 # Welcome
@@ -44,11 +44,11 @@ separated with the comma operator:
 In these examples the strings expand, vanish, or multiply without any
 explicit `if` or `for`!
 
-## _jqt_
+## <%cite jqt>
 
 To write [_jq_][JQ] scripts using strings with interpolations is not the idea we have
 for a template language. We need some syntactic sugar, and this is provided by
-_jqt_: you write templates in a very fashionable style, the templates
+<%cite jqt>: you write templates in a very fashionable style, the templates
 are translated into a [_jq_][JQ] script and then `jq` is feed with the created
 script and some content and data in [JSON][JSON] format&hellip; and the magic is done!
 
@@ -61,9 +61,9 @@ example seems to be a template?
 
 ### Status
 
-This site is built using _jqt_, and is itself in his implementation a kind of
-tutorial about _jqt_.
-If you want to learn how to use _jqt_ see all the different sections of this site:
+This site is built using <%cite jqt>, and is itself in his implementation a kind of
+tutorial about <%cite jqt>.
+If you want to learn how to use <%cite jqt> see all the different sections of this site:
 
 * [Template engine](./engine.html)
 * [Page structure](./structure.html)
@@ -73,7 +73,7 @@ If you want to learn how to use _jqt_ see all the different sections of this sit
 And don’t forget to study this documentation source code in the repository
 [`docs`](https://github.com/fadado/jqt/tree/master/docs) directory!
 
-_jqt_ is developed under the _Fedora_ Linux
+<%cite jqt> is developed under the _Fedora_ Linux
 distribution, and a lot of portability issues are expected at this stage of
 development. Please, use the project [GitHub repository][REPO] features if you
 want to collaborate or send any kind of questions.
