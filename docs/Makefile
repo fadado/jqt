@@ -68,7 +68,7 @@ Common := \
 	$(Layouts)/default.html		\
 	$(Content)/LINKS.txt		\
 	filters.jq			\
-	macros/markup.m			\
+	content/markup.m		\
 
 # Files to "build"
 Home := index

@@ -5,7 +5,7 @@ description: Web pages structure is defined by the HTML markup.
 keywords:  jqt, jq, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros/markup.m>&
+<%include content/markup.m>&
 <%include content/LINKS.txt>&
 
 # Page structure
@@ -15,9 +15,9 @@ transformation of that content in the final pages must be completely automatic.
 
 ## General operation
 
-Web pages structure is defined by the HTML markup, and using _jqt_ it is
+Web pages structure is defined by the HTML markup, and using <%cite jqt> it is
 added to the input content and data using a template.
-_jqt_ transforms templates into [_jq_][JQ] scripts, but before that
+<%cite jqt> transforms templates into [_jq_][JQ] scripts, but before that
 [GPP][GPP] is used to preprocess them. The generated script will be combined
 with the document and data inputs in the render stage to produce the
 final HTML page.
@@ -43,8 +43,8 @@ rendering:
 ## Template syntax
 
 A template is a text file with intermixed snippets of [_jq_][JQ] code. Snippets can be
-<dfn>expressions</dfn> (delimited by `{{` and `}}`), which get replaced with
-values when a template is rendered and <dfn>actions</dfn> (delimited by `{%` and `%}`), which control the logic of the
+<%dfn expressions> (delimited by `{{` and `}}`), which get replaced with
+values when a template is rendered and <%dfn actions> (delimited by `{%` and `%}`), which control the logic of the
 template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
 This is a complete template example:
 
@@ -65,7 +65,7 @@ as you can see in the internal code of this page.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ in templates and MarkDown documents precedes macro names with the characters `<%`
+The macro syntax used by <%cite jqt> in templates and MarkDown documents precedes macro names with the characters `<%`
 and finishes the macro calls with the character `>`.
 Here are some of the predefined macros:
 
@@ -121,7 +121,7 @@ before include the base template:
 <%include default.html>
 ```
 
-In addition to [GPP][GPP] predefined macros _jqt_ define some macros to be
+In addition to [GPP][GPP] predefined macros <%cite jqt> define some macros to be
 included in the render stage. The
 more useful will be perhaps `<%partial name arg...>`, to include a template
 file passing arguments to it and `<%call name arg...>`, to call a macro by name.
@@ -162,7 +162,7 @@ This table summarizes all the available skips:
 `{%` `%}`           No                  No                  No
 `{#` `#}`           No                  No                  No
 
-Table: **Semantics for all _jqt_ template skips**
+Table: **Semantics for all <%cite jqt> template skips**
 
 [^1]: An ampersand followed by a newline is treated as a line continuation (that
 is, the ampersand and the newline are removed and effectively ignored).
@@ -173,7 +173,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 The input text for a template is UTF-8 text with intermixed snippets of [_jq_][JQ] 
 code. Snippets can be _expressions_, _actions_ and _comments_.  The delimiters
-used by _jqt_ are as follows:
+used by <%cite jqt> are as follows:
 
 Delimiters    Purpose
 ----------    -----------------------------------
@@ -181,7 +181,7 @@ Delimiters    Purpose
 `{% ... %}`   Actions for conditional evaluation and loops
 `{# ... #}`   Comments not included in the output
 
-Table: **Delimiters used in _jqt_ templates**
+Table: **Delimiters used in <%cite jqt> templates**
 
 #### Expressions
 
@@ -201,9 +201,9 @@ cartesian product is generated!
 
 There are two kinds of actions:
 
-* <dfn>One line actions</dfn>: lines beginning with optional space, followed by a
+* <%dfn 'One line actions'>: lines beginning with optional space, followed by a
   `{%...%}` snippet and more text.
-* <dfn>Multiline actions</dfn>: initial line prefixed with optional space,
+* <%dfn 'Multiline actions'>: initial line prefixed with optional space,
   followed by an opening `{%...%}` snippet and a newline character
   immediately after the character `}`;
   then zero or more template lines; final line prefixed with optional space,

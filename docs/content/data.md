@@ -5,7 +5,7 @@ description: jqt combines one template with one MarkDown document and a data mod
 keywords:  jqt, JSON, YAML, gpp, preprocessing, data model
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros/markup.m>&
+<%include content/markup.m>&
 <%include content/LINKS.txt>&
 
 # Data model
@@ -16,7 +16,7 @@ a way to represent them: this is the data model.
 
 ## General operation
 
-_jqt_ is designed to combine one template with one [MarkDown][MARKDOWN] document and a
+<%cite jqt> is designed to combine one template with one [MarkDown][MARKDOWN] document and a
 [data model](https://en.wikipedia.org/wiki/Data_model) to
 produce the final HTML result.
 To define the data model you can provide metadata in the document front matter to be inserted when
@@ -44,7 +44,7 @@ data and influence JSON preprocessing:
 
 ## Data formats
 
-_jqt_ accepts metadata in [YAML][YAML] and [JSON][JSON] formats.
+<%cite jqt> accepts metadata in [YAML][YAML] and [JSON][JSON] formats.
 
 ### YAML and JSON
 
@@ -72,7 +72,7 @@ CSS files are also preprocessed with the same macros syntax used in JSON files.
 
 #### Macro calls
 
-The macro syntax used by _jqt_ in JSON and CSS files is very similar to the syntax used by the traditional
+The macro syntax used by <%cite jqt> in JSON and CSS files is very similar to the syntax used by the traditional
 TeX language macro processor, but changing the prefix character `\` by `&`.
 Here are some of the predefined macros:
 
@@ -147,7 +147,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 #### CSS preprocessor
 
-_jqt_ offers an standalone CSS preprocessor. Macros can be defined, files included, etc.
+<%cite jqt> offers an standalone CSS preprocessor. Macros can be defined, files included, etc.
 
 <details>
 
@@ -167,7 +167,7 @@ The CSS minimization is not extremely aggressive, but is safe and fast.
 ### Data conversion
 
 When preparing data inputs sometimes you need to mix files in several formats.
-To make easy the integration of data from several sources _jqt_ comes with the
+To make easy the integration of data from several sources <%cite jqt> comes with the
 following utilities to convert between CSV, JSON and YAML formats:
 
 * `csv2json`
@@ -184,7 +184,7 @@ argument and write to standard output.
 
 Sometimes you want to apply queries in the _jq_ style to CSV or YAML files,
 in the same style as _jq_ processes JSON data.
-As wrappers to `jq` you have the following utilities shipped with _jqt_:
+As wrappers to `jq` you have the following utilities shipped with <%cite jqt>:
 
 * `cq`, apply `jq` to CSV input files.
 * `yq`, apply `jq` to YAML input files.

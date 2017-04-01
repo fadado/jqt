@@ -5,7 +5,7 @@ description: jqt transforms MarkDown documents to HTML using Pandoc.
 keywords:  jqt, markdown, pandoc, gpp, preprocessing, authoring content
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include macros/markup.m>&
+<%include content/markup.m>&
 <%include content/LINKS.txt>&
 
 # Authoring content
@@ -16,7 +16,7 @@ _MarkDown_ promises and delivers exactly this.
 
 ## General operation
 
-_jqt_ transforms [MarkDown][MARKDOWN] documents to HTML using [Pandoc][PANDOC],
+<%cite jqt> transforms [MarkDown][MARKDOWN] documents to HTML using [Pandoc][PANDOC],
 but before that [GPP][GPP] is used to preprocess them. Pandoc's output
 is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
@@ -43,13 +43,13 @@ Document files contain MarkDown text preceded by an optional YAML front matter.
 
 ### Front matter
 
-_jqt_ extracts the YAML front matter, located at the very beginning of the file,
+<%cite jqt> extracts the YAML front matter, located at the very beginning of the file,
 and injects it into the render stage under a global JSON object named `.page`.
 
 ### Body
 
 Pandoc translates the document body to HTML,
-and _jqt_ injects it into the render stage under the global JSON scalar 
+and <%cite jqt> injects it into the render stage under the global JSON scalar 
 `.page._content`. If the document contains fenced code blocks specifying the language of
 the code block, the related highlight CSS code will be in the scalar `.page._highlight`. Also, the
 HTML table of contents is available in the scalar `.page._toc`, and the path to the document
@@ -60,7 +60,7 @@ file in the scalar `.page._path`.
 <details>
 
 <summary>
-_jqt_ offers also a transformation that can also be considered a kind of preprocessing.
+<%cite jqt> offers also a transformation that can also be considered a kind of preprocessing.
 The option `-T` allows the use of YAML files for collections of MarkDown snippets:
 </summary>
 
@@ -106,7 +106,7 @@ as you can see in this paragraph and on the top of these pages.
 
 All the power of [GPP][GPP] is available to help you when
 [transcluding](https://en.wikipedia.org/wiki/Wikipedia:Transclusion)
-the input MarkDown document. The macro syntax used by _jqt_ in templates and input documents
+the input MarkDown document. The macro syntax used by <%cite jqt> in templates and input documents
 precedes macro names with the characters `<%` and finishes the macro calls with
 the character `>`. 
 Here are some of the predefined macros:
@@ -194,7 +194,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 ### Pandoc’s Markdown
 
-_jqt_ accept as input format for documents the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
+<%cite jqt> accept as input format for documents the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
 variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
 disabled, and produces by default transitional HTML.  When running `jqt` the following
 Pandoc long options can be specified in
