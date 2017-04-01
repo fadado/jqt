@@ -67,7 +67,7 @@ Common := \
 	$(Blocks)/*/markup.html		\
 	$(Layouts)/default.html		\
 	$(Content)/LINKS.txt		\
-	filters.jq			\
+	blocks/filters.jq		\
 	content/markup.m		\
 
 # Files to "build"
@@ -89,7 +89,7 @@ JQT = jqt $(JQTFLAGS)
 JQTFLAGS := \
 	-5 					\
 	-I./					\
-	-ifilters				\
+	-iblocks/filters			\
 	-msite:$(Meta)/config.json		\
 	-msnippets:$(Meta)/snippets.json	\
 	--toc-depth=4				\

@@ -1,7 +1,6 @@
 -P LANGUAGE
 :   Expands input file with the macro-processor (*LANGUAGE* can be `jqt`, `md`,
 `json`, `css` or `css-min`).
-
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
 #>

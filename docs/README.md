@@ -1,5 +1,7 @@
-File extension conventions
-==========================
+## Extension conventions for content files
+
+The files in the `content` directory must follow some conventions in the file
+extensions:
 
 * Web site pages
     - content.md
@@ -12,7 +14,7 @@ File extension conventions
     - EXAMPLE.txt
     - FLOW.txt
     - LINKS.txt
-    - opt/*.txt
+    - opt/\*.txt
 
 * MarkDown snippets
     - snippets.yaml
