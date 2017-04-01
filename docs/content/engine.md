@@ -5,7 +5,7 @@ description: jqt orchestrates several shell utilities to transform MarkDown text
 keywords:  jqt, jq, YAML, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include content/markup.m>&
+<%include content/macros.m>&
 <%include content/LINKS.txt>&
 
 # Template engine

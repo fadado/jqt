@@ -1,4 +1,4 @@
-# jqt site documentation management
+# jqt documentation management
 
 ########################################################################
 # Prerequisites
@@ -50,28 +50,28 @@ SHELL := /bin/bash
 ########################################################################
 
 # Output directories
-Meta := .yummy
+Metadata := .yummy
 Destination := /tmp/jqt
 
-# Directories for input files
+# Input files directories 
 Assets  := ./assets
 Blocks  := ./blocks
 Content := ./content
+Data    := ./data
 Styles  := ./styles
-Layouts := ./layouts
 
-# Common sources for all targets
+# Common dependencies for all targets
 Common := \
-	$(Meta)/config.json		\
-	$(Meta)/snippets.json		\
+	$(Metadata)/config.json		\
+	$(Metadata)/snippets.json	\
 	$(Blocks)/*/markup.html		\
-	$(Layouts)/default.html		\
+	$(Blocks)/main.html		\
+	$(Blocks)/filters.jq		\
 	$(Content)/LINKS.txt		\
-	blocks/filters.jq		\
-	content/markup.m		\
+	$(Content)/macros.m		\
 
 # Files to "build"
-Home := index
+Home  := index
 Pages := content data engine structure 
 Files := README.md styles.css
 ManPage := ../jqt.1.gz
@@ -81,18 +81,20 @@ Targets := \
 	$(ManPage)						\
 
 ########################################################################
-# Commands
+# jqt command with options
 ########################################################################
 
-# The template engine (.site and .snippets defined in the jqt call)
-JQT = jqt $(JQTFLAGS)
+# The template engine (.site and .snippets are defined in the jqt call)
+
 JQTFLAGS := \
 	-5 					\
 	-I./					\
 	-iblocks/filters			\
-	-msite:$(Meta)/config.json		\
-	-msnippets:$(Meta)/snippets.json	\
+	-msite:$(Metadata)/config.json		\
+	-msnippets:$(Metadata)/snippets.json	\
 	--toc-depth=4				\
+
+JQT = jqt $(JQTFLAGS)
 
 ########################################################################
 # Rules
@@ -101,29 +103,19 @@ JQTFLAGS := \
 # Main
 all: $(Targets)
 
-# Validation with vnu.jar
-VNU := /usr/local/vnu/vnu.jar
-valid: all
-	xmlwf $(Destination)/*.html
-	java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
-
-lint: all
-	xmlwf $(Destination)/*.html
-	java -jar $(VNU) --format text $(Destination)/*.html
-
 # Directories
-$(Meta) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
+$(Metadata) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
 
-# Meta files
-$(Meta)/config.json: config.yaml \
-| $(Meta)
+# Metadata files
+$(Metadata)/config.json: config.yaml \
+| $(Metadata)
 	yaml2json <$< >$@
 
-$(Meta)/snippets.json: $(Content)/snippets.yaml \
-| $(Meta)
+$(Metadata)/snippets.json: $(Content)/snippets.yaml \
+| $(Metadata)
 	jqt -T <$< | yaml2json > $@
 
-# Target files
+# Documentation site to build
 $(Destination)/README.md: $(Assets)/README.md \
 | $(Destination)
 	$(info ==> $@)
@@ -138,25 +130,25 @@ DETAILS := sed					\
 $(Destination)/index.html: $(Content)/home.md $(Common) \
 | $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(Layouts)/default.html > $@
+	$(JQT) -d $< $(Blocks)/main.html > $@
 
 $(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
 $(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
 
 define Target
-$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html $(Common) \
+$(Destination)/$(1).html: $(Content)/$(1).md $(Blocks)/$(2).html $(Common) \
 | $(Destination)
 	$$(info ==> $$@)
-	$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
+	$(JQT) -d $$< $(Blocks)/$(2).html | $(DETAILS) > $$@
 endef
 
 $(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
 
-$(Destination)/styles.css: $(Styles)/main.css $(Styles)/*.css $(Styles)/new/*.css $(Blocks)/*/*style.css
+$(Destination)/styles.css: $(Styles)/*.css $(Styles)/new/*.css $(Blocks)/*/*style.css $(Styles)/macros.m
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 
-# Man page (to be build without callig `jqt`!)
+# Man page (to be build without calling jqt!)
 GPP_MD := \
 	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
 	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
@@ -193,7 +185,7 @@ clean:
 	rm -rf $(Destination)/* $(ManPage)
 
 clobber:
-	rm -rf $(Destination) $(Meta)
+	rm -rf $(Destination) $(Metadata)
 
 build: clean all
 
@@ -207,5 +199,15 @@ help:
 	| sort --unique						\
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
+
+# Validation with vnu.jar
+VNU := /usr/local/vnu/vnu.jar
+valid: all
+	xmlwf $(Destination)/*.html
+	java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
+
+lint: all
+	xmlwf $(Destination)/*.html
+	java -jar $(VNU) --format text $(Destination)/*.html
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

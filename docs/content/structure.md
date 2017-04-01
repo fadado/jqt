@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Defining the page structure with jqt
-description: Web pages structure is defined by the HTML markup.
+description: Web pages structure is defined by the HTML macros.
 keywords:  jqt, jq, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include content/markup.m>&
+<%include content/macros.m>&
 <%include content/LINKS.txt>&
 
 # Page structure

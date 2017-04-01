@@ -5,7 +5,7 @@ description: jqt combines one template with one MarkDown document and a data mod
 keywords:  jqt, JSON, YAML, gpp, preprocessing, data model
 updated: "2016-08-28T10:27:09Z"
 ---
-<%include content/markup.m>&
+<%include content/macros.m>&
 <%include content/LINKS.txt>&
 
 # Data model
