@@ -1,3 +1,4 @@
+// CSS named colors
 &define{Black}{	#000000}
 &define{Navy}{	#000080}
 &define{DarkBlue}{	#00008B}

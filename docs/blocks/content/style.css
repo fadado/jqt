@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 &SEL{$content} h2:target::after,
-&SEL{$content} h2:target::after,
+&SEL{$content} h3:target::after,
 &SEL{$content} h4:target::after {
   content: " §";
   color: &ColorQuaternary;

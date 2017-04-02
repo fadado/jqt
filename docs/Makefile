@@ -56,6 +56,7 @@ Destination := /tmp/jqt
 # Input files directories 
 Assets  := ./assets
 Blocks  := ./blocks
+Layouts := ./blocks
 Content := ./content
 Data    := ./data
 Styles  := ./styles
@@ -65,7 +66,7 @@ Common := \
 	$(Metadata)/config.json		\
 	$(Metadata)/snippets.json	\
 	$(Blocks)/*/markup.html		\
-	$(Blocks)/main.html		\
+	$(Layouts)/page.html		\
 	$(Blocks)/filters.jq		\
 	$(Content)/LINKS.txt		\
 	$(Content)/macros.m		\
@@ -130,21 +131,22 @@ DETAILS := sed					\
 $(Destination)/index.html: $(Content)/home.md $(Common) \
 | $(Destination)
 	$(info ==> $@)
-	$(JQT) -d $< $(Blocks)/main.html > $@
+	$(JQT) -d $< $(Layouts)/page.html > $@
 
 $(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
 $(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
 
 define Target
-$(Destination)/$(1).html: $(Content)/$(1).md $(Blocks)/$(2).html $(Common) \
+$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html $(Common) \
 | $(Destination)
 	$$(info ==> $$@)
-	$(JQT) -d $$< $(Blocks)/$(2).html | $(DETAILS) > $$@
+	$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
 endef
 
-$(foreach p,$(Pages),$(eval $(call Target,$(p),page)))
+$(foreach p,$(Pages),$(eval $(call Target,$(p),page-toc)))
 
-$(Destination)/styles.css: $(Styles)/*.css $(Styles)/new/*.css $(Blocks)/*/*style.css $(Styles)/macros.m
+TOPCSS=$(Styles)/page.css 
+$(Destination)/styles.css: $(TOPCSS) $(Styles)/*.css $(Styles)/milligram/*.css $(Blocks)/*/*style.css $(Styles)/bem.m 
 	$(info ==> $@)
 	jqt -P CSS-min -I$(Styles) <$< >$@
 

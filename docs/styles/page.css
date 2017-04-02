@@ -1,18 +1,15 @@
 ////////////////////////////////////////////////////////////////////////
-// main
+// Top-level stylesheet
 ////////////////////////////////////////////////////////////////////////
 
-&include{macros.m}
-&include{new/default.css}
+&include{bem.m}
+&include{colornames.m}
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic");
+
+&include{normalize.css}
 
 &include{milligram.css}
-//&include{media.css}
-
-@media screen {
-  html {
-    background-color: &ColorInitial;
-  }
-}
 
 &include{blocks/container/style.css}
 &include{blocks/header/style.css}
@@ -24,5 +21,8 @@
 &include{blocks/toc/style.css}
 &include{blocks/license/style.css}
 &include{blocks/repository/style.css}
+
+// Not used
+//&include{media.css}
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

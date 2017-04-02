@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: page-toc
 title: Defining the page structure with jqt
 description: Web pages structure is defined by the HTML macros.
 keywords:  jqt, jq, gpp, preprocessing, template engine

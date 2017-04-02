@@ -9,8 +9,8 @@ The tools used in the implementation of _jqt_ are:
 * [Pandoc](http://pandoc.org/), a universal document converter.
 * [Bash](https://www.gnu.org/software/bash/), [sed](https://www.gnu.org/software/sed/) and other shell tools.
 
-If you want to learn how to use _jqt_ consult the documentation at
-<https://fadado.github.io/jqt/>. The documentation is generated using _jqt_ in
+If you want to learn how to use _jqt_ visit the site 
+<https://fadado.github.io/jqt/>. The site pages are generated using _jqt_ in
 the [`docs`](./docs/) folder of this repository.
 If you are interested in _jq_ you can see also [JBOL](https://fadado.github.io/jbol/),
 a related project with a collection of modules for the _jq_ language.
@@ -43,7 +43,7 @@ are:
 
 ### Installation
 
-In systems with the GNU software installed tools as [Bash](https://www.gnu.org/software/bash/),
+In systems with the GNU software installed tools such as [Bash](https://www.gnu.org/software/bash/),
 [sed](https://www.gnu.org/software/sed/) and other shell tools are installed by default.
 To use _jqt_ you must install additional tools like [GPP](https://logological.org/gpp)
 or [Pandoc](http://pandoc.org/); for example, in recent _Fedora Linux_ distributions
@@ -84,7 +84,7 @@ another `jqt` uses.
 
 ### Documentation
 
-The directory [`docs`](./docs/) contains the documentation for _jqt_, and is in itself a subproject with his
+The directory [`docs`](./docs/) contains the source files for _jqt_ documentation, and is in itself a subproject with his
 own makefile. Please see the directory [`docs`](./docs/) for all information on
 this subproject.
 

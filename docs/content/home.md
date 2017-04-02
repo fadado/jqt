@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Welcome to jqt
 description: Could be jq the basis for a web template engine?
 keywords:  jqt, jq, template engine
