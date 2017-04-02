@@ -63,15 +63,7 @@
   font-size: 1.4rem;
 }
 
-@media print {
-  &SEL{$content} figure > pre {
-    font-size: 1.2rem;
-  }
-}
-
-// Page specific
-
-html#content-home &SEL{$content} > blockquote:first-of-type {
+&SEL{$content} &SEL{page-quote} {
   float: right;
   margin: 0 0 0 auto;
   padding-top:    0;
@@ -79,6 +71,12 @@ html#content-home &SEL{$content} > blockquote:first-of-type {
   max-width: 20em;
   font-family: "Liberation Serif", "Times New Roman", Times, serif;
   text-align: right;
+}
+
+@media print {
+  &SEL{$content} figure > pre {
+    font-size: 1.2rem;
+  }
 }
 
 // vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

@@ -36,6 +36,7 @@ if [[ -f VERSION ]]; then
     rm /tmp/$$-changes
     git add CHANGES VERSION
     sed -i "s/^declare -r VERSION=/&'$NEXT_VERSION'/" bin/jqt
+	sed -i "s/\[version .*\]/[version $(NEXT_VERSION)]/" bin/jqt
     git commit -am "Version bump to $NEXT_VERSION"
     git tag -a -m "Tagging version $NEXT_VERSION" "v$NEXT_VERSION"
     [[ $PUSH == yes ]] && git push origin --tags

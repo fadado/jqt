@@ -19,7 +19,7 @@ author:
 
 menu:
 - URL: ./index.html
-  path: content/home.md
+  path: content/index.md
   name: Home
 - URL: ./engine.html
   path: content/engine.md

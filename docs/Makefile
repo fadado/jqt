@@ -50,43 +50,35 @@ SHELL := /bin/bash
 ########################################################################
 
 # Output directories
-Metadata := .yummy
 Destination := /tmp/jqt
+Metadata    := .yummy
 
 # Input files directories 
 Assets  := ./assets
 Blocks  := ./blocks
-Layouts := ./blocks
 Content := ./content
 Data    := ./data
+Layouts := ./blocks
 Styles  := ./styles
 
-# Common dependencies for all targets
-Common := \
-	$(Metadata)/config.json		\
-	$(Metadata)/snippets.json	\
-	$(Blocks)/*/markup.html		\
-	$(Layouts)/page.html		\
-	$(Blocks)/filters.jq		\
-	$(Content)/LINKS.txt		\
-	$(Content)/macros.m		\
+# Files to build or publish
+Home 	:= index
+Other	:= content data engine structure 
+Static	:= README.md styles.css
 
-# Files to "build"
-Home  := index
-Pages := content data engine structure 
-Files := README.md styles.css
+# Target filenames
 ManPage := ../jqt.1.gz
-Targets := \
-	$(foreach f,$(Files),$(Destination)/$(f))		\
-	$(foreach p,$(Home) $(Pages),$(Destination)/$(p).html)	\
-	$(ManPage)						\
+HomePage   := $(Destination)/$(Home).html
+OtherPages := $(foreach p,$(Other),$(Destination)/$(p).html)
+Files	   := $(foreach f,$(Static),$(Destination)/$(f))
+Pages  	   := $(HomePage) $(OtherPages)
+Targets    := $(Pages) $(Files) $(ManPage)
 
 ########################################################################
 # jqt command with options
 ########################################################################
 
-# The template engine (.site and .snippets are defined in the jqt call)
-
+# jqt with options
 JQTFLAGS := \
 	-5 					\
 	-I./					\
@@ -97,61 +89,8 @@ JQTFLAGS := \
 
 JQT = jqt $(JQTFLAGS)
 
-########################################################################
-# Rules
-########################################################################
-
-# Main
-all: $(Targets)
-
-# Directories
-$(Metadata) $(Destination): ; mkdir $@ >/dev/null 2>&1 || true
-
-# Metadata files
-$(Metadata)/config.json: config.yaml \
-| $(Metadata)
-	yaml2json <$< >$@
-
-$(Metadata)/snippets.json: $(Content)/snippets.yaml \
-| $(Metadata)
-	jqt -T <$< | yaml2json > $@
-
-# Documentation site to build
-$(Destination)/README.md: $(Assets)/README.md \
-| $(Destination)
-	$(info ==> $@)
-	cp $< $@
-
-DETAILS := sed					\
-	-e 's/^<p><details><\/p>/<details>/'	\
-	-e 's/^<p><\/details><\/p>/<\/details>/'\
-	-e 's/^<p><summary>/<summary>/'		\
-	-e 's/<\/summary><\/p>/<\/summary>/'
-
-$(Destination)/index.html: $(Content)/home.md $(Common) \
-| $(Destination)
-	$(info ==> $@)
-	$(JQT) -d $< $(Layouts)/page.html > $@
-
-$(foreach p,$(Pages),$(Destination)/$(p).html): $(Content)/FLOW.txt $(Content)/opt/*.txt
-$(Destination)/index.html $(Destination)/structure.html: $(Content)/EXAMPLE.txt
-
-define Target
-$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html $(Common) \
-| $(Destination)
-	$$(info ==> $$@)
-	$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
-endef
-
-$(foreach p,$(Pages),$(eval $(call Target,$(p),page-toc)))
-
-TOPCSS=$(Styles)/page.css 
-$(Destination)/styles.css: $(TOPCSS) $(Styles)/*.css $(Styles)/milligram/*.css $(Blocks)/*/*style.css $(Styles)/bem.m 
-	$(info ==> $@)
-	jqt -P CSS-min -I$(Styles) <$< >$@
-
-# Man page (to be build without calling jqt!)
-GPP_MD := \
+# gpp for the man page (to be build without calling jqt!)
+GPP_MD_FLAGS := \
 	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
 	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
 	+sccc '&\n' '' ''				\
@@ -164,9 +103,89 @@ GPP_MD := \
 	+ssss '\n```' '\n```' ''			\
 	+ssss '\n~~~' '\n~~~' ''			\
     
+GPP_MD = gpp $(GPP_MD_FLAGS)
+
+# hack to modify <detail> markup
+DETAILS := sed					\
+	-e 's/^<p><details><\/p>/<details>/'	\
+	-e 's/^<p><\/details><\/p>/<\/details>/'\
+	-e 's/^<p><summary>/<summary>/'		\
+	-e 's/<\/summary><\/p>/<\/summary>/'
+
+########################################################################
+# Extra dependencies
+########################################################################
+
+$(Pages): \
+	$(Blocks)/*/markup.html		\
+	$(Blocks)/filters.jq		\
+	$(Content)/LINKS.txt		\
+	$(Content)/macros.m		\
+	$(Metadata)/config.json		\
+	$(Metadata)/snippets.json	\
+
+
+$(OtherPages):			\
+	$(Content)/FLOW.txt	\
+	$(Layouts)/page.html	\
+	$(Content)/opt/*.txt	\
+
+$(HomePage) 			\
+$(Destination)/structure.html:	\
+	$(Content)/EXAMPLE.txt	\
+
+$(Destination)/styles.css:		\
+	$(Blocks)/*/*style.css		\
+	$(Styles)/*.css			\
+	$(Styles)/*.m 			\
+	$(Styles)/milligram/*.css	\
+
+########################################################################
+# Rules
+########################################################################
+
+all: $(Targets)
+
+# Directories
+$(Metadata)	\
+$(Destination):
+	mkdir $@ >/dev/null 2>&1 || true
+
+# Metadata files
+$(Metadata)/config.json: config.yaml \
+| $(Metadata)
+	yaml2json <$< >$@
+
+$(Metadata)/snippets.json: $(Content)/snippets.yaml \
+| $(Metadata)
+	jqt -T <$< | yaml2json > $@
+
+# Assets
+$(Destination)/README.md: $(Assets)/README.md \
+| $(Destination)
+	$(info ==> $@)
+	cp $< $@
+
+# HTML pages
+define Target
+$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html \
+| $(Destination)
+	$$(info ==> $$@)
+	$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
+endef
+
+$(eval $(call Target,$(Home),page))
+$(foreach p,$(Other),$(eval $(call Target,$(p),page-toc)))
+
+# CSS stylesheet
+$(Destination)/styles.css: $(Styles)/page.css
+	$(info ==> $@)
+	jqt -P CSS-min -I$(Styles) <$< >$@
+
+# Man page: jqt(1)
 $(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
-	gpp $(GPP_MD) -I$(Content) <$<			\
+	$(GPP_MD) -I$(Content) <$<			\
 	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
 

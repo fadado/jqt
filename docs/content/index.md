@@ -10,8 +10,11 @@ updated: "2016-08-28T10:27:09Z"
 
 # Welcome
 
+<!--
 > _Editing is a rewording activity._\
 > — _Alan J. Perlis_
+-->
+<blockquote class="page-quote"><p><em>Editing is a rewording activity.</em><br/>— <em>Alan J. Perlis</em></p></blockquote>
 
 Could be [_jq_][JQ] the basis for a web template engine?
 Let’s explore&hellip;

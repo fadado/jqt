@@ -537,7 +537,7 @@ function usage
 function help
 {
     cat <<'EOF'
-jqt - jq based web template engine [version 0.1.0]
+jqt - jq based web template engine [version 0.5.0]
 Usage: jqt [-h | --help | -p | -V | --version]
        jqt [options] < infile > result
        jqt [options] infile > result
