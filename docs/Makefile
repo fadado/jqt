@@ -1,49 +1,6 @@
 # jqt documentation management
 
-########################################################################
-# Prerequisites
-########################################################################
-
-# We are using some of the newest GNU Make features... so require GNU
-# Make version >= 3.82
-version_test := $(filter 3.82,$(firstword $(sort $(MAKE_VERSION) 3.82)))
-ifndef version_test
-$(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
-endif
-
-########################################################################
-# Configuration
-########################################################################
-
-# Disable builtins.
-MAKEFLAGS += --no-builtin-rules
-MAKEFLAGS += --no-builtin-variables
-
-# Warn when an undefined variable is referenced.
-MAKEFLAGS += --warn-undefined-variables
-
-# Make will not print the recipe used to remake files.
-.SILENT:
-
-# Eliminate use of the built-in implicit rules. Also clear out the
-# default list of suffixes for suffix rules.
-.SUFFIXES:
-
-# Sets the default goal to be used if no targets were specified on the
-# command line.
-.PHONY: all
-.DEFAULT_GOAL := all
-
-# Default shell: if we require GNU Make, why not require Bash?
-SHELL := /bin/bash
-
-# The argument(s) passed to the shell are taken from the variable
-# .SHELLFLAGS.
-.SHELLFLAGS := -o errexit -o pipefail -o nounset -c
-
-# Make will delete the target of a rule if it has changed and its recipe
-# exits with a nonzero exit status.
-.DELETE_ON_ERROR:
+include make.d/config.make
 
 ########################################################################
 # Variables
@@ -147,22 +104,22 @@ $(Destination)/styles.css:		\
 all: $(Targets) cp_assets
 
 # Directories
-$(Metadata)	\
 $(Destination):
+	$(info ==> $@)
 	mkdir $@ >/dev/null 2>&1 || true
-
-# Metadata files
-$(Metadata)/config.json: config.yaml \
-| $(Metadata)
-	yaml2json <$< >$@
-
-$(Metadata)/snippets.json: $(Content)/snippets.yaml \
-| $(Metadata)
-	jqt -T <$< | yaml2json > $@
 
 # Assets
 cp_assets: | $(Destination)
 	cp --verbose --recursive --update $(Assets)/* $(Destination)
+
+# META !!!!!!!!
+include make.d/metadata.make
+
+# Snippets
+$(Metadata)/snippets.json: $(Content)/snippets.yaml \
+| $(Metadata)
+	$(info ==> $@)
+	jqt -T <$< | yaml2json > $@
 
 # HTML pages
 define Target
@@ -189,6 +146,7 @@ $(ManPage): $(Content)/jqt.1.markdown
 
 # Help text
 /tmp/help: $(Content)/help.markdown
+	$(info ==> $@)
 	jqt -P MarkDown -I$(Content) <$<				\
 	| pandoc --from markdown --to plain -				\
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
@@ -219,12 +177,13 @@ help:
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
 
-# Validation with vnu.jar
+# Validation using vnu.jar
 VNU := /usr/local/vnu/vnu.jar
 valid: all
 	xmlwf $(Destination)/*.html
 	java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
 
+# Validation with warnings using vnu.jar
 lint: all
 	xmlwf $(Destination)/*.html
 	java -jar $(VNU) --format text $(Destination)/*.html

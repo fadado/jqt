@@ -1,5 +1,7 @@
 # cache
 /docs/.yummy
+# built site
+/docs/_site
 # man pages
 jqt.1.gz
 # other
