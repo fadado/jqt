@@ -64,7 +64,7 @@ Styles  := ./styles
 # Files to build or publish
 Home 	:= index
 Other	:= content data engine structure 
-Static	:= README.md styles.css
+Static	:= styles.css
 
 # Target filenames
 ManPage := ../jqt.1.gz
@@ -144,7 +144,7 @@ $(Destination)/styles.css:		\
 # Rules
 ########################################################################
 
-all: $(Targets)
+all: $(Targets) cp_assets
 
 # Directories
 $(Metadata)	\
@@ -161,10 +161,8 @@ $(Metadata)/snippets.json: $(Content)/snippets.yaml \
 	jqt -T <$< | yaml2json > $@
 
 # Assets
-$(Destination)/README.md: $(Assets)/README.md \
-| $(Destination)
-	$(info ==> $@)
-	cp $< $@
+cp_assets: | $(Destination)
+	cp --verbose --recursive --update $(Assets)/* $(Destination)
 
 # HTML pages
 define Target
@@ -205,7 +203,7 @@ $(ManPage): $(Content)/jqt.1.markdown
 clean:
 	rm -rf $(Destination)/* $(ManPage)
 
-clobber:
+clobber: clean
 	rm -rf $(Destination) $(Metadata)
 
 build: clean all
