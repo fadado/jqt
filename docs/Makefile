@@ -6,9 +6,11 @@ include make.d/config.make
 # Variables
 ########################################################################
 
-# Output directories
+# Metadata directory
+Metadata := .yummy
+
+# Output directory
 Destination := /tmp/jqt
-Metadata    := .yummy
 
 # Input files directories 
 Assets  := ./assets
@@ -24,7 +26,7 @@ Other	:= content data engine structure
 Static	:= styles.css
 
 # Target filenames
-ManPage := ../jqt.1.gz
+ManPage    := ../jqt.1.gz
 HomePage   := $(Destination)/$(Home).html
 OtherPages := $(foreach p,$(Other),$(Destination)/$(p).html)
 Files	   := $(foreach f,$(Static),$(Destination)/$(f))
@@ -103,23 +105,23 @@ $(Destination)/styles.css:		\
 
 all: $(Targets) cp_assets
 
-# Directories
+# Destination directory
 $(Destination):
 	$(info ==> $@)
 	mkdir $@ >/dev/null 2>&1 || true
 
-# Assets
+# Copy assets
 cp_assets: | $(Destination)
 	cp --verbose --recursive --update $(Assets)/* $(Destination)
 
-# META !!!!!!!!
+# Include metadata
 include make.d/metadata.make
 
 # Snippets
 $(Metadata)/snippets.json: $(Content)/snippets.yaml \
 | $(Metadata)
 	$(info ==> $@)
-	jqt -T <$< | yaml2json > $@
+	jqt -T < $< | yaml2json > $@
 
 # HTML pages
 define Target
@@ -135,28 +137,20 @@ $(foreach p,$(Other),$(eval $(call Target,$(p),page-toc)))
 # CSS stylesheet
 $(Destination)/styles.css: $(Styles)/page.css
 	$(info ==> $@)
-	jqt -P CSS-min -I$(Styles) <$< >$@
+	jqt -P CSS-min -I$(Styles) < $< > $@
 
 # Man page: jqt(1)
 $(ManPage): $(Content)/jqt.1.markdown
 	$(info ==> $@)
-	$(GPP_MD) -I$(Content) <$<			\
+	$(GPP_MD) -I$(Content) < $<			\
 	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
-
-# Help text
-/tmp/help: $(Content)/help.markdown
-	$(info ==> $@)
-	jqt -P MarkDown -I$(Content) <$<				\
-	| pandoc --from markdown --to plain -				\
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
-	> $@
 
 ########################################################################
 # Utilities
 ########################################################################
 
-.PHONY: clean clobber build
+.PHONY: clean clobber build help valid lint
 
 clean:
 	rm -rf $(Destination)/* $(ManPage)
@@ -167,7 +161,6 @@ clobber: clean
 build: clean all
 
 # Show targets
-.PHONY: help
 help:
 	echo 'Targets:';					\
 	$(MAKE) --print-data-base --just-print 2>&1		\
@@ -187,5 +180,13 @@ valid: all
 lint: all
 	xmlwf $(Destination)/*.html
 	java -jar $(VNU) --format text $(Destination)/*.html
+
+# Generate Help text (need explicit call: `make /tmp/help`)
+/tmp/help: $(Content)/help.markdown
+	$(info ==> $@)
+	jqt -P MarkDown -I$(Content) < $<				\
+	| pandoc --from markdown --to plain -				\
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
+	> $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

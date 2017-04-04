@@ -10,14 +10,15 @@ $(Metadata):
 	$(info ==> $@)
 	mkdir $@ >/dev/null 2>&1 || true
 
-# Main configuration file
+# Main configuration file.
+# Must be named config.yaml or config.json and must exist.
 ifeq (config.yaml, $(wildcard config.yaml))
 
 # Convert config.yaml to $(Metadata)/config.json
 $(Metadata)/config.json: config.yaml \
 | $(Metadata)
 	$(info ==> $@)
-	yaml2json <$< >$@
+	yaml2json < $< > $@
 
 else ifeq (config.json, $(wildcard config.json))
 
@@ -25,7 +26,7 @@ else ifeq (config.json, $(wildcard config.json))
 $(Metadata)/config.json: config.json \
 | $(Metadata)
 	$(info ==> $@)
-	cp $< $@
+	jqt -Pjson < $< > $@
 
 else
 $(error Configuration file not found)

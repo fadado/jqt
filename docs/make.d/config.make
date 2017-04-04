@@ -20,6 +20,9 @@ ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
 ifeq (0,$(shell id --user))
 $(error  Root only can make "(un)install" targets)
 endif
+SUDO := 
+else
+SUDO := sudo
 endif
 
 ########################################################################
@@ -70,13 +73,5 @@ space := $(empty) $(empty)
 
 # Hack for list manipulation
 rest = $(wordlist 2,2147483648,$1)
-
-#!# Make a directory if it no exists
-#!define mkdir
-#!  if test ! -d $1; then		\
-#!	echo 1>&2 '==> $1';	\
-#!	mkdir --parents $1;	\
-#!  fi
-#!endef
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
