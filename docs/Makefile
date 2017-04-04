@@ -3,42 +3,36 @@
 include make.d/config.make
 
 ########################################################################
-# Variables
+# Globals
 ########################################################################
 
 # Metadata directory
 Metadata := .yummy
 
-# Output directory
-Destination := /tmp/jqt
+# Load global parameters
+-include $(Metadata)/globals.make
 
-# Input files directories 
-Assets  := ./assets
-Blocks  := ./blocks
-Content := ./content
-Data    := ./data
-Layouts := ./blocks
-Styles  := ./styles
+# Defined in globals.make:
+#    __globals__
+#    Assets
+#    Blocks
+#    Content
+#    Data
+#    Destination
+#    Layouts
+#    Styles
 
-# Files to build or publish
-Home 	:= index
-Other	:= content data engine structure 
-Static	:= styles.css
-
-# Target filenames
-ManPage    := ../jqt.1.gz
-HomePage   := $(Destination)/$(Home).html
-OtherPages := $(foreach p,$(Other),$(Destination)/$(p).html)
-Files	   := $(foreach f,$(Static),$(Destination)/$(f))
-Pages  	   := $(HomePage) $(OtherPages)
-Targets    := $(Pages) $(Files) $(ManPage)
+# Include metadata
+include make.d/metadata.make
 
 ########################################################################
 # jqt command with options
 ########################################################################
 
+ifdef __globals__
+
 # jqt with options
-JQTFLAGS := \
+JQTFLAGS = 					\
 	-5 					\
 	-I./					\
 	-iblocks/filters			\
@@ -49,7 +43,7 @@ JQTFLAGS := \
 JQT = jqt $(JQTFLAGS)
 
 # gpp for the man page (to be build without calling jqt!)
-GPP_MD_FLAGS := \
+GPP_MD := gpp						\
 	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
 	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
 	+sccc '&\n' '' ''				\
@@ -62,8 +56,6 @@ GPP_MD_FLAGS := \
 	+ssss '\n```' '\n```' ''			\
 	+ssss '\n~~~' '\n~~~' ''			\
     
-GPP_MD = gpp $(GPP_MD_FLAGS)
-
 # hack to modify <detail> markup
 DETAILS := sed					\
 	-e 's/^<p><details><\/p>/<details>/'	\
@@ -71,9 +63,31 @@ DETAILS := sed					\
 	-e 's/^<p><summary>/<summary>/'		\
 	-e 's/<\/summary><\/p>/<\/summary>/'
 
+endif # __globals__
+
 ########################################################################
+# Pages and other files to generate
+########################################################################
+
+ifdef __globals__
+
+# Files to build or publish
+Home 	:= index
+Other	:= content data engine structure 
+Static	:= styles.css
+JQT_Man := jqt.1
+
+# Target filenames
+HomePage   := $(Destination)/$(Home).html
+OtherPages := $(foreach p,$(Other),$(Destination)/$(p).html)
+Files	   := $(foreach f,$(Static),$(Destination)/$(f))
+Pages  	   := $(HomePage) $(OtherPages)
+ManPage    := ../$(JQT_Man).gz
+Targets    := $(Pages) $(Files) $(ManPage)
+
+#
 # Extra dependencies
-########################################################################
+#
 
 $(Pages): \
 	$(Blocks)/*/markup.html		\
@@ -99,11 +113,16 @@ $(Destination)/styles.css:		\
 	$(Styles)/*.m 			\
 	$(Styles)/milligram/*.css	\
 
+endif # __globals__
+
 ########################################################################
 # Rules
 ########################################################################
 
-all: $(Targets) cp_assets
+ifdef __globals__
+
+# Default target
+all: $(Targets) static
 
 # Destination directory
 $(Destination):
@@ -111,11 +130,9 @@ $(Destination):
 	mkdir $@ >/dev/null 2>&1 || true
 
 # Copy assets
-cp_assets: | $(Destination)
-	cp --verbose --recursive --update $(Assets)/* $(Destination)
-
-# Include metadata
-include make.d/metadata.make
+static: | $(Destination)
+	cp --verbose --recursive --update $(Assets)/* $(Destination) \
+	| sed "s/^.*-> ./==> /;s/.$$//"
 
 # Snippets
 $(Metadata)/snippets.json: $(Content)/snippets.yaml \
@@ -140,27 +157,20 @@ $(Destination)/styles.css: $(Styles)/page.css
 	jqt -P CSS-min -I$(Styles) < $< > $@
 
 # Man page: jqt(1)
-$(ManPage): $(Content)/jqt.1.markdown
+$(ManPage): $(Content)/$(JQT_Man).markdown
 	$(info ==> $@)
 	$(GPP_MD) -I$(Content) < $<			\
 	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
 
+endif # __globals__
+
 ########################################################################
 # Utilities
 ########################################################################
 
-.PHONY: clean clobber build help valid lint
-
-clean:
-	rm -rf $(Destination)/* $(ManPage)
-
-clobber: clean
-	rm -rf $(Destination) $(Metadata)
-
-build: clean all
-
 # Show targets
+.PHONY: help
 help:
 	echo 'Targets:';					\
 	$(MAKE) --print-data-base --just-print 2>&1		\
@@ -169,6 +179,18 @@ help:
 	| sort --unique						\
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
+
+ifdef __globals__
+
+.PHONY: clean clobber build valid lint
+
+clean:
+	rm -rf $(Destination)/* $(ManPage)
+
+clobber: clean
+	rm -rf $(Destination) $(Metadata)
+
+build: clean all
 
 # Validation using vnu.jar
 VNU := /usr/local/vnu/vnu.jar
@@ -188,5 +210,7 @@ lint: all
 	| pandoc --from markdown --to plain -				\
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
 	> $@
+
+endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
