@@ -6,6 +6,8 @@
 #	Metadata
 #	Content
 #	Destination
+# Exported variables:
+#	?
 
 # Destination directory
 $(Destination):
@@ -14,33 +16,31 @@ $(Destination):
 
 # Markdown document found in the filesystem (only .md extensions)
 _documents := $(shell find $(Content) -type f -a -name '*.md')
+# Tree structure of directories
+_paths := $(sort $(dir $(_documents)))
 
 # Pages to be generated, and related JSON
 define fsys_pages =
   $(patsubst %.md,%.$1,$(patsubst $(Content)%,$2%,$(_documents)))
 endef
 
-PagesHTML := $(call fsys_pages,html,$(Destination))
-PagesJSON := $(call fsys_pages,json,$(Metadata)/pages)
-
-# Tree structure of directories
-fsys_tree_docs := $(sort $(dir $(_documents)))
-
 define fsys_tree =
-  $(patsubst $(Content)%,$1%,$(fsys_tree_docs))
+  $(patsubst $(Content)%,$1%,$(_paths))
 endef
 
-fsys_tree_site := $(call fsys_tree,$(Destination))
-fsys_tree_page := $(call fsys_tree,$(Metadata)/pages)
-fsys_tree_node := $(call fsys_tree,$(Metadata)/nodes)
-
 # All sections and subsections, removing home page node
-define fsys_derived_nodes =
+define fsys_nodes =
   $(call rest,$(patsubst %/,%$1,$2))
 endef
 
-NodesJSON := $(call fsys_derived_nodes,.json,$(fsys_tree_node))
-NodesHTML := $(call fsys_derived_nodes,/index.html,$(fsys_tree_site))
+#
+PagesHTML := $(call fsys_pages,html,$(Destination))
+PagesJSON := $(call fsys_pages,json,$(Metadata)/pages)
+fsys_tree_site := $(call fsys_tree,$(Destination))
+fsys_tree_page := $(call fsys_tree,$(Metadata)/pages)
+fsys_tree_node := $(call fsys_tree,$(Metadata)/nodes)
+NodesJSON := $(call fsys_nodes,.json,$(fsys_tree_node))
+NodesHTML := $(call fsys_nodes,/index.html,$(fsys_tree_site))
 
 # Make directories
 $(fsys_tree_site): $(Destination)/% : $(Content)/%
@@ -54,9 +54,9 @@ $(fsys_tree_node): $(Metadata)/nodes/% : $(Content)/%
 # Test
 intro:
 	@echo '_documents: $(_documents)'
+	@echo '_paths: $(_paths)'
 	@echo 'PagesHTML: $(PagesHTML)'
 	@echo 'PagesJSON: $(PagesJSON)'
-	@echo 'fsys_tree_docs: $(fsys_tree_docs)'
 	@echo 'fsys_tree_site: $(fsys_tree_site)'
 	@echo 'fsys_tree_page: $(fsys_tree_page)'
 	@echo 'fsys_tree_node: $(fsys_tree_node)'
