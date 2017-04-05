@@ -5,17 +5,17 @@
 # Imported variables:
 #	Metadata
 
+# Metadata directory
+$(Metadata):
+	$(info ==> $@)
+	@mkdir $@ >/dev/null 2>&1 || true
+
 # Build all metadata files
 .PHONY: metadata
 metadata:				\
 	$(Metadata)/config.json		\
 	$(Metadata)/globals.make
 	@:
-
-# Metadata directory
-$(Metadata):
-	$(info ==> $@)
-	@mkdir $@ >/dev/null 2>&1 || true
 
 #
 # Configuration files

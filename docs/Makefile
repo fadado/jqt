@@ -3,7 +3,7 @@
 include make.d/config.make
 
 ########################################################################
-# Globals
+# Globals and setup
 ########################################################################
 
 # Metadata directory
@@ -22,14 +22,19 @@ Metadata := .yummy
 #    Layouts
 #    Styles
 
-# While clobbering don't introspect
+# If not clobbering
 #ifeq (,$(filter clobber,$(MAKECMDGOALS)))
 ifneq (clobber,$(MAKECMDGOALS))
 
-# Include metadata
+# Define targets for basic metadata
 include make.d/metadata.make
 
+# Build metadata from introspection
+ifdef __globals__
+include make.d/introspect.make
 endif
+
+endif	# not clobbering
 
 ########################################################################
 # jqt command with options
@@ -130,11 +135,6 @@ ifdef __globals__
 # Default target
 all: $(Targets) static
 	@echo 1>&2 'Imprimatur!'
-
-# Destination directory
-$(Destination):
-	$(info ==> $@)
-	@mkdir $@ >/dev/null 2>&1 || true
 
 # Copy assets
 static: | $(Destination)
