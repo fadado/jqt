@@ -1,5 +1,8 @@
 # cache
 /docs/.yummy
+# experiments
+/docs/content/xxx*
+/docs/content/yyy*
 # built site
 /docs/_site
 # man pages

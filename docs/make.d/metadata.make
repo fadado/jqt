@@ -10,13 +10,6 @@ $(Metadata):
 	$(info ==> $@)
 	@mkdir $@ >/dev/null 2>&1 || true
 
-# Build all metadata files
-.PHONY: metadata
-metadata:				\
-	$(Metadata)/config.json		\
-	$(Metadata)/globals.make
-	@:
-
 #
 # Configuration files
 #
@@ -78,5 +71,19 @@ $(Metadata)/globals.make: $(Metadata)/config.json
 	   --raw-output		\
 	   '$(MAKE_GLOBALS)'	\
 	   < $< > $@
+
+ifdef __globals__
+
+# TODO: rest of metadata files...
+
+
+# Build all metadata files (utility not called automatically)
+.PHONY: metadata
+metadata:				\
+	$(Metadata)/config.json		\
+	$(Metadata)/globals.make
+	@:
+
+endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

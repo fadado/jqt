@@ -23,7 +23,6 @@ Metadata := .yummy
 #    Styles
 
 # If not clobbering
-#ifeq (,$(filter clobber,$(MAKECMDGOALS)))
 ifneq (clobber,$(MAKECMDGOALS))
 
 # Define targets for basic metadata
@@ -34,7 +33,20 @@ ifdef __globals__
 include make.d/introspect.make
 endif
 
-endif	# not clobbering
+# Defined in introspect.make:
+#	HomePage
+#	Pages
+#	OtherPages
+
+endif # not clobbering
+
+# Warning:
+#
+# If `__globals__` is not defined because `globals.make` does not exists, after
+# this point most of the file is ignored, but `globals.make` is built because a
+# rule exists in the file `metadata.make` (only if the target is not `clobber`).
+# Then `Makefile` is restarted, `MAKE_RESTARTS` will be equal to 1,
+# `globals.make` is loaded and `__globals__` is defined.
 
 ########################################################################
 # jqt command with options
@@ -89,10 +101,7 @@ Static	:= styles.css
 JQT_Man := jqt.1
 
 # Target filenames
-HomePage   := $(Destination)/$(Home).html
-OtherPages := $(foreach p,$(Other),$(Destination)/$(p).html)
 Files	   := $(foreach f,$(Static),$(Destination)/$(f))
-Pages  	   := $(HomePage) $(OtherPages)
 ManPage    := ../$(JQT_Man).gz
 Targets    := $(Pages) $(Files) $(ManPage)
 
@@ -133,8 +142,8 @@ endif # __globals__
 ifdef __globals__
 
 # Default target
-all: $(Targets) static
-	@echo 1>&2 'Imprimatur!'
+all: static $(Targets)
+	@echo 1>&2 'Imprimatur.'
 
 # Copy assets
 static: | $(Destination)
@@ -170,6 +179,14 @@ $(ManPage): $(Content)/$(JQT_Man).markdown
 	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
 
+# Generate Help text (needs explicit call: `make /tmp/help`)
+/tmp/help: $(Content)/help.markdown
+	$(info ==> $@)
+	@jqt -P MarkDown -I$(Content) < $<				\
+	| pandoc --from markdown --to plain -				\
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
+	> $@
+
 endif # __globals__
 
 ########################################################################
@@ -177,18 +194,6 @@ endif # __globals__
 ########################################################################
 
 .PHONY: clean clobber build help
-
-clean:
-	@rm -rf $(Destination)/* $(ManPage)
-
-ifdef __globals__
-clobber:
-	@rm -rf $(Destination) $(ManPage) $(Metadata)
-else
-clobber: ;
-endif
-
-build: clean all
 
 # Show targets
 help:
@@ -200,6 +205,20 @@ help:
 	| sort --unique						\
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
+
+ifndef __globals__
+
+clobber: ;
+
+else
+
+clean:
+	@rm -rf $(Destination)/* $(ManPage)
+
+clobber:
+	@rm -rf $(Destination) $(ManPage) $(Metadata)
+
+build: clean all
 
 .PHONY: valid lint
 
@@ -214,12 +233,6 @@ lint: all
 	@xmlwf $(Destination)/*.html
 	@java -jar $(VNU) --format text $(Destination)/*.html
 
-# Generate Help text (need explicit call: `make /tmp/help`)
-/tmp/help: $(Content)/help.markdown
-	$(info ==> $@)
-	@jqt -P MarkDown -I$(Content) < $<				\
-	| pandoc --from markdown --to plain -				\
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
-	> $@
+endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

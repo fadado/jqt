@@ -1,5 +1,5 @@
 ########################################################################
-# Introspect filesystem and files's front-matter to build metadata
+# Introspection of filesystem and files's front-matter
 ########################################################################
 
 # Imported variables:
@@ -7,60 +7,82 @@
 #	Content
 #	Destination
 # Exported variables:
-#	?
+#	HomePage
+#	Pages
+#	OtherPages
+#	...
 
-# Destination directory
+# Markdown documents found in the filesystem (only .md extensions)
+_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
+
+# Unique paths to documents directories
+_paths := $(sort $(dir $(_documents)))
+
+# Paths to create at $(Destination)
+_paths_destination := $(patsubst $(Content)%,$(Destination)%,$(_paths))
+
+# Paths to nodes at $(Metadata)
+_paths_meta_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(_paths))
+
+# Paths to pages at $(Metadata)
+_paths_meta_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(_paths))
+
+#
+# Make directories
+#
+
 $(Destination):
 	$(info ==> $@)
 	@mkdir $@ >/dev/null 2>&1 || true
 
-# Markdown document found in the filesystem (only .md extensions)
-_documents := $(shell find $(Content) -type f -a -name '*.md')
-# Tree structure of directories
-_paths := $(sort $(dir $(_documents)))
+$(_paths_destination): $(Destination)/% : $(Content)/%
+	@mkdir $@ >/dev/null 2>&1 || true
 
-# Pages to be generated, and related JSON
-define fsys_pages =
-  $(patsubst %.md,%.$1,$(patsubst $(Content)%,$2%,$(_documents)))
-endef
+$(_paths_meta_pages): $(Metadata)/pages/% : $(Content)/%
+	@mkdir $@ >/dev/null 2>&1 || true
 
-define fsys_tree =
-  $(patsubst $(Content)%,$1%,$(_paths))
-endef
-
-# All sections and subsections, removing home page node
-define fsys_nodes =
-  $(call rest,$(patsubst %/,%$1,$2))
-endef
+$(_paths_meta_nodes): $(Metadata)/nodes/% : $(Content)/%
+	@mkdir $@ >/dev/null 2>&1 || true
 
 #
-PagesHTML := $(call fsys_pages,html,$(Destination))
-PagesJSON := $(call fsys_pages,json,$(Metadata)/pages)
-fsys_tree_site := $(call fsys_tree,$(Destination))
-fsys_tree_page := $(call fsys_tree,$(Metadata)/pages)
-fsys_tree_node := $(call fsys_tree,$(Metadata)/nodes)
-NodesJSON := $(call fsys_nodes,.json,$(fsys_tree_node))
-NodesHTML := $(call fsys_nodes,/index.html,$(fsys_tree_site))
+# Global names defined
+#
 
-# Make directories
-$(fsys_tree_site): $(Destination)/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
-$(fsys_tree_page): $(Metadata)/pages/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
-$(fsys_tree_node): $(Metadata)/nodes/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
+# Home page
+HomePage := $(Destination)/index.html
+
+# Pages to generate at $(Destination)
+Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(_documents)))
+OtherPages := $(filter-out $(HomePage),$(Pages))
+
+# JSON for each page to generate at $(Metadata)/pages
+PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(_documents)))
+
+# Nodes to generate at $(Destination)
+NodesHTML := $(call rest,$(patsubst %/,%/index.html,$(_paths_destination))))
+
+# JSON for each node to generate at $(Metadata)/nodes
+NodesJSON := $(call rest,$(patsubst %/,%.json,$(_paths_meta_nodes))))
 
 #########################################################################
 # Test
 intro:
+	@echo 'Metadata: $(Metadata)'
+	@echo 'Content: $(Content)'
+	@echo 'Destination: $(Destination)'
+	@echo
 	@echo '_documents: $(_documents)'
 	@echo '_paths: $(_paths)'
-	@echo 'PagesHTML: $(PagesHTML)'
+	@echo
+	@echo '_paths_meta_nodes: $(_paths_meta_nodes)'
+	@echo '_paths_meta_pages: $(_paths_meta_pages)'
+	@echo '_paths_destination: $(_paths_destination)'
+	@echo
+	@echo 'HomePage: $(HomePage)'
+	@echo 'Pages: $(Pages)'
+	@echo 'OtherPages: $(OtherPages)'
 	@echo 'PagesJSON: $(PagesJSON)'
-	@echo 'fsys_tree_site: $(fsys_tree_site)'
-	@echo 'fsys_tree_page: $(fsys_tree_page)'
-	@echo 'fsys_tree_node: $(fsys_tree_node)'
-	@echo 'NodesJSON: $(NodesJSON)'
 	@echo 'NodesHTML: $(NodesHTML)'
+	@echo 'NodesJSON: $(NodesJSON)'
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
