@@ -9,11 +9,8 @@ ifndef version_test
 $(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
 endif
 
-#!# Only one target at the same time
-#!MAKECMDGOALS ?= all
-#!ifneq (1,$(words $(MAKECMDGOALS)))
-#!$(error Only one target accepted!)
-#!endif
+# Only one target at the same time
+MAKECMDGOALS ?= all
 
 # Check 'root' intentions
 ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
@@ -23,6 +20,13 @@ endif
 SUDO := 
 else
 SUDO := sudo
+endif
+
+# Target 'clobber' must be alone
+ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
+ifneq (1,$(words $(MAKECMDGOALS)))
+$(error Target "clobber" must be alone)
+endif
 endif
 
 ########################################################################
@@ -37,7 +41,7 @@ MAKEFLAGS += --no-builtin-variables
 MAKEFLAGS += --warn-undefined-variables
 
 # Make will not print the recipe used to remake files.
-.SILENT:
+#.SILENT:
 
 # Eliminate use of the built-in implicit rules. Also clear out the
 # default list of suffixes for suffix rules.

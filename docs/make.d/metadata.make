@@ -8,7 +8,7 @@
 # Metadata directory
 $(Metadata):
 	$(info ==> $@)
-	mkdir $@ >/dev/null 2>&1 || true
+	@mkdir $@ >/dev/null 2>&1 || true
 
 #
 # Configuration files
@@ -35,7 +35,7 @@ ifeq (config.yaml, $(wildcard config.yaml))
 $(Metadata)/config.json: config.yaml \
 | $(Metadata)
 	$(info ==> $@)
-	yaml2json < $< \
+	@yaml2json < $< \
 	| jq --sort-keys '$(JSON_GLOBALS)' > $@
 
 else ifeq (config.json, $(wildcard config.json))
@@ -44,7 +44,7 @@ else ifeq (config.json, $(wildcard config.json))
 $(Metadata)/config.json: config.json \
 | $(Metadata)
 	$(info ==> $@)
-	jqt -Pjson < $<	\
+	@jqt -Pjson < $<	\
 	| jq --sort-keys '$(JSON_GLOBALS)' > $@
 
 else
@@ -69,7 +69,7 @@ endef
 # Create makefile with globals
 $(Metadata)/globals.make: $(Metadata)/config.json
 	$(info ==> $@)
-	jq --sort-keys		\
+	@jq --sort-keys		\
 	   --raw-output		\
 	   '$(MAKE_GLOBALS)'	\
 	   < $< > $@
