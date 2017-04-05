@@ -22,8 +22,9 @@ Metadata := .yummy
 #    Layouts
 #    Styles
 
-# While  clobbering don't introspect
-ifeq (,$(filter clobber,$(MAKECMDGOALS)))
+# While clobbering don't introspect
+#ifeq (,$(filter clobber,$(MAKECMDGOALS)))
+ifneq (clobber,$(MAKECMDGOALS))
 
 # Include metadata
 include make.d/metadata.make
@@ -191,6 +192,7 @@ build: clean all
 
 # Show targets
 help:
+	@echo 'Usage: make TARGET [parameter=value...]'
 	@echo 'Targets:';					\
 	$(MAKE) --print-data-base --just-print 2>&1		\
 	| grep -v '^[mM]akefile'				\

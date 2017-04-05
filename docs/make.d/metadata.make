@@ -5,6 +5,13 @@
 # Imported variables:
 #	Metadata
 
+# Build all metadata files
+.PHONY: metadata
+metadata:				\
+	$(Metadata)/config.json		\
+	$(Metadata)/globals.make
+	@:
+
 # Metadata directory
 $(Metadata):
 	$(info ==> $@)
@@ -53,8 +60,6 @@ endif
 
 # Variables to define in globals.make
 define MAKE_GLOBALS :=
-  "# vim:syntax=make",			\
-  "",					\
   "__globals__ := 1",			\
   "Destination := " + .Destination,	\
   "Assets      := " + .Assets,		\
@@ -63,7 +68,7 @@ define MAKE_GLOBALS :=
   "Data        := " + .Data,		\
   "Layouts     := " + .Layouts,		\
   "Styles      := " + .Styles,		\
-  ""
+  "# vim:syntax=make"
 endef
 
 # Create makefile with globals

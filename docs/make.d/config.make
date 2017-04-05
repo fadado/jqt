@@ -15,7 +15,7 @@ MAKECMDGOALS ?= all
 # Check 'root' intentions
 ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
 ifeq (0,$(shell id --user))
-$(error  Root only can make "(un)install" targets)
+$(error Root only can make "(un)install" targets)
 endif
 SUDO := 
 else
