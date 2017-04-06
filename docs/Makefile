@@ -57,7 +57,7 @@ endif
 #	NodesJSON
 # Targets:
 # 	$(Destination)
-# 	all paths at $(Destination) and $(Metadata)
+# 	all paths from $(Destination) and $(Metadata)
 
 endif # not clobbering
 
@@ -178,7 +178,7 @@ $(Metadata)/snippets.json: $(Content)/snippets.yaml \
 	@jqt -T < $< | yaml2json > $@
 
 # HTML pages
-define Target
+define Target =
 $(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html \
 | $(Destination)
 	$$(info ==> $$@)

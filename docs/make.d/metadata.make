@@ -90,6 +90,7 @@ ifdef __globals__
 # Metadata files built with globals defined
 #
 
+#########################################################################
 # Build all metadata files (utility not called automatically)
 .PHONY: metadata
 metadata:				\

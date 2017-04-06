@@ -1,5 +1,5 @@
 ########################################################################
-# Introspection of filesystem and files's front-matter
+# Introspection of filesystem
 ########################################################################
 
 # Imported variables:
@@ -39,13 +39,14 @@ $(Destination):
 	$(info ==> $@)
 	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(i_paths_destination): $(Destination)/% : $(Content)/%
+# TODO: static rules??? Targets are directories...???
+$(i_paths_destination): #? $(Destination)/% : $(Content)/%
 	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(i_paths_meta_pages): $(Metadata)/pages/% : $(Content)/%
+$(i_paths_meta_pages): #? $(Metadata)/pages/% : $(Content)/%
 	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(i_paths_meta_nodes): $(Metadata)/nodes/% : $(Content)/%
+$(i_paths_meta_nodes): #? $(Metadata)/nodes/% : $(Content)/%
 	@mkdir -p $@ >/dev/null 2>&1 || true
 
 #
@@ -62,13 +63,14 @@ Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(i_docum
 PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(i_documents)))
 
 # Nodes to generate at $(Destination)
-Nodes := $(patsubst %/,%/index.html,$(i_paths_destination))
+Nodes := $(addsuffix index.html,$(i_paths_destination))
 
 # JSON for each node to generate at $(Metadata)/nodes
 NodesJSON := $(call rest,$(patsubst %/,%.json,$(i_paths_meta_nodes)))
 
 #########################################################################
 # Test
+.PHONY: intro
 intro:
 	@echo 'Metadata: $(Metadata)'
 	@echo 'Content: $(Content)'
@@ -77,9 +79,9 @@ intro:
 	@echo 'i_documents: $(i_documents)'
 	@echo 'i_paths: $(i_paths)'
 	@echo
+	@echo 'i_paths_destination: $(i_paths_destination)'
 	@echo 'i_paths_meta_nodes: $(i_paths_meta_nodes)'
 	@echo 'i_paths_meta_pages: $(i_paths_meta_pages)'
-	@echo 'i_paths_destination: $(i_paths_destination)'
 	@echo
 	@echo 'HomePage: $(HomePage)'
 	@echo 'Pages: $(Pages)'

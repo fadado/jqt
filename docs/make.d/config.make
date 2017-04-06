@@ -76,6 +76,8 @@ empty :=
 space := $(empty) $(empty)
 
 # Hack for list manipulation
-rest = $(wordlist 2,2147483648,$1)
+define rest =
+  $(wordlist 2,2147483648,$1)
+endef
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
