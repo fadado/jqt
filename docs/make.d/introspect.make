@@ -10,22 +10,27 @@
 #	HomePage
 #	Pages
 #	OtherPages
-#	...
+#	PagesJSON 
+#	Nodes
+#	NodesJSON
+# Targets for:
+# 	$(Destination)
+# 	all paths at $(Destination) and $(Metadata)
 
 # Markdown documents found in the filesystem (only .md extensions)
-_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
+i_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
 
 # Unique paths to documents directories
-_paths := $(sort $(dir $(_documents)))
+i_paths := $(sort $(dir $(i_documents)))
 
 # Paths to create at $(Destination)
-_paths_destination := $(patsubst $(Content)%,$(Destination)%,$(_paths))
+i_paths_destination := $(patsubst $(Content)%,$(Destination)%,$(i_paths))
 
 # Paths to nodes at $(Metadata)
-_paths_meta_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(_paths))
+i_paths_meta_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(i_paths))
 
 # Paths to pages at $(Metadata)
-_paths_meta_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(_paths))
+i_paths_meta_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(i_paths))
 
 #
 # Make directories
@@ -33,16 +38,16 @@ _paths_meta_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(_paths))
 
 $(Destination):
 	$(info ==> $@)
-	@mkdir $@ >/dev/null 2>&1 || true
+	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(_paths_destination): $(Destination)/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
+$(i_paths_destination): $(Destination)/% : $(Content)/%
+	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(_paths_meta_pages): $(Metadata)/pages/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
+$(i_paths_meta_pages): $(Metadata)/pages/% : $(Content)/%
+	@mkdir -p $@ >/dev/null 2>&1 || true
 
-$(_paths_meta_nodes): $(Metadata)/nodes/% : $(Content)/%
-	@mkdir $@ >/dev/null 2>&1 || true
+$(i_paths_meta_nodes): $(Metadata)/nodes/% : $(Content)/%
+	@mkdir -p $@ >/dev/null 2>&1 || true
 
 #
 # Global names defined
@@ -52,17 +57,17 @@ $(_paths_meta_nodes): $(Metadata)/nodes/% : $(Content)/%
 HomePage := $(Destination)/index.html
 
 # Pages to generate at $(Destination)
-Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(_documents)))
+Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(i_documents)))
 OtherPages := $(filter-out $(HomePage),$(Pages))
 
 # JSON for each page to generate at $(Metadata)/pages
-PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(_documents)))
+PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(i_documents)))
 
 # Nodes to generate at $(Destination)
-NodesHTML := $(call rest,$(patsubst %/,%/index.html,$(_paths_destination))))
+Nodes := $(call rest,$(patsubst %/,%/index.html,$(i_paths_destination)))
 
 # JSON for each node to generate at $(Metadata)/nodes
-NodesJSON := $(call rest,$(patsubst %/,%.json,$(_paths_meta_nodes))))
+NodesJSON := $(call rest,$(patsubst %/,%.json,$(i_paths_meta_nodes)))
 
 #########################################################################
 # Test
@@ -71,18 +76,18 @@ intro:
 	@echo 'Content: $(Content)'
 	@echo 'Destination: $(Destination)'
 	@echo
-	@echo '_documents: $(_documents)'
-	@echo '_paths: $(_paths)'
+	@echo 'i_documents: $(i_documents)'
+	@echo 'i_paths: $(i_paths)'
 	@echo
-	@echo '_paths_meta_nodes: $(_paths_meta_nodes)'
-	@echo '_paths_meta_pages: $(_paths_meta_pages)'
-	@echo '_paths_destination: $(_paths_destination)'
+	@echo 'i_paths_meta_nodes: $(i_paths_meta_nodes)'
+	@echo 'i_paths_meta_pages: $(i_paths_meta_pages)'
+	@echo 'i_paths_destination: $(i_paths_destination)'
 	@echo
 	@echo 'HomePage: $(HomePage)'
 	@echo 'Pages: $(Pages)'
 	@echo 'OtherPages: $(OtherPages)'
 	@echo 'PagesJSON: $(PagesJSON)'
-	@echo 'NodesHTML: $(NodesHTML)'
+	@echo 'Nodes: $(Nodes)'
 	@echo 'NodesJSON: $(NodesJSON)'
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

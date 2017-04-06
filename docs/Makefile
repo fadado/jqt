@@ -9,10 +9,16 @@ include make.d/config.make
 # Metadata directory
 Metadata := .yummy
 
+# jqt/yummy version
+Version := $(shell cat ../VERSION)
+
 # Load global parameters
+# As a side effect config.json and site.json are built
 -include $(Metadata)/globals.make
 
-# Defined in globals.make:
+# Defined in globals.make
+# =======================
+# Variables:
 #    __globals__
 #    Assets
 #    Blocks
@@ -28,15 +34,31 @@ ifneq (clobber,$(MAKECMDGOALS))
 # Define targets for basic metadata
 include make.d/metadata.make
 
+# Defined in metadata.make
+# ========================
+# Targets:
+# 	$(Metadata)
+#	$(Metadata)/config.json
+#	$(Metadata)/site.json
+#	$(Metadata)/globals.make
+
 # Build metadata from introspection
 ifdef __globals__
 include make.d/introspect.make
 endif
 
-# Defined in introspect.make:
+# Defined in introspect.make
+# ==========================
+# Variables:
 #	HomePage
 #	Pages
 #	OtherPages
+#	PagesJSON 
+#	Nodes
+#	NodesJSON
+# Targets:
+# 	$(Destination)
+# 	all paths at $(Destination) and $(Metadata)
 
 endif # not clobbering
 
@@ -109,15 +131,16 @@ Targets    := $(Pages) $(Files) $(ManPage)
 # Extra dependencies
 #
 
-$(Pages): \
+# All pages
+$(Pages):				\
 	$(Blocks)/*/markup.html		\
 	$(Blocks)/filters.jq		\
 	$(Content)/LINKS.txt		\
 	$(Content)/macros.m		\
-	$(Metadata)/config.json		\
 	$(Metadata)/snippets.json	\
+	$(Metadata)/config.json		\
 
-
+# All pages except home page
 $(OtherPages):			\
 	$(Content)/FLOW.txt	\
 	$(Layouts)/page.html	\

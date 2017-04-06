@@ -4,39 +4,31 @@
 
 # Imported variables:
 #	Metadata
+#	Version
+# Targets for:
+# 	$(Metadata)
+#	$(Metadata)/config.json	==>
+#	$(Metadata)/site.json	==>
+#	$(Metadata)/globals.make
 
 # Metadata directory
 $(Metadata):
 	$(info ==> $@)
-	@mkdir $@ >/dev/null 2>&1 || true
+	@mkdir -p $@ >/dev/null 2>&1 || true
 
 #
-# Configuration files
+# config.json, site.json and globals.make
 #
 
-# Members to mix with config.yaml when converted to JSON
-define JSON_GLOBALS :=
-  . + { 						\
-  	Destination: (.Destination // "./_site"),	\
-  	Assets:      (.Assets      // "./assets"),	\
-  	Blocks:      (.Blocks      // "./blocks"),	\
-  	Content:     (.Content     // "./content"),	\
-  	Data:        (.Data        // "./data"),	\
-  	Layouts:     (.Layouts     // "./layouts"),	\
-  	Styles:      (.Styles      // "./styles") 	\
-  }
-endef
-
-# Main configuration file.
-# Must be named config.yaml or config.json and must exist.
+# Create $(Metadata)/config.json
+# Input is user defined config.yaml or config.json.
 ifeq (config.yaml, $(wildcard config.yaml))
 
 # Convert config.yaml to $(Metadata)/config.json
 $(Metadata)/config.json: config.yaml \
 | $(Metadata)
 	$(info ==> $@)
-	@yaml2json < $< \
-	| jq --sort-keys '$(JSON_GLOBALS)' > $@
+	@yaml2json < $< > $@
 
 else ifeq (config.json, $(wildcard config.json))
 
@@ -44,15 +36,33 @@ else ifeq (config.json, $(wildcard config.json))
 $(Metadata)/config.json: config.json \
 | $(Metadata)
 	$(info ==> $@)
-	@jqt -Pjson < $<	\
-	| jq --sort-keys '$(JSON_GLOBALS)' > $@
+	@jqt -Pjson < $< > $@
 
 else
 $(error Configuration file not found)
 endif
 
+# Globals definition to mix with config.json
+define m_SITE_JSON :=
+  del(.defaults)					\
+  | . + { 						\
+  	Destination: (.Destination // "./_site"),	\
+  	Assets:      (.Assets      // "./assets"),	\
+  	Blocks:      (.Blocks      // "./blocks"),	\
+  	Content:     (.Content     // "./content"),	\
+  	Data:        (.Data        // "./data"),	\
+  	Layouts:     (.Layouts     // "./layouts"),	\
+  	Styles:      (.Styles      // "./styles"),	\
+  	Version:     (.Version     // "$(Version)")	\
+  }
+endef
+
+$(Metadata)/site.json: $(Metadata)/config.json
+	$(info ==> $@)
+	@jq --sort-keys '$(m_SITE_JSON)' < $< > $@
+
 # Variables to define in globals.make
-define MAKE_GLOBALS :=
+define m_MAKE_GLOBALS :=
   "__globals__ := 1",			\
   "Destination := " + .Destination,	\
   "Assets      := " + .Assets,		\
@@ -64,24 +74,26 @@ define MAKE_GLOBALS :=
   "# vim:syntax=make"
 endef
 
-# Create makefile with globals
-$(Metadata)/globals.make: $(Metadata)/config.json
+# Create globals.make
+$(Metadata)/globals.make: $(Metadata)/site.json
 	$(info ==> $@)
-	@jq --sort-keys		\
-	   --raw-output		\
-	   '$(MAKE_GLOBALS)'	\
+	@jq --raw-output	\
+	   '$(m_MAKE_GLOBALS)'	\
 	   < $< > $@
 
 ifdef __globals__
 
-# TODO: rest of metadata files...
-
+#
+# TODO: in this file???
+# Metadata files built with globals defined
+#
 
 # Build all metadata files (utility not called automatically)
 .PHONY: metadata
 metadata:				\
+	$(Metadata)/globals.make	\
 	$(Metadata)/config.json		\
-	$(Metadata)/globals.make
+	$(Metadata)/site.json
 	@:
 
 endif # __globals__

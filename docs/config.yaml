@@ -30,12 +30,12 @@ Layouts:     ./blocks   # shared space
 
 title: jqt, the jq template engine
 baseURL: https://fadado.github.com/jqt/
-lang: en
+lang: &lang en
 logo: "❴❴❏❵❵"
 
 author:
 - email: jordinas@gmail.com
-  name: Joan Josep Ordinas Rosa
+  name: &author Joan Josep Ordinas Rosa
 
 # TODO: instrospect
 menu:
@@ -54,6 +54,14 @@ menu:
 - URL: ./data.html
   path: content/data.md
   name: Data
+
+# Default values
+defaults:
+  - idprefix: "" # all files
+    properties:
+      title-prefix: jqt
+      author: *author
+      lang: *lang
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
 ...
