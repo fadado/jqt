@@ -52,7 +52,6 @@ endif
 # Variables:
 #	HomePage
 #	Pages
-#	OtherPages
 #	PagesJSON 
 #	Nodes
 #	NodesJSON
@@ -117,8 +116,6 @@ endif # __globals__
 ifdef __globals__
 
 # Files to build or publish
-Home 	:= index
-Other	:= content data engine structure 
 Static	:= styles.css
 JQT_Man := jqt.1
 
@@ -141,7 +138,8 @@ $(Pages):				\
 	$(Metadata)/config.json		\
 
 # All pages except home page
-$(OtherPages):			\
+other_pages := $(filter-out $(HomePage),$(Pages))
+$(other_pages):			\
 	$(Content)/FLOW.txt	\
 	$(Layouts)/page.html	\
 	$(Content)/opt/*.txt	\
@@ -187,6 +185,9 @@ $(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html \
 	@$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
 endef
 
+# TODO: instrospect
+Home 	:= index
+Other	:= content data engine structure 
 $(eval $(call Target,$(Home),page))
 $(foreach p,$(Other),$(eval $(call Target,$(p),page-toc)))
 

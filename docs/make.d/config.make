@@ -63,8 +63,8 @@ SHELL := /bin/bash
 # exits with a nonzero exit status.
 .DELETE_ON_ERROR:
 
-#!# Enable a second expansion of the prerequisites
-#!.SECONDEXPANSION:
+# Enable a second expansion of the prerequisites
+.SECONDEXPANSION:
 
 ########################################################################
 # Common macros

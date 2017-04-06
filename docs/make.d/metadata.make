@@ -10,6 +10,8 @@
 #	$(Metadata)/config.json	==>
 #	$(Metadata)/site.json	==>
 #	$(Metadata)/globals.make
+# Dependencies:
+# 	globals.make => site.json => config.json => config.yaml
 
 # Metadata directory
 $(Metadata):
@@ -63,14 +65,14 @@ $(Metadata)/site.json: $(Metadata)/config.json
 
 # Variables to define in globals.make
 define m_MAKE_GLOBALS :=
-  "__globals__ := 1",			\
-  "Destination := " + .Destination,	\
-  "Assets      := " + .Assets,		\
-  "Blocks      := " + .Blocks,		\
-  "Content     := " + .Content,		\
-  "Data        := " + .Data,		\
-  "Layouts     := " + .Layouts,		\
-  "Styles      := " + .Styles,		\
+  "__globals__ := 1",				\
+  "Assets      := " + .Assets,			\
+  "Blocks      := " + .Blocks,			\
+  "Content     := " + .Content,			\
+  "Data        := " + .Data,			\
+  "Destination := " + .Destination,		\
+  "Layouts     := " + .Layouts,			\
+  "Styles      := " + .Styles,			\
   "# vim:syntax=make"
 endef
 

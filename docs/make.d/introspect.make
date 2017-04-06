@@ -9,7 +9,6 @@
 # Exported variables:
 #	HomePage
 #	Pages
-#	OtherPages
 #	PagesJSON 
 #	Nodes
 #	NodesJSON
@@ -24,7 +23,7 @@ i_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
 i_paths := $(sort $(dir $(i_documents)))
 
 # Paths to create at $(Destination)
-i_paths_destination := $(patsubst $(Content)%,$(Destination)%,$(i_paths))
+i_paths_destination := $(call rest,$(patsubst $(Content)%,$(Destination)%,$(i_paths)))
 
 # Paths to nodes at $(Metadata)
 i_paths_meta_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(i_paths))
@@ -58,13 +57,12 @@ HomePage := $(Destination)/index.html
 
 # Pages to generate at $(Destination)
 Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(i_documents)))
-OtherPages := $(filter-out $(HomePage),$(Pages))
 
 # JSON for each page to generate at $(Metadata)/pages
 PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(i_documents)))
 
 # Nodes to generate at $(Destination)
-Nodes := $(call rest,$(patsubst %/,%/index.html,$(i_paths_destination)))
+Nodes := $(patsubst %/,%/index.html,$(i_paths_destination))
 
 # JSON for each node to generate at $(Metadata)/nodes
 NodesJSON := $(call rest,$(patsubst %/,%.json,$(i_paths_meta_nodes)))
@@ -85,7 +83,6 @@ intro:
 	@echo
 	@echo 'HomePage: $(HomePage)'
 	@echo 'Pages: $(Pages)'
-	@echo 'OtherPages: $(OtherPages)'
 	@echo 'PagesJSON: $(PagesJSON)'
 	@echo 'Nodes: $(Nodes)'
 	@echo 'NodesJSON: $(NodesJSON)'
