@@ -2,92 +2,83 @@
 # Configuration
 ########################################################################
 
-# Exported macros:
-#	comma
-#	empty
-#	space
-#	rest
+# Imported variables:
+#	Metadata
+#	Version
+# Exported targets:
+# 	$(Metadata)
+#	$(Metadata)/config.json
+#	$(Metadata)/site.json
+#	$(Metadata)/globals.make
+# Order of dependencies:
+# 	globals.make => site.json => config.json => config.yaml
+
+# Metadata directory
+$(Metadata):
+	$(info ==> $@)
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 #
-# Prerequisites
+# Target files
 #
 
-# We are using some of the newest GNU Make features... so require GNU
-# Make version >= 3.82
-version_test := $(filter 3.82,$(firstword $(sort $(MAKE_VERSION) 3.82)))
-ifndef version_test
-$(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
-endif
+# Create $(Metadata)/config.json
+# Input is user defined config.yaml or config.json.
+ifeq (config.yaml, $(wildcard config.yaml))
 
-# Only one target at the same time
-MAKECMDGOALS ?= all
+# Convert config.yaml to $(Metadata)/config.json
+$(Metadata)/config.json: config.yaml \
+| $(Metadata)
+	$(info ==> $@)
+	@yaml2json < $< > $@
 
-# Check 'root' intentions
-ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
-ifeq (0,$(shell id --user))
-$(error Root only can make "(un)install" targets)
-endif
-SUDO := 
+else ifeq (config.json, $(wildcard config.json))
+
+# Convert config.json to $(Metadata)/config.json
+$(Metadata)/config.json: config.json \
+| $(Metadata)
+	$(info ==> $@)
+	@jqt -Pjson < $< > $@
+
 else
-SUDO := sudo
+$(error Configuration file not found)
 endif
 
-# Target 'clobber' must be alone
-ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
-ifneq (1,$(words $(MAKECMDGOALS)))
-$(error Target "clobber" must be alone)
-endif
-endif
-
-#
-# Parameters
-#
-
-# Disable builtins.
-MAKEFLAGS += --no-builtin-rules
-MAKEFLAGS += --no-builtin-variables
-
-# Warn when an undefined variable is referenced.
-MAKEFLAGS += --warn-undefined-variables
-
-# Make will not print the recipe used to remake files.
-#.SILENT:
-
-# Eliminate use of the built-in implicit rules. Also clear out the
-# default list of suffixes for suffix rules.
-.SUFFIXES:
-
-# Sets the default goal to be used if no targets were specified on the
-# command line.
-.PHONY: all
-.DEFAULT_GOAL := all
-
-# Default shell: if we require GNU Make, why not require Bash?
-SHELL := /bin/bash
-
-# The argument(s) passed to the shell are taken from the variable
-# .SHELLFLAGS.
-.SHELLFLAGS := -o errexit -o pipefail -o nounset -c
-
-# Make will delete the target of a rule if it has changed and its recipe
-# exits with a nonzero exit status.
-.DELETE_ON_ERROR:
-
-# Enable a second expansion of the prerequisites
-.SECONDEXPANSION:
-
-#
-# Common macros
-#
-
-# Hacks for string manipulation
-comma := ,
-empty :=
-space := $(empty) $(empty)
-
-# Hack for list manipulation
-define rest =
-  $(wordlist 2,2147483648,$1)
+# Globals definition to mix with config.json
+define m_SITE_JSON :=
+  del(.defaults)					\
+  | . + { 						\
+  	Destination: (.Destination // "./_site"),	\
+  	Assets:      (.Assets      // "./assets"),	\
+  	Blocks:      (.Blocks      // "./blocks"),	\
+  	Content:     (.Content     // "./content"),	\
+  	Data:        (.Data        // "./data"),	\
+  	Layouts:     (.Layouts     // "./layouts"),	\
+  	Styles:      (.Styles      // "./styles"),	\
+  	Version:     (.Version     // "$(Version)")	\
+  }
 endef
+
+$(Metadata)/site.json: $(Metadata)/config.json
+	$(info ==> $@)
+	@jq --sort-keys '$(m_SITE_JSON)' < $< > $@
+
+# Variables to define in globals.make
+define m_GLOBALS_MAKE :=
+  "__globals__ := 1",				\
+  "Assets      := " + .Assets,			\
+  "Blocks      := " + .Blocks,			\
+  "Content     := " + .Content,			\
+  "Data        := " + .Data,			\
+  "Destination := " + .Destination,		\
+  "Layouts     := " + .Layouts,			\
+  "Styles      := " + .Styles,			\
+  "# vim:syntax=make"
+endef
+
+# Create globals.make
+$(Metadata)/globals.make: $(Metadata)/site.json
+	$(info ==> $@)
+	@jq --raw-output '$(m_GLOBALS_MAKE)' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

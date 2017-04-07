@@ -4,6 +4,7 @@ title: Welcome to jqt
 description: Could be jq the basis for a web template engine?
 keywords:  jqt, jq, template engine
 updated: "2016-08-28T10:27:09Z"
+use: [content/macros.m, content/LINKS.txt, content/EXAMPLE.txt]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&

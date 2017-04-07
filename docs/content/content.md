@@ -4,6 +4,7 @@ title: Authoring content in jqt using MarkDown
 description: jqt transforms MarkDown documents to HTML using Pandoc.
 keywords:  jqt, markdown, pandoc, gpp, preprocessing, authoring content
 updated: "2016-08-28T10:27:09Z"
+use: [content/macros.m, content/LINKS.txt, content/FLOW.txt, "content/opt/[4DdiT].txt"]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&

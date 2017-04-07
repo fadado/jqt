@@ -1,6 +1,6 @@
 # jqt documentation management
 
-include make.d/config.make
+include make.d/prelude.make
 
 ########################################################################
 # Globals and setup
@@ -19,20 +19,20 @@ Version := $(shell cat ../VERSION)
 # Defined in globals.make
 # =======================
 # Variables:
-#    __globals__
-#    Assets
-#    Blocks
-#    Content
-#    Data
-#    Destination
-#    Layouts
-#    Styles
+#	__globals__
+#	Assets
+#	Blocks
+#	Content
+#	Data
+#	Destination
+#	Layouts
+#	Styles
 
 # If not clobbering
 ifneq (clobber,$(MAKECMDGOALS))
 
 # Define targets for basic metadata
-include make.d/metadata.make
+include make.d/config.make
 
 # Defined in metadata.make
 # ========================
@@ -41,6 +41,7 @@ include make.d/metadata.make
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
 #	$(Metadata)/globals.make
+#	$(Metadata)/pages/**.json
 
 # Build metadata from introspection
 ifdef __globals__
@@ -57,7 +58,8 @@ endif
 #	NodesJSON
 # Targets:
 # 	$(Destination)
-# 	all paths from $(Destination) and $(Metadata)
+# 	all paths at $(Destination) and $(Metadata)
+# 	each page from his metadata
 
 endif # not clobbering
 
@@ -132,8 +134,8 @@ Targets    := $(Pages) $(Files) $(ManPage)
 $(Pages):				\
 	$(Blocks)/*/markup.html		\
 	$(Blocks)/filters.jq		\
-	$(Content)/LINKS.txt		\
 	$(Content)/macros.m		\
+	$(Content)/LINKS.txt		\
 	$(Metadata)/snippets.json	\
 	$(Metadata)/config.json		\
 
@@ -141,8 +143,8 @@ $(Pages):				\
 other_pages := $(filter-out $(HomePage),$(Pages))
 $(other_pages):			\
 	$(Content)/FLOW.txt	\
-	$(Layouts)/page.html	\
 	$(Content)/opt/*.txt	\
+	$(Layouts)/page.html	\
 
 $(HomePage) 			\
 $(Destination)/structure.html:	\
@@ -162,12 +164,10 @@ endif # __globals__
 
 ifdef __globals__
 
-# Default target
+# Default target (always try to copy assets)
 all: $(Targets)
-# Copy assets
 	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
-# All done
 	@echo 1>&2 'Imprimatur.'
 
 # Snippets
@@ -238,10 +238,14 @@ endif # __globals__
 # External utilities
 ########################################################################
 
+ifdef __globals__
+
 # help and other targets
 include make.d/tools.make
 
 # HTML 5 validation
 include make.d/vnu.make
+
+endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

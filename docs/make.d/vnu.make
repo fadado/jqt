@@ -6,8 +6,6 @@
 # 	valid
 # 	lint
 
-ifdef __globals__
-
 .PHONY: valid lint
 
 VNU := /usr/local/vnu/vnu.jar
@@ -21,7 +19,5 @@ valid: all
 lint: all
 	@xmlwf $(Destination)/*.html
 	@java -jar $(VNU) --format text $(Destination)/*.html
-
-endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

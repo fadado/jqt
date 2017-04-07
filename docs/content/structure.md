@@ -4,6 +4,7 @@ title: Defining the page structure with jqt
 description: Web pages structure is defined by the HTML macros.
 keywords:  jqt, jq, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
+use: [content/macros.m, content/LINKS.txt, content/EXAMPLE.txt, content/FLOW.txt, "content/opt/[DIijL].txt"]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&

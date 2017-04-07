@@ -4,6 +4,7 @@ title: The jqt template engine
 description: jqt orchestrates several shell utilities to transform MarkDown text and YAML or JSON data into a final HTML page.
 keywords:  jqt, jq, YAML, gpp, preprocessing, template engine
 updated: "2016-08-28T10:27:09Z"
+use: [content/macros.m, content/LINKS.txt, content/FLOW.txt, "content/opt/[4CDdeHhIijLMmnPprSTtVw].txt"]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&
