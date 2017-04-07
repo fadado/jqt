@@ -1,5 +1,5 @@
 ########################################################################
-# Prelude
+# The project prelude: common module available in all makefile modules
 ########################################################################
 
 # Exported macros:
@@ -9,9 +9,9 @@
 #	rest
 #	filename
 
-#
+########################################################################
 # Prerequisites
-#
+########################################################################
 
 # We are using some of the newest GNU Make features... so require GNU
 # Make version >= 3.82
@@ -40,9 +40,9 @@ $(error Target "clobber" must be alone)
 endif
 endif
 
-#
+########################################################################
 # Make configuration
-#
+########################################################################
 
 # Disable builtins.
 MAKEFLAGS += --no-builtin-rules
@@ -77,9 +77,9 @@ SHELL := /bin/bash
 # Enable a second expansion of the prerequisites
 .SECONDEXPANSION:
 
-#
+########################################################################
 # Common macros
-#
+########################################################################
 
 # Hacks for string manipulation
 comma := ,

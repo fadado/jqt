@@ -1,11 +1,14 @@
+########################################################################
 # jqt management
-#
-
-project := jqt
-
 ########################################################################
-# Parameters (redefine as you like)
-########################################################################
+
+# Parameters:
+# 	prefix
+# 	bindir
+# 	datadir
+# 	mandir
+
+PROJECT := jqt
 
 prefix	?= /usr/local
 bindir	?= $(prefix)/bin
@@ -104,18 +107,18 @@ clobber: clean
 install:
 	[[ -e jqt.1.gz ]] || { cd docs && make ../jqt.1.gz; }
 	test -d $(bindir) || $(SUDO) mkdir --verbose --parents $(bindir)
-	test -d $(datadir)/$(project) || $(SUDO) mkdir --verbose --parents $(datadir)/$(project)
+	test -d $(datadir)/$(PROJECT) || $(SUDO) mkdir --verbose --parents $(datadir)/$(PROJECT)
 	test -d $(mandir)/man1 || $(SUDO) mkdir --verbose --parents $(mandir)/man1
 	$(SUDO) install --verbose --compare --mode 555 bin/* $(bindir)
-	$(SUDO) install --verbose --compare --mode 644 share/* $(datadir)/$(project)
+	$(SUDO) install --verbose --compare --mode 644 share/* $(datadir)/$(PROJECT)
 	$(SUDO) install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
 	$(SUDO) sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
 
 uninstall:
 	$(SUDO) rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
 	$(SUDO) rm --verbose --force -- $(mandir)/man1/jqt.1.gz
-	test -d $(datadir)/$(project)					  \
-	&& $(SUDO) rm --verbose --force --recursive $(datadir)/$(project) \
+	test -d $(datadir)/$(PROJECT)					  \
+	&& $(SUDO) rm --verbose --force --recursive $(datadir)/$(PROJECT) \
 	|| true
 
 # Show targets

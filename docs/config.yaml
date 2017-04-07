@@ -28,6 +28,8 @@ Layouts:     ./blocks   # shared space
 # Site parameters
 #
 
+baseurl: https://fadado.github.io/jqt
+
 title: jqt, the jq template engine
 baseURL: https://fadado.github.com/jqt/
 lang: &lang en

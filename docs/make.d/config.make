@@ -1,5 +1,5 @@
 ########################################################################
-# Configuration
+# Build files derived from user defined configuration
 ########################################################################
 
 # Imported variables:
@@ -18,9 +18,9 @@ $(Metadata):
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-#
+########################################################################
 # Target files
-#
+########################################################################
 
 # Create $(Metadata)/config.json
 # Input is user defined config.yaml or config.json.
@@ -45,7 +45,7 @@ $(error Configuration file not found)
 endif
 
 # Globals definition to mix with config.json
-define m_SITE_JSON :=
+define m_SITE_JSON.jq :=
   del(.defaults)					\
   | . + { 						\
   	Destination: (.Destination // "./_site"),	\
@@ -61,10 +61,10 @@ endef
 
 $(Metadata)/site.json: $(Metadata)/config.json
 	$(info ==> $@)
-	@jq --sort-keys '$(m_SITE_JSON)' < $< > $@
+	@jq --sort-keys '$(m_SITE_JSON.jq)' < $< > $@
 
 # Variables to define in globals.make
-define m_GLOBALS_MAKE :=
+define m_GLOBALS_MAKE.jq :=
   "__globals__ := 1",				\
   "Assets      := " + .Assets,			\
   "Blocks      := " + .Blocks,			\
@@ -79,6 +79,6 @@ endef
 # Create globals.make
 $(Metadata)/globals.make: $(Metadata)/site.json
 	$(info ==> $@)
-	@jq --raw-output '$(m_GLOBALS_MAKE)' < $< > $@
+	@jq --raw-output '$(m_GLOBALS_MAKE.jq)' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

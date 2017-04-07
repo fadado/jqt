@@ -1,6 +1,16 @@
-# jqt documentation management
+########################################################################
+# Makefile for web site management
+#
+# Project: jqt
+# Author: jordinas@gmail.com <Joan Josep Ordinas Rosa>
+# Published: https://fadado.github.io/jqt/
+########################################################################
 
+# Make configuration
 include make.d/prelude.make
+
+# jqt/yummy version
+Version := $(shell cat ../VERSION)
 
 ########################################################################
 # Globals and setup
@@ -9,11 +19,7 @@ include make.d/prelude.make
 # Metadata directory
 Metadata := .yummy
 
-# jqt/yummy version
-Version := $(shell cat ../VERSION)
-
 # Load global parameters
-# As a side effect config.json and site.json are built
 -include $(Metadata)/globals.make
 
 # Defined in globals.make
@@ -34,22 +40,21 @@ ifneq (clobber,$(MAKECMDGOALS))
 # Define targets for basic metadata
 include make.d/config.make
 
-# Defined in metadata.make
-# ========================
+# Defined in config.make
+# ======================
 # Targets:
 # 	$(Metadata)
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
 #	$(Metadata)/globals.make
-#	$(Metadata)/pages/**.json
 
-# Build metadata from introspection
+# Build metadata from filesystem introspection
 ifdef __globals__
-include make.d/introspect.make
+include make.d/pathnames.make
 endif
 
-# Defined in introspect.make
-# ==========================
+# Defined in pathnames.make
+# =========================
 # Variables:
 #	HomePage
 #	Pages
@@ -58,8 +63,19 @@ endif
 #	NodesJSON
 # Targets:
 # 	$(Destination)
-# 	all paths at $(Destination) and $(Metadata)
-# 	each page from his metadata
+# 	all paths starting at $(Destination) and $(Metadata)
+
+# Build metadata from files front-matter
+ifdef __globals__
+include make.d/front-matter.make
+endif
+
+# Defined in front-matter.make
+# ============================
+# Targets:
+# 	JSON metadata files at $(Metadata)/pages/ and $(Metadata)/nodes/
+# Additional dependencies defined:
+# 	each page and node from his metadata
 
 endif # not clobbering
 
@@ -67,12 +83,12 @@ endif # not clobbering
 #
 # If `__globals__` is not defined because `globals.make` does not exists, after
 # this point most of the file is ignored, but `globals.make` is built because a
-# rule exists in the file `metadata.make` (only if the target is not `clobber`).
+# rule exists in the file `config.make` (only if the target is not `clobber`).
 # Then `Makefile` is restarted, `MAKE_RESTARTS` will be equal to 1,
 # `globals.make` is loaded and `__globals__` is defined.
 
 ########################################################################
-# jqt command with options
+# Commands
 ########################################################################
 
 ifdef __globals__
@@ -144,7 +160,7 @@ other_pages := $(filter-out $(HomePage),$(Pages))
 $(other_pages):			\
 	$(Content)/FLOW.txt	\
 	$(Content)/opt/*.txt	\
-	$(Layouts)/page.html	\
+	$(Layouts)/default.html	\
 
 $(HomePage) 			\
 $(Destination)/structure.html:	\
@@ -184,11 +200,11 @@ $(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html \
 	@$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
 endef
 
-# TODO: instrospect
-Home 	:= index
-Other	:= content data engine structure 
-$(eval $(call Target,$(Home),page))
-$(foreach p,$(Other),$(eval $(call Target,$(p),page-toc)))
+# TODO: introspect
+home 	:= index
+other	:= content data engine structure 
+$(eval $(call Target,$(home),page))
+$(foreach p,$(other),$(eval $(call Target,$(p),page-toc)))
 
 # CSS stylesheet
 $(Destination)/styles.css: $(Styles)/page.css
@@ -220,31 +236,29 @@ endif # __globals__
 
 ifndef __globals__
 
-clobber: ;
+# If clobbering a not initialized project do nothing
+clobber: ;@:
 
 else
 
+# Delete generated publications
 clean:
 	@rm -rf $(Destination)/* $(ManPage)
 
+# Delete all generated files and directories
 clobber:
 	@rm -rf $(Destination) $(ManPage) $(Metadata)
 
+# Build again all documents
 build: clean all
 
-endif # __globals__
-
-########################################################################
-# External utilities
-########################################################################
-
-ifdef __globals__
+# Build again all documents and metadata
+xbuild:
+	@touch config.yaml
+	@$(MAKE) -s all
 
 # help and other targets
 include make.d/tools.make
-
-# HTML 5 validation
-include make.d/vnu.make
 
 endif # __globals__
 

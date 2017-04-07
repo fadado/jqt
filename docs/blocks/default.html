@@ -1,0 +1,40 @@
+<# Top-level page markup #>&
+<!DOCTYPE html>
+<!-- this document uses polyglot markup (well formed XHTML5)  -->
+<html id="{{.page._id}}" xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
+  <head>
+<#
+ #  Meta elements
+ #>
+    <meta charset="utf-8" />
+<# Document title and related metadata #>
+    <title>jqt · {{.page.title}}</title>
+    <meta name='description' content='{{.page.description//empty}}' />
+    <meta name='keywords' content='{{.page.keywords//empty}}' />
+    <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
+<# More metadata #>
+    <meta name="generator" content="jqt v<%include ../VERSION>" />
+    <meta name='dcterms.date' content='{{.page.updated//empty}}' />
+<# Presentation #>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    {{.page._highlight}}
+  </head>
+<#
+ #  Document body
+ #>
+  <body class="#container">
+    <%include blocks/header/markup.html>&
+<%ifndef BODY_BLOCK>&
+  <%error Descendent layout must define BODY_BLOCK macro>
+<%else>&
+    <%call BODY_BLOCK>
+<%endif>&
+    <%include blocks/footer/markup.html>&
+    <%partial analytics 'UA-82432866-1'>&
+  </body>
+</html>
+<#
+vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
+#>
