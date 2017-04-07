@@ -5,21 +5,22 @@
 # Imported variables:
 #	Metadata
 #	Version
-# Targets for:
+# Exported targets:
 # 	$(Metadata)
-#	$(Metadata)/config.json	==>
-#	$(Metadata)/site.json	==>
+#	$(Metadata)/config.json
+#	$(Metadata)/site.json
 #	$(Metadata)/globals.make
-# Dependencies:
+#	$(Metadata)/pages/**.json
+# Order of dependencies:
 # 	globals.make => site.json => config.json => config.yaml
 
 # Metadata directory
 $(Metadata):
 	$(info ==> $@)
-	@mkdir -p $@ >/dev/null 2>&1 || true
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 #
-# config.json, site.json and globals.make
+# Configuration
 #
 
 # Create $(Metadata)/config.json
@@ -79,25 +80,44 @@ endef
 # Create globals.make
 $(Metadata)/globals.make: $(Metadata)/site.json
 	$(info ==> $@)
-	@jq --raw-output	\
-	   '$(m_MAKE_GLOBALS)'	\
-	   < $< > $@
+	@jq --raw-output '$(m_MAKE_GLOBALS)' < $< > $@
 
 ifdef __globals__
 
+#md_page_id      = $(subst $(MetaDB)/pages/,,$(basename $1))
+#md_page_url     = $(call md_page_id,$1).html
+#md_page_name    = $(basename $(notdir $1))
+#md_page_path    = $(dir $(call md_page_id,$1))
+#md_page_section = $(patsubst %/,%,$(call md_page_path,$1))
+#md_page_base    = $(patsubst ../../%,%,$(subst $(space),,$(patsubst %,../,$(subst /, ,$1))))
 #
-# TODO: in this file???
-# Metadata files built with globals defined
-#
+## . is a MarkDown file front matter
+#define md_entry_page
+#  . + {                                         \
+#    "id":       "$(call md_page_id,$1)",        \
+#    "base":     "$(call md_page_base,$1)",      \
+#    "filename": "$(call md_page_name,$1)",      \
+#    "path":     "$(call md_page_path,$1)",      \
+#    "url":      "$(call md_page_url,$1)",       \
+#    "section":  "$(call md_page_section,$1)",   \
+#    "isnode":   false,                          \
+#    "ispage":   true                            \
+#  } as $$page |                                 \
+#  $$config[0].defaults as $$defaults |          \
+#  reduce $$defaults[] as $$d                    \
+#    ({}; if ("$(call md_page_id,$1)" | test("^" + $$d.idprefix)) \
+#         then . + $$d.properties                \
+#         else . end) + $$page
+#endef
 
-#########################################################################
-# Build all metadata files (utility not called automatically)
-.PHONY: metadata
-metadata:				\
-	$(Metadata)/globals.make	\
-	$(Metadata)/config.json		\
-	$(Metadata)/site.json
-	@:
+#$(Metadata)/pages/%.json: $(Content)/%.md $(Metadata)config.json | $$(dir $$@)		\
+#	$(info ==> $@)
+#        sed -n -e '1d;/^---$$/q;/^\.\.\.$$/q;/^\#/d;p' < $<	\
+#        | yaml2json                                             \
+#        | jq --sort-keys                                        \
+#             --slurpfile config $(MetaDB)/config.json           \
+#             '$(call md_entry_page,$@)' >$@
+#
 
 endif # __globals__
 

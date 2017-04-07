@@ -163,13 +163,12 @@ endif # __globals__
 ifdef __globals__
 
 # Default target
-all: static $(Targets)
-	@echo 1>&2 'Imprimatur.'
-
+all: $(Targets)
 # Copy assets
-static: | $(Destination)
 	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
+# All done
+	@echo 1>&2 'Imprimatur.'
 
 # Snippets
 $(Metadata)/snippets.json: $(Content)/snippets.yaml \
@@ -217,18 +216,7 @@ endif # __globals__
 # Utilities
 ########################################################################
 
-.PHONY: clean clobber build help
-
-# Show targets
-help:
-	@echo 'Usage: make TARGET [parameter=value...]'
-	@echo 'Targets:';					\
-	$(MAKE) --print-data-base --just-print 2>&1		\
-	| grep -v '^[mM]akefile'				\
-	| awk '/^[^ \t.%][-A-Za-z0-9_]*:/ { print $$1 }'	\
-	| sort --unique						\
-	| sed 's/:\+$$//'					\
-	| pr --omit-pagination --indent=4 --width=80 --columns=4
+.PHONY: clean clobber build
 
 ifndef __globals__
 
@@ -244,19 +232,16 @@ clobber:
 
 build: clean all
 
-.PHONY: valid lint
-
-# Validation using vnu.jar
-VNU := /usr/local/vnu/vnu.jar
-valid: all
-	@xmlwf $(Destination)/*.html
-	@java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
-
-# Validation with warnings using vnu.jar
-lint: all
-	@xmlwf $(Destination)/*.html
-	@java -jar $(VNU) --format text $(Destination)/*.html
-
 endif # __globals__
+
+########################################################################
+# External utilities
+########################################################################
+
+# help and other targets
+include make.d/tools.make
+
+# HTML 5 validation
+include make.d/vnu.make
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

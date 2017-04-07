@@ -1,6 +1,16 @@
 ########################################################################
-# Prerequisites
+# Configuration
 ########################################################################
+
+# Exported macros:
+#	comma
+#	empty
+#	space
+#	rest
+
+#
+# Prerequisites
+#
 
 # We are using some of the newest GNU Make features... so require GNU
 # Make version >= 3.82
@@ -29,9 +39,9 @@ $(error Target "clobber" must be alone)
 endif
 endif
 
-########################################################################
-# Configuration
-########################################################################
+#
+# Parameters
+#
 
 # Disable builtins.
 MAKEFLAGS += --no-builtin-rules
@@ -66,9 +76,9 @@ SHELL := /bin/bash
 # Enable a second expansion of the prerequisites
 .SECONDEXPANSION:
 
-########################################################################
+#
 # Common macros
-########################################################################
+#
 
 # Hacks for string manipulation
 comma := ,

@@ -12,7 +12,7 @@
 #	PagesJSON 
 #	Nodes
 #	NodesJSON
-# Targets for:
+# Exported targets:
 # 	$(Destination)
 # 	all paths at $(Destination) and $(Metadata)
 
@@ -37,21 +37,23 @@ i_paths_meta_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(i_paths))
 
 $(Destination):
 	$(info ==> $@)
-	@mkdir -p $@ >/dev/null 2>&1 || true
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-# TODO: static rules??? Targets are directories...???
-$(i_paths_destination): #? $(Destination)/% : $(Content)/%
-	@mkdir -p $@ >/dev/null 2>&1 || true
+$(i_paths_destination): ## $(Destination)/% : $(Content)/%
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-$(i_paths_meta_pages): #? $(Metadata)/pages/% : $(Content)/%
-	@mkdir -p $@ >/dev/null 2>&1 || true
+$(i_paths_meta_pages): ## $(Metadata)/pages/% : $(Content)/%
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-$(i_paths_meta_nodes): #? $(Metadata)/nodes/% : $(Content)/%
-	@mkdir -p $@ >/dev/null 2>&1 || true
+$(i_paths_meta_nodes): ## $(Metadata)/nodes/% : $(Content)/%
+	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 #
 # Global names defined
 #
+
+# All pathnames to create
+#? Paths := $(i_paths_destination) $(i_paths_meta_pages) $(i_paths_meta_nodes)
 
 # Home page
 HomePage := $(Destination)/index.html
