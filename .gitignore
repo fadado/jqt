@@ -1,5 +1,6 @@
 # cache
 /docs/.yummy
+/docs/.meta
 # experiments
 /docs/content/xxx*
 /docs/content/yyy*

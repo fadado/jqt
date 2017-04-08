@@ -6,6 +6,10 @@
 # Published: https://fadado.github.io/jqt/
 ########################################################################
 
+ifdef MAKE_RESTARTS
+$(info make restarted: $(MAKE_RESTARTS))
+endif
+
 # Make configuration
 include make.d/prelude.make
 
@@ -17,7 +21,7 @@ Version := $(shell cat ../VERSION)
 ########################################################################
 
 # Metadata directory
-Metadata := .yummy
+Metadata := .meta
 
 # Load global parameters
 -include $(Metadata)/globals.make
@@ -67,7 +71,16 @@ endif
 
 # Build metadata from files front-matter
 ifdef __globals__
+
+# Extra dependencies for pages
+-include $(Metadata)/pages-d.make
+
+# Extra dependencies for nodes
+#-include $(Metadata)/nodes-d.make	NOT YET
+
+# Extract front-mater from Markdown files
 include make.d/front-matter.make
+
 endif
 
 # Defined in front-matter.make
@@ -147,25 +160,9 @@ Targets    := $(Pages) $(Files) $(ManPage)
 #
 
 # All pages
-$(Pages):				\
-	$(Blocks)/*/markup.html		\
-	$(Blocks)/filters.jq		\
-	$(Content)/macros.m		\
-	$(Content)/LINKS.txt		\
-	$(Metadata)/snippets.json	\
-	$(Metadata)/config.json		\
+$(Pages): $(Metadata)/snippets.json
 
 # All pages except home page
-other_pages := $(filter-out $(HomePage),$(Pages))
-$(other_pages):			\
-	$(Content)/FLOW.txt	\
-	$(Content)/opt/*.txt	\
-	$(Layouts)/default.html	\
-
-$(HomePage) 			\
-$(Destination)/structure.html:	\
-	$(Content)/EXAMPLE.txt	\
-
 $(Destination)/styles.css:		\
 	$(Blocks)/*/*style.css		\
 	$(Styles)/*.css			\
@@ -194,7 +191,7 @@ $(Metadata)/snippets.json: $(Content)/snippets.yaml \
 
 # HTML pages
 define Target =
-$(Destination)/$(1).html: $(Content)/$(1).md $(Layouts)/$(2).html \
+$(Destination)/$(1).html: $(Content)/$(1).md \
 | $(Destination)
 	$$(info ==> $$@)
 	@$(JQT) -d $$< $(Layouts)/$(2).html | $(DETAILS) > $$@
