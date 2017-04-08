@@ -1,7 +1,8 @@
 ########################################################################
-# Build files derived from user defined configuration
-########################################################################
-
+# config.make
+#
+# Build files derived from user defined configuration file.
+#
 # Imported variables:
 #	Metadata
 #	Version
@@ -11,30 +12,38 @@
 #	$(Metadata)/site.json
 #	$(Metadata)/globals.make
 # Order of dependencies:
-# 	globals.make => site.json => config.json => config.yaml
+# 	config.{yaml,json} => config.json => site.json => globals.make
 
-# Metadata directory
-$(Metadata):
+########################################################################
+# Targets for directories
+########################################################################
+
+# Create metadata directory.
+# Receive all generated metadata files and makefiles.
+$(Metadata) $(Metadata)/:
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 ########################################################################
-# Target files
+# Targets for configuration files
 ########################################################################
 
-# Create $(Metadata)/config.json
-# Input is user defined config.yaml or config.json.
-ifeq (config.yaml, $(wildcard config.yaml))
+#
+# Create `$(Metadata)/config.json`.
+#
 
-# Convert config.yaml to $(Metadata)/config.json
+# Input is user defined `config.yaml` or `config.json`.
+ifeq (config.yaml,$(wildcard config.yaml))
+
+# Convert `config.yaml` to `$(Metadata)/config.json`.
 $(Metadata)/config.json: config.yaml \
 | $(Metadata)
 	$(info ==> $@)
 	@yaml2json < $< > $@
 
-else ifeq (config.json, $(wildcard config.json))
+else ifeq (config.json,$(wildcard config.json))
 
-# Convert config.json to $(Metadata)/config.json
+# Convert `config.json` to `$(Metadata)/config.json`.
 $(Metadata)/config.json: config.json \
 | $(Metadata)
 	$(info ==> $@)
@@ -44,7 +53,11 @@ else
 $(error Configuration file not found)
 endif
 
-# Globals definition to mix with config.json
+#
+# Create `$(Metadata)/site.json` from `$(Metadata)/config.json`.
+#
+
+# Add some new members to `$(Metadata)/config.json` and delete `.defaults`.
 define m_SITE_JSON.jq :=
   del(.defaults)					\
   | . + { 						\
@@ -59,11 +72,16 @@ define m_SITE_JSON.jq :=
   }
 endef
 
+#
 $(Metadata)/site.json: $(Metadata)/config.json
 	$(info ==> $@)
 	@jq --sort-keys '$(m_SITE_JSON.jq)' < $< > $@
 
-# Variables to define in globals.make
+#
+# Create `$(Metadata)/globals.make` from `$(Metadata)/site.json`.
+#
+
+# Format members as make variables.
 define m_GLOBALS_MAKE.jq :=
   "__globals__ := 1",				\
   "Assets      := " + .Assets,			\
@@ -76,7 +94,7 @@ define m_GLOBALS_MAKE.jq :=
   "# vim:syntax=make"
 endef
 
-# Create globals.make
+#
 $(Metadata)/globals.make: $(Metadata)/site.json
 	$(info ==> $@)
 	@jq --raw-output '$(m_GLOBALS_MAKE.jq)' < $< > $@

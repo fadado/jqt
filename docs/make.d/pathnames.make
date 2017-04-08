@@ -1,17 +1,18 @@
 ########################################################################
-# Filesystem introspection
-########################################################################
-
+# pathnames.make
+#
+# Build metadata from filesystem introspection.
+#
 # Imported variables:
-#	Metadata
 #	Content
 #	Destination
+#	Metadata
 # Exported variables:
 #	HomePage
-#	Pages
-#	PagesJSON 
 #	Nodes
 #	NodesJSON
+#	Pages
+#	PagesJSON 
 # Exported targets:
 # 	$(Destination)
 # 	all paths at $(Destination) and $(Metadata)
@@ -19,41 +20,45 @@
 # 	each HTML page from his metadata and directory
 # 	each HTML node from his metadata and directory
 
-# Markdown documents found in the filesystem (only .md extensions)
+########################################################################
+# Derived pathnames
+########################################################################
+
+# Markdown documents found in the filesystem (only `.md` extensions).
 i_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
 
-# Unique paths to documents directories
+# Unique paths to documents directories.
 i_paths := $(sort $(dir $(i_documents)))
 
-# Paths to create at $(Destination)
+# Paths to create at `$(Destination)`.
 i_paths_destination := $(call rest,$(patsubst $(Content)%,$(Destination)%,$(i_paths)))
 
-# Paths to nodes at $(Metadata)
+# Paths to nodes at `$(Metadata)`.
 i_paths_metadata_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(i_paths))
 
-# Paths to pages at $(Metadata)
+# Paths to pages at `$(Metadata)`.
 i_paths_metadata_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(i_paths))
 
 ########################################################################
 # Targets for directories
 ########################################################################
 
-# Destination directory
-$(Destination):
+# Destination directory.
+$(Destination) $(Destination)/:
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-# $(Destination)/.../
+# Directories starting at `$(Destination)/`
 $(i_paths_destination):
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-# $(Metadata)/pages/.../
+# Directories starting at `$(Metadata)/pages/`.
 $(i_paths_metadata_pages):
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
-# $(Metadata)/nodes/.../
+# Directories starting at `$(Metadata)/nodes/`.
 $(i_paths_metadata_nodes):
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
@@ -62,40 +67,43 @@ $(i_paths_metadata_nodes):
 # Exported variables
 ########################################################################
 
-# Home page
+# Home page.
 HomePage := $(Destination)/index.html
 
-# Pages to generate at $(Destination)
+# Pages to generate at `$(Destination)`.
 Pages := $(patsubst %.md,%.html,$(patsubst $(Content)%,$(Destination)%,$(i_documents)))
 
-# JSON for each page to generate at $(Metadata)/pages
+# JSON for each page to generate at `$(Metadata)/pages`.
 PagesJSON := $(patsubst %.md,%.json,$(patsubst $(Content)%,$(Metadata)/pages%,$(i_documents)))
 
-# Nodes to generate at $(Destination)
+# Nodes to generate at `$(Destination)`.
 Nodes := $(addsuffix index.html,$(i_paths_destination))
 
-# JSON for each node to generate at $(Metadata)/nodes
+# JSON for each node to generate at `$(Metadata)/nodes`.
 NodesJSON := $(call rest,$(patsubst %/,%.json,$(i_paths_metadata_nodes)))
 
 ########################################################################
-# Dependencies
+# Extra dependencies
 ########################################################################
 
-# Each HTML file depends on his metadata and directory
+# Each HTML file depends on his metadata and directory.
 $(Pages): $(Destination)/%.html : $(Metadata)/pages/%.json
 $(Pages): | $$(dir $$@)
 
 $(Nodes): $(Destination)/%.html : $(Metadata)/nodes/%.json
 $(Nodes): | $$(dir $$@)
 
-# Each JSON file depends on his directory
+# Each JSON file depends on his directory.
 $(PagesJSON): | $$(dir $$@)
 $(NodesJSON): | $$(dir $$@)
 
+# Add prerequisites to main target
+all:: $(Pages)
+
 #########################################################################
 # Test
-.PHONY: introspect
-introspect:
+..PHONY: .pathnames
+.pathnames:
 	@echo 'Metadata: $(Metadata)'
 	@echo 'Content: $(Content)'
 	@echo 'Destination: $(Destination)'
