@@ -7,8 +7,11 @@
 #	Content
 #	Metadata
 # Exported targets:
-# 	JSON metadata files for pages and nodes
-# 	JSON files grouping other metadata files
+# 	$(Metadata)/pages/.../page.json
+# 	$(Metadata)/nodes/.../node.json
+# 	$(Metadata)/pages.json
+# 	$(Metadata)/nodes.json
+# 	$(Metadata)/sections.json
 
 ########################################################################
 # Collect metadata for pages
@@ -130,6 +133,6 @@ $(Metadata)/sections.json: $(Metadata)/pages.json
 
 $(Metadata)/nodes.json: $(NodesJSON)
 	$(info ==> $@)
-	@[[ "$^" != "" ]] && jq --slurp '{ nodes: . }' $^ > $@ || true
+	@test -n "$^" && jq --slurp '{ nodes: . }' $^ > $@ || true
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

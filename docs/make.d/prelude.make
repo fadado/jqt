@@ -9,6 +9,11 @@
 #	rest
 #	filename
 
+# Debug tool
+ifdef MAKE_RESTARTS
+$(info Makefile restarted: $(MAKE_RESTARTS))
+endif
+
 ########################################################################
 # Prerequisites
 ########################################################################
@@ -37,6 +42,13 @@ endif
 ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
 ifneq (1,$(words $(MAKECMDGOALS)))
 $(error Target "clobber" must be alone)
+endif
+endif
+
+# Do not build to clobber immediately
+ifeq (clobber,$(MAKECMDGOALS))
+ifeq (,$(wildcard $(Metadata)))
+$(error Nothing to clobber)
 endif
 endif
 

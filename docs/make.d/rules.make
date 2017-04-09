@@ -4,12 +4,50 @@
 # Define rules for HTML pages and nodes.
 #
 # Imported variables:
+#	Assets
 #	Destination
 #	JQTFLAGS
 #	Layouts
 #	Metadata
 # Exported targets:
 #	$(Metadata)/html.make
+#	all
+# 	build
+# 	clean
+# 	clobber
+# 	xbuild
+
+########################################################################
+# Standard rules
+########################################################################
+
+.PHONY: clean clobber build xbuild xxbuild
+
+# Copy Assets
+all::
+	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
+	| sed "s/^.*-> ./==> /;s/.$$//"
+
+# Delete generated publications
+clean::
+	@rm -rf $(Destination)/*
+
+# Delete all generated files and directories
+clobber::
+	@rm -rf $(Destination) $(Metadata)
+
+# Build again all documents
+build: clean all
+
+# Clobber and build again
+xbuild:
+	@test -e config.yaml && touch config.yaml || true; \
+	 test -e config.json && touch config.json || true
+	@$(MAKE) -s all
+
+# Clobber and build again
+xxbuild: clobber
+	@$(MAKE) -s all
 
 ########################################################################
 # Create makefile for targets rules

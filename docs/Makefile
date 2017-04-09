@@ -2,14 +2,9 @@
 # Makefile for web site management
 #
 # Project: jqt
-# Author: jordinas@gmail.com <Joan Josep Ordinas Rosa>
+# Author: <Joan Josep Ordinas Rosa> jordinas@gmail.com 
 # Published: https://fadado.github.io/jqt/
 ########################################################################
-
-# Debug tool
-ifdef MAKE_RESTARTS
-$(info Makefile restarted: $(MAKE_RESTARTS))
-endif
 
 # Make configuration
 include make.d/prelude.make
@@ -20,20 +15,13 @@ Version := $(shell cat ../VERSION)
 # Metadata directory
 Metadata := .meta
 
-# Do not build to clobber immediately
-ifeq (clobber,$(MAKECMDGOALS))
-ifeq (,$(wildcard $(Metadata)))
-$(error Nothing to clobber)
-endif
-endif
-
 # ======================================================================
 -include $(Metadata)/globals.make
 #
 # Load global parameters. If `globals.make` not exists it is built when
 # restarting with a rule defined in `config.make`.
 #
-# Variables:
+# Exported variables:
 #	__globals__
 #	Assets
 #	Blocks
@@ -88,10 +76,11 @@ include make.d/pathnames.make
 #	PagesJSON 
 # Exported targets:
 # 	$(Destination)
+#	all
 # 	all paths starting at $(Destination) and $(Metadata)
 # Additional dependencies defined:
-# 	each HTML page from his metadata and directory
-# 	each HTML node from his metadata and directory
+# 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
+# 	$(Destination)/.../node/index.html => $(Metadata)/nodes/.../node.json
 # ======================================================================
 
 # ======================================================================
@@ -103,8 +92,11 @@ include make.d/front-matter.make
 #	Content
 #	Metadata
 # Exported targets:
-# 	JSON metadata files for pages and nodes
-# 	JSON files grouping other metadata files
+# 	$(Metadata)/pages/.../page.json
+# 	$(Metadata)/nodes/.../node.json
+# 	$(Metadata)/pages.json
+# 	$(Metadata)/nodes.json
+# 	$(Metadata)/sections.json
 # ======================================================================
 
 # ======================================================================
@@ -113,11 +105,13 @@ include make.d/front-matter.make
 # Load rules for pages and nodes. If not exists is built when restarting with
 # rule defined in `rules.make`.
 #
-# Variables:
+# Exported variables:
 #	__html__
 # Exported targets:
 # 	rules for all HTML files
 # ======================================================================
+
+ifdef __html__
 
 # Options for `jqt`.
 JQTFLAGS = 					\
@@ -127,6 +121,8 @@ JQTFLAGS = 					\
 	-msite:$(Metadata)/config.json		\
 	-msnippets:$(Metadata)/snippets.json	\
 	--toc-depth=4				\
+
+endif
 
 # ======================================================================
 include make.d/rules.make
@@ -140,34 +136,45 @@ include make.d/rules.make
 #	Metadata
 # Exported targets:
 #	$(Metadata)/html.make
+#	all
+# 	build
+# 	clean
+# 	clobber
+# 	xbuild
+# ======================================================================
+
+# ======================================================================
+include make.d/tools.make
+# 
+# Tools independent of any target.
 #
+# Parameters:
+# 	vnudir
+# Imported variables:
+#	Destination
+# Exported targets:
+# 	help
+# 	valid
+# 	lint
+# ======================================================================
+
+# ======================================================================
+include make.d/styles.make
+# 
+# Build CSS main stylesheet.
+#
+# Imported variables:
+#	Destination
+#	Blocks
+#	Styles
+# Exported targets:
+#	$(Destination)/styles.css
+# 	all
 # ======================================================================
 
 ########################################################################
-# Rules
+#  Specific rules this web site
 ########################################################################
-
-.PHONY: clean clobber build rebuild xbuild
-
-# Delete generated publications
-clean::
-	@rm -rf $(Destination)/*
-
-# Delete all generated files and directories
-clobber::
-	@rm -rf $(Destination) $(Metadata)
-
-# Build again all documents
-build: clean all
-
-#
-rebuild: clobber
-	@$(MAKE) -s all
-
-# Build again all config.yaml dependents
-xbuild:
-	@touch config.yaml
-	@$(MAKE) -s all
 
 # Snippets
 $(Metadata)/snippets.json: $(Content)/snippets.yaml \
@@ -178,39 +185,54 @@ $(Metadata)/snippets.json: $(Content)/snippets.yaml \
 # Extra dependencies
 $(Pages): $(Metadata)/snippets.json $(Blocks)/filters.jq
 
-# Generate CSS stylesheet
-all:: $(Destination)/styles.css
-
-# Styles
-$(Destination)/styles.css:		\
-	$(Blocks)/*/*style.css		\
-	$(Styles)/*.css			\
-	$(Styles)/*.m 			\
-	$(Styles)/milligram/*.css	\
-
-# CSS stylesheet
-$(Destination)/styles.css: $(Styles)/page.css
-	$(info ==> $@)
-	@jqt -P CSS-min -I$(Styles) < $< > $@
-
+#
 # Generate man page for jqt
-include make.d/man.make
+#
 
-# last all:: rule
-all:: # copy Assets
-	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
-	| sed "s/^.*-> ./==> /;s/.$$//"
-	@echo 1>&2 'Imprimatur.'
+# gpp for the man page (to be build without calling jqt!)
+GPP_MD := gpp						\
+	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
+	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
+	+sccc '&\n' '' ''				\
+	+sccc '\\n' '' ''				\
+	+sccc '<\#' '\#>\n' ''				\
+	+siqi "'" "'" '\'				\
+	+siQi '"' '"' '\'				\
+	+ssss '<!--' '-->' ''				\
+	+ssss '`'  '`' ''				\
+	+ssss '\n```' '\n```' ''			\
+	+ssss '\n~~~' '\n~~~' ''			\
+    
+#
+ManPage := ../jqt.1.gz
+
+# Man page: jqt(1)
+$(ManPage): $(Content)/jqt.1.markdown
+	$(info ==> $@)
+	@$(GPP_MD) -I$(Content) < $<			\
+	| pandoc --standalone --from markdown --to man	\
+	| gzip > $@
+
+# Add prerequisites and recipes to common targets
+all:: $(ManPage)
+
+clean::
+	@rm -f $(ManPage)
+
+clobber::
+	@rm -f $(ManPage)
 
 ########################################################################
-# Tools
-########################################################################
-
-# Validate HTML 5
-include make.d/vnu.make
-
-# help and other targets
-include make.d/tools.make
+# Generate Help text
+# Independent target: helps generating text for `jqt -h`
+# Needs explicit call: `make /tmp/help`
+#
+/tmp/help: $(Content)/help.markdown
+	$(info ==> $@)
+	@jqt -P MarkDown -I$(Content) < $<				\
+	| pandoc --from markdown --to plain -				\
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
+	> $@
 
 endif # __globals__
 

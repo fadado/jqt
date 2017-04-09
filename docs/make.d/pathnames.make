@@ -14,11 +14,12 @@
 #	Pages
 #	PagesJSON 
 # Exported targets:
+#	all
 # 	$(Destination)
 # 	all paths at $(Destination) and $(Metadata)
 # Additional dependencies defined:
-# 	each HTML page from his metadata and directory
-# 	each HTML node from his metadata and directory
+# 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
+# 	$(Destination)/.../node/index.html => $(Metadata)/nodes/.../node.json
 
 ########################################################################
 # Derived pathnames
@@ -97,7 +98,7 @@ $(Nodes): | $$(dir $$@)
 $(PagesJSON): | $$(dir $$@)
 $(NodesJSON): | $$(dir $$@)
 
-# Add prerequisites to main target
+# Add prerequisites to default goal
 all:: $(Pages)
 
 #########################################################################
