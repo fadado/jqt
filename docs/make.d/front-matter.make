@@ -6,9 +6,9 @@
 # Imported variables:
 #	Content
 #	Metadata
-# Exported targets:
+# Exported rules for:
 # 	$(Metadata)/pages/.../page.json
-# 	$(Metadata)/nodes/.../node.json
+# 	$(Metadata)/nodes/.../section.json
 # 	$(Metadata)/pages.json
 # 	$(Metadata)/nodes.json
 # 	$(Metadata)/sections.json

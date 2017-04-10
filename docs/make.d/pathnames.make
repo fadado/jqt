@@ -13,13 +13,14 @@
 #	NodesJSON
 #	Pages
 #	PagesJSON 
-# Exported targets:
-#	all
+# Exported rules for:
 # 	$(Destination)
-# 	all paths at $(Destination) and $(Metadata)
+# 	$(Destination)/.../
+# 	$(Metadata)/.../
+#	all:: $(Pages)
 # Additional dependencies defined:
 # 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
-# 	$(Destination)/.../node/index.html => $(Metadata)/nodes/.../node.json
+# 	$(Destination)/.../section/index.html => $(Metadata)/nodes/.../section.json
 
 ########################################################################
 # Derived pathnames
@@ -41,10 +42,11 @@ i_paths_metadata_nodes := $(patsubst $(Content)%,$(Metadata)/nodes%,$(i_paths))
 i_paths_metadata_pages := $(patsubst $(Content)%,$(Metadata)/pages%,$(i_paths))
 
 ########################################################################
-# Targets for directories
+# Rules for directories
 ########################################################################
 
 # Destination directory.
+# Define targets with and without trailing slash.
 $(Destination) $(Destination)/:
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true

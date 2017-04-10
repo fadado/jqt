@@ -1,11 +1,3 @@
-# cache
-/docs/.yummy
-/docs/.meta
-# experiments
-/docs/content/xxx*
-/docs/content/yyy*
-# built site
-/docs/_site
 # man pages
 jqt.1.gz
 # other

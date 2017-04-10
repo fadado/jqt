@@ -1,0 +1,7 @@
+*.log
+*.bak
+*.swp
+/.meta/
+/_site/
+/content/xxx*
+/content/yyy*

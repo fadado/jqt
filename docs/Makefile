@@ -15,6 +15,13 @@ Version := $(shell cat ../VERSION)
 # Metadata directory
 Metadata := .meta
 
+# Do not build to clobber immediately
+ifeq (clobber,$(MAKECMDGOALS))
+ifeq (,$(wildcard $(Metadata)))
+$(error Nothing to clobber)
+endif
+endif
+
 # ======================================================================
 -include $(Metadata)/globals.make
 #
@@ -35,18 +42,17 @@ Metadata := .meta
 # ======================================================================
 include make.d/config.make
 #
-# Build files derived from user defined configuration.
+# Build files derived from user defined configuration:
+# 	config.{yaml,json} => config.json => site.json => globals.make
 #
 # Imported variables:
 #	Metadata
 #	Version
-# Exported targets:
+# Exported rules for:
 # 	$(Metadata)
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
 #	$(Metadata)/globals.make
-# Order of dependencies:
-# 	config.{yaml,json} => config.json => site.json => globals.make
 # ======================================================================
 
 # Warning:
@@ -74,13 +80,14 @@ include make.d/pathnames.make
 #	NodesJSON
 #	Pages
 #	PagesJSON 
-# Exported targets:
+# Exported rules for:
 # 	$(Destination)
-#	all
-# 	all paths starting at $(Destination) and $(Metadata)
+# 	$(Destination)/.../
+# 	$(Metadata)/.../
+#	all:: $(Pages)
 # Additional dependencies defined:
 # 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
-# 	$(Destination)/.../node/index.html => $(Metadata)/nodes/.../node.json
+# 	$(Destination)/.../section/index.html => $(Metadata)/nodes/.../section.json
 # ======================================================================
 
 # ======================================================================
@@ -91,9 +98,9 @@ include make.d/front-matter.make
 # Imported variables:
 #	Content
 #	Metadata
-# Exported targets:
+# Exported rules for:
 # 	$(Metadata)/pages/.../page.json
-# 	$(Metadata)/nodes/.../node.json
+# 	$(Metadata)/nodes/.../section.json
 # 	$(Metadata)/pages.json
 # 	$(Metadata)/nodes.json
 # 	$(Metadata)/sections.json
@@ -103,59 +110,55 @@ include make.d/front-matter.make
 -include $(Metadata)/html.make
 #
 # Load rules for pages and nodes. If not exists is built when restarting with
-# rule defined in `rules.make`.
+# rule defined in `pages.make`.
 #
 # Exported variables:
 #	__html__
-# Exported targets:
+# Exported rules for:
 # 	rules for all HTML files
 # ======================================================================
 
 ifdef __html__
 
-# Options for `jqt`.
-JQTFLAGS = 					\
-	-5 					\
-	-I./					\
-	-iblocks/filters			\
-	-msite:$(Metadata)/config.json		\
-	-msnippets:$(Metadata)/snippets.json	\
-	--toc-depth=4				\
+# Options for `jqt`. To be extended in the site specific section.
+JQTFLAGS = \
+	-I./				\
+	-msite:$(Metadata)/config.json	\
 
 endif
 
 # ======================================================================
-include make.d/rules.make
+include make.d/pages.make
 #
-# Define rules for HTML pages and nodes.
+# Define standard rules and rules for HTML pages and nodes.
 #
 # Imported variables:
+#	Assets
 #	Destination
-#	JQTFLAGS
 #	Layouts
 #	Metadata
-# Exported targets:
+#	JQTFLAGS
+# Exported rules for:
 #	$(Metadata)/html.make
-#	all
+#	all:: # assets
 # 	build
-# 	clean
-# 	clobber
+# 	clean::
+# 	clobber::
 # 	xbuild
+# 	xxbuild
 # ======================================================================
 
 # ======================================================================
-include make.d/tools.make
-# 
-# Tools independent of any target.
+include make.d/sitemap.make
 #
-# Parameters:
-# 	vnudir
+# Define rules for sitemap.
+#
 # Imported variables:
 #	Destination
-# Exported targets:
-# 	help
-# 	valid
-# 	lint
+#	Metadata
+# Exported rules for:
+#	$(Destination)/sitemap.*
+#	all:: $(Destination)/sitemap.*
 # ======================================================================
 
 # ======================================================================
@@ -167,14 +170,38 @@ include make.d/styles.make
 #	Destination
 #	Blocks
 #	Styles
-# Exported targets:
+# Exported rules for:
 #	$(Destination)/styles.css
-# 	all
+# 	all:: $(Destination)/styles.css
+# ======================================================================
+
+# ======================================================================
+include make.d/tools.make
+# 
+# Tools independent of any target.
+#
+# Parameters:
+# 	vnudir
+# Imported variables:
+#	Destination
+# Exported rules for:
+# 	help
+# 	valid
+# 	lint
 # ======================================================================
 
 ########################################################################
-#  Specific rules this web site
+#  Specific rules for this web site
 ########################################################################
+
+ifdef __html__
+
+# Options for `jqt`.
+JQTFLAGS += 					\
+	-5 					\
+	-iblocks/filters			\
+	-msnippets:$(Metadata)/snippets.json	\
+	--toc-depth=4				\
 
 # Snippets
 $(Metadata)/snippets.json: $(Content)/snippets.yaml \
@@ -234,6 +261,10 @@ clobber::
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
 	> $@
 
+clean::
+	@rm -f /tmp/help
+
+endif # __html__
 endif # __globals__
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

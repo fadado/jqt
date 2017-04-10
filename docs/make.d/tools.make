@@ -8,7 +8,7 @@
 # 	vnudir
 # Imported variables:
 #	Destination
-# Exported targets:
+# Exported rules for:
 # 	help
 # 	valid
 # 	lint

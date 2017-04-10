@@ -1,31 +1,29 @@
 ########################################################################
 # config.make
 #
-# Build files derived from user defined configuration file.
+# Build files derived from user defined configuration:
+# 	config.{yaml,json} => config.json => site.json => globals.make
 #
 # Imported variables:
 #	Metadata
 #	Version
-# Exported targets:
+# Exported rules for:
 # 	$(Metadata)
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
 #	$(Metadata)/globals.make
-# Order of dependencies:
-# 	config.{yaml,json} => config.json => site.json => globals.make
 
 ########################################################################
-# Targets for directories
+# Metadata directory for all generated metadata and make files
 ########################################################################
 
-# Create metadata directory.
-# Receive all generated metadata files and makefiles.
+# Define targets with and without trailing slash.
 $(Metadata) $(Metadata)/:
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 ########################################################################
-# Targets for configuration files
+# Rules for configuration files
 ########################################################################
 
 #
@@ -72,7 +70,7 @@ define m_SITE_JSON.jq :=
   }
 endef
 
-#
+# Global configuration file with some added members.
 $(Metadata)/site.json: $(Metadata)/config.json
 	$(info ==> $@)
 	@jq --sort-keys '$(m_SITE_JSON.jq)' < $< > $@
@@ -94,7 +92,7 @@ define m_GLOBALS_MAKE.jq :=
   "# vim:syntax=make"
 endef
 
-#
+# Makefile to be included in `Makefile`.
 $(Metadata)/globals.make: $(Metadata)/site.json
 	$(info ==> $@)
 	@jq --raw-output '$(m_GLOBALS_MAKE.jq)' < $< > $@

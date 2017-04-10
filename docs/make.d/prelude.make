@@ -45,13 +45,6 @@ $(error Target "clobber" must be alone)
 endif
 endif
 
-# Do not build to clobber immediately
-ifeq (clobber,$(MAKECMDGOALS))
-ifeq (,$(wildcard $(Metadata)))
-$(error Nothing to clobber)
-endif
-endif
-
 ########################################################################
 # Make configuration
 ########################################################################

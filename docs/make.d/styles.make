@@ -8,14 +8,13 @@
 #	Destination
 #	Blocks
 #	Styles
-# Exported targets:
+# Exported rules for:
 #	$(Destination)/styles.css
-# 	all
-
+# 	all:: $(Destination)/styles.css
 
 # Styles
 $(Destination)/styles.css:		\
-	$(Blocks)/*/*style.css		\
+	$(Blocks)/*/style.css		\
 	$(Styles)/*.css			\
 	$(Styles)/*.m 			\
 	$(Styles)/milligram/*.css	\
@@ -26,6 +25,6 @@ $(Destination)/styles.css: $(Styles)/main.css
 	@jqt -P CSS-min -I$(Styles) < $< > $@
 
 # Add `$(Destination)/styles.css` to `all` target.
-all:: $(Destination)/styles.css
+all:: $(Destination)/styles.css | $(Destination)
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
