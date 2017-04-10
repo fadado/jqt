@@ -81,7 +81,7 @@ endef
 
 define p_PAGES_D_MAKE.jq :=
   "__html__ := 1",						\
-  (.pages[] | (							\
+  (.[] | (							\
   	"$(Destination)/"+.url+": "+(.use|join(" ")),		\
 	"$(Destination)/"+.url+": $(Layouts)/default.html",	\
 	"$(Destination)/"+.url+": $(Layouts)/"+.layout+".html",	\

@@ -42,19 +42,19 @@ author:
 # TODO: instrospect
 menu:
 - URL: ./index.html
-  path: content/index.md
+  source: content/index.md
   name: Home
 - URL: ./engine.html
-  path: content/engine.md
+  source: content/engine.md
   name: Engine
 - URL: ./structure.html
-  path: content/structure.md
+  source: content/structure.md
   name: Structure
 - URL: ./content.html
-  path: content/content.md
+  source: content/content.md
   name: Content
 - URL: ./data.html
-  path: content/data.md
+  source: content/data.md
   name: Data
 
 # Default values

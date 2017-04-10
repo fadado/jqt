@@ -47,18 +47,24 @@ define f_page_section =
 $(patsubst %/,%,$(call f_page_path,$1))
 endef
 
-# `.` is a MarkDown file front matter.
+# Add members to user defined front-matter at `.`.
+# Defined by jqt:
+#	.page._id
+#	.page._content
+#	.page._highlight
+#	.page._toc
+#	.page._source == $1
 define f_PAGE_JSON.jq =
   . + {						\
-    source:   "$1",				\
-    id:       "$(call f_page_id,$2)",		\
     base:     "$(call f_page_base,$2)",		\
     filename: "$(call f_page_name,$2)",		\
-    path:     "$(call f_page_path,$2)",		\
-    url:      "$(call f_page_url,$2)",		\
-    section:  "$(call f_page_section,$2)",	\
+    id:       "$(call f_page_id,$2)",		\
     isnode:   false,				\
-    ispage:   true				\
+    ispage:   true,				\
+    path:     "$(call f_page_path,$2)",		\
+    section:  "$(call f_page_section,$2)",	\
+    source:  "$1",				\
+    url:      "$(call f_page_url,$2)"		\
   } as $$page |					\
   $$config[0].defaults as $$defaults |		\
   reduce $$defaults[] as $$d			\
@@ -96,17 +102,17 @@ endef
 
 # `.` is `$(Metadata)/config.json`.
 define f_NODE_JSON.jq =
-  { id:       "$(call f_node_id,$1)",		\
+  {						\
     base:     "$(call f_page_base,$1)",		\
-    title:    "$(call f_page_name,$1)",	\
     filename: "$(call f_page_name,$1)",		\
-    path:     "$(call f_page_path,$1)",		\
-    url:      "$(call f_page_url,$1)",		\
-    section:  "$(call f_page_section,$1)",	\
-    date:     (now | todateiso8601),		\
-    ishome:   false,				\
+    id:       "$(call f_node_id,$1)",		\
     isnode:   true,				\
-    ispage:   false				\
+    ispage:   false,				\
+    path:     "$(call f_page_path,$1)",		\
+    section:  "$(call f_page_section,$1)",	\
+    url:      "$(call f_page_url,$1)",		\
+    date:     (now | todateiso8601),		\
+    title:    "$(call f_page_name,$1)"		\
   } as $$node |					\
   reduce .defaults[] as $$d			\
     ({}; if "$(call f_node_id,$1)" | test("^" + $$d.idprefix) \
@@ -125,14 +131,14 @@ $(NodesJSON): $(Metadata)/config.json
 
 $(Metadata)/pages.json: $(PagesJSON)
 	$(info ==> $@)
-	@jq --slurp '{ pages: . }' $^ > $@
+	@jq --slurp '.' $^ > $@
 
 $(Metadata)/sections.json: $(Metadata)/pages.json
 	$(info ==> $@)
-	@jq '{ sections: ([.pages[].section] | unique) }' < $< > $@
+	@jq '[.[].section] | unique' < $< > $@
 
 $(Metadata)/nodes.json: $(NodesJSON)
 	$(info ==> $@)
-	@test -n "$^" && jq --slurp '{ nodes: . }' $^ > $@ || true
+	@test -n "$^" && jq --slurp '.' $^ > $@ || true
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

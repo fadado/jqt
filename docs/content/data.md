@@ -1,4 +1,5 @@
 ---
+name: Data
 layout: page-toc
 title: Managing the data model with jqt
 description: jqt combines one template with one MarkDown document and a data model.
@@ -59,7 +60,7 @@ are provided:
 
 * `.page._content`: the rendered input document.
 * `.page._highlight`: CSS styles for highlighted code.
-* `.page._path`: the input document pathname as provided to `jqt`.
+* `.page._source`: the input document pathname as provided to `jqt`.
 * `.page._toc`: the rendered input document table of contents.
 
 Additional JSON files can be provided and are merged with front matter metadata

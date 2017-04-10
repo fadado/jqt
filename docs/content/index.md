@@ -1,4 +1,5 @@
 ---
+name: Home
 layout: page
 title: Welcome to jqt
 description: Could be jq the basis for a web template engine?

@@ -437,7 +437,7 @@ declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 #	.page._content
 #	.page._highlight
 #	.page._id
-#	.page._path
+#	.page._source
 #	.page._toc
 
 # < stdin > stdout
@@ -462,7 +462,7 @@ function merge
             echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
             # page
             echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $front_matter
-            echo "+ { _id: \"$id\", _path: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
+            echo "+ { _id: \"$id\", _source: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
         fi
 
         # additional data

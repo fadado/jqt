@@ -1,4 +1,5 @@
 ---
+name: Structure
 layout: page-toc
 title: Defining the page structure with jqt
 description: Web pages structure is defined by the HTML macros.

@@ -1,4 +1,5 @@
 ---
+name: Content
 layout: page-toc
 title: Authoring content in jqt using MarkDown
 description: jqt transforms MarkDown documents to HTML using Pandoc.
