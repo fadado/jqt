@@ -39,7 +39,6 @@ data and influence JSON preprocessing:
 <%include content/opt/I.txt>
 <%include content/opt/M.txt>
 <%include content/opt/m.txt>
-<%include content/opt/n.txt>
 <%include content/opt/T.txt>
 
 </details>
@@ -54,14 +53,15 @@ Documents front matter metadata and additional input YAML files are converted to
 JSON and merged to be the `jq` input in the render stage. No preprocessing is
 applied  to YAML data.
 
-The front matter content is available in the global object `.page`. The object
-member names prefixed with the underline character (`_`) are reserved, and the following
+The front matter content is available in the global object `._front_matter`. 
+Reserved global names are prefixed with the underline character (`_`), and the following
 are provided:
 
-* `.page._content`: the rendered input document.
-* `.page._highlight`: CSS styles for highlighted code.
-* `.page._source`: the input document pathname as provided to `jqt`.
-* `.page._toc`: the rendered input document table of contents.
+* `._content`: the rendered input document.
+* `._front_matter`: the document front-matter.
+* `._highlight`: CSS styles for highlighted code.
+* `._source`: the input document pathname as provided to `jqt`.
+* `._toc`: the rendered input document table of contents.
 
 Additional JSON files can be provided and are merged with front matter metadata
 to be the `jq` input in the render stage.

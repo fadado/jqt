@@ -189,18 +189,17 @@ ifdef __html__
 
 # Options for `jqt`.
 JQTFLAGS += 					\
-	-n document				\
-	-I./					\
-	-msite:$(Metadata)/config.json		\
-	-mpages:$(Metadata)/pages.json		\
-	-msections:$(Metadata)/sections.json	\
 	-5 					\
+	-I./					\
+	-j'$$'pages:$(Metadata)/pages		\
+	-msite:$(Metadata)/config.json		\
+	-msections:$(Metadata)/sections.json	\
 	-iblocks/filters			\
-	-msnippets:$(Metadata)/snippets.json	\
 	--toc-depth=4				\
+	-msnippets:$(Metadata)/snippets.json	\
 
 # Snippets
-$(Metadata)/snippets.json: $(Content)/snippets.yaml \
+$(Metadata)/snippets.json: $(Data)/snippets.yaml \
 | $(Metadata)
 	$(info ==> $@)
 	@jqt -T < $< | yaml2json > $@
@@ -230,7 +229,7 @@ GPP_MD := gpp						\
 ManPage := ../jqt.1.gz
 
 # Man page: jqt(1)
-$(ManPage): $(Content)/jqt.1.markdown
+$(ManPage): $(Content)/jqt.1.text
 	$(info ==> $@)
 	@$(GPP_MD) -I$(Content) < $<			\
 	| pandoc --standalone --from markdown --to man	\
@@ -250,7 +249,7 @@ clobber::
 # Independent target: helps generating text for `jqt -h`
 # Needs explicit call: `make /tmp/help`
 #
-/tmp/help: $(Content)/help.markdown
+/tmp/help: $(Content)/help.text
 	$(info ==> $@)
 	@jqt -P MarkDown -I$(Content) < $<				\
 	| pandoc --from markdown --to plain -				\

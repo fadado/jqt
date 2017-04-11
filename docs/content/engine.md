@@ -65,7 +65,6 @@ arguments.  The usage possibilities are:
 <%include content/opt/L.txt>
 <%include content/opt/M.txt>
 <%include content/opt/m.txt>
-<%include content/opt/n.txt>
 <%include content/opt/P.txt>
 <%include content/opt/p.txt>
 <%include content/opt/r.txt>

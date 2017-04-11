@@ -27,7 +27,9 @@
 ########################################################################
 
 # Markdown documents found in the filesystem (only `.md` extensions).
-i_documents := $(sort $(shell find $(Content) -type f -a -name '*.md'))
+#i_suffixes := -name '*.md' -o -name '*.mkd' -o -name '*.markdown'
+i_suffixes := -name '*.md' 
+i_documents := $(sort $(shell find $(Content) -type f -a $(i_suffixes)))
 
 # Unique paths to documents directories.
 i_paths := $(sort $(dir $(i_documents)))
@@ -112,6 +114,8 @@ all:: $(Pages)
 	@echo 'Destination: $(Destination)'
 	@echo
 	@echo 'i_documents: $(i_documents)'
+	@echo 'i_doc_mkd: $(i_doc_mkd)'
+	@echo 'i_doc_markdown: $(i_doc_markdown)'
 	@echo 'i_paths: $(i_paths)'
 	@echo
 	@echo 'i_paths_destination: $(i_paths_destination)'

@@ -46,16 +46,16 @@ Document files contain MarkDown text preceded by an optional YAML front matter.
 ### Front matter
 
 <%cite jqt> extracts the YAML front matter, located at the very beginning of the file,
-and injects it into the render stage under a global JSON object named `.page`.
+and injects it into the render stage under a global JSON object named `._front_matter`.
 
 ### Body
 
 Pandoc translates the document body to HTML,
 and <%cite jqt> injects it into the render stage under the global JSON scalar 
-`.page._content`. If the document contains fenced code blocks specifying the language of
-the code block, the related highlight CSS code will be in the scalar `.page._highlight`. Also, the
-HTML table of contents is available in the scalar `.page._toc`, and the path to the document
-file in the scalar `.page._source`.
+`._content`. If the document contains fenced code blocks specifying the language of
+the code block, the related highlight CSS code will be in the scalar `._highlight`. Also, the
+HTML table of contents is available in the scalar `._toc`, and the path to the document
+file in the scalar `._source`.
 
 ### MarkDown snippets
 

@@ -427,23 +427,20 @@ s/tr class="even"/tr/
 # Merge document and all data
 ########################################################################
 
-declare DOCUMENT_METADATA_NAME='page'  # front matter and etc.
-
 declare -A JSON_DATA=() YAML_DATA=() YAML_SNIPPETS=()
 declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 
 # Global objects available in jq scripts:
-#	.page ...
-#	.page._content
-#	.page._highlight
-#	.page._id
-#	.page._source
-#	.page._toc
+#	._content
+#	._highlight
+#	._source
+#	._toc
+#   ._front_matter
 
 # < stdin > stdout
 function merge
 {
-    local front_matter key id
+    local front_matter key
     local -i without_document=0
     if [[ $1 == '-w' ]]; then
         without_document=1
@@ -455,14 +452,9 @@ function merge
     {   if (( without_document )); then
             echo '{}' # dummy object
         else
-            id=${DOCUMENT//\//-}
-            id=${id#-}
-            id=${id%.*}
-            # split .
-            echo '(. / "<!--JQT-->") as [$body, $toc, $css] |'
-            # page
-            echo "{ $DOCUMENT_METADATA_NAME: ("; yaml2json < $front_matter
-            echo "+ { _id: \"$id\", _source: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css })}'
+            echo '(. / "<!--JQT-->") as [$body, $toc, $css] | { _front_matter: ('
+            yaml2json < $front_matter
+            echo ")} + { _source: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css }'
         fi
 
         # additional data
@@ -609,7 +601,7 @@ declare expand=''
 
 declare opt key filename
 
-while getopts :hVD:I:P:L:i:j:45d:weprtn:m:M:T:CHS-: opt; do
+while getopts :hVD:I:P:L:i:j:45d:weprt:m:M:T:CHS-: opt; do
     case $opt in
     # Generic options
         h)  help
@@ -675,8 +667,6 @@ while getopts :hVD:I:P:L:i:j:45d:weprtn:m:M:T:CHS-: opt; do
                     YAML_DATA_DOT[$key]=$filename
                 fi
             fi
-            ;;
-        n)  DOCUMENT_METADATA_NAME=$OPTARG
             ;;
         T)  if [[ -z $OPTARG ]]; then
                 snippets=1

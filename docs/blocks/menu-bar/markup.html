@@ -2,9 +2,9 @@
  # Menu Bar
  ######################################################################>&
 <ol class="menu-bar">
-{% .site.menu[] %}
+{% $pages::pages[0] as $pages | .site.menu[] %}
   <li class='menu-bar__item {{if .==$M.page.id then "menu-bar__item_current" else "" end}}'>
-    {% (. as $id | $M.pages[] | select($id == .id)) as $page %}
+    {% (. as $id | $pages[] | select($id == .id)) as $page %}
     <a href="{{$page.url}}">{{$page.name}}</a>
     {% end %}
   </li>

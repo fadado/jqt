@@ -1,7 +1,8 @@
 ########################################################################
+# prelude.make
+#
 # The project prelude: common module available in all makefile modules
-########################################################################
-
+#
 # Exported macros:
 #	comma
 #	empty

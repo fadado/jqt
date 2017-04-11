@@ -1,7 +1,6 @@
 ########################################################################
 # pages.make
 #
-# Define rules for HTML pages and nodes.
 # Define standard rules and rules for HTML pages and nodes.
 #
 # Imported variables:
@@ -16,14 +15,14 @@
 # 	build
 # 	clean
 # 	clobber
-# 	xbuild
-# 	xxbuild
+# 	touch
+# 	fresh
 
 ########################################################################
 # Standard targets
 ########################################################################
 
-.PHONY: clean clobber build xbuild xxbuild
+.PHONY: clean clobber build touch fresh
 
 # Copy Assets
 all:: | $(Destination)
@@ -51,13 +50,17 @@ define p_test_and_touch.sh
   fi
 endef
 
-xbuild:
+touch:
 	@$(p_test_and_touch.sh)
 	@$(MAKE) -s all
 
 # Clobber and build again
-xxbuild: clobber
+fresh: clobber
 	@$(MAKE) -s all
+
+init:
+	@rm -rf $(Metadata)
+	@$(MAKE) -s $(Metadata)/html.make
 
 ########################################################################
 # Create makefile containing rules for all HTML files
@@ -79,14 +82,16 @@ define p_recipe :=
 "\t$$(info ==> $$@)\n\t@$$(JQT) -mpage:$(Metadata)/pages/"+.id+".json -d $$< $(Layouts)/"+.layout+".html | $$(p_DETAILS) > $$@"
 endef
 
+define p_layouts :=
+$(Layouts)/default.html $(Layouts)/"+.layout+".html | $$$$(dir $$$$@)"
+endef
+
 # . is $(Metadata)/pages.json
 define p_PAGES_D_MAKE.jq :=
   "__html__ := 1",						\
   (.[] | (							\
   	"$(Destination)/"+.url+": "+(.use|join(" ")),		\
-	"$(Destination)/"+.url+": $(Layouts)/default.html",	\
-	"$(Destination)/"+.url+": $(Layouts)/"+.layout+".html",	\
-	"$(Destination)/"+.url+": | $$$$(dir $$$$@)",		\
+	"$(Destination)/"+.url+": $(p_layouts),			\
   	"$(Destination)/"+.url+": "+.source+"\n"+$(p_recipe)	\
   )), "# vim:syntax=make"
 endef

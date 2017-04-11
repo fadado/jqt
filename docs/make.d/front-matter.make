@@ -50,12 +50,12 @@ endef
 # Add members to user defined front-matter at `.`.
 #
 # Defined by jqt:
-#	.page._id
-#	.page._content
-#	.page._highlight
-#	.page._toc
-#	.page._source == $1
-# Defined here:
+#	._content
+#	._highlight
+#	._toc
+#	._source
+#	._front_matter
+# Defined here (front-matter plus...):
 #	.page.base
 #	.page.filename
 #	.page.id
@@ -119,15 +119,15 @@ endef
 define f_NODE_JSON.jq =
   {						\
     base:     "$(call f_page_base,$1)",		\
+    date:     (now | todateiso8601),		\
     filename: "$(call f_page_name,$1)",		\
     id:       "$(call f_node_id,$1)",		\
     isnode:   true,				\
     ispage:   false,				\
     path:     "$(call f_page_path,$1)",		\
     section:  "$(call f_page_section,$1)",	\
-    url:      "$(call f_page_url,$1)",		\
-    date:     (now | todateiso8601),		\
-    title:    "$(call f_page_name,$1)"		\
+    title:    "$(call f_page_name,$1)",		\
+    url:      "$(call f_page_url,$1)"		\
   } as $$node |					\
   reduce .defaults[] as $$d			\
     ({}; if "$(call f_node_id,$1)" | test("^" + $$d.idprefix) \
