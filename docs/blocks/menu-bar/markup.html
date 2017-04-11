@@ -3,8 +3,10 @@
  ######################################################################>&
 <ol class="menu-bar">
 {% .site.menu[] %}
-  <li class='menu-bar__item {{if .source==$M.page._source then "menu-bar__item_current" else "" end}}'>
-    <a href="{{.URL}}">{{.name}}</a>
+  <li class='menu-bar__item {{if .==$M.page.id then "menu-bar__item_current" else "" end}}'>
+    {% (. as $id | $M.pages[] | select($id == .id)) as $page %}
+    <a href="{{$page.url}}">{{$page.name}}</a>
+    {% end %}
   </li>
 {% end %}
 </ol>

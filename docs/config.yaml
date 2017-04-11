@@ -35,27 +35,15 @@ baseURL: https://fadado.github.com/jqt/
 lang: &lang en
 logo: "❴❴❏❵❵"
 
-author:
+author: &author 
 - email: jordinas@gmail.com
-  name: &author Joan Josep Ordinas Rosa
-
-# TODO: instrospect
+  name: Joan Josep Ordinas Rosa
 menu:
-- URL: ./index.html
-  source: content/index.md
-  name: Home
-- URL: ./engine.html
-  source: content/engine.md
-  name: Engine
-- URL: ./structure.html
-  source: content/structure.md
-  name: Structure
-- URL: ./content.html
-  source: content/content.md
-  name: Content
-- URL: ./data.html
-  source: content/data.md
-  name: Data
+  - index
+  - engine
+  - structure
+  - content
+  - data
 
 # Default values
 defaults:

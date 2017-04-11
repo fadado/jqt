@@ -74,11 +74,12 @@ define p_DETAILS :=
 	-e 's/<\/summary><\/p>/<\/summary>/'
 endef
 
-# . is $(Metadata)/pages.json
+# Complete command
 define p_recipe :=
-"\t$$(info ==> $$@)\n\t@$$(JQT) -d $$< $(Layouts)/"+.layout+".html | $$(p_DETAILS) > $$@"
+"\t$$(info ==> $$@)\n\t@$$(JQT) -mpage:$(Metadata)/pages/"+.id+".json -d $$< $(Layouts)/"+.layout+".html | $$(p_DETAILS) > $$@"
 endef
 
+# . is $(Metadata)/pages.json
 define p_PAGES_D_MAKE.jq :=
   "__html__ := 1",						\
   (.[] | (							\

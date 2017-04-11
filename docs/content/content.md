@@ -55,7 +55,7 @@ and <%cite jqt> injects it into the render stage under the global JSON scalar
 `.page._content`. If the document contains fenced code blocks specifying the language of
 the code block, the related highlight CSS code will be in the scalar `.page._highlight`. Also, the
 HTML table of contents is available in the scalar `.page._toc`, and the path to the document
-file in the scalar `.page._path`.
+file in the scalar `.page._source`.
 
 ### MarkDown snippets
 

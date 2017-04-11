@@ -19,7 +19,7 @@
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to/page`
 define f_page_id =
-$(subst $(Metadata)/pages/,,$(basename $1))
+$(subst $(Metadata)/pages/,$(empty),$(basename $1))
 endef
 
 # `$(Metadata)/pages/path/to/page.json` => `(../)+`
@@ -48,12 +48,27 @@ $(patsubst %/,%,$(call f_page_path,$1))
 endef
 
 # Add members to user defined front-matter at `.`.
+#
 # Defined by jqt:
 #	.page._id
 #	.page._content
 #	.page._highlight
 #	.page._toc
 #	.page._source == $1
+# Defined here:
+#	.page.base
+#	.page.filename
+#	.page.id
+#	.page.isnode
+#	.page.ispage
+#	.page.path
+#	.page.section
+#	.page.source
+#	.page.url
+#
+# Parameters:
+#	$1: $(Content)/%.md
+#	$2: $(Metadata)/pages/%.json
 define f_PAGE_JSON.jq =
   . + {						\
     base:     "$(call f_page_base,$2)",		\

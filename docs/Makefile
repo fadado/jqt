@@ -118,15 +118,6 @@ include make.d/front-matter.make
 # 	rules for all HTML files
 # ======================================================================
 
-ifdef __html__
-
-# Options for `jqt`. To be extended in the site specific section.
-JQTFLAGS = \
-	-I./				\
-	-msite:$(Metadata)/config.json	\
-
-endif
-
 # ======================================================================
 include make.d/pages.make
 #
@@ -198,6 +189,11 @@ ifdef __html__
 
 # Options for `jqt`.
 JQTFLAGS += 					\
+	-n document				\
+	-I./					\
+	-msite:$(Metadata)/config.json		\
+	-mpages:$(Metadata)/pages.json		\
+	-msections:$(Metadata)/sections.json	\
 	-5 					\
 	-iblocks/filters			\
 	-msnippets:$(Metadata)/snippets.json	\
