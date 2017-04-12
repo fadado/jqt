@@ -28,7 +28,7 @@
 
 # Markdown documents found in the filesystem (only `.md` extensions).
 #i_suffixes := -name '*.md' -o -name '*.mkd' -o -name '*.markdown'
-i_suffixes := -name '*.md' 
+i_suffixes := -name '[!_]*.md' 
 i_documents := $(sort $(shell find $(Content) -type f -a $(i_suffixes)))
 
 # Unique paths to documents directories.

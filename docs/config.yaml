@@ -22,7 +22,6 @@
 
 # Changes from defaults
 Destination: /tmp/jqt   # fast RAM disk
-Layouts:     ./blocks   # shared space
 
 #
 # Site parameters
