@@ -10,7 +10,7 @@
 <meta name='keywords' content='jqt, jq, template engine' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 
-<meta name="generator" content="jqt v0.5.0" />
+<meta name="generator" content="JQT v0.5.1" />
 <meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
 
 <link rel="shortcut icon" href="favicon.ico"/>
@@ -18,23 +18,68 @@
 <link rel="stylesheet" type="text/css" href="styles.css"/>
     
 <style type="text/css">/*<![CDATA[*/
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 /*]]>*/</style>
 
 
@@ -43,7 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <body class="#container">
 <header class="#header">
 <nav>
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.0</span></span>
+<span class="logo"><a title="jqt, the jq template engine" href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.1</span></span>
 <ol class="menu-bar">
 <li class='menu-bar__item menu-bar__item_current'>
 <a href="index.html">Home</a>
@@ -65,7 +110,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </header>
 <main class="#body">
 <article class="$content">
-<h1 id="welcome">Welcome</h1>
+<h1 id="welcome-to-jqt">Welcome to <cite>jqt</cite></h1>
 <!--
 > _Editing is a rewording activity._\
 > — _Alan J. Perlis_
@@ -79,31 +124,31 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h2 id="jq"><em>jq</em></h2>
 <p><a href="https://stedolan.github.io/jq/"><em>jq</em></a> have nice features like string interpolation and implicit backtracking. Mixed with the help of some syntactic sugar a powerful template engine appear. Imagine the following interpolation strings, in a <a href="https://stedolan.github.io/jq/"><em>jq</em></a> program, separated with the comma operator:</p>
 <h3 id="simple-expansion">Simple expansion</h3>
-<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;title&gt;</span>\(.title)<span class="kw">&lt;/title&gt;</span>&quot;, ...</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a>..., &quot;<span class="kw">&lt;title&gt;</span>\(.title)<span class="kw">&lt;/title&gt;</span>&quot;, ...</span></code></pre></div>
 <h3 id="conditional-expansion">Conditional expansion</h3>
-<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.published//empty)&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a>..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;date&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.published//empty)&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</span></code></pre></div>
 <h3 id="repeated-expansion">Repeated expansion</h3>
-<pre class="sourceCode html"><code class="sourceCode html">..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.author[])&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a>..., &quot;<span class="kw">&lt;meta</span><span class="ot"> name=</span><span class="st">&#39;author&#39;</span><span class="ot"> content=</span><span class="st">&#39;\(.author[])&#39;</span> <span class="kw">/&gt;</span>&quot;, ...</span></code></pre></div>
 <p>In these examples the strings expand, vanish, or multiply without any explicit <code>if</code> or <code>for</code>!</p>
 <h2 id="jqt"><cite>jqt</cite></h2>
 <p>To write <a href="https://stedolan.github.io/jq/"><em>jq</em></a> scripts using strings with interpolations is not the idea we have for a template language. We need some syntactic sugar, and this is provided by <cite>jqt</cite>: you write templates in a very fashionable style, the templates are translated into a <a href="https://stedolan.github.io/jq/"><em>jq</em></a> script and then <code>jq</code> is feed with the created script and some content and data in <a href="http://json.org/">JSON</a> format… and the magic is done!</p>
 <h3 id="syntactic-sugar">Syntactic sugar</h3>
 <p>And, how do the <em>syntactic sugar</em> looks like? Do you think the following example seems to be a template?</p>
-<pre><code>&lt;html lang=&#39;{{.page.lang//.site.lang}}&#39;&gt;
+<pre><code>&lt;html lang=&#39;{{page.lang//site.lang}}&#39;&gt;
 &lt;head&gt;
-    &lt;title&gt;{{.page.title | gsub(&quot;&lt;[^&gt;]*&gt;&quot;; &quot;&quot;)}}&lt;/title&gt;
+    &lt;title&gt;{{page.title | gsub(&quot;&lt;[^&gt;]*&gt;&quot;; &quot;&quot;)}}&lt;/title&gt;
     {# include files in preprocessing stage: #}
     &lt;%include &quot;head.html&quot;&gt;
-    &lt;meta name=&quot;generator&quot; content=&quot;jqt v&lt;%include &quot;../VERSION&quot;&gt;&quot;/&gt;
+    &lt;meta name=&quot;generator&quot; content=&quot;JQT v&lt;%version&gt;&quot;/&gt;
     {# optional line: #}
-    &lt;meta name=&#39;dcterms.modified&#39; content=&#39;{{.page.updated//empty}}&#39; /&gt;
+    &lt;meta name=&#39;dcterms.modified&#39; content=&#39;{{page.updated//empty}}&#39; /&gt;
     {# implicit loop for all authors: #}
-    {% .page.author | sort[] %}&lt;meta name=&#39;author&#39; content=&#39;{{.}}&#39; /&gt;
+    {% page.author | sort[] %}&lt;meta name=&#39;author&#39; content=&#39;{{.}}&#39; /&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;h1&gt;{{.page.title}}&lt;/h1&gt;
+    &lt;h1&gt;{{page.title}}&lt;/h1&gt;
     &lt;div id=&quot;CONTENT&quot;&gt;
-        {{.page._content}}
+        {{$jqt._content}}
     &lt;/div&gt;
     {# macro calls: #}
     &lt;%partial analytics &#39;UA-82432866-1&#39;&gt;
@@ -125,7 +170,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 <footer class="#footer">
 <section class="license">
-<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /> <em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
 </section>
 <ol class="repository">
@@ -133,6 +178,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li class="repository__section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+<li class="repository__section"><a href="#">top</a></li>
 </ol>
 </footer>
 <script type="text/javascript">/*<![CDATA[*/

@@ -10,7 +10,7 @@
 <meta name='keywords' content='jqt, jq, YAML, gpp, preprocessing, template engine' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 
-<meta name="generator" content="jqt v0.5.0" />
+<meta name="generator" content="JQT v0.5.1" />
 <meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
 
 <link rel="shortcut icon" href="favicon.ico"/>
@@ -24,7 +24,7 @@
 <body class="#container">
 <header class="#header">
 <nav>
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.0</span></span>
+<span class="logo"><a title="jqt, the jq template engine" href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.1</span></span>
 <ol class="menu-bar">
 <li class='menu-bar__item '>
 <a href="index.html">Home</a>
@@ -53,7 +53,14 @@
 <li><a href="#implementation">Implementation</a></li>
 <li><a href="#invoking-jqt">Invoking <cite>jqt</cite></a><ul>
 <li><a href="#synopsis">Synopsis</a></li>
-<li><a href="#options">Options</a></li>
+<li><a href="#options">Options</a><ul>
+<li><a href="#preprocessor-options">Preprocessor options</a></li>
+<li><a href="#template-options">Template options</a></li>
+<li><a href="#document-options">Document options</a></li>
+<li><a href="#data-options">Data options</a></li>
+<li><a href="#debugging-options">Debugging options</a></li>
+<li><a href="#information-options">Information options</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#preprocessing">Preprocessing</a></li>
 </ul></li>
@@ -93,74 +100,81 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <h2 id="invoking-jqt">Invoking <cite>jqt</cite></h2>
 <h3 id="synopsis">Synopsis</h3>
 <p><code>jqt</code> accepts several options and can be called with zero, one or two filename arguments. The usage possibilities are:</p>
-<p><strong>jqt</strong> [<strong>-h</strong> | <strong>--help</strong> | <strong>-p</strong> | <strong>-V</strong> | <strong>--version</strong>]<br /><strong>jqt</strong> [<em>options</em>] &lt; <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> &gt; <em>result</em><br /><strong>jqt</strong> [<em>options</em>] <em>infile</em> <em>result</em></p>
+<div class="line-block"><strong>jqt</strong> [<strong>-h</strong> | <strong>–help</strong> | <strong>-p</strong> | <strong>-V</strong> | <strong>–version</strong>]<br />
+<strong>jqt</strong> [<em>options</em>] &lt; <em>infile</em> &gt; <em>result</em><br />
+<strong>jqt</strong> [<em>options</em>] <em>infile</em> &gt; <em>result</em></div>
+<p><strong>jqt</strong> [<em>options</em>] <em>infile</em> <em>result</em></p>
 <h3 id="options">Options</h3>
+<h4 id="preprocessor-options">Preprocessor options</h4>
 <dl>
-<dt>-4, -5</dt>
-<dd>Sets the output HTML version (HTML4 / HTML5).
-</dd>
-<dt>-C</dt>
-<dd>Stops processing before the render stage and outputs the full JSON data model.
-</dd>
-<dt>-D NAME=VAL</dt>
-<dd>Defines the user macro <em>NAME</em> as equal to <em>VAL</em>.
-</dd>
-<dt>-d FILE</dt>
-<dd>Reads the content document from <em>FILE</em>.
-</dd>
-<dt>-e</dt>
-<dd>Extracts and outputs the MarkDown document YAML front matter.
-</dd>
-<dt>-H</dt>
-<dd>Stops MarkDown processing after generating HTML (outputs several HTML fragments).
-</dd>
-<dt>-h, --help</dt>
-<dd>Displays this message.
+<dt>-D NAME=STRING</dt>
+<dd>Defines the user macro <em>NAME</em> as equal to <em>STRING</em>.
 </dd>
 <dt>-I DIRECTORY</dt>
 <dd>Appends <em>DIRECTORY</em> to the end of the preprocessor list of directories to be searched for include files.
 </dd>
-<dt>-i MODULE</dt>
-<dd>Includes the jq <em>MODULE</em> in the render stage.
+<dt>-P LANGUAGE</dt>
+<dd>Expands input file with the macro-processor (<em>LANGUAGE</em> can be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
 </dd>
-<dt>-j MODULE:NAME</dt>
-<dd>Imports the jq <em>MODULE</em> in the render stage.
-</dd>
+</dl>
+<h4 id="template-options">Template options</h4>
+<dl>
 <dt>-L DIRECTORY</dt>
-<dd>Appends <em>DIRECTORY</em> to the end of the jq list of directories to be searched for included and imported modules.
+<dd>Appends <em>DIRECTORY</em> to the end of the <cite>jq</cite> list of directories to be searched for included and imported modules.
 </dd>
+<dt>-i MODULE</dt>
+<dd>Includes the <cite>jq</cite> <em>MODULE</em> in the render stage.
+</dd>
+<dt>-j NAME:MODULE</dt>
+<dd>Imports the <cite>jq</cite> <em>MODULE</em> in the render stage and define helper function named <em>NAME</em> if <em>MODULE</em> is a data module and has the suffix <code>.json</code>.
+</dd>
+</dl>
+<h4 id="document-options">Document options</h4>
+<dl>
+<dt>-4, -5</dt>
+<dd>Sets the output HTML version (HTML4 / HTML5).
+</dd>
+<dt>-d FILE</dt>
+<dd>Reads the content document from <em>FILE</em>.
+</dd>
+<dt>-w</dt>
+<dd>Build the data model without input document, only from JSON and YAML input files.
+</dd>
+</dl>
+<h4 id="data-options">Data options</h4>
+<dl>
 <dt>-M NAME:FILE</dt>
 <dd>Adds a <em>FILE</em> in YAML or JSON format to the input data at the top level (<em>NAME</em> is ignored but must be present and unique).
 </dd>
 <dt>-m NAME:FILE</dt>
 <dd>Adds a <em>FILE</em> in YAML or JSON format to the input data as the value of object <em>NAME</em>.
 </dd>
-<dt>-n NAME</dt>
-<dd>Defines the name for YAML document metadata in <em>jq</em> scripts (defaults to <code>page</code>).
-</dd>
-<dt>-P LANGUAGE</dt>
-<dd>Expands input file with the macro-processor (<em>LANGUAGE</em> can be <code>jqt</code>, <code>md</code>, <code>json</code>, <code>css</code> or <code>css-min</code>).
-</dd>
-<dt>-p</dt>
-<dd>Prints list of Pandoc accepted options.
-</dd>
-<dt>-r</dt>
-<dd>Removes the MarkDown document YAML front matter and outputs the document body.
-</dd>
-<dt>-S</dt>
-<dd>Stops template processing before the render stage (outputs the jq script).
-</dd>
 <dt>-T [NAME:FILE]</dt>
 <dd>Transforms front matter YAML top level MarkDown scalar values to HTML. If <em>NAME:FILE</em> is provided add the transformed data to the input data as a value of object <em>NAME</em>. Otherwise, outputs a new YAML document.
 </dd>
-<dt>-t</dt>
-<dd>Tests presence of front matter in MarkDown (indicated in the output status).
+</dl>
+<h4 id="debugging-options">Debugging options</h4>
+<dl>
+<dt>-C</dt>
+<dd>Stops processing before the render stage and outputs the full JSON data model.
 </dd>
-<dt>-V, --version</dt>
+<dt>-H</dt>
+<dd>Stops MarkDown processing after generating HTML (outputs several HTML fragments).
+</dd>
+<dt>-S</dt>
+<dd>Stops template processing before the render stage (outputs the <cite>jq</cite> script).
+</dd>
+</dl>
+<h4 id="information-options">Information options</h4>
+<dl>
+<dt>-h</dt>
+<dd>Displays this message.
+</dd>
+<dt>-p</dt>
+<dd>Prints information about Pandoc options.
+</dd>
+<dt>-V</dt>
 <dd>Displays version information.
-</dd>
-<dt>-w</dt>
-<dd>Build the data model without input document, only from JSON and YAML input files.
 </dd>
 </dl>
 <h2 id="preprocessing">Preprocessing</h2>
@@ -170,35 +184,35 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <caption><strong>Summary of macro syntax</strong></caption>
 <thead>
 <tr>
-<th style="text-align: left;"></th>
-<th style="text-align: left;">JQT and MarkDown</th>
+<th></th>
+<th>JQT and MarkDown</th>
 <th style="text-align: left;">JSON and CSS</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Macro calls</td>
-<td style="text-align: left;"><code>&lt;%m&gt;</code></td>
+<td>Macro calls</td>
+<td><code>&lt;%m&gt;</code></td>
 <td style="text-align: left;"><code>&amp;m</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>&lt;%m x y&gt;</code></td>
+<td></td>
+<td><code>&lt;%m x y&gt;</code></td>
 <td style="text-align: left;"><code>&amp;m{x}{y}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Macro parameters</td>
-<td style="text-align: left;"><code>$1</code>...<code>$9</code></td>
-<td style="text-align: left;"><code>$1</code>...<code>$9</code></td>
+<td>Macro parameters</td>
+<td><code>$1</code>…<code>$9</code></td>
+<td style="text-align: left;"><code>$1</code>…<code>$9</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Interpolation in arguments</td>
-<td style="text-align: left;"><code>&quot; &quot;</code></td>
+<td>Interpolation in arguments</td>
+<td><code>" "</code></td>
 <td style="text-align: left;"></td>
 </tr>
 <tr>
-<td style="text-align: left;">Escape in arguments</td>
-<td style="text-align: left;"><code>' '</code></td>
+<td>Escape in arguments</td>
+<td><code>' '</code></td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody>
@@ -208,92 +222,99 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <caption><strong>Summary of text skips</strong></caption>
 <thead>
 <tr>
-<th style="text-align: left;"></th>
-<th style="text-align: left;">JQT templates</th>
-<th style="text-align: left;">MarkDown content</th>
-<th style="text-align: left;">JSON documents</th>
-<th style="text-align: left;">CSS stylesheets</th>
+<th></th>
+<th>JQT templates</th>
+<th>MarkDown content</th>
+<th>JSON documents</th>
+<th>CSS stylesheets</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Continuation lines</td>
-<td style="text-align: left;"><code>&amp;</code></td>
-<td style="text-align: left;"><code>&amp;</code></td>
-<td style="text-align: left;"><code>&amp;</code></td>
-<td style="text-align: left;"><code>&amp;</code></td>
+<td>Continuation lines</td>
+<td><code>&amp;</code></td>
+<td><code>&amp;</code></td>
+<td><code>&amp;</code></td>
+<td><code>&amp;</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Block comment</td>
-<td style="text-align: left;"><code>&lt;# #&gt;</code></td>
-<td style="text-align: left;"><code>&lt;# #&gt;</code></td>
-<td style="text-align: left;"><code>/* */</code></td>
-<td style="text-align: left;"><code>/* */</code></td>
+<td>Block comment</td>
+<td><code>&lt;# #&gt;</code></td>
+<td><code>&lt;# #&gt;</code></td>
+<td><code>/* */</code></td>
+<td><code>/* */</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Line comment</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>//</code></td>
-<td style="text-align: left;"><code>//</code></td>
+<td>Line comment</td>
+<td></td>
+<td></td>
+<td><code>//</code></td>
+<td><code>//</code></td>
 </tr>
 <tr>
-<td style="text-align: left;">Bypass<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
-<td style="text-align: left;"><code>&lt;!-- --&gt;</code></td>
-<td style="text-align: left;"><code>&lt;!-- --&gt;</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td>Bypass<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></td>
+<td><code>&lt;!-- --&gt;</code></td>
+<td><code>&lt;!-- --&gt;</code></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>` `</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td></td>
+<td></td>
+<td><code>` `</code></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>\n~~~</code> (also backticks)</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td></td>
+<td></td>
+<td><code>\n```</td>
+<td></code></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: left;">Escape<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>` `</code></td>
-<td style="text-align: left;"><code>` `</code></td>
+<td></td>
+<td></td>
+<td><code>\n~~~</code></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: left;">String<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></td>
-<td style="text-align: left;"><code>{% %}</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>&quot; &quot;</code></td>
-<td style="text-align: left;"><code>&quot; &quot;</code></td>
+<td>Escape<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></td>
+<td></td>
+<td></td>
+<td><code>` `</code></td>
+<td><code>` `</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>{{ }}</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>' '</code></td>
+<td>String<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></td>
+<td><code>{% %}</code></td>
+<td></td>
+<td><code>" "</code></td>
+<td><code>" "</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>{# #}</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td></td>
+<td><code>{{ }}</code></td>
+<td></td>
+<td></td>
+<td><code>' '</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>{# #}</code></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Text copied verbatim.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Quotes removed, text no expanded.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Quotes not removed, text expanded.<a href="#fnref3">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Text copied verbatim.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Quotes removed, text no expanded.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Quotes not removed, text expanded.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -303,7 +324,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 
 <footer class="#footer">
 <section class="license">
-<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /> <em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
 </section>
 <ol class="repository">
@@ -311,6 +332,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <li class="repository__section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+<li class="repository__section"><a href="#">top</a></li>
 </ol>
 </footer>
 <script type="text/javascript">/*<![CDATA[*/

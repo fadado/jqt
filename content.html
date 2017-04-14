@@ -10,7 +10,7 @@
 <meta name='keywords' content='jqt, markdown, pandoc, gpp, preprocessing, authoring content' />
 <meta name='author' content='Joan Josep Ordinas Rosa' />
 
-<meta name="generator" content="jqt v0.5.0" />
+<meta name="generator" content="JQT v0.5.1" />
 <meta name='dcterms.date' content='2016-08-28T10:27:09Z' />
 
 <link rel="shortcut icon" href="favicon.ico"/>
@@ -18,23 +18,68 @@
 <link rel="stylesheet" type="text/css" href="styles.css"/>
     
 <style type="text/css">/*<![CDATA[*/
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 /*]]>*/</style>
 
 
@@ -43,7 +88,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <body class="#container">
 <header class="#header">
 <nav>
-<span class="logo"><a href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.0</span></span>
+<span class="logo"><a title="jqt, the jq template engine" href="index.html">❴❴❏❵❵</a><span class="logo__version">v0.5.1</span></span>
 <ol class="menu-bar">
 <li class='menu-bar__item '>
 <a href="index.html">Home</a>
@@ -91,7 +136,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1 id="authoring-content">Authoring content</h1>
 <p>Authors must be freed from any concern regarding the presentation of his writings, and his dedication to its structure must be the essential minimum: <em>MarkDown</em> promises and delivers exactly this.</p>
 <h2 id="general-operation">General operation</h2>
-<p><cite>jqt</cite> transforms <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> documents to HTML using <a href="http://pandoc.org/">Pandoc</a>, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. Pandoc's output is then merged with the <a href="http://yaml.org/">YAML</a> front matter metadata and other input data before be sended to the render stage. This is described on the middle of this diagram:</p>
+<p><cite>jqt</cite> transforms <a href="https://daringfireball.net/projects/markdown/">MarkDown</a> documents to HTML using <a href="http://pandoc.org/">Pandoc</a>, but before that <a href="https://logological.org/gpp">GPP</a> is used to preprocess them. Pandoc’s output is packaged as JSON data and then merged with the <a href="http://yaml.org/">YAML</a> front matter metadata and other input data before be sended to the render stage. This is described on the middle of this diagram:</p>
 <figure style="margin:0; padding:0;clear:both;">
 <figcaption style="text-align:center; font-weight: bold;">
 jqt workflow
@@ -120,8 +165,8 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <dt>-4, -5</dt>
 <dd>Sets the output HTML version (HTML4 / HTML5).
 </dd>
-<dt>-D NAME=VAL</dt>
-<dd>Defines the user macro <em>NAME</em> as equal to <em>VAL</em>.
+<dt>-D NAME=STRING</dt>
+<dd>Defines the user macro <em>NAME</em> as equal to <em>STRING</em>.
 </dd>
 <dt>-d FILE</dt>
 <dd>Reads the content document from <em>FILE</em>.
@@ -146,17 +191,17 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 </dd>
 </dl>
 </details>
-<p>This feature can be used to collect multiple text snippets in only one file. The MarkDown can be transformed to HTML and put in a new YAML or JSON file with a command like this:</p>
-<pre class="sourceCode zsh"><code class="sourceCode zsh">jqt -T -- text.yaml <span class="kw">|</span> yaml2json <span class="kw">&gt;</span> snippets.json</code></pre>
+<p>This feature can be used to collect multiple text snippets in only one file (YAML file or MarkDown file with only front-matter). The MarkDown can be transformed to HTML and put in a new YAML or JSON file with a command like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb2-1"><a href="#cb2-1"></a>jqt -T -- text.yaml <span class="kw">|</span> yaml2json <span class="kw">&gt;</span> snippets.json</span></code></pre></div>
 <p>Then this converted file can be loaded by <code>jqt</code> in succesive calls:</p>
-<pre class="sourceCode zsh"><code class="sourceCode zsh">jqt -m snippets:snippets.json ...</code></pre>
-<p>Template files can expand the snippets without never containing raw content:</p>
-<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;h1&gt;</span>{{.snippets.title}}<span class="kw">&lt;/h1&gt;</span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb3-1"><a href="#cb3-1"></a>jqt -j snippets:snippets.json ...</span></code></pre></div>
+<p>Template files (only!) can expand the snippets without never containing raw content:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">&lt;h1&gt;</span>{{snippets.title}}<span class="kw">&lt;/h1&gt;</span></span></code></pre></div>
 <p>This allows the absolute separation of structure and content, as it should be.</p>
 <h2 id="document-syntax">Document syntax</h2>
-<p>Document's conversion has two stages. In the first the text is preprocessed, and the second does the proper conversion to HTML.</p>
+<p>Document’s conversion has two stages. In the first the text is preprocessed, and the second does the proper conversion to HTML.</p>
 <h3 id="preprocessing">Preprocessing</h3>
-<p>The MarkDown input content is preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options in a preprocessor are available, like defining new macros, include other files, etc. For example, a macro call like <code>&lt;%include &quot;../VERSION&quot;&gt;</code> will expand to he string <code>0.5.0</code> as you can see in this paragraph and on the top of these pages.</p>
+<p>The MarkDown input content is preprocessed using <a href="https://logological.org/gpp">GPP</a>. All the expected options in a preprocessor are available, like defining new macros, include other files, etc. For example, a macro call like <code>&lt;%version&gt;</code> will expand to the <cite>jqt</cite> version (<code>0.5.1</code>) as you can see in this paragraph.</p>
 <h4 id="macro-calls">Macro calls</h4>
 <p>All the power of <a href="https://logological.org/gpp">GPP</a> is available to help you when <a href="https://en.wikipedia.org/wiki/Wikipedia:Transclusion">transcluding</a> the input MarkDown document. The macro syntax used by <cite>jqt</cite> in templates and input documents precedes macro names with the characters <code>&lt;%</code> and finishes the macro calls with the character <code>&gt;</code>. Here are some of the predefined macros:</p>
 <pre><code>&lt;%defeval x y&gt;
@@ -182,7 +227,7 @@ Document +-----------&gt;|expand|--&gt;|markup|--+          |merge|--------&gt;|
 <p>Warning: you must see the <a href="https://files.nothingisreal.com/software/gpp/gpp.html">GPP manual</a> if you want to know all the gory details.</p>
 <h4 id="skips">Skips</h4>
 <p>Some fragments of text are skipped during macro expansion, like comments, continuation lines and arbitrary but delimited strings of characters:</p>
-<pre><code>&lt;# Block comments, removed, must end in newline (also removed) #&gt;
+<pre><code>&lt;# Block comments, removed #&gt;
 Continuation lines using an ampersand &amp;
 just before the newline character</code></pre>
 <p><em>Strings</em> are copied to the output, but evaluation of macros inside strings can be enabled or disabled depending on the type of string. Also, string delimiters can be copied, or not, to the output:</p>
@@ -199,101 +244,78 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 <thead>
 <tr>
 <th style="text-align: center;">Delimiters</th>
-<th style="text-align: left;">Macro expansion</th>
-<th style="text-align: left;">Delimiters removed</th>
-<th style="text-align: left;">Content removed</th>
+<th>Macro expansion</th>
+<th>Delimiters removed</th>
+<th>Content removed</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>&amp;\n</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">There is no content</td>
+<td style="text-align: center;"><code>&amp;\n</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></td>
+<td>No</td>
+<td>Yes</td>
+<td>There is no content</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>&lt;#</code> <code>#&gt;\n</code></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">Yes</td>
+<td style="text-align: center;"><code>&lt;#</code> <code>#&gt;</code></td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>'</code> <code>'</code><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">No</td>
+<td style="text-align: center;"><code>'</code> <code>'</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>&quot;</code> <code>&quot;</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">Yes</td>
-<td style="text-align: left;">No</td>
+<td style="text-align: center;"><code>"</code> <code>"</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>&lt;!--</code> <code>--&gt;</code></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>`</code> <code>`</code></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>\n```</code><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
+<td style="text-align: center;"><code>\n```</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>\n~~~</code><a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
-<td style="text-align: left;">No</td>
+<td style="text-align: center;"><code>\n~~~</code><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
 </tr>
 </tbody>
 </table>
 <h3 id="pandocs-markdown">Pandoc’s Markdown</h3>
-<p><cite>jqt</cite> accept as input format for documents the <a href="http://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc's MarkDown</a> variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a> disabled, and produces by default transitional HTML. When running <code>jqt</code> the following Pandoc long options can be specified in the command line and will be forwarded untouched to <code>pandoc</code>:</p>
-<pre><code>--base-header-level=NUMBER
---bibliography=FILE
---citation-abbreviations=FILE
---columns=NUMBER
---csl=FILE
---email-obfuscation=none|javascript|references
---file-scope
---gladtex
---highlight-style=STYLE
---html-q-tags
---id-prefix=STRING
---indented-code-classes=CLASSES
---jsmath[=URL]
---katex[=URL]
---katex-stylesheet
---latexmathml[=URL]
---mathjax[=URL]
---mathml[=URL]
---mimetex[=URL]
---no-highlight
---normalize
---number-offset=NUMBER[,NUMBER,...]
---number-sections
---preserve-tabs
---section-divs
---tab-stop=NUMBER
---toc-depth=NUMBER
---webtex[=URL]
---wrap=[auto|none|preserve]</code></pre>
-<section class="footnotes">
+<p><cite>jqt</cite> accepts as input format for documents the <a href="http://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc’s MarkDown</a> variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a> disabled, and produces by default transitional HTML. When running <code>jqt</code> all long options specified in the command line will be forwarded untouched to <code>pandoc</code> (as for example with <code>--help</code>), but some are reserved or have no meaning.</p>
+<p><cite>Pandoc</cite> options used internally by <cite>jqt</cite> (do not play with them):</p>
+<pre><code>    --from=FORMAT
+    --to=FORMAT
+    --template=FILE
+    --table-of-contents
+    --output=FILE</code></pre>
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>An ampersand followed by a newline is treated as a line continuation (that is, the ampersand and the newline are removed and effectively ignored).<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Only inside user defined macros.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Only inside user defined macros.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Blocks of code fenced between two lines with three or more backticks.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>Blocks of code fenced between two lines with three or more tildes.<a href="#fnref5">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>An ampersand followed by a newline is treated as a line continuation (that is, the ampersand and the newline are removed and effectively ignored).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Only inside user defined macros.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Only inside user defined macros.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Blocks of code fenced between two lines with three or more backticks.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Blocks of code fenced between two lines with three or more tildes.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -303,7 +325,7 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 
 <footer class="#footer">
 <section class="license">
-<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /><em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
+<p><small>This website is made with <a href="https://fadado.github.io/jqt/"><em>jqt</em></a>.<br /> <em>jqt</em> is licensed under the <a href="https://github.com/fadado/jqt/blob/master/LICENSE">MIT</a> license (code) and the <a href="https://creativecommons.org/licenses/by/3.0/">CC-BY-3.0</a> license (documents).</small></p>
 
 </section>
 <ol class="repository">
@@ -311,6 +333,7 @@ Fenced code blocks with tildes (~~~) or backticks (```)
 <li class="repository__section"><a href="https://github.com/fadado/jqt/issues">issues</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/wiki">wiki</a></li>
 <li class="repository__section"><a href="https://github.com/fadado/jqt/releases">releases</a></li>
+<li class="repository__section"><a href="#">top</a></li>
 </ol>
 </footer>
 <script type="text/javascript">/*<![CDATA[*/
