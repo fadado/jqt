@@ -23,13 +23,13 @@ endif
 endif
 
 # ======================================================================
--include $(Metadata)/globals.make
+-include $(Metadata)/phase_1.make
 #
-# Load global parameters. If `globals.make` not exists it is built when
+# Load site global parameters. If `phase_1.make` not exists it is built when
 # restarting with a rule defined in `config.make`.
 #
 # Exported variables:
-#	__globals__
+#	__phase_1
 #	Assets
 #	Blocks
 #	Content
@@ -43,7 +43,7 @@ endif
 include make.d/config.make
 #
 # Build files derived from user defined configuration:
-# 	config.{yaml,json} => config.json => site.json => globals.make
+# 	config.{yaml,json} => config.json => site.json => phase_1.make
 #
 # Imported variables:
 #	Metadata
@@ -52,43 +52,52 @@ include make.d/config.make
 # 	$(Metadata)
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
-#	$(Metadata)/globals.make
+#	$(Metadata)/phase_1.make
 # ======================================================================
 
 # Warning:
 #
-# If `__globals__` is not defined because `globals.make` does not exists, after
-# this point most of the file is ignored, but `globals.make` is built because a
+# If `__phase_1` is not defined because `phase_1.make` does not exists, after
+# this point most of the file is ignored, but `phase_1.make` is built because a
 # rule exists in the file `config.make`.  Then this `Makefile` is restarted,
-# `MAKE_RESTARTS` will be equal to 1, `globals.make` is now loaded and
-# `__globals__` is defined.
+# `MAKE_RESTARTS` will be equal to 1, `phase_1.make` is now loaded and
+# `__phase_1` is defined.
 
-ifdef __globals__ # not defined in a fresh start
+ifdef __phase_1 # not defined in a fresh start
+
+# ======================================================================
+-include $(Metadata)/phase_2.make
+#
+# Build metadata from filesystem introspection.
+#
+# Exported variables:
+#	__phase_2
+#	DestinationPages
+#	DestinationPaths
+#	HomePage
+#	MetadataPages 
+#	MetadataPaths
+# ======================================================================
 
 # ======================================================================
 include make.d/pathnames.make
 #
-# Build metadata from filesystem introspection.
+# ???????'
 #
 # Imported variables:
 #	Content
 #	Destination
 #	Metadata
-# Exported variables:
-#	HomePage
-#	Nodes
-#	NodesJSON
-#	Pages
-#	PagesJSON 
 # Exported rules for:
 # 	$(Destination)
 # 	$(Destination)/.../
 # 	$(Metadata)/.../
-#	all:: $(Pages)
+#	all:: $(DestinationPages)
 # Additional dependencies defined:
 # 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
-# 	$(Destination)/.../section/index.html => $(Metadata)/nodes/.../section.json
 # ======================================================================
+
+#ifdef __phase_2
 
 # ======================================================================
 include make.d/front-matter.make
@@ -98,6 +107,7 @@ include make.d/front-matter.make
 # Imported variables:
 #	Content
 #	Metadata
+#	MetadataPages 
 # Exported rules for:
 # 	$(Metadata)/pages/.../page.json
 # 	$(Metadata)/nodes/.../section.json
@@ -107,13 +117,13 @@ include make.d/front-matter.make
 # ======================================================================
 
 # ======================================================================
--include $(Metadata)/html.make
+-include $(Metadata)/phase_3.make
 #
 # Load rules for pages and nodes. If not exists is built when restarting with
 # rule defined in `pages.make`.
 #
 # Exported variables:
-#	__html__
+#	__phase_3
 # Exported rules for:
 # 	rules for all HTML files
 # ======================================================================
@@ -130,7 +140,7 @@ include make.d/pages.make
 #	Metadata
 #	JQTFLAGS
 # Exported rules for:
-#	$(Metadata)/html.make
+#	$(Metadata)/phase_3.make
 #	all:: # assets
 # 	build
 # 	clean::
@@ -185,7 +195,7 @@ include make.d/tools.make
 #  Specific rules for this web site
 ########################################################################
 
-ifdef __html__
+ifdef __phase_3
 
 # Options for `jqt`.
 JQTFLAGS += 					\
@@ -205,7 +215,7 @@ $(Metadata)/snippets.json: $(Data)/snippets.yaml \
 	@jqt -T < $< | yaml2json > $@
 
 # Extra dependencies
-$(Pages): $(Metadata)/snippets.json $(Blocks)/filters.jq
+$(DestinationPages): $(Metadata)/snippets.json $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
 
 #
 # Generate man page for jqt
@@ -259,7 +269,8 @@ clobber::
 clean::
 	@rm -f /tmp/help
 
-endif # __html__
-endif # __globals__
+endif # __phase_3
+#endif # __phase_2
+endif # __phase_1
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

@@ -1,0 +1,15 @@
+<#######################################################################
+ # Body for blog posts
+ ######################################################################>&
+<main class="#body">
+  {% $pages::pages[0][] | select(.section=="blog") %}<#TODO: sort?#>
+    <div class="post-excerpt">
+      <a class="post-excerpt__title" href="{{.base}}{{.url}}">{{.title}}</a>
+      <p class="post-excerpt__test">{{.description}}
+        <span class="post-excerpt__date">{{.updated | fromdate |strftime("%B %Y") }}</span></p>
+    </div>
+  {% end %}
+</main>
+<#
+vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=html
+#>&

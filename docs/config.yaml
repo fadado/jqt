@@ -27,10 +27,8 @@ Destination: /tmp/jqt   # fast RAM disk
 # Site parameters
 #
 
-baseurl: https://fadado.github.io/jqt
-
 title: jqt, the jq template engine
-baseURL: https://fadado.github.com/jqt/
+baseurl: https://fadado.github.com/jqt/
 lang: &lang en
 logo: "❴❴❏❵❵"
 
@@ -43,6 +41,7 @@ menu:
   - structure
   - content
   - data
+  - blog/index
 
 # Default values
 defaults:

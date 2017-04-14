@@ -2,7 +2,7 @@
 # config.make
 #
 # Build files derived from user defined configuration:
-# 	config.{yaml,json} => config.json => site.json => globals.make
+# 	config.{yaml,json} => config.json => site.json => phase_1.make
 #
 # Imported variables:
 #	Metadata
@@ -11,7 +11,7 @@
 # 	$(Metadata)
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
-#	$(Metadata)/globals.make
+#	$(Metadata)/phase_1.make
 
 ########################################################################
 # Metadata directory for all generated metadata and make files
@@ -76,12 +76,12 @@ $(Metadata)/site.json: $(Metadata)/config.json
 	@jq --sort-keys '$(m_SITE_JSON.jq)' < $< > $@
 
 #
-# Create `$(Metadata)/globals.make` from `$(Metadata)/site.json`.
+# Create `$(Metadata)/phase_1.make` from `$(Metadata)/site.json`.
 #
 
 # Format members as make variables.
-define m_GLOBALS_MAKE.jq :=
-  "__globals__ := 1",				\
+define PHASE_1.jq :=
+  "__phase_1   := 1",				\
   "Assets      := " + .Assets,			\
   "Blocks      := " + .Blocks,			\
   "Content     := " + .Content,			\
@@ -93,8 +93,8 @@ define m_GLOBALS_MAKE.jq :=
 endef
 
 # Makefile to be included in `Makefile`.
-$(Metadata)/globals.make: $(Metadata)/site.json
+$(Metadata)/phase_1.make: $(Metadata)/site.json make.d/config.make
 	$(info ==> $@)
-	@jq --raw-output '$(m_GLOBALS_MAKE.jq)' < $< > $@
+	@jq --raw-output '$(PHASE_1.jq)' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

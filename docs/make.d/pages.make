@@ -10,7 +10,7 @@
 #	Metadata
 #	JQTFLAGS
 # Exported rules for:
-#	$(Metadata)/html.make
+#	$(Metadata)/phase_3.make
 #	all:: # assets
 # 	build
 # 	clean
@@ -60,7 +60,7 @@ fresh: clobber
 
 init:
 	@rm -rf $(Metadata)
-	@$(MAKE) -s $(Metadata)/html.make
+	@$(MAKE) -s $(Metadata)/phase_3.make
 
 ########################################################################
 # Create makefile containing rules for all HTML files
@@ -87,18 +87,18 @@ $(Layouts)/default.html $(Layouts)/"+.layout+".html | $$$$(dir $$$$@)"
 endef
 
 # . is $(Metadata)/pages.json
-define p_PAGES_D_MAKE.jq :=
-  "__html__ := 1",						\
+define PHASE_3.jq :=
+  "__phase_3 := 1",						\
   (.[] | (							\
-  	"$(Destination)/"+.url+": "+(.use|join(" ")),		\
+  	"$(Destination)/"+.url+": "+(.use//[]|join(" ")),	\
 	"$(Destination)/"+.url+": $(p_layouts),			\
   	"$(Destination)/"+.url+": "+.source+"\n"+$(p_recipe)	\
   )), "# vim:syntax=make"
 endef
 
 # Rules for each page (depend also on sections.json only to force build)
-$(Metadata)/html.make: $(Metadata)/pages.json $(Metadata)/sections.json
+$(Metadata)/phase_3.make: $(Metadata)/pages.json $(Metadata)/sections.json
 	$(info ==> $@)
-	@jq --raw-output '$(p_PAGES_D_MAKE.jq)' < $< > $@
+	@jq --raw-output '$(PHASE_3.jq)' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

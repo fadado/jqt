@@ -11,6 +11,7 @@
 
 &include{milligram.css}
 
+&include{blocks/body/_blog/style.css}
 &include{blocks/container/style.css}
 &include{blocks/header/style.css}
 &include{blocks/footer/style.css}

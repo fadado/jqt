@@ -24,7 +24,7 @@ endef
 
 # `$(Metadata)/pages/path/to/page.json` => `(../)+`
 define f_page_base =
-$(patsubst ../../%,%,$(subst $(space),$(empty),$(patsubst %,../,$(subst /,$(space),$1))))
+$(patsubst ../../../%,%,$(subst $(space),$(empty),$(patsubst %,../,$(subst /,$(space),$1))))
 endef
 
 # `$(Metadata)/pages/path/to/page.json` => `page`
@@ -44,7 +44,7 @@ endef
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to`
 define f_page_section =
-$(patsubst %/,%,$(call f_page_path,$1))
+$(if $(filter %index.json,$1),null,"$(patsubst %/,%,$(call f_page_path,$1))")
 endef
 
 # Add members to user defined front-matter at `.`.
@@ -59,8 +59,6 @@ endef
 #	.page.base
 #	.page.filename
 #	.page.id
-#	.page.isnode
-#	.page.ispage
 #	.page.path
 #	.page.section
 #	.page.source
@@ -74,10 +72,8 @@ define f_PAGE_JSON.jq =
     base:     "$(call f_page_base,$2)",		\
     filename: "$(call f_page_name,$2)",		\
     id:       "$(call f_page_id,$2)",		\
-    isnode:   false,				\
-    ispage:   true,				\
     path:     "$(call f_page_path,$2)",		\
-    section:  "$(call f_page_section,$2)",	\
+    section:  $(call f_page_section,$2),	\
     source:  "$1",				\
     url:      "$(call f_page_url,$2)"		\
   } as $$page |					\
@@ -98,8 +94,8 @@ define f_extract_front_matter =
 endef
 
 # Build metadata for pages.
-$(PagesJSON): $(Metadata)/config.json	
-$(PagesJSON): $(Metadata)/pages/%.json : $(Content)/%.md
+$(MetadataPages): $(Metadata)/config.json	
+$(MetadataPages): $(Metadata)/pages/%.json : $(Content)/%.md
 	$(info ==> $@)
 	@$(f_extract_front_matter) < $< 		\
         | yaml2json					\
@@ -108,52 +104,15 @@ $(PagesJSON): $(Metadata)/pages/%.json : $(Content)/%.md
              '$(call f_PAGE_JSON.jq,$<,$@)' > $@
 
 ########################################################################
-# Collect metadata for nodes
-########################################################################
-
-define f_node_id =
-$(subst $(Metadata)/nodes/,$(empty),$(basename $1))/index
-endef
-
-# `.` is `$(Metadata)/config.json`.
-define f_NODE_JSON.jq =
-  {						\
-    base:     "$(call f_page_base,$1)",		\
-    date:     (now | todateiso8601),		\
-    filename: "$(call f_page_name,$1)",		\
-    id:       "$(call f_node_id,$1)",		\
-    isnode:   true,				\
-    ispage:   false,				\
-    path:     "$(call f_page_path,$1)",		\
-    section:  "$(call f_page_section,$1)",	\
-    title:    "$(call f_page_name,$1)",		\
-    url:      "$(call f_page_url,$1)"		\
-  } as $$node |					\
-  reduce .defaults[] as $$d			\
-    ({}; if "$(call f_node_id,$1)" | test("^" + $$d.idprefix) \
-         then . + $$d.properties		\
-         else . end) + $$node
-endef
-
-# Build metadata for nodes
-$(NodesJSON): $(Metadata)/config.json	
-	$(info ==> $@)
-	jq --sort-keys '$(call f_NODE_JSON.jq,$@)' < $< > $@
-
-########################################################################
 # Group metadata
 ########################################################################
 
-$(Metadata)/pages.json: $(PagesJSON)
+$(Metadata)/pages.json: $(MetadataPages)
 	$(info ==> $@)
 	@jq --slurp '.' $^ > $@
 
 $(Metadata)/sections.json: $(Metadata)/pages.json
 	$(info ==> $@)
-	@jq '[.[].section] | unique' < $< > $@
-
-$(Metadata)/nodes.json: $(NodesJSON)
-	$(info ==> $@)
-	@test -n "$^" && jq --slurp '.' $^ > $@ || true
+	@jq '[.[].section] | unique | map(select(.))' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

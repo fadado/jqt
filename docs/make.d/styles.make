@@ -14,6 +14,7 @@
 # Styles
 $(Destination)/styles.css:		\
 	$(Blocks)/*/style.css		\
+	$(Blocks)/*/*/style.css		\
 	$(Styles)/*.css			\
 	$(Styles)/*.m 			\
 	$(Styles)/milligram/*.css	\
