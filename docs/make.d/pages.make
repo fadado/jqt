@@ -10,13 +10,13 @@
 #	Metadata
 #	JQTFLAGS
 # Exported rules for:
-#	$(Metadata)/phase_3.make
 #	all:: # assets
 # 	build
 # 	clean
 # 	clobber
 # 	touch
 # 	fresh
+#	$(Metadata)/phase3.make
 
 ########################################################################
 # Standard targets
@@ -60,45 +60,27 @@ fresh: clobber
 
 init:
 	@rm -rf $(Metadata)
-	@$(MAKE) -s $(Metadata)/phase_3.make
+	@$(MAKE) -s $(Metadata)/phase3.make
 
 ########################################################################
 # Create makefile containing rules for all HTML files
 ########################################################################
 
-# Call jqt with user defined flags
-JQT = jqt $(JQTFLAGS)
-
-# hack to modify <detail> markup
-define p_DETAILS :=
-  sed	-e 's/^<p><details><\/p>/<details>/'		\
-	-e 's/^<p><\/details><\/p>/<\/details>/'	\
-	-e 's/^<p><summary>/<summary>/'			\
-	-e 's/<\/summary><\/p>/<\/summary>/'
-endef
-
-# Complete command
-define p_recipe :=
-"\t$$(info ==> $$@)\n\t@$$(JQT) -mpage:$(Metadata)/pages/"+.id+".json -d $$< $(Layouts)/"+.layout+".html | $$(p_DETAILS) > $$@"
-endef
-
-define p_layouts :=
-$(Layouts)/default.html $(Layouts)/"+.layout+".html | $$$$(dir $$$$@)"
-endef
-
-# . is $(Metadata)/pages.json
-define PHASE_3.jq :=
-  "__phase_3 := 1",						\
-  (.[] | (							\
-  	"$(Destination)/"+.url+": "+(.use//[]|join(" ")),	\
-	"$(Destination)/"+.url+": $(p_layouts),			\
-  	"$(Destination)/"+.url+": "+.source+"\n"+$(p_recipe)	\
-  )), "# vim:syntax=make"
+define DETAILS :=
+  sed -e 's/^<p><details><\/p>/<details>/'	\
+      -e 's/^<p><\/details><\/p>/<\/details>/'	\
+      -e 's/^<p><summary>/<summary>/'		\
+      -e 's/<\/summary><\/p>/<\/summary>/'
 endef
 
 # Rules for each page (depend also on sections.json only to force build)
-$(Metadata)/phase_3.make: $(Metadata)/pages.json $(Metadata)/sections.json
+$(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d/pages.make make.d/phase3.jq
 	$(info ==> $@)
-	@jq --raw-output '$(PHASE_3.jq)' < $< > $@
+	@jq --raw-output			\
+	    --arg Metadata $(Metadata)		\
+	    --arg Layouts $(Layouts)		\
+	    --arg Destination $(Destination)	\
+	    --from-file make.d/phase3.jq	\
+	    < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

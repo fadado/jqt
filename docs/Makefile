@@ -23,9 +23,9 @@ endif
 endif
 
 # ======================================================================
--include $(Metadata)/phase_1.make
+-include $(Metadata)/phase1.make
 #
-# Load site global parameters. If `phase_1.make` not exists it is built when
+# Load site global parameters. If `phase1.make` not exists it is built when
 # restarting with a rule defined in `config.make`.
 #
 # Exported variables:
@@ -39,85 +39,41 @@ endif
 #	Styles
 # ======================================================================
 
-# ======================================================================
 include make.d/config.make
-#
-# Build files derived from user defined configuration:
-# 	config.{yaml,json} => config.json => site.json => phase_1.make
-#
-# Imported variables:
-#	Metadata
-#	Version
-# Exported rules for:
-# 	$(Metadata)
-#	$(Metadata)/config.json
-#	$(Metadata)/site.json
-#	$(Metadata)/phase_1.make
-# ======================================================================
 
 # Warning:
 #
-# If `__phase_1` is not defined because `phase_1.make` does not exists, after
-# this point most of the file is ignored, but `phase_1.make` is built because a
+# If `__phase_1` is not defined because `phase1.make` does not exists, after
+# this point most of the file is ignored, but `phase1.make` is built because a
 # rule exists in the file `config.make`.  Then this `Makefile` is restarted,
-# `MAKE_RESTARTS` will be equal to 1, `phase_1.make` is now loaded and
-# `__phase_1` is defined.
+# `MAKE_RESTARTS` is be equal to 1, `phase1.make` is now loaded and
+# `__phase_1` is defined. Equivalent situation happens in all phases.
 
-ifdef __phase_1 # not defined in a fresh start
+ifdef __phase_1
 
 # ======================================================================
--include $(Metadata)/phase_2.make
+-include $(Metadata)/phase2.make
 #
-# Build metadata from filesystem introspection.
+# Load variables for several pathnames.
 #
 # Exported variables:
 #	__phase_2
 #	DestinationPages
 #	DestinationPaths
-#	HomePage
 #	MetadataPages 
 #	MetadataPaths
+# Exported dependencies:
+# 	$(Metadata)/pages/.../page.json: | $$(dir $$@)
 # ======================================================================
 
-# ======================================================================
 include make.d/pathnames.make
-#
-# ???????'
-#
-# Imported variables:
-#	Content
-#	Destination
-#	Metadata
-# Exported rules for:
-# 	$(Destination)
-# 	$(Destination)/.../
-# 	$(Metadata)/.../
-#	all:: $(DestinationPages)
-# Additional dependencies defined:
-# 	$(Destination)/.../page.html => $(Metadata)/pages/.../page.json
-# ======================================================================
 
-#ifdef __phase_2
+ifdef __phase_2
 
-# ======================================================================
 include make.d/front-matter.make
-#
-# Collect metadata from front-matter sections.
-#
-# Imported variables:
-#	Content
-#	Metadata
-#	MetadataPages 
-# Exported rules for:
-# 	$(Metadata)/pages/.../page.json
-# 	$(Metadata)/nodes/.../section.json
-# 	$(Metadata)/pages.json
-# 	$(Metadata)/nodes.json
-# 	$(Metadata)/sections.json
-# ======================================================================
 
 # ======================================================================
--include $(Metadata)/phase_3.make
+-include $(Metadata)/phase3.make
 #
 # Load rules for pages and nodes. If not exists is built when restarting with
 # rule defined in `pages.make`.
@@ -125,77 +81,23 @@ include make.d/front-matter.make
 # Exported variables:
 #	__phase_3
 # Exported rules for:
-# 	rules for all HTML files
+# 	dependencies and rules for all HTML files
 # ======================================================================
 
-# ======================================================================
 include make.d/pages.make
-#
-# Define standard rules and rules for HTML pages and nodes.
-#
-# Imported variables:
-#	Assets
-#	Destination
-#	Layouts
-#	Metadata
-#	JQTFLAGS
-# Exported rules for:
-#	$(Metadata)/phase_3.make
-#	all:: # assets
-# 	build
-# 	clean::
-# 	clobber::
-# 	xbuild
-# 	xxbuild
-# ======================================================================
 
-# ======================================================================
+ifdef __phase_3
+
 include make.d/sitemap.make
-#
-# Define rules for sitemap.
-#
-# Imported variables:
-#	Destination
-#	Metadata
-# Exported rules for:
-#	$(Destination)/sitemap.*
-#	all:: $(Destination)/sitemap.*
-# ======================================================================
-
-# ======================================================================
 include make.d/styles.make
-# 
-# Build CSS main stylesheet.
-#
-# Imported variables:
-#	Destination
-#	Blocks
-#	Styles
-# Exported rules for:
-#	$(Destination)/styles.css
-# 	all:: $(Destination)/styles.css
-# ======================================================================
-
-# ======================================================================
 include make.d/tools.make
-# 
-# Tools independent of any target.
-#
-# Parameters:
-# 	vnudir
-# Imported variables:
-#	Destination
-# Exported rules for:
-# 	help
-# 	valid
-# 	lint
-# ======================================================================
 
 ########################################################################
 #  Specific rules for this web site
 ########################################################################
 
-ifdef __phase_3
+# Call jqt with user defined flags
+JQT = jqt $(JQTFLAGS)
 
 # Options for `jqt`.
 JQTFLAGS += 					\
@@ -270,7 +172,7 @@ clean::
 	@rm -f /tmp/help
 
 endif # __phase_3
-#endif # __phase_2
+endif # __phase_2
 endif # __phase_1
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

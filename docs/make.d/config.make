@@ -9,6 +9,7 @@
 #	Version
 # Exported rules for:
 # 	$(Metadata)
+# 	$(Metadata)/
 #	$(Metadata)/config.json
 #	$(Metadata)/site.json
 #	$(Metadata)/phase_1.make
@@ -54,47 +55,20 @@ endif
 #
 # Create `$(Metadata)/site.json` from `$(Metadata)/config.json`.
 #
-
-# Add some new members to `$(Metadata)/config.json` and delete `.defaults`.
-define m_SITE_JSON.jq :=
-  del(.defaults)					\
-  | . + { 						\
-  	Destination: (.Destination // "./_site"),	\
-  	Assets:      (.Assets      // "./assets"),	\
-  	Blocks:      (.Blocks      // "./blocks"),	\
-  	Content:     (.Content     // "./content"),	\
-  	Data:        (.Data        // "./data"),	\
-  	Layouts:     (.Layouts     // "./layouts"),	\
-  	Styles:      (.Styles      // "./styles"),	\
-  	Version:     (.Version     // "$(Version)")	\
-  }
-endef
-
-# Global configuration file with some added members.
-$(Metadata)/site.json: $(Metadata)/config.json
+$(Metadata)/site.json: $(Metadata)/config.json make.d/config.make
 	$(info ==> $@)
-	@jq --sort-keys '$(m_SITE_JSON.jq)' < $< > $@
+	@jq --sort-keys				\
+	    --from-file make.d/phase0.jq	\
+	    --arg Version $(Version)		\
+	    < $< > $@
 
 #
-# Create `$(Metadata)/phase_1.make` from `$(Metadata)/site.json`.
+# Create `$(Metadata)/phase1.make` from `$(Metadata)/site.json`.
 #
-
-# Format members as make variables.
-define PHASE_1.jq :=
-  "__phase_1   := 1",				\
-  "Assets      := " + .Assets,			\
-  "Blocks      := " + .Blocks,			\
-  "Content     := " + .Content,			\
-  "Data        := " + .Data,			\
-  "Destination := " + .Destination,		\
-  "Layouts     := " + .Layouts,			\
-  "Styles      := " + .Styles,			\
-  "# vim:syntax=make"
-endef
-
-# Makefile to be included in `Makefile`.
-$(Metadata)/phase_1.make: $(Metadata)/site.json make.d/config.make
+$(Metadata)/phase1.make: $(Metadata)/site.json make.d/config.make make.d/phase1.jq
 	$(info ==> $@)
-	@jq --raw-output '$(PHASE_1.jq)' < $< > $@
+	@jq --raw-output 			\
+	    --from-file make.d/phase1.jq	\
+	    < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

@@ -4,17 +4,57 @@
 # Collect metadata from front-matter sections.
 #
 # Imported variables:
-#	Content
-#	Metadata
+#	DestinationPages
 # Exported rules for:
-# 	$(Metadata)/pages/.../page.json
-# 	$(Metadata)/nodes/.../section.json
-# 	$(Metadata)/pages.json
-# 	$(Metadata)/nodes.json
-# 	$(Metadata)/sections.json
+# 	??
 
 ########################################################################
-# Collect metadata for pages
+# Extra dependencies
+########################################################################
+
+# Add prerequisites to default goal
+all:: $(DestinationPages)
+
+$(DestinationPages): $(Destination)/%.html : $(Metadata)/pages/%.json
+$(DestinationPages): $(Layouts)/default.html
+
+########################################################################
+# Rules for directories
+########################################################################
+
+# Destination directory.
+# Define targets with and without trailing slash.
+$(Destination) $(Destination)/:
+	$(info ==> $@)
+	@mkdir --parents $@ >/dev/null 2>&1 || true
+
+# Directories starting at `$(Destination)/`
+$(DestinationPaths):
+	$(info ==> $@)
+	@mkdir --parents $@ >/dev/null 2>&1 || true
+
+# Directories starting at `$(Metadata)/pages/`.
+$(MetadataPaths):
+	$(info ==> $@)
+	@mkdir --parents $@ >/dev/null 2>&1 || true
+
+$(DestinationPages): | $$(dir $$@)
+$(MetadataPages): | $$(dir $$@)
+
+########################################################################
+# Group metadata
+########################################################################
+
+$(Metadata)/pages.json: $(MetadataPages)
+	$(info ==> $@)
+	@jq --slurp '.' $^ > $@
+
+$(Metadata)/sections.json: $(Metadata)/pages.json
+	$(info ==> $@)
+	@jq '[.[].section] | unique | map(select(.))' < $< > $@
+
+########################################################################
+# TODO: phase21.jq !!!!!!!!!!!
 ########################################################################
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to/page`
@@ -85,7 +125,7 @@ define f_PAGE_JSON.jq =
 endef
 
 # Extract YAML front matter.
-define f_extract_front_matter =
+define EXTRACT_FRONT_MATTER =
   sed -n -e '1d'		\
   	 -e '/^---$$/q'		\
 	 -e '/^\.\.\.$$/q'	\
@@ -95,24 +135,12 @@ endef
 
 # Build metadata for pages.
 $(MetadataPages): $(Metadata)/config.json	
-$(MetadataPages): $(Metadata)/pages/%.json : $(Content)/%.md
+$(MetadataPages): $(Metadata)/pages/%.json : $(Content)/%.md	# TODO: any accepted extension
 	$(info ==> $@)
-	@$(f_extract_front_matter) < $< 		\
+	@$(EXTRACT_FRONT_MATTER) < $<	 		\
         | yaml2json					\
         | jq --sort-keys				\
              --slurpfile config $(Metadata)/config.json	\
              '$(call f_PAGE_JSON.jq,$<,$@)' > $@
-
-########################################################################
-# Group metadata
-########################################################################
-
-$(Metadata)/pages.json: $(MetadataPages)
-	$(info ==> $@)
-	@jq --slurp '.' $^ > $@
-
-$(Metadata)/sections.json: $(Metadata)/pages.json
-	$(info ==> $@)
-	@jq '[.[].section] | unique | map(select(.))' < $< > $@
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make
