@@ -5,13 +5,13 @@
 
 del(.defaults)
 | . + { 
-  	Destination: (.Destination // "./_site"),
-  	Assets:      (.Assets      // "./assets"),
-  	Blocks:      (.Blocks      // "./blocks"),
-  	Content:     (.Content     // "./content"),
-  	Data:        (.Data        // "./data"),
-  	Layouts:     (.Layouts     // "./layouts"),
-  	Styles:      (.Styles      // "./styles"),
+  	Destination: (.Destination // "_site"),
+  	Assets:      (.Assets      // "assets"),
+  	Blocks:      (.Blocks      // "blocks"),
+  	Content:     (.Content     // "content"),
+  	Data:        (.Data        // "data"),
+  	Layouts:     (.Layouts     // "layouts"),
+  	Styles:      (.Styles      // "styles"),
   	Version:     (.Version     // $Version)
 }
 

@@ -3,12 +3,6 @@
 #
 # The project prelude: common module available in all makefile modules
 #
-# Exported macros:
-#	comma
-#	empty
-#	space
-#	rest
-#	filename
 
 # Debug tool
 ifdef MAKE_RESTARTS
@@ -88,19 +82,19 @@ SHELL := /bin/bash
 ########################################################################
 
 # Hacks for string manipulation
-comma := ,
-empty :=
-space := $(empty) $(empty)
-tab := $(empty)	$(empty)
+#!comma := ,
+#!empty :=
+#!space := $(empty) $(empty)
+#!tab := $(empty)	$(empty)
 
 # Hack for list manipulation
-define rest =
-$(wordlist 2,2147483648,$1)
-endef
+#!define rest =
+#!$(wordlist 2,2147483648,$1)
+#!endef
 
 # File name without extension nor directory
-define filename
-$(basename $(notdir $1))
-endef
+#!define filename
+#!$(basename $(notdir $1))
+#!endef
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

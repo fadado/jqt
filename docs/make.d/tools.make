@@ -1,7 +1,7 @@
 ########################################################################
 # tools.make
 #
-# Tools independent of any target.
+# Tools.
 #
 # Parameters:
 # 	vnudir
@@ -18,6 +18,7 @@
 
 .PHONY: help
 
+# Warning: `make help` can build several phases.
 help:
 	@echo 'Usage: make TARGET [parameter=value...]'
 	@echo 'Targets:';					\
@@ -26,7 +27,8 @@ help:
 	| awk '/^[^ \t.%][-A-Za-z0-9_]*:/ { print $$1 }'	\
 	| sort --unique						\
 	| sed 's/:\+$$//'					\
-	| pr --omit-pagination --indent=4 --width=80 --columns=4
+	| pr --omit-pagination --indent=4 --width=80 --columns=4\
+	|| true
 
 ########################################################################
 # HTML 5 validation

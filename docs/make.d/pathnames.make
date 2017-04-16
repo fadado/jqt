@@ -3,6 +3,11 @@
 #
 # Build metadata from filesystem introspection.
 #
+# Imported variables:
+#	Content
+#	Destination
+#	Metadata
+#
 # Exported rules for:
 #	$(Metadata)/phase2.make
 
@@ -10,7 +15,7 @@
 # Create makefile defining global parameters about pathnames
 ########################################################################
 
-$(Metadata)/phase2.make: make.d/pathnames.make make.d/phase2.jq
+$(Metadata)/phase2.make: make.d/pathnames.make make.d/phase2.jq $(Metadata)/phase1.make
 	$(info ==> $@)
 	@find $(Content) -type f -a			\
 			 -name '[!_]*.md' -o		\

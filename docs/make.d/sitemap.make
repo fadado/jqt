@@ -8,13 +8,12 @@
 #	Metadata
 # Exported rules for:
 #	$(Destination)/sitemap.*
-#	all:: $(Destination)/sitemap.*
 
 ########################################################################
 # Sitemap
 ########################################################################
 
-define s_sitemap.jq
+define SITEMAP.jq
   $$site[0].baseurl as $$baseurl | \
   "<?xml version='\''1.0'\'' encoding='\''UTF-8'\''?> \
   <urlset xmlns:xsi='\''http://www.w3.org/2001/XMLSchema-instance'\'' \
@@ -32,7 +31,7 @@ endef
 $(Destination)/sitemap.xml: $(Metadata)/pages.json $(Metadata)/site.json \
 | $(Destination)
 	$(info ==> $@)
-	@jq --raw-output --slurpfile site $(Metadata)/site.json '$(s_sitemap.jq)' < $< > $@
+	@jq --raw-output --slurpfile site $(Metadata)/site.json '$(SITEMAP.jq)' < $< > $@
 
 $(Destination)/sitemap.xml.gz: $(Destination)/sitemap.xml
 	$(info ==> $@)

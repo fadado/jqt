@@ -62,8 +62,8 @@ ifdef __phase_1
 #	DestinationPaths
 #	MetadataPages 
 #	MetadataPaths
-# Exported dependencies:
-# 	$(Metadata)/pages/.../page.json: | $$(dir $$@)
+# Exported rules for:
+# 	$(Metadata)/pages/.../page.json
 # ======================================================================
 
 include make.d/pathnames.make

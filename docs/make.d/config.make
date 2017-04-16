@@ -18,8 +18,7 @@
 # Metadata directory for all generated metadata and make files
 ########################################################################
 
-# Define targets with and without trailing slash.
-$(Metadata) $(Metadata)/:
+$(Metadata):
 	$(info ==> $@)
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 

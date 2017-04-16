@@ -10,41 +10,47 @@ def dir:
     sub("/[^/]+$"; "/") 
 ;
 
-def dpaths($p):
+def dpaths($paths):
     def dpath:
-        sub("^"+$Content; $Destination)
+        sub("^" + $Content; $Destination)
     ;
-    "DestinationPaths := " + ([$p[] | dpath][1:] | join(" "))
+    "DestinationPaths := " + ([$paths[] | dpath] | join(" "))
 ;
 
-def mpaths($p):
+def mpaths($paths):
     def mpath:
-        sub("^"+$Content; $Metadata+"/pages")
+        sub("^" + $Content; $Metadata + "/pages")
     ;
-    "MetadataPaths := " + ([$p[] | mpath] |  join(" "))
+    "MetadataPaths := " + ([$paths[] | mpath] |  join(" "))
 ;
 
-def dpages($d):
+def dpages($documents):
     def dpage:
-        sub("^"+$Content; $Destination)
+        sub("^" + $Content; $Destination)
         | sub("\\.(?:markdown|mk?d)$"; ".html")
     ;
-    "DestinationPages := " + ([$d[] | dpage] | join(" "))
+    "DestinationPages := " + ([$documents[] | dpage] | join(" "))
 ;
 
-def mpages($d):
+def mpages($documents):
     def mpage:
-        sub("^"+$Content; $Metadata+"/pages")
+        sub("^" + $Content; $Metadata + "/pages")
         | sub("\\.(?:markdown|mk?d)$"; ".json")
     ;
-    [$d[] | mpage] as $json
-    | "MetadataPages := " + ($json | join(" ")) #+ "\n"
-    #+ ([$json[] | . + ": | $$(dir $$@)"] | join("\n"))
+    def mrule:
+        [ $documents[]
+          | mpage + ": " + . + "\n" +
+          "\t$(info ==> $@)\n" +
+          "\t@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_JSON) > $@"
+        ] | join("\n")
+    ;
+    [$documents[] | mpage] as $json
+    | "MetadataPages := " + ($json | join(" ")) + "\n" + mrule
 ;
 
 ########################################################################
 
-(.[:-1]/"\n") as $documents
+(.[:-1] / "\n") as $documents
 | [$documents[] | dir] | unique as $paths
 | dpaths($paths) as $DestinationPaths 
 | mpaths($paths) as $MetadataPaths

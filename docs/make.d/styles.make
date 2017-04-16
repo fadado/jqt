@@ -9,7 +9,6 @@
 #	Styles
 # Exported rules for:
 #	$(Destination)/styles.css
-# 	all:: $(Destination)/styles.css
 
 # Styles
 $(Destination)/styles.css:		\

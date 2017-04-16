@@ -12,13 +12,13 @@
 
 # Default values:
 #
-# Destination: ./_site
-# Assets:      ./assets
-# Blocks:      ./blocks
-# Content:     ./content
-# Data:        ./data
-# Layouts:     ./layouts
-# Styles:      ./styles
+# Destination: _site
+# Assets:      assets
+# Blocks:      blocks
+# Content:     content
+# Data:        data
+# Layouts:     layouts
+# Styles:      styles
 
 # Changes from defaults
 Destination: /tmp/jqt   # fast RAM disk
