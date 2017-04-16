@@ -1,4 +1,4 @@
-# phase2.jq --arg Destination s -arg Content s --arg Metadata s
+# phase2.jq --arg Content $(Content) --arg Destination $(Destination) --arg Metadata $(Metadata)
 # 
 # Generate phase2.make from `find` output.
 
@@ -48,6 +48,8 @@ def mpages($documents):
     | "MetadataPages := " + ($json | join(" ")) + "\n" + mrule
 ;
 
+########################################################################
+# Output makefile
 ########################################################################
 
 (.[:-1] / "\n") as $documents

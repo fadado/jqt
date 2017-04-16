@@ -2,11 +2,15 @@
 # 
 # Generate phase1.make from site.json.
 
-# Format members as make variables.
-
 def comment:
     "# vim:syntax=make"
 ;
+
+########################################################################
+# Output makefile
+########################################################################
+
+# Format members as make variables.
 
 "__phase_1   := 1",
 "Assets      := " + .Assets,

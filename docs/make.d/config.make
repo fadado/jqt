@@ -2,20 +2,25 @@
 # config.make
 #
 # Build files derived from user defined configuration:
-# 	config.{yaml,json} => config.json => site.json => phase_1.make
+# 	config.{yaml,json} => config.json => site.json => phase1.make
 #
-# Imported variables:
-#	Metadata
-#	Version
-# Exported rules for:
+# Variables defined in phase1.make:
+#	__phase_1
+#	Assets
+#	Blocks
+#	Content
+#	Data
+#	Destination
+#	Layouts
+#	Styles
+# Defined rules for:
 # 	$(Metadata)
-# 	$(Metadata)/
 #	$(Metadata)/config.json
+#	$(Metadata)/phase1.make
 #	$(Metadata)/site.json
-#	$(Metadata)/phase_1.make
 
 ########################################################################
-# Metadata directory for all generated metadata and make files
+# Metadata directory for all generated make and metadata files
 ########################################################################
 
 $(Metadata):
@@ -23,14 +28,12 @@ $(Metadata):
 	@mkdir --parents $@ >/dev/null 2>&1 || true
 
 ########################################################################
-# Rules for configuration files
+# Files derived from user defined configuration file
 ########################################################################
 
 #
-# Create `$(Metadata)/config.json`.
+# Create `$(Metadata)/config.json` from `config.yaml` or `config.json`.
 #
-
-# Input is user defined `config.yaml` or `config.json`.
 ifeq (config.yaml,$(wildcard config.yaml))
 
 # Convert `config.yaml` to `$(Metadata)/config.json`.
@@ -54,11 +57,12 @@ endif
 #
 # Create `$(Metadata)/site.json` from `$(Metadata)/config.json`.
 #
-$(Metadata)/site.json: $(Metadata)/config.json make.d/config.make
+$(Metadata)/site.json: $(Metadata)/config.json make.d/config.make make.d/phase0.jq
 	$(info ==> $@)
 	@jq --sort-keys				\
 	    --from-file make.d/phase0.jq	\
 	    --arg Version $(Version)		\
+	    --arg Metadata $(Metadata)		\
 	    < $< > $@
 
 #

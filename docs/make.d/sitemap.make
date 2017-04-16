@@ -3,16 +3,11 @@
 #
 # Define rules for sitemap.
 #
-# Imported variables:
-#	Destination
-#	Metadata
 # Exported rules for:
-#	$(Destination)/sitemap.*
+#	$(Destination)/sitemap.xml
+#	$(Destination)/sitemap.xml.gz
 
-########################################################################
-# Sitemap
-########################################################################
-
+# XML sitemap
 define SITEMAP.jq
   $$site[0].baseurl as $$baseurl | \
   "<?xml version='\''1.0'\'' encoding='\''UTF-8'\''?> \

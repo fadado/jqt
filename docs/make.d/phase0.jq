@@ -1,7 +1,12 @@
-# phase0.jq --arg Version s
+# phase0.jq --arg Version $(Version) --arg Metadata $(Metadata)
 # 
-# Generate site.json from config.json. Add some new members
-# and delete `.defaults`.
+# Generate site.json from config.json.
+
+########################################################################
+# Output object
+########################################################################
+
+# Add some new members if not defined and delete `.defaults`.
 
 del(.defaults)
 | . + { 
@@ -12,6 +17,7 @@ del(.defaults)
   	Data:        (.Data        // "data"),
   	Layouts:     (.Layouts     // "layouts"),
   	Styles:      (.Styles      // "styles"),
+  	Metadata:    (.Metadata    // $Metadata),
   	Version:     (.Version     // $Version)
 }
 

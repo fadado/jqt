@@ -1,16 +1,14 @@
 ########################################################################
 # tools.make
 #
-# Tools.
+# Miscelaneous tools.
 #
 # Parameters:
 # 	vnudir
-# Imported variables:
-#	Destination
-# Exported rules for:
+# Defined targets:
 # 	help
-# 	valid
 # 	lint
+# 	valid
 
 ########################################################################
 # Show all targets

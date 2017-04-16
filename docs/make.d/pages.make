@@ -3,20 +3,45 @@
 #
 # Define standard rules and rules for HTML pages and nodes.
 #
-# Imported variables:
-#	Assets
-#	Destination
-#	Layouts
-#	Metadata
-#	JQTFLAGS
-# Exported rules for:
-#	all:: # assets
+# Defined rules for:
+#	$(Metadata)/phase3.make
+# Defined targets:
+#	all
 # 	build
 # 	clean
 # 	clobber
-# 	touch
 # 	fresh
-#	$(Metadata)/phase3.make
+# 	init
+# 	touch
+
+########################################################################
+# Create makefile containing rules for all HTML files
+########################################################################
+
+# Rules for each page (depend also on sections.json only to force build)
+$(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
+	$(info ==> $@)
+	@jq --raw-output			\
+	    --arg Metadata $(Metadata)		\
+	    --arg Layouts $(Layouts)		\
+	    --arg Destination $(Destination)	\
+	    --from-file make.d/phase3.jq	\
+	    < $< > $@
+
+#
+# Variables used when building HTML files in phase3.make.
+#
+
+JQT = jqt $(JQTFLAGS)
+
+define DETAILS =
+  sed -e 's/^<p><details><\/p>/<details>/'	\
+      -e 's/^<p><\/details><\/p>/<\/details>/'	\
+      -e 's/^<p><summary>/<summary>/'		\
+      -e 's/<\/summary><\/p>/<\/summary>/'
+endef
+
+ifdef __phase_3
 
 ########################################################################
 # Standard targets
@@ -24,8 +49,8 @@
 
 .PHONY: clean clobber build touch fresh
 
-# Copy Assets
-all:: | $(Destination)
+# Copy Assets after create HTML pages
+all:: $(DestinationPages) | $(Destination)
 	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
 
@@ -41,7 +66,7 @@ clobber:: clean
 build: clean all
 
 # Clobber and build again
-define p_test_and_touch.sh
+define TEST_AND_TOUCH.sh
   if test -e config.yaml;	\
   then touch config.yaml;	\
   elif test -e config.json;	\
@@ -51,7 +76,7 @@ define p_test_and_touch.sh
 endef
 
 touch:
-	@$(p_test_and_touch.sh)
+	@$(TEST_AND_TOUCH.sh)
 	@$(MAKE) -s all
 
 # Clobber and build again
@@ -62,25 +87,6 @@ init:
 	@rm -rf $(Metadata)
 	@$(MAKE) -s $(Metadata)/phase3.make
 
-########################################################################
-# Create makefile containing rules for all HTML files
-########################################################################
-
-define DETAILS :=
-  sed -e 's/^<p><details><\/p>/<details>/'	\
-      -e 's/^<p><\/details><\/p>/<\/details>/'	\
-      -e 's/^<p><summary>/<summary>/'		\
-      -e 's/<\/summary><\/p>/<\/summary>/'
-endef
-
-# Rules for each page (depend also on sections.json only to force build)
-$(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d/pages.make make.d/phase3.jq
-	$(info ==> $@)
-	@jq --raw-output			\
-	    --arg Metadata $(Metadata)		\
-	    --arg Layouts $(Layouts)		\
-	    --arg Destination $(Destination)	\
-	    --from-file make.d/phase3.jq	\
-	    < $< > $@
+endif
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

@@ -1,6 +1,6 @@
-# phase3.jq --arg Destination s -arg Layouts s --arg Metadata s
+# phase3.jq --arg Metadata $(Metadata) --arg Layouts $(Layouts) --arg Destination $(Destination)
 # 
-# Generate phase3.make from pages.json from pages.json
+# Generate phase3.make from pages.json
 
 def comment:
     "# vim:syntax=make"
@@ -11,6 +11,10 @@ def use:
     then " "+(.use | join(" "))
     else "" end
 ;
+
+########################################################################
+# Output makefile
+########################################################################
 
 "__phase_3 := 1",
 (.[] | (
