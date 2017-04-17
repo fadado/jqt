@@ -24,7 +24,11 @@ if [[ -f VERSION ]]; then
     V_PATCH=0
     declare -r SUGGESTED_VERSION="${V_MAJOR}.${V_MINOR}.${V_PATCH}"
     read 1>&2 -p "Enter a version number [${SUGGESTED_VERSION}]: "
-    [[ -z $REPLY ]] && NEXT_VERSION=${SUGGESTED_VERSION}
+    if [[ -z $REPLY ]]; then
+        NEXT_VERSION=${SUGGESTED_VERSION}
+    else
+        NEXT_VERSION=${REPLY}
+    fi
     echo 1>&2 "Will set new version to be ${NEXT_VERSION}"
     echo -n ${NEXT_VERSION} > VERSION
     {   echo "Version ${NEXT_VERSION}:"
@@ -35,7 +39,7 @@ if [[ -f VERSION ]]; then
     cp /tmp/$$-changes CHANGES
     rm /tmp/$$-changes
     git add CHANGES VERSION
-    sed -i "s/^declare -r VERSION=/&'${NEXT_VERSION}'/" bin/jqt
+    sed -i "s/^declare -r VERSION=$/declare -r VERSION=${NEXT_VERSION}'/" bin/jqt
 	sed -i "s/\[version .*\]/[version ${NEXT_VERSION}]/" bin/jqt
 	sed -i "s/^Version *:=.*/Version := ${NEXT_VERSION}/" docs/Makefile
     git commit -am "Version bump to ${NEXT_VERSION}"
