@@ -29,12 +29,17 @@ $(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d
 	    < $< > $@
 
 #
-# Variables used when building HTML files in phase3.make.
+# Variables used in $(Metadata)/phase3.make.
 #
+
+JQTFLAGS =					\
+	-I./					\
+	-msite:$(Metadata)/config.json		\
+	-j'$$'pages:$(Metadata)/pages		\
 
 JQT = jqt $(JQTFLAGS)
 
-define DETAILS =
+define DETAILS :=
   sed -e 's/^<p><details><\/p>/<details>/'	\
       -e 's/^<p><\/details><\/p>/<\/details>/'	\
       -e 's/^<p><summary>/<summary>/'		\

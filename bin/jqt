@@ -2,7 +2,7 @@
 
 # jqt - jq based web template engine
 
-declare -r VERSION='''''0.5.0''0.4.0'
+declare -r VERSION='0.5.1'
 declare -r DATADIR='/usr/local/share'
 
 declare -r SELF=${0##*/}
@@ -529,7 +529,7 @@ function usage
 function help
 {
     cat <<'EOF'
-jqt - jq based web template engine [version ]
+jqt - jq based web template engine [version 0.5.1]
 Usage: jqt [-h | --help | -p | -V | --version]
        jqt [options] < infile > result
        jqt [options] infile > result

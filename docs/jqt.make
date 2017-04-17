@@ -1,17 +1,9 @@
 ########################################################################
 #  Specific makefile for this web site
-########################################################################
 
-# Options for `jqt`.
-JQTFLAGS += 					\
-	-5 					\
-	--toc-depth=4				\
-	-I./					\
-	-msite:$(Metadata)/config.json		\
-	-msections:$(Metadata)/sections.json	\
-	-msnippets:$(Metadata)/snippets.json	\
-	-iblocks/filters			\
-	-j'$$'pages:$(Metadata)/pages		\
+########################################################################
+# Data files
+########################################################################
 
 # Snippets
 $(Metadata)/snippets.json: $(Data)/snippets.yaml \
@@ -19,11 +11,25 @@ $(Metadata)/snippets.json: $(Data)/snippets.yaml \
 	$(info ==> $@)
 	@jqt -T < $< | yaml2json > $@
 
-clean::
-	@rm -f $(Metadata)/snippets.json
+$(DestinationPages): $(Metadata)/snippets.json
+
+JQTFLAGS += -msnippets:$(Metadata)/snippets.json
+
+clean:: ; @rm -f $(Metadata)/snippets.json
+
+########################################################################
+# Build pages options
+########################################################################
 
 # Extra dependencies
-$(DestinationPages): $(Metadata)/snippets.json # $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
+#?$(DestinationPages): $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
+
+# Options for `jqt`.
+JQTFLAGS += 					\
+	-5 					\
+	--toc-depth=4				\
+	-iblocks/filters			\
+	-msections:$(Metadata)/sections.json	\
 
 ########################################################################
 # Generate man page for jqt

@@ -62,6 +62,18 @@ define BUILD_JSON
 endef
 
 ########################################################################
+# Extra dependencies
+########################################################################
+
+$(DestinationPages): $(Destination)/%.html : $(Metadata)/pages/%.json
+$(DestinationPages): $(Layouts)/default.html
+
+$(MetadataPages): $(Metadata)/config.json
+
+$(DestinationPages): | $$(dir $$@)
+$(MetadataPages): | $$(dir $$@)
+
+########################################################################
 # Rules for directories
 ########################################################################
 
@@ -86,18 +98,6 @@ $(Metadata)/pages.json: $(MetadataPages)
 $(Metadata)/sections.json: $(Metadata)/pages.json
 	$(info ==> $@)
 	@jq '[.[].section] | unique | map(select(.))' < $< > $@
-
-########################################################################
-# Extra dependencies
-########################################################################
-
-$(DestinationPages): $(Destination)/%.html : $(Metadata)/pages/%.json
-$(DestinationPages): $(Layouts)/default.html
-
-$(MetadataPages): $(Metadata)/config.json
-
-$(DestinationPages): | $$(dir $$@)
-$(MetadataPages): | $$(dir $$@)
 
 endif
 
