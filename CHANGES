@@ -1,3 +1,44 @@
+Version :
+ - Created jqt.make
+ - Migrated generation to jq
+ - Implementing external jq
+ - Started blog
+ - Segregated layouts
+ - Changed top level object name
+ - Introspected menu
+ - Some renaming
+ - Generated sitemap
+ - Completed makefile modules
+ - Rules generated introspecting
+ - Generated makefile for extra dependencies
+ - Renamed make modules
+ - Generated JSON for pages
+ - More modules at make.d
+ - use addsuffix function
+ - Enabled second expansion
+ - Generate site.json
+ - New name inside introspect
+ - Renaming macros
+ - Exploring introspection
+ - New target "metadata"
+ - Protected target clobber
+ - Implemented default globals
+ - Make files reorganized
+ - Makefile subdivided in fragments
+ - Added favicon
+ - General solution for assets
+ - Big makefile reorganization
+ - New styles organization
+ - Better filenames
+ - Restructuring docs
+ - Merge branch 'mac'
+ - New tests
+ - Content macros moved
+ - New tests
+ - Moved install documentation
+ - Created directory for macros
+ - Enhanced README
+
 Version 0.5.0:
  - Version bump to 0.5.0
  - Segregated common macros library

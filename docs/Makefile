@@ -10,7 +10,7 @@
 include make.d/prelude.make
 
 # jqt version
-Version := 0.5.0
+Version := 
 
 # Metadata directory
 Metadata := .meta
