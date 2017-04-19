@@ -18,8 +18,8 @@
 # Create makefile containing rules for all HTML files
 ########################################################################
 
-# Rules for each page (depend also on sections.json only to force build)
-$(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
+# Build rules for each page
+$(Metadata)/phase3.make: $(Metadata)/pages.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
 	$(info ==> $@)
 	@jq --raw-output			\
 	    --arg Metadata $(Metadata)		\
@@ -32,10 +32,11 @@ $(Metadata)/phase3.make: $(Metadata)/pages.json $(Metadata)/sections.json make.d
 # Variables used in $(Metadata)/phase3.make.
 #
 
-JQTFLAGS =					\
-	-I./					\
-	-msite:$(Metadata)/config.json		\
-	-j'$$'pages:$(Metadata)/pages		\
+define JQTFLAGS :=
+	-msite:$(Metadata)/config.json	\
+	-j'$$'pages:$(Metadata)/pages	\
+	-I./
+endef
 
 JQT = jqt $(JQTFLAGS)
 
@@ -88,10 +89,15 @@ touch:
 fresh: clobber
 	@$(MAKE) -s all
 
-init:
+# make all metadata except files derived from $(Data)
+init::
+ifdef MAKE_RESTARTS
+	@:
+else
 	@rm -rf $(Metadata)
 	@$(MAKE) -s $(Metadata)/phase3.make
-
 endif
+
+endif # __phase_3
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

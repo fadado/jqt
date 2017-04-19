@@ -1,21 +1,75 @@
 ########################################################################
+#
 #  Specific makefile for this web site
+#
+# Defined rules for:
+#	$(Metadata)/snippets.json
+#	$(ManPage)
+#	/tmp/help
+# Defined targets:
+# 	all
+# 	clean
+# 	clobber
+# 	init
 
 ########################################################################
 # Data files
 ########################################################################
 
-# Snippets
-$(Metadata)/snippets.json: $(Data)/snippets.yaml \
-| $(Metadata)
-	$(info ==> $@)
-	@jqt -T < $< | yaml2json > $@
-
-$(DestinationPages): $(Metadata)/snippets.json
-
+# Declare explicitly modules with -m, -M or -j; this must be decided by a
+# human!
 JQTFLAGS += -msnippets:$(Metadata)/snippets.json
 
-clean:: ; @rm -f $(Metadata)/snippets.json
+# To define in phase2.make from
+#	find $(Data) -name '*.*'
+
+DataMD    := $(Metadata)/snippets.json
+DataYAML  :=
+DataJSON  :=
+DataCSV   :=
+
+# =========================
+# To move to pathnames.make
+# =========================
+
+#
+# Files derived from $(Data)/*
+#
+
+ifneq (,$(DataMD))
+$(DataMD): $(Metadata)/%.json : $(Data)/%.md | $(Metadata)
+	$(info ==> $@)
+	@jqt -T < $< | yaml2json > $@
+endif
+
+ifneq (,$(DataYAML))
+$(DataYAML): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@yaml2json > $@
+endif
+
+ifneq (,$(DataJSON))
+$(DataJSON): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@jqt -P json < $< > $@
+endif
+
+ifneq (,$(DataCSV))
+$(DataCSV): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@csv2json < $< > $@
+endif
+
+DataFiles := $(DataMD) $(DataYAML) $(DataJSON) $(DataCSV)
+
+ifneq (,$(DataFiles))
+
+$(DestinationPages): $(DataFiles)
+
+init::
+	@$(MAKE) -s $(DataFiles)
+
+endif
 
 ########################################################################
 # Build pages options
@@ -29,7 +83,9 @@ JQTFLAGS += 					\
 	-5 					\
 	--toc-depth=4				\
 	-iblocks/filters			\
-	-msections:$(Metadata)/sections.json	\
+
+# only for derived nodes?
+#	-msections:$(Metadata)/sections.json	\
 
 ########################################################################
 # Generate man page for jqt

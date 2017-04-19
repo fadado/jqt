@@ -32,6 +32,7 @@ $(Metadata)/phase2.make: make.d/pathnames.make make.d/phase2.jq $(Metadata)/phas
 	     --slurp					\
 	     --raw-output				\
 	     --from-file make.d/phase2.jq		\
+	     --arg DF "$$(find $(Data) -name '*.*')"	\
 	     --arg Content $(Content)			\
 	     --arg Destination $(Destination)		\
 	     --arg Metadata $(Metadata)			\
@@ -99,6 +100,6 @@ $(Metadata)/sections.json: $(Metadata)/pages.json
 	$(info ==> $@)
 	@jq '[.[].section] | unique | map(select(.))' < $< > $@
 
-endif
+endif # __phase_2
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

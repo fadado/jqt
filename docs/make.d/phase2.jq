@@ -1,4 +1,4 @@
-# phase2.jq --arg Content $(Content) --arg Destination $(Destination) --arg Metadata $(Metadata)
+# phase2.jq --arg Content $(Content) --arg Destination $(Destination) --arg Metadata $(Metadata) --arg DF "$$(find $(Data) -name '*.*')
 # 
 # Generate phase2.make from `find` output.
 
@@ -48,6 +48,16 @@ def mpages($documents):
     | "MetadataPages := " + ($json | join(" ")) + "\n" + mrule
 ;
 
+
+def data($files):
+    ($files / "\n") as $names
+    | [($names[] | select(test(".md$")))] as $DataMD
+    | [($names[] | select(test(".yaml$")))] as $DataYAML
+    | [($names[] | select(test(".json$")))] as $DataJSON
+    | [($names[] | select(test(".csv$")))] as $DataCSV
+    | ""
+;
+
 ########################################################################
 # Output makefile
 ########################################################################
@@ -58,12 +68,14 @@ def mpages($documents):
 | mpaths($paths) as $MetadataPaths
 | dpages($documents) as $DestinationPages 
 | mpages($documents) as $MetadataPages
+| data($DF) as $DataFiles
 |
 "__phase_2 := 1",
 $DestinationPaths,
 $MetadataPaths,
 $DestinationPages,
 $MetadataPages,
+$DataFiles,
 comment
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

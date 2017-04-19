@@ -9,16 +9,23 @@
 # Make configuration
 include make.d/prelude.make
 
-# jqt version
-Version := 0.5.1
-
 # Metadata directory
 Metadata := .meta
+
+# jqt version
+Version := 0.5.1
 
 # Do not build to clobber immediately
 ifeq (clobber,$(MAKECMDGOALS))
 ifeq (,$(wildcard $(Metadata)))
 $(error Nothing to clobber)
+endif
+endif
+
+# Do not build to clean immediately
+ifeq (clean,$(filter clean,$(MAKECMDGOALS)))
+ifeq (,$(wildcard $(Metadata)))
+$(error Nothing to clean)
 endif
 endif
 
