@@ -11,7 +11,6 @@
 # 	clean
 # 	clobber
 # 	fresh
-# 	init
 # 	touch
 
 ########################################################################
@@ -27,6 +26,8 @@ $(Metadata)/phase3.make: $(Metadata)/pages.json make.d/pages.make make.d/phase3.
 	    --arg Destination $(Destination)	\
 	    --from-file make.d/phase3.jq	\
 	    < $< > $@
+
+ifdef __phase_3
 
 #
 # Variables used in $(Metadata)/phase3.make.
@@ -46,8 +47,6 @@ define DETAILS :=
       -e 's/^<p><summary>/<summary>/'		\
       -e 's/<\/summary><\/p>/<\/summary>/'
 endef
-
-ifdef __phase_3
 
 ########################################################################
 # Standard targets
@@ -88,15 +87,6 @@ touch:
 # Clobber and build again
 fresh: clobber
 	@$(MAKE) -s all
-
-# make all metadata except files derived from $(Data)
-init::
-ifdef MAKE_RESTARTS
-	@:
-else
-	@rm -rf $(Metadata)
-	@$(MAKE) -s $(Metadata)/phase3.make
-endif
 
 endif # __phase_3
 

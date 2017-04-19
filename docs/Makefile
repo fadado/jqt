@@ -9,11 +9,11 @@
 # Make configuration
 include make.d/prelude.make
 
-# Metadata directory
-Metadata := .meta
-
 # jqt version
 Version := 0.5.1
+
+# Metadata directory
+Metadata := .meta
 
 # Do not build to clobber immediately
 ifeq (clobber,$(MAKECMDGOALS))
@@ -61,10 +61,14 @@ ifdef __phase_1
 
 # ======================================================================
 -include $(Metadata)/phase2.make
- include make.d/pathnames.make
+ include make.d/data.make
 #
 # Variables defined in phase2.make:
 #	__phase_2
+#	DataCSV
+#	DataJSON
+#	DataMD
+#	DataYAML
 #	DestinationPages
 #	DestinationPaths
 #	MetadataPages 
@@ -76,6 +80,8 @@ ifdef __phase_1
 # 	$(MetadataPages)
 # 	$(Metadata)/pages.json
 # 	$(Metadata)/sections.json
+# Defined targets:
+# 	init
 # ======================================================================
 
 ifdef __phase_2
@@ -84,8 +90,7 @@ ifdef __phase_2
 -include $(Metadata)/phase3.make
  include make.d/pages.make
 #
-# Load rules for pages and nodes. If not exists is built when restarting with
-# rule defined in `pages.make`.
+# Load rules for pages and nodes.
 #
 # Variables defined in phase3.make:
 #	__phase_3
@@ -98,7 +103,6 @@ ifdef __phase_2
 # 	clean
 # 	clobber
 # 	fresh
-# 	init
 # 	touch
 # ======================================================================
 
@@ -122,7 +126,7 @@ include make.d/tools.make
 # ======================================================================
 
 ########################################################################
-include jqt.make
+include project.make
 #
 # Project specific makefile. All the previous modules are expected to be
 # independent, valid for any project without any change.

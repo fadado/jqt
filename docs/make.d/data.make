@@ -1,10 +1,14 @@
 ########################################################################
-# pathnames.make
+# data.make
 #
 # Build metadata from filesystem introspection.
 #
 # Variables defined in phase2.make:
 #	__phase_2
+#	DataCSV
+#	DataJSON
+#	DataMD
+#	DataYAML
 #	DestinationPages
 #	DestinationPaths
 #	MetadataPages 
@@ -16,13 +20,16 @@
 # 	$(MetadataPages)
 # 	$(Metadata)/pages.json
 # 	$(Metadata)/sections.json
+# 	$(DataFiles)
+# Targets:
+# 	init
 
 ########################################################################
 # Create makefile defining global variables about pathnames and rules to
 # generate JSON metadata files for each page.
 ########################################################################
 
-$(Metadata)/phase2.make: make.d/pathnames.make make.d/phase2.jq $(Metadata)/phase1.make
+$(Metadata)/phase2.make: make.d/data.make make.d/phase2.jq $(Metadata)/phase1.make
 	$(info ==> $@)
 	@find $(Content) -type f -a			\
 			 -name '[!_]*.md' -o		\
@@ -34,6 +41,7 @@ $(Metadata)/phase2.make: make.d/pathnames.make make.d/phase2.jq $(Metadata)/phas
 	     --from-file make.d/phase2.jq		\
 	     --arg DF "$$(find $(Data) -name '*.*')"	\
 	     --arg Content $(Content)			\
+	     --arg Data $(Data)				\
 	     --arg Destination $(Destination)		\
 	     --arg Metadata $(Metadata)			\
 	     > $@
@@ -68,10 +76,9 @@ endef
 
 $(DestinationPages): $(Destination)/%.html : $(Metadata)/pages/%.json
 $(DestinationPages): $(Layouts)/default.html
+$(DestinationPages): | $$(dir $$@)
 
 $(MetadataPages): $(Metadata)/config.json
-
-$(DestinationPages): | $$(dir $$@)
 $(MetadataPages): | $$(dir $$@)
 
 ########################################################################
@@ -99,6 +106,49 @@ $(Metadata)/pages.json: $(MetadataPages)
 $(Metadata)/sections.json: $(Metadata)/pages.json
 	$(info ==> $@)
 	@jq '[.[].section] | unique | map(select(.))' < $< > $@
+
+########################################################################
+# Files derived from $(Data)/*
+########################################################################
+
+ifneq (,$(DataMD))
+$(DataMD): $(Metadata)/%.json : $(Data)/%.md | $(Metadata)
+	$(info ==> $@)
+	@jqt -T < $< | yaml2json > $@
+endif
+
+ifneq (,$(DataYAML))
+$(DataYAML): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@yaml2json > $@
+endif
+
+ifneq (,$(DataJSON))
+$(DataJSON): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@jqt -P json < $< > $@
+endif
+
+ifneq (,$(DataCSV))
+$(DataCSV): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
+	$(info ==> $@)
+	@csv2json < $< > $@
+endif
+
+DataFiles := $(DataMD) $(DataYAML) $(DataJSON) $(DataCSV)
+
+########################################################################
+
+$(DestinationPages): $(DataFiles)
+
+# make all metadata and data files
+init::
+ifdef MAKE_RESTARTS
+	@$(MAKE) -s $(DataFiles)
+else
+	@rm -rf $(Metadata)
+	@$(MAKE) -s $(DataFiles)
+endif
 
 endif # __phase_2
 

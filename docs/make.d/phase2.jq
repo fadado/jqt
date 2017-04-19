@@ -1,4 +1,4 @@
-# phase2.jq --arg Content $(Content) --arg Destination $(Destination) --arg Metadata $(Metadata) --arg DF "$$(find $(Data) -name '*.*')
+# phase2.jq --arg ...
 # 
 # Generate phase2.make from `find` output.
 
@@ -50,12 +50,23 @@ def mpages($documents):
 
 
 def data($files):
+    def d2m($x):
+        sub("\\."+$x+"$"; ".json")
+        | sub("^"+$Data; $Metadata)
+    ;
     ($files / "\n") as $names
-    | [($names[] | select(test(".md$")))] as $DataMD
-    | [($names[] | select(test(".yaml$")))] as $DataYAML
-    | [($names[] | select(test(".json$")))] as $DataJSON
-    | [($names[] | select(test(".csv$")))] as $DataCSV
-    | ""
+    | [$names[] | select(test(".md$"))] as $DataMD
+    | [$names[] | select(test(".yaml$"))] as $DataYAML
+    | [$names[] | select(test(".json$"))] as $DataJSON
+    | [$names[] | select(test(".csv$"))] as $DataCSV
+    | if ($DataMD|length) == 0 then "DataMD :=\n"
+      else "DataMD := " + ($DataMD | map(d2m("md")) | join(" ")) + "\n" end
+    + if ($DataYAML|length) == 0 then "DataYAML :=\n"
+      else "DataYAML := " + ($DataYAML | map(d2m("yaml")) | join(" ")) + "\n" end
+    + if ($DataJSON|length) == 0 then "DataJSON :=\n"
+      else "DataJSON := " + ($DataJSON | map(d2m("json")) | join(" ")) + "\n" end
+    + if ($DataCSV|length) == 0 then "DataCSV :=\n"
+      else "DataCSV := " + ($DataCSV | map(d2m("csv")) | join(" ")) + "\n" end
 ;
 
 ########################################################################

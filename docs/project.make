@@ -3,80 +3,20 @@
 #  Specific makefile for this web site
 #
 # Defined rules for:
-#	$(Metadata)/snippets.json
 #	$(ManPage)
 #	/tmp/help
 # Defined targets:
 # 	all
 # 	clean
 # 	clobber
-# 	init
-
-########################################################################
-# Data files
-########################################################################
-
-# Declare explicitly modules with -m, -M or -j; this must be decided by a
-# human!
-JQTFLAGS += -msnippets:$(Metadata)/snippets.json
-
-# To define in phase2.make from
-#	find $(Data) -name '*.*'
-
-DataMD    := $(Metadata)/snippets.json
-DataYAML  :=
-DataJSON  :=
-DataCSV   :=
-
-# =========================
-# To move to pathnames.make
-# =========================
-
-#
-# Files derived from $(Data)/*
-#
-
-ifneq (,$(DataMD))
-$(DataMD): $(Metadata)/%.json : $(Data)/%.md | $(Metadata)
-	$(info ==> $@)
-	@jqt -T < $< | yaml2json > $@
-endif
-
-ifneq (,$(DataYAML))
-$(DataYAML): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
-	$(info ==> $@)
-	@yaml2json > $@
-endif
-
-ifneq (,$(DataJSON))
-$(DataJSON): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
-	$(info ==> $@)
-	@jqt -P json < $< > $@
-endif
-
-ifneq (,$(DataCSV))
-$(DataCSV): $(Metadata)/%.json : $(Data)/%.yaml | $(Metadata)
-	$(info ==> $@)
-	@csv2json < $< > $@
-endif
-
-DataFiles := $(DataMD) $(DataYAML) $(DataJSON) $(DataCSV)
-
-ifneq (,$(DataFiles))
-
-$(DestinationPages): $(DataFiles)
-
-init::
-	@$(MAKE) -s $(DataFiles)
-
-endif
 
 ########################################################################
 # Build pages options
 ########################################################################
 
-# Extra dependencies
-#?$(DestinationPages): $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
+# Declare explicitly modules with -m, -M or -j; this must be decided by a
+# human!
+JQTFLAGS += -msnippets:$(Metadata)/snippets.json
 
 # Options for `jqt`.
 JQTFLAGS += 					\
@@ -86,6 +26,9 @@ JQTFLAGS += 					\
 
 # only for derived nodes?
 #	-msections:$(Metadata)/sections.json	\
+
+# Extra dependencies
+#?$(DestinationPages): $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
 
 ########################################################################
 # Generate man page for jqt
