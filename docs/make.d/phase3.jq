@@ -12,6 +12,14 @@ def use:
     else "" end
 ;
 
+def flags:
+    if .flags then .flags | join(" ") else "" end
+;
+
+def data:
+    if .data then .data | map("-m\(.):$(Metadata)/snippets.json") | join(" ") else "" end
+;
+
 ########################################################################
 # Output makefile
 ########################################################################
@@ -20,7 +28,7 @@ def use:
 (.[] | (
     $Destination+"/"+.url+": "+.source+" "+$Layouts+"/"+.layout+".html"+use,
     "\t$(info ==> $@)",
-    "\t@$(JQT) -mpage:"+$Metadata+"/pages/"+.id+".json -d $< "+$Layouts+"/"+.layout+".html | $(DETAILS) > $@"
+    "\t@$(JQT) "+data+" "+flags+" -mpage:"+$Metadata+"/pages/"+.id+".json -d $< "+$Layouts+"/"+.layout+".html | $(DETAILS) > $@"
     )
 ),
 comment

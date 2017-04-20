@@ -51,5 +51,12 @@ defaults:
       author: *author
       lang: *lang
 
+#     data:
+#       - snippets
+
+# TODO: explore flags here!
+#     flags:
+#       - -msnippets:$(Metadata)/snippets.json
+
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
 ...

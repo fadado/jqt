@@ -18,7 +18,7 @@
 ########################################################################
 
 # Build rules for each page
-$(Metadata)/phase3.make: $(Metadata)/pages.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
+$(Metadata)/phase3.make: $(Metadata)/collected-front-matter.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
 	$(info ==> $@)
 	@jq --raw-output			\
 	    --arg Metadata $(Metadata)		\
@@ -34,9 +34,9 @@ ifdef __phase_3
 #
 
 define JQTFLAGS :=
-	-msite:$(Metadata)/config.json	\
-	-j'$$'pages:$(Metadata)/pages	\
-	-I./
+	-msite:$(Metadata)/site.json	\
+	-I./ -L$(Metadata) -L$(Blocks)	\
+	-ifilters
 endef
 
 JQT = jqt $(JQTFLAGS)

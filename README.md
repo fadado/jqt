@@ -12,7 +12,7 @@ The tools used in the implementation of _jqt_ are:
 If you want to learn how to use _jqt_ visit the site 
 <https://fadado.github.io/jqt/>. The site pages are generated using _jqt_ in
 the [`docs`](./docs/) folder of this repository.
-If you are interested in _jq_ you can see also [JBOL](https://fadado.github.io/jbol/),
+If you are interested in _jqt_ you can see also [JBOL](https://github.com/fadado/jbol),
 a related project with a collection of modules for the _jq_ language.
 
 _jqt_ is developed under the _Fedora_ Linux distribution, and a lot of

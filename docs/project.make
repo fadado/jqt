@@ -14,18 +14,10 @@
 # Build pages options
 ########################################################################
 
-# Declare explicitly modules with -m, -M or -j; this must be decided by a
-# human!
-JQTFLAGS += -msnippets:$(Metadata)/snippets.json
+JQTFLAGS += -msnippets:$(Metadata)/snippets.json  
 
-# Options for `jqt`.
-JQTFLAGS += 					\
-	-5 					\
-	--toc-depth=4				\
-	-iblocks/filters			\
-
-# only for derived nodes?
-#	-msections:$(Metadata)/sections.json	\
+# Pandoc options
+JQTFLAGS += -5 --toc-depth=4
 
 # Extra dependencies
 #?$(DestinationPages): $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html

@@ -18,8 +18,7 @@
 # 	$(DestinationPaths)
 # 	$(MetadataPaths)
 # 	$(MetadataPages)
-# 	$(Metadata)/pages.json
-# 	$(Metadata)/sections.json
+# 	$(Metadata)/collected-front-matter.json
 # 	$(DataFiles)
 # Targets:
 # 	init
@@ -99,13 +98,9 @@ $(MetadataPaths):
 # Group metadata
 ########################################################################
 
-$(Metadata)/pages.json: $(MetadataPages)
+$(Metadata)/collected-front-matter.json: $(MetadataPages)
 	$(info ==> $@)
 	@jq --slurp '.' $^ > $@
-
-$(Metadata)/sections.json: $(Metadata)/pages.json
-	$(info ==> $@)
-	@jq '[.[].section] | unique | map(select(.))' < $< > $@
 
 ########################################################################
 # Files derived from $(Data)/*

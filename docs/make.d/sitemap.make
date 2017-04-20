@@ -23,7 +23,7 @@ define SITEMAP.jq
   "</urlset>"
 endef
 
-$(Destination)/sitemap.xml: $(Metadata)/pages.json $(Metadata)/site.json \
+$(Destination)/sitemap.xml: $(Metadata)/collected-front-matter.json $(Metadata)/site.json \
 | $(Destination)
 	$(info ==> $@)
 	@jq --raw-output --slurpfile site $(Metadata)/site.json '$(SITEMAP.jq)' < $< > $@
