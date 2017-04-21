@@ -25,7 +25,7 @@ def data:
 ########################################################################
 
 "__phase_3 := 1",
-(.[] | (
+(.[] | ( # for each page
     $Destination+"/"+.url+": "+.source+" "+$Layouts+"/"+.layout+".html"+use,
     "\t$(info ==> $@)",
     "\t@$(JQT) "+data+" "+flags+" -mpage:"+$Metadata+"/pages/"+.id+".json -d $< "+$Layouts+"/"+.layout+".html | $(DETAILS) > $@"

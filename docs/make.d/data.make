@@ -15,11 +15,11 @@
 #	MetadataPaths
 # Defined rules for:
 #	$(Metadata)/phase2.make
-# 	$(DestinationPaths)
-# 	$(MetadataPaths)
-# 	$(MetadataPages)
-# 	$(Metadata)/collected-front-matter.json
 # 	$(DataFiles)
+# 	$(DestinationPaths)
+# 	$(Metadata)/pages-by-id.json
+# 	$(MetadataPages)
+# 	$(MetadataPaths)
 # Targets:
 # 	init
 
@@ -98,9 +98,10 @@ $(MetadataPaths):
 # Group metadata
 ########################################################################
 
-$(Metadata)/collected-front-matter.json: $(MetadataPages)
+# Bundle all pages as a relation (id => page)
+$(Metadata)/pages-by-id.json: $(MetadataPages)
 	$(info ==> $@)
-	@jq --slurp '.' $^ > $@
+	@jq --slurp 'reduce .[] as $$p ({}; . + {($$p.id): $$p})' $^ > $@
 
 ########################################################################
 # Files derived from $(Data)/*

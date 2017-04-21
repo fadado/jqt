@@ -18,7 +18,7 @@
 ########################################################################
 
 # Build rules for each page
-$(Metadata)/phase3.make: $(Metadata)/collected-front-matter.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
+$(Metadata)/phase3.make: $(Metadata)/pages-by-id.json make.d/pages.make make.d/phase3.jq $(Metadata)/phase2.make
 	$(info ==> $@)
 	@jq --raw-output			\
 	    --arg Metadata $(Metadata)		\

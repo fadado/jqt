@@ -7,7 +7,7 @@ def comment:
 ;
 
 def dir:
-    sub("/[^/]+$"; "/") 
+    if test("/") then sub("/[^/]+$"; "/") else "./" end
 ;
 
 def dpaths($paths):

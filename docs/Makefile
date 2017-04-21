@@ -75,11 +75,11 @@ ifdef __phase_1
 #	MetadataPaths
 # Defined rules for:
 #	$(Metadata)/phase2.make
+# 	$(DataFiles)
 # 	$(DestinationPaths)
-# 	$(MetadataPaths)
+# 	$(Metadata)/pages-by-id.json
 # 	$(MetadataPages)
-# 	$(Metadata)/pages.json
-# 	$(Metadata)/sections.json
+# 	$(MetadataPaths)
 # Defined targets:
 # 	init
 # ======================================================================

@@ -14,16 +14,14 @@ define SITEMAP.jq
   <urlset xmlns:xsi='\''http://www.w3.org/2001/XMLSchema-instance'\'' \
   xsi:schemaLocation='\''http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd'\'' \
   xmlns='\''http://www.sitemaps.org/schemas/sitemap/0.9'\''>", \
-  ( .[] |	\
-    "\t<url>",	\
+  (.[] | ( "\t<url>",	\
     "\t\t<loc>" + $$baseurl + "/" + .url + "</loc>", \
     "\t\t<lastmod>" + .updated + "</lastmod>", \
-    "\t</url>"	\
-  ),		\
+    "\t</url>")), \
   "</urlset>"
 endef
 
-$(Destination)/sitemap.xml: $(Metadata)/collected-front-matter.json $(Metadata)/site.json \
+$(Destination)/sitemap.xml: $(Metadata)/pages-by-id.json $(Metadata)/site.json \
 | $(Destination)
 	$(info ==> $@)
 	@jq --raw-output --slurpfile site $(Metadata)/site.json '$(SITEMAP.jq)' < $< > $@

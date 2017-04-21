@@ -2,7 +2,7 @@
 # Extra filters for this site
 #
 
-import "collected-front-matter" as $pages;
+import "pages-by-id" as $pages;
 
 # Remove XML tags
 def striptags:
@@ -15,7 +15,9 @@ def pages:
 ;
 
 def sections:
-    [pages[].section] | unique | map(select(.))
+    [$pages::pages[0].section]
+    | unique
+    | map(select(. != null and . != ""))
 ;
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq
