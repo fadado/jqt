@@ -1,6 +1,6 @@
 ########################################################################
 #
-#  Specific makefile for this web site
+# Specific makefile for this web site
 #
 # Defined rules for:
 #	$(ManPage)

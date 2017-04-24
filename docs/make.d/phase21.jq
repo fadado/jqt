@@ -38,18 +38,23 @@ def page_path:
 def page_section:
     $Target
     | if test("(?<!/pages)/index.json$") # index but not home page
-    then null
-    else page_path[:-1] end
+      then null
+      else page_path[:-1] end
 ;
 
+# derived
 def page_slug:
-    $Target | page_name+".html"
+    .filename + ".html"
 ;
 
 def page_date:
-    page_name |
-    (capture("^(?<date>\\d{4}-\\d{2}-\\d{2})-") | .date)
-    // ""
+    .filename |
+    (capture("^(?<YMD>\\d{4}-\\d{2}-\\d{2})-") | .YMD)
+        // ""
+;
+
+def page_url:
+    .path + .slug
 ;
 
 ########################################################################
@@ -65,15 +70,16 @@ def defaults:
 
 def properties:
     {
-        base:     page_base,
-        date:     page_date,
         id:       page_id,
-        path:     page_path,
+        base:     page_base,
+        filename: page_name,
         section:  page_section,
-        slug:     page_slug,
-        source:   $Source,
-        url:      (page_path+page_slug)
+        path:     page_path,
+        source:   $Source
     }
+    | .date = page_date # in this order!
+    | .slug = page_slug
+    | .url  = page_url
 ;
 
 . as $front_matter |

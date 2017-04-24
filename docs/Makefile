@@ -96,7 +96,6 @@ ifdef __phase_2
 #	__phase_3
 # Defined rules for:
 #	$(Metadata)/phase3.make
-# 	$(DestinationPages)
 # Defined targets:
 #	all
 # 	build
@@ -130,6 +129,14 @@ include project.make
 #
 # Project specific makefile. All the previous modules are expected to be
 # independent, valid for any project without any change.
+#
+# Defined rules for:
+#	$(ManPage)
+#	/tmp/help
+# Defined targets:
+# 	all
+# 	clean
+# 	clobber
 ########################################################################
 
 endif # __phase_3

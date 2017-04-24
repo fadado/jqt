@@ -13,11 +13,15 @@ def use:
 ;
 
 def flags:
-    if .flags then .flags | join(" ") else "" end
+    if .flags
+    then .flags | join(" ")
+    else "" end
 ;
 
 def data:
-    if .data then .data | map("-m\(.):$(Metadata)/snippets.json") | join(" ") else "" end
+    if .data
+    then .data | map("-m\(.):$(Metadata)/snippets.json") | join(" ")
+    else "" end
 ;
 
 ########################################################################
