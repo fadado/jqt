@@ -1,17 +1,12 @@
-# phase1.jq
+# phase1.jq < $(Metadata)/site.json > $(Metadata)/phase1.make
 # 
-# Generate phase1.make from site.json.
 
-def comment:
-    "# vim:syntax=make"
-;
+# Function to cheat vim
+def comment: "# vim:syntax=make";
 
-########################################################################
-# Output makefile
-########################################################################
-
-# Format members as make variables.
-
+#
+# Format some members as make variables
+#
 "__phase_1   := 1",
 "Assets      := " + .Assets,
 "Blocks      := " + .Blocks,

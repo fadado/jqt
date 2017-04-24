@@ -1,6 +1,9 @@
-# phase21.jq - --arg Source s --arg Target s --arg Metadata s --slurpfile config s
-# 
-# Generate each page.json files
+# FRONT-MATTER | phase21.jq 
+#   --arg Source s
+#   --arg Target s
+#   --arg Metadata s
+#   --slurpfile config s
+#   > $(Metadata)/pages/PAGE.json
 
 def basename:
     sub("\\.[^/]+$"; "")

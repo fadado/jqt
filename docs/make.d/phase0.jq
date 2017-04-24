@@ -1,15 +1,13 @@
-# phase0.jq --arg Version $(Version) --arg Metadata $(Metadata)
-# 
-# Generate site.json from config.json.
+# phase0.jq
+#   --arg Version $(Version)
+#   --arg Metadata $(Metadata)
+#   < $(Metadata)/config.json > $(Metadata)/site.json
 
-########################################################################
-# Output object
-########################################################################
-
-# Add some new members if not defined and delete `.defaults`.
-
+#
+# Delete `.defaults` and add some new members if not defined
+#
 del(.defaults)
-| . + { 
++ {
   	Destination: (.Destination // "_site"),
   	Assets:      (.Assets      // "assets"),
   	Blocks:      (.Blocks      // "blocks"),

@@ -1,13 +1,18 @@
-# phase2.jq --arg ...
-# 
-# Generate phase2.make from `find` output.
+# find $(Content) MARKDOWN FILES |
+# phase2.jq
+#   --arg DF "$$(find $(Data) -name '*.*')"
+#   --arg Content $(Content)
+#   --arg Data $(Data)
+#   --arg Destination $(Destination)
+#   --arg Metadata $(Metadata)
+#   > $(Metadata)/phase1.make
 
-def comment:
-    "# vim:syntax=make"
-;
+def comment: "# vim:syntax=make";
 
 def dir:
-    if test("/") then sub("/[^/]+$"; "/") else "./" end
+    if test("/")
+    then sub("/[^/]+$"; "/")
+    else "./" end
 ;
 
 def dpaths($paths):
@@ -69,9 +74,9 @@ def data($files):
       else "DataCSV := " + ($DataCSV | map(d2m("csv")) | join(" ")) + "\n" end
 ;
 
-########################################################################
+#
 # Output makefile
-########################################################################
+#
 
 (.[:-1] / "\n") as $documents
 | [$documents[] | dir] | unique as $paths
