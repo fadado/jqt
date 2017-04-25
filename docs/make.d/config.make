@@ -57,10 +57,10 @@ endif
 #
 # Create `$(Metadata)/site.json` from `$(Metadata)/config.json`.
 #
-$(Metadata)/site.json: $(Metadata)/config.json make.d/config.make make.d/phase0.jq
+$(Metadata)/site.json: $(Metadata)/config.json make.d/config.make make.d/site.jq
 	$(info ==> $@)
 	@jq --sort-keys				\
-	    --from-file make.d/phase0.jq	\
+	    --from-file make.d/site.jq		\
 	    --arg Version $(Version)		\
 	    --arg Metadata $(Metadata)		\
 	    < $< > $@

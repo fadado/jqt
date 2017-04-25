@@ -50,11 +50,8 @@ defaults:
       title-prefix: jqt
       author: *author
       lang: *lang
-
 #     data:
 #       - snippets
-
-# TODO: explore flags here!
 #     flags:
 #       - -msnippets:$(Metadata)/snippets.json
 

@@ -66,7 +66,7 @@ define BUILD_JSON
      --arg Target $@				\
      --arg Metadata $(Metadata)			\
      --slurpfile config $(Metadata)/config.json	\
-     --from-file make.d/phase21.jq
+     --from-file make.d/page.jq
 endef
 
 ########################################################################

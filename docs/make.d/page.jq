@@ -1,8 +1,12 @@
-# FRONT-MATTER | phase21.jq 
-#   --arg Source s
-#   --arg Target s
-#   --arg Metadata s
-#   --slurpfile config s
+# Called for each source document, from macro BUILD_JSON in created
+# phase2.make, to build the JSON file for each page.
+#
+# input is page front-matter converted to JSON |
+# page.jq 
+#   --arg Source $(Content)/.../PAGE.md
+#   --arg Target $(Metadata)/pages/.../PAGE.json
+#   --arg Metadata $(Metadata)
+#   --slurpfile config $(Metadata)/config.json
 #   > $(Metadata)/pages/PAGE.json
 
 def basename:
@@ -10,7 +14,9 @@ def basename:
 ;
 
 def dir:
-    if test("/") then sub("/[^/]+$"; "/") else "" end
+    if test("/")
+    then sub("/[^/]+$"; "/")
+    else "" end
 ;
 
 def notdir:
@@ -19,44 +25,51 @@ def notdir:
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to/page`
 def page_id:
-    $Target | basename | sub($Metadata+"/pages/"; "")
+    # . as $target
+    basename | sub($Metadata+"/pages/"; "")
 ;
 
 # `$(Metadata)/pages/path/to/page.json` => `(../)+`
 def page_base:
-    ("../" * ((($Target / "/") | length) - 3)) // ""
+    # . as $target
+    ("../" * (((. / "/") | length) - 3)) // ""
 ;
 
 # `$(Metadata)/pages/path/to/page.json` => `page`
 def page_name:
-    $Target | notdir | basename
+    # . as $target
+    notdir | basename
 ;
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to/`
 def page_path:
-    $Target | page_id | dir
+    # . as $obj
+    .id | dir
 ;
 
 # `$(Metadata)/pages/path/to/page.json` => `path/to`
 def page_section:
-    $Target
-    | if test("(?<!/pages)/index.json$") # index but not home page
-      then null
-      else page_path[:-1] end
+    #. as $obj
+    if $Target | test("(?<!/pages)/index.json$") # index but not home page
+    then null
+    else .path[:-1] end
 ;
 
 # derived
 def page_slug:
+    # . as $obj
     .filename + ".html"
 ;
 
 def page_date:
+    # . as $obj
     .filename |
     (capture("^(?<YMD>\\d{4}-\\d{2}-\\d{2})-") | .YMD)
         // ""
 ;
 
 def page_url:
+    # . as $obj
     .path + .slug
 ;
 
@@ -65,30 +78,31 @@ def page_url:
 ########################################################################
 
 def defaults:
-    reduce $config[0].defaults[] as $d
-        ({}; if page_id | test("^"+$d.idprefix)
+    # . as $target
+    page_id as $id
+    | reduce $config[0].defaults[] as $d
+        ({}; if $id | test("^" + $d.idprefix)
              then . + $d.properties
              else . end)
 ;
 
 def properties:
-    {
-        id:       page_id,
+    # . as $target
+    {   id:       page_id,
         base:     page_base,
         filename: page_name,
-        section:  page_section,
-        path:     page_path,
         source:   $Source
     }
-    | .date = page_date # in this order!
-    | .slug = page_slug
-    | .url  = page_url
+    # in the following order!
+    | .path     = page_path
+    | .section  = page_section
+    | .date     = page_date
+    | .slug     = page_slug
+    | .url      = page_url
 ;
 
 . as $front_matter |
-
-# final object 
-defaults + properties + $front_matter 
+$Target | defaults + properties + $front_matter 
 
 #        section  slug
 #        ⊢--^-⊣ ⊢--^----⊣

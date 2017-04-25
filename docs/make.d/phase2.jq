@@ -1,4 +1,6 @@
-# find $(Content) MARKDOWN FILES |
+# Called from data.make to create auxiliar makefile.
+#
+# find $(Content) all MarkDown files |
 # phase2.jq
 #   --arg DF "$$(find $(Data) -name '*.*')"
 #   --arg Content $(Content)
@@ -7,6 +9,7 @@
 #   --arg Metadata $(Metadata)
 #   > $(Metadata)/phase1.make
 
+# Function to cheat vim
 def comment: "# vim:syntax=make";
 
 def dir:
@@ -53,7 +56,6 @@ def mpages($documents):
     | "MetadataPages := " + ($json | join(" ")) + "\n" + mrule
 ;
 
-
 def data($files):
     def d2m($x):
         sub("\\."+$x+"$"; ".json")
@@ -86,6 +88,7 @@ def data($files):
 | mpages($documents) as $MetadataPages
 | data($DF) as $DataFiles
 |
+# print now
 "__phase_2 := 1",
 $DestinationPaths,
 $MetadataPaths,

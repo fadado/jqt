@@ -1,10 +1,14 @@
-# phase0.jq
+# Called from config.make to adapt user defined configuration.
+#
+# site.jq
 #   --arg Version $(Version)
 #   --arg Metadata $(Metadata)
-#   < $(Metadata)/config.json > $(Metadata)/site.json
+#   < $(Metadata)/config.json
+#   > $(Metadata)/site.json
 
 #
-# Delete `.defaults` and add some new members if not defined
+# Delete `.defaults` and add some new members with default value if not defined
+# in the configuration file.
 #
 del(.defaults)
 + {

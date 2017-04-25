@@ -1,5 +1,8 @@
-# phase1.jq < $(Metadata)/site.json > $(Metadata)/phase1.make
-# 
+# Called from config.make to create auxiliar makefile.
+#
+# phase1.jq
+#   < $(Metadata)/site.json
+#   > $(Metadata)/phase1.make
 
 # Function to cheat vim
 def comment: "# vim:syntax=make";
