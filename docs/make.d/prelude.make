@@ -28,9 +28,10 @@ ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
 ifeq (0,$(shell id --user))
 $(error Root only can make "(un)install" targets)
 endif
-SUDO := 
 else
-SUDO := sudo
+ifneq (0,$(shell id --user))
+$(error Only root can make "(un)install" targets)
+endif
 endif
 
 # Target 'clobber' must be alone

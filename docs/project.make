@@ -1,11 +1,18 @@
 ########################################################################
 #
-# Specific makefile for this web site
+# Specific makefile for this web site.
+# This should be the only file to edit by hand!
 #
-# Defined rules for:
+# Variables imported:
+#	Content
+#	Metadata
+# 	JQTFLAGS
+#
+# Define new rules for:
 #	$(ManPage)
 #	/tmp/help
-# Defined targets:
+#
+# Add double-colon recipes for targets:
 # 	all
 # 	clean
 # 	clobber
@@ -14,6 +21,7 @@
 # Build pages options
 ########################################################################
 
+# Append parameters to:
 JQTFLAGS += -msnippets:$(Metadata)/snippets.json  
 
 # Pandoc options

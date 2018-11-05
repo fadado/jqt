@@ -41,7 +41,7 @@ menu:
   - structure
   - content
   - data
-  - blog/index
+# - blog/index
 
 # Default values
 defaults:

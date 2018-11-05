@@ -26,14 +26,14 @@ ifndef version_test
 $(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
 endif
 
-# Paranoia
 ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
 ifeq (0,$(shell id --user))
-$(error  Root only can make "(un)install" targets)
+$(error Root only can make "(un)install" targets)
 endif
-SUDO := 
 else
-SUDO := sudo
+ifneq (0,$(shell id --user))
+$(error Only root can make "(un)install" targets)
+endif
 endif
 
 ########################################################################
@@ -86,9 +86,10 @@ SHELL := /bin/bash
 # Warning: only `dnf`! Use this rule as template to your own script.
 setup:
 	@rpm -q --quiet general-purpose-preprocessor || sudo dnf -y install general-purpose-preprocessor
-	@rpm -q --quiet jq || sudo dnf -y install jq
+	@test -e /usr/bin/jq || test -e /usr/local/bin/jq || sudo dnf -y install jq
 	@rpm -q --quiet pandoc || sudo dnf -y install pandoc
-	@test -d /usr/share/doc/PyYAML || sudo dnf -y install PyYAML
+	@rpm -q --quiet python2-pyyaml || sudo dnf -y install python2-pyyaml
+	@echo Done!
 
 # Default target
 all: check
@@ -106,19 +107,19 @@ clobber: clean
 
 install:
 	[[ -e jqt.1.gz ]] || { cd docs && make ../jqt.1.gz; }
-	test -d $(bindir) || $(SUDO) mkdir --verbose --parents $(bindir)
-	test -d $(datadir)/$(PROJECT) || $(SUDO) mkdir --verbose --parents $(datadir)/$(PROJECT)
-	test -d $(mandir)/man1 || $(SUDO) mkdir --verbose --parents $(mandir)/man1
-	$(SUDO) install --verbose --compare --mode 555 bin/* $(bindir)
-	$(SUDO) install --verbose --compare --mode 644 share/* $(datadir)/$(PROJECT)
-	$(SUDO) install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
-	$(SUDO) sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
+	test -d $(bindir) || mkdir --verbose --parents $(bindir)
+	test -d $(datadir)/$(PROJECT) || mkdir --verbose --parents $(datadir)/$(PROJECT)
+	test -d $(mandir)/man1 || mkdir --verbose --parents $(mandir)/man1
+	install --verbose --compare --mode 555 bin/* $(bindir)
+	install --verbose --compare --mode 644 share/* $(datadir)/$(PROJECT)
+	install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
+	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
 
 uninstall:
-	$(SUDO) rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
-	$(SUDO) rm --verbose --force -- $(mandir)/man1/jqt.1.gz
-	test -d $(datadir)/$(PROJECT)					  \
-	&& $(SUDO) rm --verbose --force --recursive $(datadir)/$(PROJECT) \
+	rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
+	rm --verbose --force -- $(mandir)/man1/jqt.1.gz
+	test -d $(datadir)/$(PROJECT)				  \
+	&& rm --verbose --force --recursive $(datadir)/$(PROJECT) \
 	|| true
 
 # Show targets

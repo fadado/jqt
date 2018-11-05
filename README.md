@@ -54,7 +54,7 @@ $ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
 ```
 
 To install _jqt_ simply run `make install` on the _jqt_ repository top
-directory. If don’t like to install into the `/usr/local` system directory you
+directory. If you don’t like to install into the `/usr/local` system directory you
 can change the destination directory:
 
 ```zsh
