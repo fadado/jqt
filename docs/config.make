@@ -67,20 +67,4 @@ clean::
 clobber::
 	@rm -f $(ManPage)
 
-########################################################################
-# Generate help text
-########################################################################
-
-# Independent target: helps generating text for `jqt -h`
-# Needs explicit call: `make /tmp/help`
-/tmp/help: $(Content)/help.text
-	$(info ==> $@)
-	@jqt -P MarkDown -I$(Content) < $<				\
-	| pandoc --from markdown --to plain -				\
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
-	> $@
-
-clean::
-	@rm -f /tmp/help
-
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

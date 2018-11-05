@@ -125,7 +125,7 @@ include make.d/tools.make
 # ======================================================================
 
 ########################################################################
-include project.make
+include config.make
 #
 # Project specific makefile. All the previous modules are expected to be
 # independent, valid for any project without any change.

@@ -100,7 +100,7 @@ all: check
 
 .PHONY: clean clobber install uninstall
 
-clean:
+clean::
 	rm -f tests/*/generated/* jqt.1.gz
 
 clobber: clean
@@ -138,6 +138,22 @@ help:
 	echo '    bindir    = /usr/local/bin';			\
 	echo '    datadir   = /usr/local/share';		\
 	echo '    mandir    = /usr/local/share/man'
+
+########################################################################
+# Generate help text
+########################################################################
+
+# Independent target: helps generating text for `jqt -h`
+# Needs explicit call: `make /tmp/help`
+/tmp/help: docs/content/help.text
+	$(info ==> $@)
+	jqt -P MarkDown -Idocs < $<					\
+	| pandoc --from markdown --to plain -				\
+	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
+	> $@
+
+clean::
+	@rm -f /tmp/help
 
 ########################################################################
 # Tests
