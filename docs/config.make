@@ -1,21 +1,13 @@
 ########################################################################
 #
 # Specific makefile for this web site.
-# This should be the only file to edit by hand!
+# This should be the only makefile to edit by hand!
 #
 # Variables imported:
-#	Content
 #	Metadata
+#
+# Variables modified:
 # 	JQTFLAGS
-#
-# Define new rules for:
-#	$(ManPage)
-#	/tmp/help
-#
-# Add double-colon recipes for targets:
-# 	all
-# 	clean
-# 	clobber
 
 ########################################################################
 # Build pages options
@@ -29,42 +21,5 @@ JQTFLAGS += -5 --toc-depth=4
 
 # Extra dependencies
 #?$(DestinationPages): $(Blocks)/filters.jq $(Blocks)/*/*.html $(Blocks)/*/*/*.html
-
-########################################################################
-# Generate man page for jqt
-########################################################################
-
-# gpp for the man page (to be build without calling jqt!)
-GPP_MD := gpp						\
-	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
-	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
-	+sccc '&\n' '' ''				\
-	+sccc '\\n' '' ''				\
-	+sccc '<\#' '\#>\n' ''				\
-	+siqi "'" "'" '\'				\
-	+siQi '"' '"' '\'				\
-	+ssss '<!--' '-->' ''				\
-	+ssss '`'  '`' ''				\
-	+ssss '\n```' '\n```' ''			\
-	+ssss '\n~~~' '\n~~~' ''			\
-    
-#
-ManPage := ../jqt.1.gz
-
-# Man page: jqt(1)
-$(ManPage): $(Content)/jqt.1.text
-	$(info ==> $@)
-	@$(GPP_MD) -I$(Content) < $<			\
-	| pandoc --standalone --from markdown --to man	\
-	| gzip > $@
-
-# Add prerequisites and recipes to common targets
-all:: $(ManPage)
-
-clean::
-	@rm -f $(ManPage)
-
-clobber::
-	@rm -f $(ManPage)
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

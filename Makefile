@@ -61,18 +61,12 @@ MAKEFLAGS += --warn-undefined-variables
 # When it is time to consider phony targets, make will run its recipe
 # unconditionally, regardless of whether a file with that name exists or
 # what its last-modification time is.
-.PHONY: all
-
-# When a target is built all lines of the recipe will be given to a
-# single invocation of the shell.
-# !!!Does not work in  make <= 3.82 event it is documented!!!
-#.ONESHELL:
+.PHONY: all clean
 
 # Default shell: if we require GNU Make, why not require Bash?
 SHELL := /bin/bash
 
-# The argument(s) passed to the shell are taken from the variable
-# .SHELLFLAGS.
+# Argument(s) passed to the shell.
 .SHELLFLAGS := -o errexit -o pipefail -o nounset -c
 
 # Make will delete the target of a rule if it has changed and its recipe
@@ -80,10 +74,25 @@ SHELL := /bin/bash
 .DELETE_ON_ERROR:
 
 ########################################################################
-# Rules
+# Targets and variables
 ########################################################################
 
-# Warning: only `dnf`! Use this rule as template to your own script.
+# The only "productive" target...
+ManPage := jqt.1.gz
+
+# Dependencies from documentations files
+DOCS := docs
+CONTENT := $(DOCS)/content
+
+########################################################################
+# Install `jqt` dependencies.
+#
+# Warning: only with `dnf`!
+# Modify this rule as a template to your own script.
+########################################################################
+
+.PHONY: setup
+
 setup:
 	@rpm -q --quiet general-purpose-preprocessor || sudo dnf -y install general-purpose-preprocessor
 	@test -e /usr/bin/jq || test -e /usr/local/bin/jq || sudo dnf -y install jq
@@ -91,39 +100,34 @@ setup:
 	@rpm -q --quiet python2-pyyaml || sudo dnf -y install python2-pyyaml
 	@echo Done!
 
-# Default target
-all: check
-
 ########################################################################
-# Utilities
+# Install scripts and data
 ########################################################################
 
-.PHONY: clean clobber install uninstall
+.PHONY: install uninstall
 
-clean::
-	rm -f tests/*/generated/* jqt.1.gz
-
-clobber: clean
-
-install:
-	[[ -e jqt.1.gz ]] || { cd docs && make ../jqt.1.gz; }
+install: all
 	test -d $(bindir) || mkdir --verbose --parents $(bindir)
 	test -d $(datadir)/$(PROJECT) || mkdir --verbose --parents $(datadir)/$(PROJECT)
 	test -d $(mandir)/man1 || mkdir --verbose --parents $(mandir)/man1
 	install --verbose --compare --mode 555 bin/* $(bindir)
 	install --verbose --compare --mode 644 share/* $(datadir)/$(PROJECT)
-	install --verbose --compare --mode 644 jqt.1.gz $(mandir)/man1
+	install --verbose --compare --mode 644 $(ManPage) $(mandir)/man1
 	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
 
 uninstall:
 	rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
-	rm --verbose --force -- $(mandir)/man1/jqt.1.gz
+	rm --verbose --force -- $(mandir)/man1/$(ManPage)
 	test -d $(datadir)/$(PROJECT)				  \
 	&& rm --verbose --force --recursive $(datadir)/$(PROJECT) \
 	|| true
 
+########################################################################
 # Show targets
+########################################################################
+
 .PHONY: help
+
 help:
 	echo 'Usage: make TARGET [parameter=value...]'
 	echo 'Targets:';					\
@@ -145,27 +149,61 @@ help:
 
 # Independent target: helps generating text for `jqt -h`
 # Needs explicit call: `make /tmp/help`
-/tmp/help: docs/content/help.text
+/tmp/help: $(CONTENT)/help.text
 	$(info ==> $@)
-	jqt -P MarkDown -Idocs < $<					\
+	jqt -P MarkDown -I$(DOCS) < $<					\
 	| pandoc --from markdown --to plain -				\
 	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
 	> $@
 
-clean::
-	@rm -f /tmp/help
+clean:: ; @rm -f /tmp/help
+
+########################################################################
+# Generate man page for jqt
+########################################################################
+
+# gpp for the man page (to be build without calling jqt!)
+GPP_MD := gpp						\
+	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
+	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
+	+sccc '&\n' '' ''				\
+	+sccc '\\n' '' ''				\
+	+sccc '<\#' '\#>\n' ''				\
+	+siqi "'" "'" '\'				\
+	+siQi '"' '"' '\'				\
+	+ssss '<!--' '-->' ''				\
+	+ssss '`'  '`' ''				\
+	+ssss '\n```' '\n```' ''			\
+	+ssss '\n~~~' '\n~~~' ''			\
+    
+# Man page: jqt(1)
+$(ManPage): $(CONTENT)/jqt.1.text
+	$(info ==> $@)
+	@$(GPP_MD) -I$(DOCS) < $<			\
+	| pandoc --standalone --from markdown --to man	\
+	| gzip > $@
+
+# Default target
+all: $(ManPage)
+
+# Add prerequisites and recipes to common targets
+clean:: ; @rm -f $(ManPage)
 
 ########################################################################
 # Tests
 ########################################################################
 
 .PHONY: check
+
 check: test-jqt test-expand test-format
+
+clean:: ; rm -f tests/*/generated/*
 
 #
 # Test JQT
 #
 .PHONY: test-jqt test-cond test-expr test-loop test-macros test-syntax
+
 test-jqt: test-cond test-expr test-loop test-macros test-syntax
 
 define TestJQT
@@ -194,6 +232,7 @@ $(eval $(call TestJQT,syntax))
 # Test macro expansion
 #
 .PHONY: test-expand test-mpjqt test-mpmd test-mpjson test-mpcss
+
 test-expand: test-mpjqt test-mpmd test-mpjson test-mpcss
 
 define TestMacroExpand
@@ -217,6 +256,7 @@ $(eval $(call TestMacroExpand,css,mpcss))
 # Test file format conversions
 #
 .PHONY: test-format test-csv test-yaml
+
 test-format: test-csv test-yaml
 
 define TestFileFormat

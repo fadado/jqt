@@ -128,15 +128,8 @@ include make.d/tools.make
 include config.make
 #
 # Project specific makefile. All the previous modules are expected to be
-# independent, valid for any project without any change.
-#
-# Defined rules for:
-#	$(ManPage)
-#	/tmp/help
-# Defined targets:
-# 	all
-# 	clean
-# 	clobber
+# independent, valid for any project without any change. This file must
+# exist but can be empty.
 ########################################################################
 
 endif # __phase_3
