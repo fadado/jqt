@@ -3,15 +3,11 @@
 #
 # Miscelaneous tools.
 #
-# Parameters:
-# 	vnudir
 # Defined targets:
 # 	help
-# 	lint
-# 	valid
 
 ########################################################################
-# Show all targets
+# Show all targets.
 ########################################################################
 
 .PHONY: help
@@ -27,27 +23,5 @@ help:
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4\
 	|| true
-
-########################################################################
-# HTML 5 validation
-########################################################################
-
-.PHONY: valid lint
-
-# Parameter, definable at runtime
-vnudir ?= /usr/local/vnu
-
-# Validation tool
-VNU := $(vnudir)/vnu.jar
-
-# Validation
-valid: all
-	@xmlwf $(Destination)/*.html
-	@java -jar $(VNU) --errors-only --format gnu $(Destination)/*.html
-
-# Validation with warnings
-lint: all
-	@xmlwf $(Destination)/*.html
-	@java -jar $(VNU) --format text $(Destination)/*.html
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

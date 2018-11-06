@@ -1,54 +1,58 @@
-# Called from page.make to create auxiliar makefile.
+########################################################################
+# phase3.jq -- Define contents for `$(Metadata)/phase3.make`.
 #
-# phase3.jq
+# jq -r -f phase3.jq
 #   --arg Metadata $(Metadata)
 #   --arg Layouts $(Layouts)
 #   --arg Destination $(Destination)
 #   < $(Metadata)/pages-by-id.json
 #   > $(Metadata)/phase3.make
 
-# Function to cheat vim
-def comment: "# vim:syntax=make";
-
-def use:
-    if .use
-    then " " + (.use | join(" "))
+def dependencies:
+    if .Dependencies
+    then " " + (.Dependencies | join(" "))
     else "" end
 ;
 
-def data:
-    if .data
-    then " " + (.data | map("-m\(.):$(Metadata)/snippets.json") | join(" "))
+def dataset:
+    if .Datasets
+    then " " + (.Datasets | map("-m\(.):\($Metadata)/\(.).json") | join(" "))
     else "" end
 ;
 
 def flags:
-    if .flags
-    then " " + (.flags | join(" "))
+    if .Flags
+    then " " + (.Flags | join(" "))
     else "" end
 ;
 
 def page:
-    " -mpage:" + $Metadata + "/pages/" + .id + ".json"
+    " -mpage:\($Metadata)/pages/\(.Id).json"
 ;
 
 def layout:
-    " " + $Layouts + "/" + .layout + ".html"
+    " \($Layouts)/\(.Layout).html"
 ;
 
-# makefile rule for HTML page
+# _site/jqt/index.html: content/index.md layouts/page.html content/macros.m content/LINKS.txt content/EXAMPLE.txt
+# 	$(info ==> $@)
+# 	@$(JQT) -d $< -mpage:.meta/pages/index.json layouts/page.html | $(DETAILS) > $@
+# ...
+# _site/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md layouts/page.html
+# 	$(info ==> $@)
+# 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
 def page_rule:
-    $Destination+"/"+.url+": " + .source + layout + use,
+    $Destination+"/"+.URL+": " + .Source + layout + dependencies,
     "\t$(info ==> $@)",
-    "\t@$(JQT)  -d $<" + data + flags + page + layout + " | $(DETAILS) > $@"
+    "\t@$(JQT) -d $<" + dataset + flags + page + layout + " | $(DETAILS) > $@"
 ;
 
 #
 # Output makefile
 #
 
-"__phase_3 := 1",
+"__phase_3 := 1\n",
 (.[] | page_rule), # for each page
-comment
+"\n# \u0076im:syntax=make"
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

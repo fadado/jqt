@@ -1,7 +1,7 @@
 <# Top-level page markup #>&
 <!DOCTYPE html>
 <!-- this document uses polyglot markup (well formed XHTML5)  -->
-<html id="{{.page.id}}" xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
+<html id="{{.page.Id}}" xmlns="http://www.w3.org/1999/xhtml" lang="{{.page.lang//.site.lang}}" xml:lang="{{.page.lang//.site.lang}}">
   <head>
 <#
  #  Meta elements
@@ -13,12 +13,12 @@
     <meta name='keywords' content='{{.page.keywords//empty}}' />
     <meta name='author' content='{{[(.page.author//.site.author)[].name] | sort[]}}' />
 <# More metadata #>
-    <meta name="generator" content="jqt v<%include ../VERSION>" />
+    <meta name="generator" content="jqt v{{.site.version}}" />
     <meta name='dcterms.date' content='{{.page.updated//empty}}' />
 <# Presentation #>
-    <link rel="shortcut icon" href="{{.page.base}}favicon.ico"/>
+    <link rel="shortcut icon" href="{{.page.Base}}favicon.ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <link rel="stylesheet" type="text/css" href="{{.page.base}}styles.css"/>
+    <link rel="stylesheet" type="text/css" href="{{.page.Base}}styles.css"/>
     {{._highlight}}
   </head>
 <#

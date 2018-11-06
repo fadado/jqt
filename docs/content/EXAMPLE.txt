@@ -8,7 +8,7 @@
     <title>{{.page.title | gsub("<[^>]*>"; "")}}</title>
     {# include files in preprocessing stage: #}
     <%include "head.html">
-    <meta name="generator" content="jqt v<%include "../VERSION">"/>
+    <meta name="generator" content="jqt v{{.site.version}}"/>
     {# optional line: #}
     <meta name='dcterms.modified' content='{{.page.updated//empty}}' />
     {# implicit loop for all authors: #}

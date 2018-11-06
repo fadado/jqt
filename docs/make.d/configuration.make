@@ -1,48 +1,29 @@
 ########################################################################
-# prelude.make
+# configuration.make -- Global GMake configuration.
 #
-# The project prelude: common module available in all makefile modules
-#
+# Debugging variables:
+# 	VERBOSE
+# 	TRACE
 
-# Debug tool
-ifdef MAKE_RESTARTS
-$(info Makefile restarted: $(MAKE_RESTARTS))
-endif
+TRACE ?=
+VERBOSE ?=
 
 ########################################################################
-# Prerequisites
+# Prerequisites.
 ########################################################################
 
 # We are using some of the newest GNU Make features... so require GNU
-# Make version >= 3.82
+# Make version >= 3.82.
 version_test := $(filter 3.82,$(firstword $(sort $(MAKE_VERSION) 3.82)))
 ifndef version_test
 $(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
 endif
 
-# Only one target at the same time
+# Only one target at the same time.
 MAKECMDGOALS ?= all
 
-# Check 'root' intentions
-ifeq (,$(filter install uninstall,$(MAKECMDGOALS)))
-ifeq (0,$(shell id --user))
-$(error Root only can make "(un)install" targets)
-endif
-else
-ifneq (0,$(shell id --user))
-$(error Only root can make "(un)install" targets)
-endif
-endif
-
-# Target 'clobber' must be alone
-ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
-ifneq (1,$(words $(MAKECMDGOALS)))
-$(error Target "clobber" must be alone)
-endif
-endif
-
 ########################################################################
-# Make configuration
+# Make configuration.
 ########################################################################
 
 # Disable builtins.
@@ -53,7 +34,7 @@ MAKEFLAGS += --no-builtin-variables
 MAKEFLAGS += --warn-undefined-variables
 
 # Make will not print the recipe used to remake files.
-#.SILENT:
+$(VERBOSE).SILENT:
 
 # Eliminate use of the built-in implicit rules. Also clear out the
 # default list of suffixes for suffix rules.
@@ -75,25 +56,25 @@ SHELL := /bin/bash
 # exits with a nonzero exit status.
 .DELETE_ON_ERROR:
 
-# Enable a second expansion of the prerequisites
+# Enable a second expansion of the prerequisites.
 .SECONDEXPANSION:
 
 ########################################################################
 # Common macros
 ########################################################################
 
-# Hacks for string manipulation
+# Hacks for string manipulation.
 #!comma := ,
 #!empty :=
 #!space := $(empty) $(empty)
 #!tab := $(empty)	$(empty)
 
-# Hack for list manipulation
+# Hack for list manipulation.
 #!define rest =
 #!$(wordlist 2,2147483648,$1)
 #!endef
 
-# File name without extension nor directory
+# File name without extension nor directory.
 #!define filename
 #!$(basename $(notdir $1))
 #!endef

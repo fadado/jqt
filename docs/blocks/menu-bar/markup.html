@@ -3,9 +3,9 @@
  ######################################################################>&
 <ol class="menu-bar">
 {% .site.menu[] %}
-  <li class='menu-bar__item {{if .==$M.page.id then "menu-bar__item_current" else "" end}}'>
-    {% (. as $id | pages[] | select($id == .id)) as $page %}
-    <a href="{{$M.page.base}}{{$page.url}}">{{$page.name}}</a>
+  <li class='menu-bar__item {{if .==$M.page.Id then "menu-bar__item_current" else "" end}}'>
+    {% (. as $id | pages[] | select($id == .Id)) as $page %}
+    <a href="{{$M.page.Base}}{{$page.URL}}">{{$page.name}}</a>
     {% end %}
   </li>
 {% end %}

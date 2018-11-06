@@ -1,16 +1,14 @@
-# Called from config.make to create auxiliar makefile.
+########################################################################
+# phase1.jq -- Define contents for `$(Metadata)/phase2.make`.
 #
-# phase1.jq
+# jq -r -f phase1.jq
 #   < $(Metadata)/site.json
 #   > $(Metadata)/phase1.make
 
-# Function to cheat vim
-def comment: "# vim:syntax=make";
-
 #
-# Format some members as make variables
+# Output makefile
 #
-"__phase_1   := 1",
+"__phase_1   := 1\n",
 "Assets      := " + .Assets,
 "Blocks      := " + .Blocks,
 "Content     := " + .Content,
@@ -18,6 +16,6 @@ def comment: "# vim:syntax=make";
 "Destination := " + .Destination,
 "Layouts     := " + .Layouts,
 "Styles      := " + .Styles,
-comment
+"\n# \u0076im:syntax=make"
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

@@ -1,26 +1,23 @@
-# Called from config.make to adapt user defined configuration.
+########################################################################
+# phase1_site.jq -- Define global members using default values.
 #
-# site.jq
-#   --arg Version $(Version)
-#   --arg Metadata $(Metadata)
+# jq -S -f phase1_site.jq --arg Metadata $(Metadata)
 #   < $(Metadata)/config.json
 #   > $(Metadata)/site.json
 
-#
 # Delete `.defaults` and add some new members with default value if not defined
 # in the configuration file.
 #
 del(.defaults)
 + {
-  	Destination: (.Destination // "_site"),
+  	Metadata:    $Metadata,
   	Assets:      (.Assets      // "assets"),
   	Blocks:      (.Blocks      // "blocks"),
   	Content:     (.Content     // "content"),
   	Data:        (.Data        // "data"),
+  	Destination: (.Destination // "_site"),
   	Layouts:     (.Layouts     // "layouts"),
-  	Styles:      (.Styles      // "styles"),
-  	Metadata:    (.Metadata    // $Metadata),
-  	Version:     (.Version     // $Version)
+  	Styles:      (.Styles      // "styles")
 }
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

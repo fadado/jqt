@@ -5,14 +5,14 @@
 &BEM{post-excerpt} {
 }
 
-&BEM{post-excerpt__title} {
+&BEM{post-excerpt}{title} {
   text-decoration: underline;
 }
 
-&BEM{post-excerpt__text} {
+&BEM{post-excerpt}{text} {
 }
 
-&BEM{post-excerpt__date} {
+&BEM{post-excerpt}{date} {
   color: &LightGrey;
 }
 

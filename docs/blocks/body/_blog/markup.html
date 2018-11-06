@@ -2,11 +2,11 @@
  # Body for blog posts
  ######################################################################>&
 <main class="#body">
-  {% pages[] | select(.section=="blog") %}<#TODO: sort?#>
+  {% pages[] | select(.Section=="blog") %}<#TODO: sort?#>
     <div class="post-excerpt">
-      <a class="post-excerpt__title" href="{{.base}}{{.url}}">{{.title}}</a>
+      <a class="post-excerpt__title" href="{{.Base}}{{.URL}}">{{.title}}</a>
       <p class="post-excerpt__test">{{.description}}
-        <span class="post-excerpt__date">{{.updated | fromdate |strftime("%B %Y") }}</span></p>
+        <span class="post-excerpt__date">{{ .updated | fromdate | strftime("%B %Y") }}</span></p>
     </div>
   {% end %}
 </main>

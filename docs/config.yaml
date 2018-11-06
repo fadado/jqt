@@ -1,31 +1,32 @@
 ---
 #
-# jqt docs configuration
+# jqt documentation site configuration
 #
-# Provide defaults to each .md file including "config.yaml" before defining
-# other elements, and is available in the .site top-level variable.
-#
-
-#
-# Global parameters
+# Provide defaults to each MarkDown file including `config.yaml`, and is
+# available in the `.site` top-level variable.
 #
 
-# Default values:
+# ======================================================================
+# Site variables with default values. Can be redefined in this file.
+# ======================================================================
 #
-# Destination: _site
-# Assets:      assets
-# Blocks:      blocks
-# Content:     content
-# Data:        data
-# Layouts:     layouts
-# Styles:      styles
+# Assets        assets
+# Blocks        blocks
+# Content       content
+# Data          data
+# Destination   _site
+# Layouts       layouts
+# Styles        styles
 
-# Changes from defaults
-Destination: /tmp/jqt   # fast RAM disk
+# Changes from defaults (fast RAM disk)
+Destination: /tmp/jqt
 
 #
 # Site parameters
 #
+
+# Site version (same as jqt)
+version: 0.5.1
 
 title: jqt, the jq template engine
 baseurl: https://fadado.github.com/jqt/
@@ -50,10 +51,14 @@ defaults:
       title-prefix: jqt
       author: *author
       lang: *lang
-#     data:
-#       - snippets
-#     flags:
-#       - -msnippets:$(Metadata)/snippets.json
+      Datasets:
+        - snippets
+      Dependencies:
+        - layouts/default.html
+        - content/macros.m
+        - content/LINKS.txt 
+#     Flags:
+#       - -mXYZ:$(Metadata)/XYZ.json
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
 ...

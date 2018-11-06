@@ -1,11 +1,11 @@
 ---
 name: Content
-layout: page-toc
 title: Authoring content in jqt using MarkDown
 description: jqt transforms MarkDown documents to HTML using Pandoc.
 keywords:  jqt, markdown, pandoc, gpp, preprocessing, authoring content
 updated: "2016-08-28T10:27:09Z"
-use: [content/macros.m, content/LINKS.txt, content/FLOW.txt, "content/opt/[4DdiT].txt"]
+Layout: page-toc
+Dependencies: [content/FLOW.txt, "content/opt/[4DdiT].txt"]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&
@@ -19,8 +19,8 @@ _MarkDown_ promises and delivers exactly this.
 ## General operation
 
 <%cite jqt> transforms [MarkDown][MARKDOWN] documents to HTML using [Pandoc][PANDOC],
-but before that [GPP][GPP] is used to preprocess them. Pandoc's output
-is then merged with the [YAML][YAML] front matter metadata and other input data before be sended
+but before that [GPP][GPP] is used to preprocess them. Pandoc's output is packaged as JSON data and
+then merged with the [YAML][YAML] front matter metadata and other input data before be sended
 to the render stage.  This is described on the middle of this diagram:
 
 <%include content/FLOW.txt>
@@ -70,9 +70,10 @@ The option `-T` allows the use of YAML files for collections of MarkDown snippet
 
 </details>
 
-This feature can be used to collect multiple text snippets in only one file.
-The MarkDown can be transformed to HTML and put in a new YAML or JSON file
-with a command like this:
+This feature can be used to collect multiple text snippets in only one file
+(YAML file or MarkDown file with only front-matter).  The MarkDown can be
+transformed to HTML and put in a new YAML or JSON file with a command like
+this:
 
 ```zsh
 jqt -T -- text.yaml | yaml2json > snippets.json
@@ -84,7 +85,7 @@ Then this converted file can be loaded by `jqt` in succesive calls:
 jqt -m snippets:snippets.json ...
 ```
 
-Template files can expand the snippets without never containing raw content:
+Template files (only!) can expand the snippets without never containing raw content:
 
 ```HTML
 <h1>{{.snippets.title}}</h1>
@@ -101,7 +102,7 @@ and the second does the proper conversion to HTML.
 
 The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
 like defining new macros, include other files, etc. For example, a macro call
-like `<%include "../VERSION">` will expand to he string <code><%include "../VERSION"></code>
+like `<%include "../VERSION">` will expand to the string <code><%include ../VERSION></code>
 as you can see in this paragraph and on the top of these pages.
 
 #### Macro calls

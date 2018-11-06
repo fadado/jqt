@@ -1,100 +1,110 @@
-# Called from data.make to create auxiliar makefile.
+########################################################################
+# phase2.jq -- Define contents for `$(Metadata)/phase2.make`.
 #
 # find $(Content) all MarkDown files |
-# phase2.jq
+# jq -s -Rr -f phase2.jq
 #   --arg DF "$$(find $(Data) -name '*.*')"
 #   --arg Content $(Content)
 #   --arg Data $(Data)
 #   --arg Destination $(Destination)
 #   --arg Metadata $(Metadata)
-#   > $(Metadata)/phase1.make
+#   > $(Metadata)/phase2.make
 
-# Function to cheat vim
-def comment: "# vim:syntax=make";
-
+# Extract pathname directory.
 def dir:
     if test("/")
     then sub("/[^/]+$"; "/")
     else "./" end
 ;
 
-def dpaths($paths):
+# destination_paths := _site/jqt/ _site/jqt/blog/ ...
+def destination_paths($paths):
     def dpath:
         sub("^" + $Content; $Destination)
     ;
-    "DestinationPaths := " + ([$paths[] | dpath] | join(" "))
+    "destination_paths := " + ([$paths[] | dpath] | join(" ")) + "\n"
 ;
 
-def mpaths($paths):
+# metadata_paths := .meta/pages/ .meta/pages/blog/ ...
+def metadata_paths($paths):
     def mpath:
         sub("^" + $Content; $Metadata + "/pages")
     ;
-    "MetadataPaths := " + ([$paths[] | mpath] |  join(" "))
+    "metadata_paths := " + ([$paths[] | mpath] |  join(" ")) + "\n"
 ;
 
-def dpages($documents):
-    def dpage:
-        sub("^" + $Content; $Destination)
-        | sub("\\.(?:markdown|mk?d)$"; ".html")
-    ;
-    "DestinationPages := " + ([$documents[] | dpage] | join(" "))
-;
-
-def mpages($documents):
-    def mpage:
-        sub("^" + $Content; $Metadata + "/pages")
-        | sub("\\.(?:markdown|mk?d)$"; ".json")
-    ;
-    def mrule:
-        [ $documents[]
-          | mpage + ": " + . + "\n" +
-          "\t$(info ==> $@)\n" +
-          "\t@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_JSON) > $@"
-        ] | join("\n")
-    ;
-    [$documents[] | mpage] as $json
-    | "MetadataPages := " + ($json | join(" ")) + "\n" + mrule
-;
-
-def data($files):
+# data_md := .meta/snippets.json
+# data_yaml :=
+# data_json :=
+# data_csv :=
+def data_files($files):
     def d2m($x):
         sub("\\."+$x+"$"; ".json")
         | sub("^"+$Data; $Metadata)
     ;
     ($files / "\n") as $names
-    | [$names[] | select(test(".md$"))] as $DataMD
-    | [$names[] | select(test(".yaml$"))] as $DataYAML
-    | [$names[] | select(test(".json$"))] as $DataJSON
-    | [$names[] | select(test(".csv$"))] as $DataCSV
-    | if ($DataMD|length) == 0 then "DataMD :=\n"
-      else "DataMD := " + ($DataMD | map(d2m("md")) | join(" ")) + "\n" end
-    + if ($DataYAML|length) == 0 then "DataYAML :=\n"
-      else "DataYAML := " + ($DataYAML | map(d2m("yaml")) | join(" ")) + "\n" end
-    + if ($DataJSON|length) == 0 then "DataJSON :=\n"
-      else "DataJSON := " + ($DataJSON | map(d2m("json")) | join(" ")) + "\n" end
-    + if ($DataCSV|length) == 0 then "DataCSV :=\n"
-      else "DataCSV := " + ($DataCSV | map(d2m("csv")) | join(" ")) + "\n" end
+    | [$names[] | select(test(".md$"))] as $data_md
+    | [$names[] | select(test(".yaml$"))] as $data_yaml
+    | [$names[] | select(test(".json$"))] as $data_json
+    | [$names[] | select(test(".csv$"))] as $data_csv
+    | if ($data_md|length) == 0 then "data_md :=\n"
+      else "data_md := " + ($data_md | map(d2m("md")) | join(" ")) + "\n" end
+    + if ($data_yaml|length) == 0 then "data_yaml :=\n"
+      else "data_yaml := " + ($data_yaml | map(d2m("yaml")) | join(" ")) + "\n" end
+    + if ($data_json|length) == 0 then "data_json :=\n"
+      else "data_json := " + ($data_json | map(d2m("json")) | join(" ")) + "\n" end
+    + if ($data_csv|length) == 0 then "data_csv :=\n"
+      else "data_csv := " + ($data_csv | map(d2m("csv")) | join(" ")) + "\n" end
+;
+
+# PagesHTML := _site/jqt/content.html _site/jqt/blog/2017-04-13-hello.html ...
+def pages_html($documents):
+    def dpage:
+        sub("^" + $Content; $Destination)
+        | sub("\\.(?:markdown|mk?d)$"; ".html")
+    ;
+    "PagesHTML := " + ([$documents[] | dpage] | join(" ")) + "\n"
+;
+
+# PagesJSON := .meta/pages/content.json .meta/pages/blog/2017-04-13-hello.json ...
+def md2json:
+    sub("^" + $Content; $Metadata + "/pages")
+    | sub("\\.(?:markdown|mk?d)$"; ".json")
+;
+
+def pages_json($documents):
+    [$documents[] | md2json] as $json
+    | "PagesJSON := " + ($json | join(" ")) + "\n"
+;
+
+# .meta/pages/content.json: content/content.md
+# 	$(info ==> $@)
+# 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@
+# ...
+# .meta/pages/blog/2017-04-13-hello.json: content/blog/2017-04-13-hello.md
+# 	$(info ==> $@)
+# 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@
+def pages_json_rules($documents):
+    [ $documents[]
+        | md2json + ": " + . + "\n" +
+        "\t$(info ==> $@)\n" +
+        "\t@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@"
+    ] | join("\n")
 ;
 
 #
 # Output makefile
 #
-
 (.[:-1] / "\n") as $documents
-| [$documents[] | dir] | unique as $paths
-| dpaths($paths) as $DestinationPaths 
-| mpaths($paths) as $MetadataPaths
-| dpages($documents) as $DestinationPages 
-| mpages($documents) as $MetadataPages
-| data($DF) as $DataFiles
+| ([$documents[] | dir] | unique) as $paths
 |
-# print now
-"__phase_2 := 1",
-$DestinationPaths,
-$MetadataPaths,
-$DestinationPages,
-$MetadataPages,
-$DataFiles,
-comment
+"__phase_2 := 1\n",
+destination_paths($paths),
+metadata_paths($paths),
+data_files($DF),
+pages_html($documents),
+pages_json($documents),
+pages_json_rules($documents),
+"\n# \u0076im:syntax=make"
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

@@ -1,11 +1,11 @@
 ---
 name: Data
-layout: page-toc
 title: Managing the data model with jqt
 description: jqt combines one template with one MarkDown document and a data model.
 keywords:  jqt, JSON, YAML, gpp, preprocessing, data model
 updated: "2016-08-28T10:27:09Z"
-use: [content/macros.m, content/LINKS.txt, content/FLOW.txt, "content/opt/[DeIMmPRT].txt"]
+Layout: page-toc
+Dependencies: [content/FLOW.txt, "content/opt/[DeIMmPRT].txt"]
 ---
 <%include content/macros.m>&
 <%include content/LINKS.txt>&
