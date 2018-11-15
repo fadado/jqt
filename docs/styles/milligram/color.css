@@ -1,6 +1,6 @@
 // Adapted from:
 /*!
- * Milligram v1.1.0
+ * Milligram v1.3.0
  * http://milligram.github.io
  *
  * Copyright (c) 2016 CJ Patoilo
@@ -9,6 +9,8 @@
 
 // Color
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// TODO: add `!default`?
 
 &ifndef{ColorInitial}
 &define{ColorInitial}{#FFFFFF}
@@ -34,4 +36,4 @@
 &define{ColorQuinary}{#E1E1E1}
 &endif
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

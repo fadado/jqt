@@ -1,6 +1,6 @@
 // Adapted (with some renaming experiments) from:
 /*!
- * Milligram v1.1.0
+ * Milligram v1.3.0
  * http://milligram.github.io
  *
  * Copyright (c) 2016 CJ Patoilo
@@ -18,14 +18,19 @@
   input[type='tel']$1,
   input[type='text']$1,
   input[type='url']$1,
+  input[type='color']$1,
+  input[type='date']$1,
+  input[type='month']$1,
+  input[type='week']$1,
+  input[type='datetime']$1,
+  input[type='datetime-local']$1,
+  input:not([type])$1,
   textarea,
   select
 }
 
 &_input{} {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+	appearance: none // Removes awkward default styles on some inputs for iOS
   background-color: transparent;
   border: 0.1rem solid &ColorQuaternary;
   border-radius: .4rem;
@@ -42,12 +47,12 @@
 }
 
 select {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 29 14" width="29"><path fill="%23d1d1d1" d="M9.37727 3.625l5.08154 6.93523L19.54036 3.625"/></svg>') center right no-repeat;
   padding-right: 3rem;
-  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAyOSAxNCIgd2lkdGg9IjI5Ij48cGF0aCBmaWxsPSIjZDFkMWQxIiBkPSJNOS40IDMuNmw1IDcgNS4yLTciLz48L3N2Zz4=) center right no-repeat;
 }
 
 select:focus {
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAyOSAxNCIgd2lkdGg9IjI5Ij48cGF0aCBmaWxsPSIjOWI0ZGNmIiBkPSJNMTkuNiAzLjZIOS40bDUgNyIvPjwvc3ZnPg==);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 29 14" width="29"><path fill="%239b4dca" d="M9.37727 3.625l5.08154 6.93523L19.54036 3.625"/></svg>')
 }
 
 textarea {
@@ -78,4 +83,4 @@ input[type='radio'] {
   margin-left: .5rem;
 }
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

@@ -1,6 +1,6 @@
 // Adapted from:
 /*!
- * Milligram v1.1.0
+ * Milligram v1.3.0
  * http://milligram.github.io
  *
  * Copyright (c) 2016 CJ Patoilo
@@ -11,6 +11,7 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 table {
+	border-spacing: 0;
   width: 100%;
 }
 
@@ -30,4 +31,49 @@ table {
   padding-right: 0;
 }
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+//@media screen and (max-width: 40rem) {
+//}
+
+/* TODO: import?
+@media screen and (max-width: 40.0rem)
+  table
+    border-spacing: 0
+    display: flex
+    width: 100%
+
+    thead
+      border-right: solid .1rem $color-quinary
+
+      td,
+      th
+        padding-left: 0
+
+        &:first-child
+          padding-left: 0
+
+        &:last-child
+          padding-right: 1.2rem
+
+    tbody
+      display: flex
+      overflow-x: auto
+      white-space: nowrap
+
+      tr
+        border-right: solid .1rem $color-quinary
+
+        &:last-child
+          border-right: none
+
+    td,
+    th
+      display: block
+
+      &:first-child
+        padding-left: 1.2rem
+
+      &:last-child
+        padding-right: 1.2rem
+*/
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

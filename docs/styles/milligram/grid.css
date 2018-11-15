@@ -1,6 +1,6 @@
 // Adapted (with some renaming experiments) from:
 /*!
- * Milligram v1.1.0
+ * Milligram v1.3.0
  * http://milligram.github.io
  *
  * Copyright (c) 2016 CJ Patoilo
@@ -46,34 +46,30 @@
 // Vertically Align Columns
 // .row-align-* vertically aligns every .column in the .row
 &BEM{#row}{}{align-top} {
-  -ms-grid-row-align: flex-start;
          align-items: flex-start;
 }
 
 &BEM{#row}{}{align-bottom} {
-  -ms-grid-row-align: flex-end;
          align-items: flex-end;
 }
 
 &BEM{#row}{}{align-center} {
-  -ms-grid-row-align: center;
          align-items: center;
 }
 
 &BEM{#row}{}{align-stretch} {
-  -ms-grid-row-align: stretch;
       align-items: stretch;
 }
 
 &BEM{#row}{}{align-baseline} {
-  -ms-grid-row-align: baseline;
       align-items: baseline;
 }
 
 // JJOR: original = .row .col..., removed .row
 &BEM{#column} {
   display: block;
-  flex: 1;
+  // IE 11 required specifying the flex-basis otherwise it breaks mobile
+  flex: 1 1 auto;
   margin-left: 0;
   max-width: 100%;
   width: 100%;
@@ -152,4 +148,4 @@
   }
 }
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

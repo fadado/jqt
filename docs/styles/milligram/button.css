@@ -1,6 +1,6 @@
 // Adapted (with some renaming experiments) from:
 /*!
- * Milligram v1.1.0
+ * Milligram v1.3.0
  * http://milligram.github.io
  *
  * Copyright (c) 2016 CJ Patoilo
@@ -78,20 +78,20 @@
 
 &_buttons_active{.button_outline.button_disabled},
 &_buttons_active{.button_outline[disabled]} {
-  color: &ColorPrimary;
   border-color: inherit;
+  color: &ColorPrimary;
 }
 
 &_buttons{.button_clear} {
-  color: &ColorPrimary;
   background-color: transparent;
   border-color: transparent;
+  color: &ColorPrimary;
 }
 
 &_buttons_active{.button_clear} {
-  color: &ColorSecondary;
   background-color: transparent;
   border-color: transparent;
+  color: &ColorSecondary;
 }
 
 &_buttons_active{.button_clear.button_disabled},
@@ -99,4 +99,4 @@
   color: &ColorPrimary;
 }
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss
