@@ -30,7 +30,7 @@
 }
 
 &_input{} {
-	appearance: none // Removes awkward default styles on some inputs for iOS
+  appearance: none // Removes awkward default styles on some inputs for iOS
   background-color: transparent;
   border: 0.1rem solid &ColorQuaternary;
   border-radius: .4rem;

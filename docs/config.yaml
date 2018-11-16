@@ -14,12 +14,12 @@
 # Blocks        blocks
 # Content       content
 # Data          data
-# Destination   _site
+# Root          _site
 # Layouts       layouts
 # Styles        styles
 
 # Changes from defaults (fast RAM disk)
-Destination: /tmp/jqt
+Root: /tmp/jqt
 
 #
 # Site parameters
@@ -51,6 +51,7 @@ defaults:
       title-prefix: jqt
       author: *author
       lang: *lang
+      Layout: page-toc
       Datasets:
         - snippets
       Dependencies:
@@ -58,7 +59,10 @@ defaults:
         - content/macros.m
         - content/LINKS.txt 
 #     Flags:
-#       - -mXYZ:$(Metadata)/XYZ.json
+#       - -mXYZ:$(Meta)/XYZ.json
+  - idprefix: "blog/"
+    properties:
+      Layout: page
 
 # vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
 ...

@@ -4,10 +4,10 @@
 # input is page front-matter converted to JSON |
 # jq -S -f phase2_page.jq 
 #   --arg Source $(Content)/.../PAGE.md
-#   --arg Target $(Metadata)/pages/.../PAGE.json
-#   --arg Metadata $(Metadata)
-#   --slurpfile config $(Metadata)/config.json
-#   > $(Metadata)/pages/.../PAGE.json
+#   --arg Target $(Meta)/pages/.../PAGE.json
+#   --arg Meta $(Meta)
+#   --slurpfile config $(Meta)/config.json
+#   > $(Meta)/pages/.../PAGE.json
 
 # Pathname functions
 def basename:
@@ -24,31 +24,31 @@ def notdir:
     sub("^.*/"; "")
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `(../)+`
+# `$(Meta)/pages/path/to/page.json` => `(../)+`
 def page_base:
     # . as $target
     ("../" * (((. / "/") | length) - 3)) // ""
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `path/to/page`
+# `$(Meta)/pages/path/to/page.json` => `path/to/page`
 def page_id:
     # . as $target
-    basename | sub($Metadata+"/pages/"; "")
+    basename | sub($Meta+"/pages/"; "")
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `page`
+# `$(Meta)/pages/path/to/page.json` => `page`
 def page_filename:
     # . as $target
     notdir | basename
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `path/to/`
+# `$(Meta)/pages/path/to/page.json` => `path/to/`
 def page_path:
     # . as $obj
     .Id | dir
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `path/to`
+# `$(Meta)/pages/path/to/page.json` => `path/to`
 def page_section:
     #. as $obj
     if $Target | test("(?<!/pages)/index.json$") # index but not home page
@@ -56,13 +56,13 @@ def page_section:
     else .Path[:-1] end
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `page.html`
+# `$(Meta)/pages/path/to/page.json` => `page.html`
 def page_slug:
     # . as $obj
     .Filename + ".html"
 ;
 
-# `$(Metadata)/pages/path/to/page.json` => `path/to/page.html`
+# `$(Meta)/pages/path/to/page.json` => `path/to/page.html`
 def page_url:
     # . as $obj
     .Path + .Slug

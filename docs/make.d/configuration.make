@@ -20,7 +20,7 @@ $(error GNU Make version $(MAKE_VERSION); version >= 3.82 is needed)
 endif
 
 # Only one target at the same time.
-MAKECMDGOALS ?= all
+MAKECMDGOALS ?= build
 
 ########################################################################
 # Make configuration.
@@ -42,8 +42,8 @@ $(VERBOSE).SILENT:
 
 # Sets the default goal to be used if no targets were specified on the
 # command line.
-.PHONY: all
-.DEFAULT_GOAL := all
+.PHONY: build
+.DEFAULT_GOAL := build
 
 # Default shell: if we require GNU Make, why not require Bash?
 SHELL := /bin/bash

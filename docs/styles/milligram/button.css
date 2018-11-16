@@ -27,7 +27,7 @@
 
 // Rules
 
-&_buttons {
+&_buttons{} {
   background-color: &ColorPrimary;
   border: 0.1rem solid &ColorPrimary;
   border-radius: .4rem;
@@ -53,49 +53,49 @@
   outline: 0;
 }
 
-&_buttons{.button_disabled},
+&_buttons{&BEM{button}{}{disabled}},
 &_buttons{[disabled]} {
   cursor: default;
   opacity: .5;
 }
 
-&_buttons_active{.button_disabled},
+&_buttons_active{&BEM{button}{}{disabled}},
 &_buttons_active{[disabled]} {
   background-color: &ColorPrimary;
   border-color: &ColorPrimary;
 }
 
-&_buttons{.button_outline} {
+&_buttons{&BEM{button}{}{outline}} {
   background-color: transparent;
   color: &ColorPrimary;
 }
 
-&_buttons_active{.button_outline} {
+&_buttons_active{&BEM{button}{}{outline}} {
   background-color: transparent;
   border-color: &ColorSecondary;
   color: &ColorSecondary;
 }
 
-&_buttons_active{.button_outline.button_disabled},
-&_buttons_active{.button_outline[disabled]} {
+&_buttons_active{&BEM{button}{}{outline}&BEM{button}{}{disabled}},
+&_buttons_active{&BEM{button}{}{outline}[disabled]} {
   border-color: inherit;
   color: &ColorPrimary;
 }
 
-&_buttons{.button_clear} {
+&_buttons{&BEM{button}{}{clear}} {
   background-color: transparent;
   border-color: transparent;
   color: &ColorPrimary;
 }
 
-&_buttons_active{.button_clear} {
+&_buttons_active{&BEM{button}{}{clear}} {
   background-color: transparent;
   border-color: transparent;
   color: &ColorSecondary;
 }
 
-&_buttons_active{.button_clear.button_disabled},
-&_buttons_active{.button_clear[disabled]} {
+&_buttons_active{&BEM{button}{}{clear}&BEM{button}{}{disabled}},
+&_buttons_active{&BEM{button}{}{clear}[disabled]} {
   color: &ColorPrimary;
 }
 

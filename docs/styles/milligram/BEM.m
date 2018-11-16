@@ -24,7 +24,7 @@
 //
 // Cases:
 //
-// &CHM{block}{modifier}            => .block.-modifier
+// &CHM{block}{}{modifier}          => .block.-modifier
 // &CHM{block}{element}{modifier}   => .block__element.-modifier
 //
 &define{CHM}{&SEL{$1}&ifneq{$2}{}__$2&endif.-$3}
@@ -46,4 +46,4 @@
 //  ^theme                      &SEL
 //  _hack                       &HACK
 
-// vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=cpp
+// vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=scss

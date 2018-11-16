@@ -2,21 +2,21 @@
 # styles.make -- Generate main CSS stylesheet.
 #
 # Exported rules for:
-#	$(Destination)/styles.css
+#	$(Root)/styles.css
 
 # Secondary prerequisites.
-$(Destination)/styles.css:		\
+$(Root)/styles.css:		\
 	$(Blocks)/*/style.css		\
 	$(Blocks)/*/*/style.css		\
 	$(Styles)/*.css			\
-	$(Styles)/*.m 			\
 	$(Styles)/milligram/*.css	\
+	$(Styles)/milligram/*.m		\
 
-$(Destination)/styles.css: $(Styles)/main.css $(THIS) \
-| $(Destination)
+$(Root)/styles.css: $(Styles)/main.css $(THIS) \
+| $(Root)
 	$(info ==> $@)
-	@jqt -P CSS-min -I$(Styles) < $< > $@
+	jqt -P CSS-min -I$(Styles) < $< > $@
 
-all:: $(Destination)/styles.css
+build:: $(Root)/styles.css
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

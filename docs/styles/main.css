@@ -2,12 +2,7 @@
 // Top-level stylesheet
 ////////////////////////////////////////////////////////////////////////
 
-&include{bem.m}
-&include{colornames.m}
-
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic");
-
-&include{normalize.css}
 
 &include{milligram.css}
 
@@ -26,4 +21,4 @@
 // Not used
 //&include{media.css}
 
-// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

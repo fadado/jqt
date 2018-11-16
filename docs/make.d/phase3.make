@@ -1,47 +1,45 @@
 ########################################################################
 # phase3.make -- Define standard rules and rules for HTML pages and nodes.
 #
-# Rules defined in $(Metadata)/phase3.make:
+# Rules defined in $(Meta)/phase3.make:
 # 	all HTML target files
 #
-# Rules defined in make.d/phase3.make:
-#	$(Metadata)/phase3.make
+# Rules defined in $(MDIR)/phase3.make:
+#	$(Meta)/phase3.make
 #
-# Targets defined in make.d/phase3.make:
-#	all
-# 	build
+# Targets defined in $(MDIR)/phase3.make:
+#	build
 # 	clean
 # 	clobber
-# 	dbg.meta
-# 	dbg.fresh
-# 	dbg.touch
+# 	configure
+# 	touch
 
-SUPER := $(Metadata)/phase2.make
+SUPER := $(Meta)/phase2.make
 
 ########################################################################
 # Create makefile containing rules for all HTML files.
 ########################################################################
 
 # Build rules for each page.
-$(Metadata)/phase3.make: $(Metadata)/pages-by-id.json make.d/phase3.jq $(SUPER) $(THIS)
+$(Meta)/phase3.make: $(Meta)/pages-by-id.json $(MDIR)/phase3.jq $(SUPER) $(THIS)
 	$(info ==> $@)
-	jq --raw-output				\
-	   --arg Metadata $(Metadata)		\
-	   --arg Layouts $(Layouts)		\
-	   --arg Destination $(Destination)	\
-	   --from-file make.d/phase3.jq		\
+	jq --raw-output			\
+	   --arg Meta $(Meta)		\
+	   --arg Layouts $(Layouts)	\
+	   --arg Root $(Root)		\
+	   --from-file $(MDIR)/phase3.jq	\
 	   < $< > $@
 
 ifdef __phase_3
 
 #
-# Variables used in `$(Metadata)/phase3.make`.
+# Variables used in `$(Meta)/phase3.make`.
 #
 
 define JQTFLAGS :=
-  -msite:$(Metadata)/site.json	\
+  -msite:$(Meta)/site.json	\
   -I./				\
-  -L$(Metadata)			\
+  -L$(Meta)			\
   -L$(Blocks)			\
   -ifilters
 endef
@@ -59,14 +57,14 @@ endef
 # Extra prerequisites for HTML pages.
 #
 
-$(PagesHTML): $(Destination)/%.html : $(Metadata)/pages/%.json
-$(PagesHTML): $(Metadata)/phase3.make $(Blocks)/*/markup.html $(Blocks)/*/*/markup.html \
+$(PagesHTML): $(Root)/%.html : $(Meta)/pages/%.json
+$(PagesHTML): $(Meta)/phase3.make $(Blocks)/*/markup.html $(Blocks)/*/*/markup.html \
 | $$(dir $$@)
 ifneq (,$(DataFiles))
 $(PagesHTML): $(DataFiles)
 endif
 
-# Content example for `$(Metadata)/phase3.make`:
+# Content example for `$(Meta)/phase3.make`:
 
 # __phase_3 := 1
 # _site/jqt/index.html: content/index.md layouts/page.html content/macros.m content/LINKS.txt content/EXAMPLE.txt
@@ -84,23 +82,20 @@ endif
 # Standard targets.
 ########################################################################
 
-.PHONY: clean clobber build
+.PHONY: clean clobber
 
 # Copy Assets after create HTML pages.
-all:: $(PagesHTML)
-	@cp --verbose --recursive --update $(Assets)/* $(Destination) \
+build:: $(PagesHTML)
+	@cp --verbose --recursive --update $(Assets)/* $(Root) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
 
 # Delete secondary files.
 clobber:: ; @rm -rf *~ *.bak  *.log
 
-# Build again all documents.
-build: clean all
-
 ########################################################################
 # Debug variations on the `build` target.
 
-.PHONY: dbg.meta dbg.touch dbg.fresh
+.PHONY: configure touch
 
 # Touch top file
 define TEST_AND_TOUCH.sh
@@ -113,22 +108,18 @@ define TEST_AND_TOUCH.sh
 endef
 
 # Force regeneration of all metadata and data files.
-dbg.meta:
+configure:
 ifdef MAKE_RESTARTS
 	@$(MAKE) -s $(DataFiles) VERBOSE=$(VERBOSE) TRACE=$(TRACE)
 else
-	@rm -rf $(Metadata)
+	@rm -rf $(Meta)
 	@$(MAKE) -s $(DataFiles) VERBOSE=$(VERBOSE) TRACE=$(TRACE)
 endif
 
 # Make after touching `config.{yaml,json}`.
-dbg.touch:
+touch:
 	@$(TEST_AND_TOUCH.sh)
-	@$(MAKE) -s all VERBOSE=$(VERBOSE) TRACE=$(TRACE)
-
-# Clobber and build again.
-dbg.fresh: clobber
-	@$(MAKE) -s all VERBOSE=$(VERBOSE) TRACE=$(TRACE)
+	@$(MAKE) -s build VERBOSE=$(VERBOSE) TRACE=$(TRACE)
 
 endif # __phase_3
 

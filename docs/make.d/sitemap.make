@@ -2,21 +2,21 @@
 # sitemap.make -- Define rules for site map.
 #
 # Exported rules for:
-#	$(Destination)/sitemap.xml
-#	$(Destination)/sitemap.xml.gz
+#	$(Root)/sitemap.xml
+#	$(Root)/sitemap.xml.gz
 
-$(Destination)/sitemap.xml: $(Metadata)/pages-by-id.json $(Metadata)/site.json make.d/sitemap.jq $(THIS) \
-| $(Destination)
+$(Root)/sitemap.xml: $(Meta)/pages-by-id.json $(Meta)/site.json $(MDIR)/sitemap.jq $(THIS) \
+| $(Root)
 	$(info ==> $@)
 	jq --raw-output					\
-	   --slurpfile site $(Metadata)/site.json	\
-	   --from-file make.d/sitemap.jq		\
+	   --slurpfile site $(Meta)/site.json	\
+	   --from-file $(MDIR)/sitemap.jq		\
 	   < $< > $@
 
-$(Destination)/sitemap.xml.gz: $(Destination)/sitemap.xml
+$(Root)/sitemap.xml.gz: $(Root)/sitemap.xml
 	$(info ==> $@)
 	@gzip --stdout < $< > $@
 
-all:: $(Destination)/sitemap.xml $(Destination)/sitemap.xml.gz
+build:: $(Root)/sitemap.xml $(Root)/sitemap.xml.gz
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

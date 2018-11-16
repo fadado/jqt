@@ -147,4 +147,4 @@
 &define{LightYellow}{	#FFFFE0}
 &define{Ivory}{	#FFFFF0}
 &define{White}{	#FFFFFF}
-// vim:syntax=tex:ts=32
+// vim:syntax=scss:ts=32

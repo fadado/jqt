@@ -1,14 +1,14 @@
 ########################################################################
-# phase2.jq -- Define contents for `$(Metadata)/phase2.make`.
+# phase2.jq -- Define contents for `$(Meta)/phase2.make`.
 #
 # find $(Content) all MarkDown files |
 # jq -s -Rr -f phase2.jq
 #   --arg DF "$$(find $(Data) -name '*.*')"
 #   --arg Content $(Content)
 #   --arg Data $(Data)
-#   --arg Destination $(Destination)
-#   --arg Metadata $(Metadata)
-#   > $(Metadata)/phase2.make
+#   --arg Root $(Root)
+#   --arg Meta $(Meta)
+#   > $(Meta)/phase2.make
 
 # Extract pathname directory.
 def dir:
@@ -20,7 +20,7 @@ def dir:
 # destination_paths := _site/jqt/ _site/jqt/blog/ ...
 def destination_paths($paths):
     def dpath:
-        sub("^" + $Content; $Destination)
+        sub("^" + $Content; $Root)
     ;
     "destination_paths := " + ([$paths[] | dpath] | join(" ")) + "\n"
 ;
@@ -28,7 +28,7 @@ def destination_paths($paths):
 # metadata_paths := .meta/pages/ .meta/pages/blog/ ...
 def metadata_paths($paths):
     def mpath:
-        sub("^" + $Content; $Metadata + "/pages")
+        sub("^" + $Content; $Meta + "/pages")
     ;
     "metadata_paths := " + ([$paths[] | mpath] |  join(" ")) + "\n"
 ;
@@ -40,7 +40,7 @@ def metadata_paths($paths):
 def data_files($files):
     def d2m($x):
         sub("\\."+$x+"$"; ".json")
-        | sub("^"+$Data; $Metadata)
+        | sub("^"+$Data; $Meta)
     ;
     ($files / "\n") as $names
     | [$names[] | select(test(".md$"))] as $data_md
@@ -60,7 +60,7 @@ def data_files($files):
 # PagesHTML := _site/jqt/content.html _site/jqt/blog/2017-04-13-hello.html ...
 def pages_html($documents):
     def dpage:
-        sub("^" + $Content; $Destination)
+        sub("^" + $Content; $Root)
         | sub("\\.(?:markdown|mk?d)$"; ".html")
     ;
     "PagesHTML := " + ([$documents[] | dpage] | join(" ")) + "\n"
@@ -68,7 +68,7 @@ def pages_html($documents):
 
 # PagesJSON := .meta/pages/content.json .meta/pages/blog/2017-04-13-hello.json ...
 def md2json:
-    sub("^" + $Content; $Metadata + "/pages")
+    sub("^" + $Content; $Meta + "/pages")
     | sub("\\.(?:markdown|mk?d)$"; ".json")
 ;
 

@@ -126,9 +126,9 @@ uninstall:
 # Show targets
 ########################################################################
 
-.PHONY: help
+.PHONY: list
 
-help:
+list:
 	echo 'Usage: make TARGET [parameter=value...]'
 	echo 'Targets:';					\
 	$(MAKE) --print-data-base --just-print 2>&1		\
@@ -138,10 +138,10 @@ help:
 	| sed 's/:\+$$//'					\
 	| pr --omit-pagination --indent=4 --width=80 --columns=4
 	echo 'Default parameters:';				\
-	echo '    prefix    = /usr/local';			\
-	echo '    bindir    = /usr/local/bin';			\
-	echo '    datadir   = /usr/local/share';		\
-	echo '    mandir    = /usr/local/share/man'
+	echo '    prefix    = $(prefix)';			\
+	echo '    bindir    = $(bindir)';			\
+	echo '    datadir   = $(datadir)';			\
+	echo '    mandir    = $(mandir)'
 
 ########################################################################
 # Generate help text

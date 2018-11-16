@@ -19,7 +19,7 @@
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
 b, strong {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 p {
@@ -33,7 +33,7 @@ h4,
 h5,
 h6 {
   font-weight: 300;
-	letter-spacing: -.1rem; // JJOR: set again in _heading
+  letter-spacing: -.1rem; // JJOR: set again in _heading
   margin-bottom: calc(&TypographyScale * 2.0rem);
   margin-top: 0;  // calc(&TypographyScale * 0)
 }

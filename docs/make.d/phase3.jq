@@ -1,12 +1,12 @@
 ########################################################################
-# phase3.jq -- Define contents for `$(Metadata)/phase3.make`.
+# phase3.jq -- Define contents for `$(Meta)/phase3.make`.
 #
 # jq -r -f phase3.jq
-#   --arg Metadata $(Metadata)
+#   --arg Meta $(Meta)
 #   --arg Layouts $(Layouts)
-#   --arg Destination $(Destination)
-#   < $(Metadata)/pages-by-id.json
-#   > $(Metadata)/phase3.make
+#   --arg Root $(Root)
+#   < $(Meta)/pages-by-id.json
+#   > $(Meta)/phase3.make
 
 def dependencies:
     if .Dependencies
@@ -16,7 +16,7 @@ def dependencies:
 
 def dataset:
     if .Datasets
-    then " " + (.Datasets | map("-m\(.):\($Metadata)/\(.).json") | join(" "))
+    then " " + (.Datasets | map("-m\(.):\($Meta)/\(.).json") | join(" "))
     else "" end
 ;
 
@@ -27,7 +27,7 @@ def flags:
 ;
 
 def page:
-    " -mpage:\($Metadata)/pages/\(.Id).json"
+    " -mpage:\($Meta)/pages/\(.Id).json"
 ;
 
 def layout:
@@ -42,7 +42,7 @@ def layout:
 # 	$(info ==> $@)
 # 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
 def page_rule:
-    $Destination+"/"+.URL+": " + .Source + layout + dependencies,
+    $Root+"/"+.URL+": " + .Source + layout + dependencies,
     "\t$(info ==> $@)",
     "\t@$(JQT) -d $<" + dataset + flags + page + layout + " | $(DETAILS) > $@"
 ;

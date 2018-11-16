@@ -1,9 +1,9 @@
 ########################################################################
-# phase1.jq -- Define contents for `$(Metadata)/phase2.make`.
+# phase1.jq -- Define contents for `$(Meta)/phase2.make`.
 #
 # jq -r -f phase1.jq
-#   < $(Metadata)/site.json
-#   > $(Metadata)/phase1.make
+#   < $(Meta)/site.json
+#   > $(Meta)/phase1.make
 
 #
 # Output makefile
@@ -13,7 +13,7 @@
 "Blocks      := " + .Blocks,
 "Content     := " + .Content,
 "Data        := " + .Data,
-"Destination := " + .Destination,
+"Root        := " + .Root,
 "Layouts     := " + .Layouts,
 "Styles      := " + .Styles,
 "\n# \u0076im:syntax=make"

@@ -1,7 +1,7 @@
 ########################################################################
 # phase2.make -- Build metadata from filesystem introspection.
 #
-# Variables defined in $(Metadata)/phase2.make:
+# Variables defined in $(Meta)/phase2.make:
 #	__phase_2
 #	data_csv
 #	data_json
@@ -12,32 +12,32 @@
 #	PagesHTML
 #	PagesJSON 
 #
-# Rules defined in $(Metadata)/phase2.make:
+# Rules defined in $(Meta)/phase2.make:
 # 	metadata JSON files for each HTML page
 #
-# Variables defined in make.d/phase2.make:
+# Variables defined in $(MDIR)/phase2.make:
 #	DataFiles
 #
-# Rules defined in make.d/phase2.make:
+# Rules defined in $(MDIR)/phase2.make:
 #	$(data_csv)
 #	$(data_json)
 #	$(data_md)
 #	$(data_yaml)
 # 	$(destination_paths)
 # 	$(metadata_paths)
-#	$(Metadata)/content.text
-#	$(Metadata)/data.text
-#	$(Metadata)/phase2.make
-# 	$(Metadata)/pages-by-id.json
+#	$(Meta)/content.text
+#	$(Meta)/data.text
+#	$(Meta)/phase2.make
+# 	$(Meta)/pages-by-id.json
 
-SUPER := $(Metadata)/phase1.make
+SUPER := $(Meta)/phase1.make
 
 ########################################################################
 # Create makefile defining global variables about pathnames and rules to
 # generate JSON metadata files for each page.
 ########################################################################
 
-$(Metadata)/content.text: $(THIS)
+$(Meta)/content.text: $(THIS)
 	$(info ==> $@)
 	find $(Content) -type f -a	\
 		-name '[!_]*.md' -o	\
@@ -45,32 +45,32 @@ $(Metadata)/content.text: $(THIS)
 		-name '[!_]*.markdown'	\
 	> $@
 
-$(Metadata)/data.text: $(THIS)
+$(Meta)/data.text: $(THIS)
 	$(info ==> $@)
 	find $(Data) -name '*.*' > $@
 
 #
-# Create `$(Metadata)/phase2.make` from `find` output using `make.d/phase2.jq`.
+# Create `$(Meta)/phase2.make` from `find` output using `$(MDIR)/phase2.jq`.
 #
-$(Metadata)/phase2.make: CONTENT := $(Metadata)/content.text 
-$(Metadata)/phase2.make: DATA := $(Metadata)/data.text 
-$(Metadata)/phase2.make: make.d/phase2.jq $(Metadata)/content.text $(Metadata)/data.text $(SUPER) $(THIS)
+$(Meta)/phase2.make: CONTENT := $(Meta)/content.text 
+$(Meta)/phase2.make: DATA := $(Meta)/data.text 
+$(Meta)/phase2.make: $(MDIR)/phase2.jq $(Meta)/content.text $(Meta)/data.text $(SUPER) $(THIS)
 	$(info ==> $@)
-	jq --raw-input				\
-	   --raw-output				\
-	   --slurp				\
-	   --from-file make.d/phase2.jq		\
-	   --arg DF "$$(<$(DATA))"		\
-	   --arg Content $(Content)		\
-	   --arg Data $(Data)			\
-	   --arg Destination $(Destination)	\
-	   --arg Metadata $(Metadata)		\
+	jq --raw-input			\
+	   --raw-output			\
+	   --slurp			\
+	   --from-file $(MDIR)/phase2.jq	\
+	   --arg DF "$$(<$(DATA))"	\
+	   --arg Content $(Content)	\
+	   --arg Data $(Data)		\
+	   --arg Root $(Root)		\
+	   --arg Meta $(Meta)		\
 	   < $(CONTENT) > $@
 
 ifdef __phase_2
 
 #
-# Variables used when building JSON files in `$(Metadata)/phase2.make`.
+# Variables used when building JSON files in `$(Meta)/phase2.make`.
 #
 
 define EXTRACT_FRONT_MATTER =
@@ -86,19 +86,19 @@ define BUILD_PAGE_JSON
   jq --sort-keys				\
      --arg Source $<				\
      --arg Target $@				\
-     --arg Metadata $(Metadata)			\
-     --slurpfile config $(Metadata)/config.json	\
-     --from-file make.d/phase2_page.jq
+     --arg Meta $(Meta)				\
+     --slurpfile config $(Meta)/config.json	\
+     --from-file $(MDIR)/phase2_page.jq
 endef
 
 #
 # Extra prerequisites for JSON metadata pages.
 #
 
-$(PagesJSON): $(Metadata)/config.json make.d/phase2_page.jq $(THIS) \
+$(PagesJSON): $(Meta)/config.json $(MDIR)/phase2_page.jq $(THIS) \
 | $$(dir $$@)
 
-# Content example for `$(Metadata)/phase2.make`:
+# Content example for `$(Meta)/phase2.make`:
 
 # __phase_2 := 1
 # destination_paths := _site/jqt/ _site/jqt/blog/
@@ -124,12 +124,12 @@ $(PagesJSON): $(Metadata)/config.json make.d/phase2_page.jq $(THIS) \
 # Rules for directories.
 ########################################################################
 
-# Directories starting at `$(Destination)/`.
+# Directories starting at `$(Root)/`.
 $(destination_paths):
 	$(info ==> $@)
 	mkdir --parents $@ >/dev/null 2>&1 || true
 
-# Directories starting at `$(Metadata)/pages/`.
+# Directories starting at `$(Meta)/pages/`.
 $(metadata_paths):
 	$(info ==> $@)
 	mkdir --parents $@ >/dev/null 2>&1 || true
@@ -140,13 +140,13 @@ $(metadata_paths):
 
 # Bundle all pages as a relation (Id => page)
 # TODO: use xargs? write $^ to a temp file with file()?
-$(Metadata)/pages-by-id.json: $(PagesJSON)
+$(Meta)/pages-by-id.json: $(PagesJSON)
 	$(info ==> $@)
 	cat $^ 							\
 	| jq -n 'reduce inputs as $$p ({}; . + {($$p.Id):$$p})'	\
 	> $@
 
-#$(Metadata)/pages-by-id.json: $(PagesJSON)
+#$(Meta)/pages-by-id.json: $(PagesJSON)
 #	$(info ==> $@)
 #	@jq --slurp 'reduce .[] as $$p ({}; . + {($$p.Id): $$p})' $^ > $@
 
@@ -157,32 +157,32 @@ $(Metadata)/pages-by-id.json: $(PagesJSON)
 DataFiles := 
 
 ifneq (,$(data_md))
-$(data_md): $(Metadata)/%.json : $(Data)/%.md \
-| $(Metadata)
+$(data_md): $(Meta)/%.json : $(Data)/%.md \
+| $(Meta)
 	$(info ==> $@)
 	jqt -T < $< | yaml2json > $@
 DataFiles += $(data_md)
 endif
 
 ifneq (,$(data_yaml))
-$(data_yaml): $(Metadata)/%.json : $(Data)/%.yaml \
-| $(Metadata)
+$(data_yaml): $(Meta)/%.json : $(Data)/%.yaml \
+| $(Meta)
 	$(info ==> $@)
 	yaml2json > $@
 DataFiles += $(data_yaml)
 endif
 
 ifneq (,$(data_json))
-$(data_json): $(Metadata)/%.json : $(Data)/%.json \
-| $(Metadata)
+$(data_json): $(Meta)/%.json : $(Data)/%.json \
+| $(Meta)
 	$(info ==> $@)
 	jqt -P json < $< > $@
 DataFiles += $(data_json)
 endif
 
 ifneq (,$(data_csv))
-$(data_csv): $(Metadata)/%.json : $(Data)/%.csv \
-| $(Metadata)
+$(data_csv): $(Meta)/%.json : $(Data)/%.csv \
+| $(Meta)
 	$(info ==> $@)
 	csv2json < $< > $@
 DataFiles += $(data_csv)

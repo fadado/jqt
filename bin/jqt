@@ -497,7 +497,7 @@ function merge
 # Render template
 ########################################################################
 
-declare -a JQ_PATH=( '-L' "$DATADIR/jqt" )
+declare -a JQ_PATH=( '-L' "${DATADIR}/jqt" )
 
 # < stdin > stdout
 function render
@@ -544,7 +544,7 @@ Preprocessor options      Data options
 Template options              -C
     -L DIRECTORY              -H                  
     -i MODULE                 -S                
-    -j MODULE:NAME          Information options
+    -j MODULE:NAME        Information options
 Document options              -h, --help
     -4, -5                    -p
     -d FILE                   -V, --version
@@ -708,6 +708,8 @@ while getopts :hVD:I:P:L:i:j:45d:weprt:m:M:T:CHS-: opt; do
             help) help
                 ;;
             version) echo "$SELF $VERSION"; exit 0
+                ;;
+            datadir) echo "${DATADIR}"; exit 0
                 ;;
         # Pandoc options:
             base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;

@@ -2,31 +2,19 @@
 
 ## Extension conventions for content files
 
-The files in the `content` and `data` directories must follow some conventions in the file
+The files in the `content` directory must follow some conventions in the file
 extensions:
 
-* Web site pages
-    - `content/content.md`
-    - `content/data.md`
-    - `content/engine.md`
-    - `content/index.md`
-    - `content/structure.md`
+* `*.md`: Web site pages.
+* `*.text`: Partial MarkDown to be included and other unrelated MarkDown files.
 
-* Partial MarkDown to be included
-    - `content/EXAMPLE.text`
-    - `content/FLOW.text`
-    - `content/LINKS.text`
-    - `content/opt/\*.text`
+The files in the `data` directory must follow some conventions in the file
+extensions:
 
-* Other unrelated MarkDown files
-    - `content/help.text`
-    - `content/jqt.1.text`
-
-* Extension conventions for data files
-    - `data/table.csv`
-    - `data/snippets.md`
-    - `data/document.json`
-    - `data/document.yaml`
+* `*.md`: MarkDown snippets in front-matter.
+* `*.csv`: CSV data files.
+* `*.json`: JSON documents.
+* `*.yaml`: YAML documents.
 
 # Variables
 
@@ -41,13 +29,14 @@ predefined variables:
 * `.site.Blocks`
 * `.site.Content`
 * `.site.Data`
-* `.site.Destination`
+* `.site.Root`
 * `.site.Layouts`
-* `.site.Metadata`
+* `.site.Meta`
 * `.site.Styles`
 
 In the configuration file you can assign new values to all predefined variables
-except `Metadata`, with hardcoded value in the file `Makefile`.
+except `Meta`, with default value defined in the file `make.d/Makefile.make`.
+You can modify this variable at the very beggining of your `Makefile`.
 
 ## Page variables
 
@@ -76,7 +65,7 @@ Front-matter members and the predefined variables.
 
 ```
           Slug
-        |---^---| 
+        |---^---|
 content/name.html
         |-^|
          Id
@@ -94,6 +83,17 @@ content/extras/indexes/name.html
         |---------------v-|
         |-----v-------| Id
              Path
+```
+
+# _Sake_: static site build automation system
+
+## Current _GMake_ commands
+
+```
+Usage: make TARGET [parameter=value...]
+Targets:
+    build       clobber         h5.lint     list
+    clean       configure       h5.valid    touch
 ```
 
 <!--

@@ -10,8 +10,6 @@
 // Color
 // ––––––––––––––––––––––––––––––––––––––––––––––––––
 
-// TODO: add `!default`?
-
 &ifndef{ColorInitial}
 &define{ColorInitial}{#FFFFFF}
 &endif
