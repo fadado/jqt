@@ -31,6 +31,8 @@ The file `Makefile` concentrates all the routine procedures, like running the te
 or install last versions of scripts in the system directories. The main defined _targets_
 are:
 
+* `list`:  list all targets defined in the Makefile.
+
 * `check`: run the _jqt_ tests. This is the default target.
 
 * `clean`: remove all files generated during tests execution.
@@ -38,8 +40,6 @@ are:
 * `install`: install _jqt_ scripts and related files in the system directories.
 
 * `uninstall`: remove installed files from the system directories.
-
-* `help`:  list all targets defined in the Makefile.
 
 ### Installation
 
@@ -50,7 +50,7 @@ or [Pandoc](http://pandoc.org/); for example, in recent _Fedora Linux_ distribut
 the following command will install all the extra software _jqt_ needs:
 
 ```zsh
-$ sudo dnf -y install make general-purpose-preprocessor jq pandoc PyYAML
+$ sudo dnf -y install make general-purpose-preprocessor jq pandoc python2-pyyaml
 ```
 
 To install _jqt_ simply run `make install` on the _jqt_ repository top
@@ -67,7 +67,7 @@ _jqt_ top directory:
 ```zsh
 $ sudo mkdir -p /usr/local/bin /usr/local/share/jqt
 $ sudo cp bin/* /usr/local/bin
-$ sudo cp share/* /usr/local/share/jqt
+$ sudo cp -r share/* /usr/local/share/jqt
 $ [[ $PATH =~ /usr/local/bin ]] || echo 'Add /usr/local/bin to your PATH'
 ```
 
@@ -84,9 +84,9 @@ another `jqt` uses.
 
 ### Documentation
 
-The directory [`docs`](./docs/) contains the source files for _jqt_ documentation, and is in itself a subproject with his
-own makefile. Please see the directory [`docs`](./docs/) for all information on
-this subproject.
+The directory [`docs`](./docs/) contains the source files for _jqt_
+documentation.  Please see the directory [`docs`](./docs/) for all information
+on this subproject.
 
 <!--
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

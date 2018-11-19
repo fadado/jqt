@@ -8,48 +8,41 @@
 # independent, valid for any project without any change.  This should be
 # the only makefile to edit by hand!
 #
-# Variables used:
-#	Root
-#
 # Variables modified:
 # 	JQTFLAGS
 
+########################################################################
+# Variables to define before include if default values must be changed.
+########################################################################
+
 #Meta := .meta
+#JQTFLAGS +=
 #VERBOSE := 1
 #TRACE := 1
+#VNU := java -jar /usr/local/vnu/vnu.jar
 
-include make.d/Makefile.make
+########################################################################
+# Starting makefile
+########################################################################
 
+include $(SAKE)/make.d/main.make
+
+########################################################################
 # Last phase, after metadata configuration.
+########################################################################
 ifdef __build
 
-########################################################################
-# Build pages options.
-########################################################################
-
-# Pandoc options
+# Add some Pandoc options
 JQTFLAGS += -5 --toc-depth=4
 
 ########################################################################
-# HTML 5 validation.
+# experimental
 ########################################################################
 
-# Download vnu.jar from `https://github.com/validator/validator/releases`.
-
-.PHONY: h5.valid h5.lint
-
-# Validation tool.
-VNU := /usr/local/vnu/vnu.jar
-
-# Validation.
-h5.valid: build
-	@xmlwf $(Root)/*.html
-	@java -jar $(VNU) --errors-only --format gnu $(Root)/*.html
-
-# Validation with warnings.
-h5.lint: build
-	@xmlwf $(Root)/*.html
-	@java -jar $(VNU) --format text $(Root)/*.html
+depend:
+	grep -r '<%include\s\+[^>]\+>'  blocks/ layouts/\
+	| sed -e 's/:.*<%include\s\+/\t/;s/>.*$$//'	\
+	| sort
 
 endif # __build
 

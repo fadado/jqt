@@ -36,7 +36,7 @@ predefined variables:
 
 In the configuration file you can assign new values to all predefined variables
 except `Meta`, with default value defined in the file `make.d/Makefile.make`.
-You can modify this variable at the very beggining of your `Makefile`.
+You can modify this variable at the very beggining of your `Sakefile`.
 
 ## Page variables
 
@@ -87,13 +87,32 @@ content/extras/indexes/name.html
 
 # _Sake_: static site build automation system
 
-## Current _GMake_ commands
+## Sakefile
+
+_Sake_ managed projects must have a makefile named `Sakefile`, and this
+makefile must contain the following include:
+
+    include $(SAKE)/make.d/main.make
+
+## Current _Sake_ commands
+
+Targets not defined now: `help`, `new`.
 
 ```
-Usage: make TARGET [parameter=value...]
 Targets:
-    build       clobber         h5.lint     list
-    clean       configure       h5.valid    touch
+    build       configure       help        new
+    clean       h5.lint         list        touch
+    clobber     h5.valid
+```
+
+## Autocompletion
+
+Hint (on _Fedora_): to enable autocompletion for `sake` do this:
+
+```
+    $ cd /usr/share/bash-completion/completions
+    $ sudo sed -i make -e '/^complete -F/s/$/ sake/'
+    $ sudo ln -s make sake
 ```
 
 <!--

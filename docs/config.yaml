@@ -53,7 +53,7 @@ defaults:
       lang: *lang
       Layout: page-toc
       Datasets:
-        - snippets
+        - snippets.md
       Dependencies:
         - layouts/default.html
         - content/macros.m

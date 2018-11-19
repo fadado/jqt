@@ -5,8 +5,8 @@
 # 	VERBOSE
 # 	TRACE
 
-TRACE ?=
-VERBOSE ?=
+export TRACE ?=
+export VERBOSE ?=
 
 ########################################################################
 # Prerequisites.
@@ -25,6 +25,9 @@ MAKECMDGOALS ?= build
 ########################################################################
 # Make configuration.
 ########################################################################
+
+# Use renamed makefile
+MAKE += --makefile=Sakefile
 
 # Disable builtins.
 MAKEFLAGS += --no-builtin-rules

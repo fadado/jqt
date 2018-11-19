@@ -106,14 +106,17 @@ setup:
 
 .PHONY: install uninstall
 
+SAKE=$(datadir)/$(PROJECT)/sake/
+
 install: all
-	test -d $(bindir) || mkdir --verbose --parents $(bindir)
-	test -d $(datadir)/$(PROJECT) || mkdir --verbose --parents $(datadir)/$(PROJECT)
-	test -d $(mandir)/man1 || mkdir --verbose --parents $(mandir)/man1
+	install --directory $(bindir) $(datadir) $(mandir)/man1 $(SAKE)/{make.d,milligram}
 	install --verbose --compare --mode 555 bin/* $(bindir)
-	install --verbose --compare --mode 644 share/* $(datadir)/$(PROJECT)
+	install --verbose --compare --mode 644 share/*.* $(datadir)/$(PROJECT)
 	install --verbose --compare --mode 644 $(ManPage) $(mandir)/man1
+	install --verbose --compare --mode 644 share/sake/make.d/*.* $(SAKE)/make.d
+	install --verbose --compare --mode 644 share/sake/milligram/*.* $(SAKE)/milligram
 	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
+	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/sake
 
 uninstall:
 	rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))

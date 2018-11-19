@@ -37,8 +37,12 @@ SUPER := $(Meta)/phase1.make
 # generate JSON metadata files for each page.
 ########################################################################
 
+phase2_files := $(Meta)/content.text $(Meta)/data.text
+
+# Do not preserve!
+.INTERMEDIATE: $(phase2_files)
+
 $(Meta)/content.text: $(THIS)
-	$(info ==> $@)
 	find $(Content) -type f -a	\
 		-name '[!_]*.md' -o	\
 		-name '[!_]*.mkd' -o	\
@@ -46,26 +50,23 @@ $(Meta)/content.text: $(THIS)
 	> $@
 
 $(Meta)/data.text: $(THIS)
-	$(info ==> $@)
 	find $(Data) -name '*.*' > $@
 
 #
 # Create `$(Meta)/phase2.make` from `find` output using `$(MDIR)/phase2.jq`.
 #
-$(Meta)/phase2.make: CONTENT := $(Meta)/content.text 
-$(Meta)/phase2.make: DATA := $(Meta)/data.text 
-$(Meta)/phase2.make: $(MDIR)/phase2.jq $(Meta)/content.text $(Meta)/data.text $(SUPER) $(THIS)
+$(Meta)/phase2.make: $(MDIR)/phase2.jq $(phase2_files) $(SUPER) $(THIS)
 	$(info ==> $@)
-	jq --raw-input			\
-	   --raw-output			\
-	   --slurp			\
+	jq --raw-input				\
+	   --raw-output				\
+	   --slurp				\
 	   --from-file $(MDIR)/phase2.jq	\
-	   --arg DF "$$(<$(DATA))"	\
-	   --arg Content $(Content)	\
-	   --arg Data $(Data)		\
-	   --arg Root $(Root)		\
-	   --arg Meta $(Meta)		\
-	   < $(CONTENT) > $@
+	   --arg DF "$$(<$(Meta)/data.text )"	\
+	   --arg Content $(Content)		\
+	   --arg Data $(Data)			\
+	   --arg Root $(Root)			\
+	   --arg Meta $(Meta)			\
+	   < $(Meta)/content.text > $@
 
 ifdef __phase_2
 
@@ -146,6 +147,7 @@ $(Meta)/pages-by-id.json: $(PagesJSON)
 	| jq -n 'reduce inputs as $$p ({}; . + {($$p.Id):$$p})'	\
 	> $@
 
+# Alternative:
 #$(Meta)/pages-by-id.json: $(PagesJSON)
 #	$(info ==> $@)
 #	@jq --slurp 'reduce .[] as $$p ({}; . + {($$p.Id): $$p})' $^ > $@

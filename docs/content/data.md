@@ -166,6 +166,12 @@ The CSS minimization is not extremely aggressive, but is safe and fast.
 
 ## Tools
 
+### Build automation
+
+One step over any templating system is a static site generator. A companion
+site generator to <%cite jqt> is <%cite sake>, a simple wrapper to
+<%cite 'GNU Make'> used to build this very same site.
+
 ### Data conversion
 
 When preparing data inputs sometimes you need to mix files in several formats.

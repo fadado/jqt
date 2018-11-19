@@ -1,0 +1,70 @@
+#!/bin/bash
+
+#
+# Wraps make
+#
+
+# Options
+set -o errexit -o noglob -o nounset -o pipefail
+shopt -s expand_aliases
+
+# Script name
+declare -r SELF=${0##*/}
+
+# Exported to use in makefiles and Sakefile
+declare -xr DATADIR='/usr/local/share'
+declare -xr SAKE="${DATADIR}/jqt/sake"
+
+# GMake call
+declare -ri CORES=2
+declare -ra makeflags=(
+    --jobs=$(( CORES * 150 / 100  ))  # CORES * 1.5
+    --makefile=Sakefile
+    --output-sync=target
+)
+alias _sake='exec make "${makeflags[@]}"'
+
+# Check project on current directory
+if test ! -e Sakefile; then
+    echo 1>&2 "${SELF}: no \`Sakefile\` found."
+    exit 1
+fi
+if test ! -e config.yaml && test ! -e config.json; then
+    echo 1>&2 "${SELF}: no \`config.yaml\` or \`config.json\` file found."
+    exit 1
+fi
+
+# Check arguments
+[[ $# == 0 ]] && set -- build
+
+# Run _sake
+case $1 in
+    help)
+        echo 1>&2 "${SELF}: Target \`help\` not implemented."
+        exit 1
+        ;;
+    new)
+        echo 1>&2 "${SELF}: Target \`new\` not implemented."
+        exit 1
+        ;;
+    list)
+        echo 'Usage: sake [goal] [[options] [variable=string] ...]'
+        echo 'Goals:'
+        _sake --jobs=1 --dry-run --print-data-base --question 2>&1 \
+        | grep -v '^[SmM]akefile' \
+        | awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' \
+        | sort --unique \
+        | sed 's/:\+$//' \
+        | pr --omit-pagination --indent=4 --width=80 --columns=5
+        ;;
+    touch)
+        if test -e config.yaml; then touch config.yaml; else touch config.json; fi
+        shift
+        _sake build "$@"
+        ;;
+    *)
+        _sake "$@"
+        ;;
+esac
+
+# vim:ai:sw=4:ts=4:et:syntax=sh

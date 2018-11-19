@@ -8,15 +8,23 @@
 #   < $(Meta)/pages-by-id.json
 #   > $(Meta)/phase3.make
 
+def basename:
+    sub("\\.[^/]+$"; "")
+;
+
 def dependencies:
     if .Dependencies
     then " " + (.Dependencies | join(" "))
+    else "" end
+    +
+    if .Datasets
+    then " " + ([.Datasets[] | basename | "\($Meta)/\(.).json"] | join(" "))
     else "" end
 ;
 
 def dataset:
     if .Datasets
-    then " " + (.Datasets | map("-m\(.):\($Meta)/\(.).json") | join(" "))
+    then " " + ([.Datasets[] | basename | "-m\(.):\($Meta)/\(.).json"] | join(" "))
     else "" end
 ;
 

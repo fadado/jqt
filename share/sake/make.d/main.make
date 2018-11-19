@@ -1,8 +1,12 @@
 ########################################################################
-# Makefile.make -- Main makefile.
+# main.make -- Main makefile.
+#
+# Imported variables:
+# 	SAKE
+# 	DATADIR
 #
 # Variables:
-# 	$(Meta)
+# 	Meta
 # Rules:
 # 	$(Meta) directory target and clobber target
 #
@@ -18,7 +22,7 @@ MDIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 include $(MDIR)/configuration.make
 
 # Do not try to rebuilt static makefiles.
-$(MDIR)/Makefile.make $(MDIR)/configuration.make: ;
+$(CURDIR)/Sakefile $(MDIR)/main.make $(MDIR)/configuration.make: ;
 
 ########################################################################
 # Metadata directory for all generated make and metadata files.
@@ -46,6 +50,15 @@ endif
 ########################################################################
 # Check command line sanity.
 ########################################################################
+
+# TODO: check only one target is present?
+
+# Target 'clean' must be alone.
+ifeq (clean,$(filter clean,$(MAKECMDGOALS)))
+ifneq (1,$(words $(MAKECMDGOALS)))
+$(error Target "clean" must be alone)
+endif
+endif
 
 # Target 'clobber' must be alone.
 ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
@@ -128,6 +141,12 @@ include $(MDIR)/tools.make
 $(MDIR)/sitemap.make: ;
 $(MDIR)/styles.make: ;
 $(MDIR)/tools.make: ;
+
+# Filter builtin tools defined in `sake`script.
+sake_builtin := new help touch list
+.PHONY: $(sake_builtin)
+$(sake_builtin):
+	echo 'sake: Target `$@` not implemented.'
 
 endif # __phase_3
 endif # __phase_2

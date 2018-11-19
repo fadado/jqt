@@ -17,7 +17,7 @@
 #	$(Meta)/phase1.make
 # 	$(Root) directory rule and clobber and clean targets
 
-SUPER := $(MDIR)/Makefile.make
+SUPER := $(MDIR)/main.make
 
 ########################################################################
 # Files derived from user defined configuration file.
@@ -63,7 +63,7 @@ $(Meta)/site.json: $(Meta)/config.json $(MDIR)/phase1_site.jq
 #
 $(Meta)/phase1.make: $(Meta)/site.json $(MDIR)/phase1.jq 
 	$(info ==> $@)
-	jq --raw-output 		\
+	jq --raw-output 			\
 	   --from-file $(MDIR)/phase1.jq	\
 	   < $< > $@
 
