@@ -56,8 +56,7 @@ endef
 # Extra prerequisites for HTML pages.
 #
 
-$(PagesHTML): $(Root)/%.html : $(Meta)/pages/%.json
-$(PagesHTML): $(Meta)/phase3.make $(Blocks)/*/markup.html $(Blocks)/*/*/markup.html \
+$(PagesHTML): $(Meta)/phase3.make \
 | $$(dir $$@)
 
 # Content example for `$(Meta)/phase3.make`:
@@ -84,6 +83,7 @@ $(PagesHTML): $(Meta)/phase3.make $(Blocks)/*/markup.html $(Blocks)/*/*/markup.h
 build:: $(PagesHTML)
 	@cp --verbose --recursive --update $(Assets)/* $(Root) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
+	date -Iseconds > $(Meta)/lastbuild
 
 # Delete secondary files.
 clobber:: ; @rm -rf *~ *.bak  *.log

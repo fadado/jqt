@@ -55,7 +55,6 @@ defaults:
       Datasets:
         - snippets.md
       Dependencies:
-        - layouts/default.html
         - content/macros.m
         - content/LINKS.txt 
 #     Flags:

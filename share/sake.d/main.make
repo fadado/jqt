@@ -2,8 +2,7 @@
 # main.make -- Main makefile.
 #
 # Imported variables:
-# 	SAKE
-# 	DATADIR
+# 	JQTDIR
 #
 # Variables:
 # 	Meta
@@ -51,20 +50,9 @@ endif
 # Check command line sanity.
 ########################################################################
 
-# TODO: check only one target is present?
-
-# Target 'clean' must be alone.
-ifeq (clean,$(filter clean,$(MAKECMDGOALS)))
+# Check only one target is present.
 ifneq (1,$(words $(MAKECMDGOALS)))
-$(error Target "clean" must be alone)
-endif
-endif
-
-# Target 'clobber' must be alone.
-ifeq (clobber,$(filter clobber,$(MAKECMDGOALS)))
-ifneq (1,$(words $(MAKECMDGOALS)))
-$(error Target "clobber" must be alone)
-endif
+$(error Only one target accepted)
 endif
 
 # Do not build to clobber immediately.
@@ -73,13 +61,6 @@ ifeq (,$(wildcard $(Meta)))
 $(error Nothing to clobber)
 endif
 endif
-
-## Do not build to clean immediately.
-#ifeq (clean,$(filter clean,$(MAKECMDGOALS)))
-#ifeq (,$(wildcard $(Meta)))
-#$(error Nothing to clean)
-#endif
-#endif
 
 ########################################################################
 # Include all makefile phases.

@@ -12,8 +12,7 @@ shopt -s expand_aliases
 declare -r SELF=${0##*/}
 
 # Exported to use in makefiles and Sakefile
-declare -xr DATADIR='/usr/local/share'
-declare -xr SAKE="${DATADIR}/jqt/sake"
+declare -xr JQTLIB='/usr/local/share/jqt'
 
 # GMake call
 declare -ri CORES=2
@@ -55,12 +54,16 @@ case $1 in
         | awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' \
         | sort --unique \
         | sed 's/:\+$//' \
-        | pr --omit-pagination --indent=4 --width=80 --columns=5
+        | pr --omit-pagination --width=80 --columns=6
         ;;
     touch)
         if test -e config.yaml; then touch config.yaml; else touch config.json; fi
         shift
         _sake build "$@"
+        ;;
+    clober)
+        shift
+        _sake clobber "$@"
         ;;
     *)
         _sake "$@"

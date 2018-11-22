@@ -20,16 +20,18 @@
 #VERBOSE := 1
 #TRACE := 1
 #VNU := java -jar /usr/local/vnu/vnu.jar
+#JQTFLAGS += ...
 
 ########################################################################
 # Starting makefile
 ########################################################################
 
-include $(SAKE)/make.d/main.make
+include $(JQTLIB)/sake.d/main.make
 
 ########################################################################
 # Last phase, after metadata configuration.
 ########################################################################
+
 ifdef __build
 
 # Add some Pandoc options
@@ -39,10 +41,22 @@ JQTFLAGS += -5 --toc-depth=4
 # experimental
 ########################################################################
 
+# TODO: new, help, man page, SITE section on web, taxonomies (flags, series...)
+
+# Remove?
+#$(PagesHTML): $(Root)/%.html : $(Meta)/pages/%.json
+#$(PagesHTML): $(Root)/blog/%.html : $(Meta)/pages/blog/%.json
+
+
+# TODO: show content pending to render?
+#newer: $(Meta)/lastbuild
+
+
+# TODO: move to phase3
 depend:
 	grep -r '<%include\s\+[^>]\+>'  blocks/ layouts/\
 	| sed -e 's/:.*<%include\s\+/\t/;s/>.*$$//'	\
-	| sort
+	| jq -nrR -f ./phase3_layout.jq --arg Layouts $(Layouts)
 
 endif # __build
 

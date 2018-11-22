@@ -4,13 +4,12 @@
 # Exported rules for:
 #	$(Root)/styles.css
 
-# DATADIR defined in `sake` script.
-_sake := $(DATADIR)/jqt/sake
+# JQTLIB defined in `sake` script.
 
 # Secondary prerequisites.
 $(Root)/styles.css:			\
-	$(_sake)/milligram/*.css	\
-	$(_sake)/milligram/*.m		\
+	$(JQTLIB)/milligram/*.css	\
+	$(JQTLIB)/milligram/*.m		\
 	$(Styles)/*.css			\
 	$(Blocks)/*/style.css		\
 	$(Blocks)/*/*/style.css		\
@@ -18,7 +17,7 @@ $(Root)/styles.css:			\
 $(Root)/styles.css: $(Styles)/main.css $(THIS) \
 | $(Root)
 	$(info ==> $@)
-	jqt -P CSS-min -I$(_sake) -I$(Styles) < $< > $@
+	jqt -P CSS-min -I$(JQTLIB) -I$(Styles) < $< > $@
 
 build:: $(Root)/styles.css
 
