@@ -25,6 +25,7 @@ def notdir:
 ;
 
 # `$(Meta)/pages/path/to/page.json` => `(../)+`
+# BUG! No usar Meta en input!!!
 def page_base:
     # . as $target
     ("../" * (((. / "/") | length) - 3)) // ""

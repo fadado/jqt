@@ -18,13 +18,13 @@ def dependencies:
     else "" end
     +
     if .Datasets
-    then " " + ([.Datasets[] | basename | "$(Meta)/\(.).json"] | join(" "))
+    then " " + ([.Datasets[] | basename | "\($Meta)/\(.).json"] | join(" "))
     else "" end
 ;
 
 def dataset:
     if .Datasets
-    then " " + ([.Datasets[] | basename | "-m\(.):$(Meta)/\(.).json"] | join(" "))
+    then " " + ([.Datasets[] | basename | "-m\(.):\($Meta)/\(.).json"] | join(" "))
     else "" end
 ;
 
@@ -35,7 +35,15 @@ def flags:
 ;
 
 def page:
-    " -mpage:$(Meta)/pages/\(.Id).json"
+    " -mpage:\($Meta)/pages/\(.Id).json"
+;
+
+# %.html: _site/%.html ;
+# blog/%.html: _site/blog/%.html ;
+def page_target:
+    map(.Path)
+    | unique[]
+    | "\(.)%.html: \($Root)/\(.)%.html ;"
 ;
 
 def layout:
@@ -51,17 +59,9 @@ def layout:
 # 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
 def page_rule:
     .[] |
-    $Root+"/"+.URL+": " + .Source + layout + dependencies,
+    "\($Root)/"+.URL+": " + .Source + dependencies,
     "\t$(info ==> $@)",
     "\t@$(JQT) -d $<" + dataset + flags + page + layout + " | $(DETAILS) > $@"
-;
-
-# %.html: _site/%.html ;
-# blog/%.html: _site/blog/%.html ;
-def page_target:
-    map(.Path)
-    | unique[]
-    | "\(.)%.html: $(Root)/\(.)%.html ;"
 ;
 
 #
@@ -70,7 +70,9 @@ def page_target:
 
 "__phase_3 := 1\n",
 page_target, # for each path
+"",
 page_rule,   # for each page
-"\n# \u0076im:syntax=make"
+"",
+"# \u0076im:syntax=make"
 
 # vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=jq

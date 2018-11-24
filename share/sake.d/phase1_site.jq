@@ -3,7 +3,7 @@
 #
 # jq -S -f phase1_site.jq --arg Meta $(Meta)
 #   < $(Meta)/config.json
-#   > $(Meta)/site.json
+#   > $(Meta)/phase1_site.json
 
 # Delete `.defaults` and add some new members with default value if not defined
 # in the configuration file.

@@ -4,6 +4,9 @@
 # Wraps make
 #
 
+# Environment
+declare -ri NCORES=${NCORES:-2}
+
 # Options
 set -o errexit -o noglob -o nounset -o pipefail
 shopt -s expand_aliases
@@ -15,9 +18,8 @@ declare -r SELF=${0##*/}
 declare -xr JQTLIB='/usr/local/share/jqt'
 
 # GMake call
-declare -ri CORES=2
 declare -ra makeflags=(
-    --jobs=$(( CORES * 150 / 100  ))  # CORES * 1.5
+    --jobs=$(( NCORES * 150 / 100  ))  # NCORES * 1.5
     --makefile=Sakefile
     --output-sync=target
 )
@@ -60,6 +62,10 @@ case $1 in
         if test -e config.yaml; then touch config.yaml; else touch config.json; fi
         shift
         _sake build "$@"
+        ;;
+    config)
+        shift
+        _sake configure "$@"
         ;;
     clober)
         shift

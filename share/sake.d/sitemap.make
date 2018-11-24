@@ -5,12 +5,13 @@
 #	$(Root)/sitemap.xml
 #	$(Root)/sitemap.xml.gz
 
-$(Root)/sitemap.xml: $(Meta)/pages-by-id.json $(Meta)/site.json $(MDIR)/sitemap.jq $(THIS) \
+$(Root)/sitemap.xml: $(SCRIPT) $(THIS)
+$(Root)/sitemap.xml: $(Meta)/pages-by-id.json $(Meta)/phase1_site.json \
 | $(Root)
 	$(info ==> $@)
-	jq --raw-output				\
-	   --slurpfile site $(Meta)/site.json	\
-	   --from-file $(MDIR)/sitemap.jq	\
+	jq --raw-output					\
+	   --slurpfile site $(Meta)/phase1_site.json	\
+	   --from-file $(MDIR)/sitemap.jq		\
 	   < $< > $@
 
 $(Root)/sitemap.xml.gz: $(Root)/sitemap.xml

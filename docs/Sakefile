@@ -43,20 +43,8 @@ JQTFLAGS += -5 --toc-depth=4
 
 # TODO: new, help, man page, SITE section on web, taxonomies (flags, series...)
 
-# Remove?
-#$(PagesHTML): $(Root)/%.html : $(Meta)/pages/%.json
-#$(PagesHTML): $(Root)/blog/%.html : $(Meta)/pages/blog/%.json
-
-
 # TODO: show content pending to render?
 #newer: $(Meta)/lastbuild
-
-
-# TODO: move to phase3
-depend:
-	grep -r '<%include\s\+[^>]\+>'  blocks/ layouts/\
-	| sed -e 's/:.*<%include\s\+/\t/;s/>.*$$//'	\
-	| jq -nrR -f ./phase3_layout.jq --arg Layouts $(Layouts)
 
 endif # __build
 

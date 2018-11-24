@@ -13,9 +13,8 @@
 #
 # Rules defined in $(MDIR)/phase1.make:
 #	$(Meta)/config.json
-#	$(Meta)/site.json
+#	$(Meta)/phase1_site.json
 #	$(Meta)/phase1.make
-# 	$(Root) directory rule and clobber and clean targets
 
 SUPER := $(MDIR)/main.make
 
@@ -24,33 +23,21 @@ SUPER := $(MDIR)/main.make
 ########################################################################
 
 #
-# Create `$(Meta)/config.json` from `config.yaml` or `config.json`.
+# Create `$(Meta)/phase1.make` from `$(Meta)/phase1_site.json` using
+# `$(MDIR)/phase1.jq`.
 #
-ifeq (config.yaml,$(wildcard config.yaml))
-
-# Convert `config.yaml` to `$(Meta)/config.json`.
-$(Meta)/config.json: $(CURDIR)/config.yaml $(SUPER) $(THIS) \
-| $(Meta)
+$(Meta)/phase1.make: $(SUPER) $(THIS) $(CURDIR)/Sakefile 
+$(Meta)/phase1.make: $(Meta)/phase1_site.json $(SCRIPT)
 	$(info ==> $@)
-	yaml2json < $< > $@
-
-else ifeq (config.json,$(wildcard config.json))
-
-# Convert `config.json` to `$(Meta)/config.json`.
-$(Meta)/config.json: $(CURDIR)/onfig.json $(SUPER) $(THIS) \
-| $(Meta)
-	$(info ==> $@)
-	jqt -Pjson < $< > $@
-
-else
-$(error Configuration file not found)
-endif
+	jq --raw-output 			\
+	   --from-file $(MDIR)/phase1.jq	\
+	   < $< > $@
 
 #
-# Create `$(Meta)/site.json` from `$(Meta)/config.json` using
+# Create `$(Meta)/phase1_site.json` from `$(Meta)/config.json` using
 # `$(MDIR)/phase1_site.jq`.
 #
-$(Meta)/site.json: $(Meta)/config.json $(MDIR)/phase1_site.jq
+$(Meta)/phase1_site.json: $(Meta)/config.json $(SCRIPT) $(THIS)
 	$(info ==> $@)
 	jq --sort-keys				\
 	   --from-file $(MDIR)/phase1_site.jq	\
@@ -58,31 +45,26 @@ $(Meta)/site.json: $(Meta)/config.json $(MDIR)/phase1_site.jq
 	   < $< > $@
 
 #
-# Create `$(Meta)/phase1.make` from `$(Meta)/site.json` using
-# `$(MDIR)/phase1.jq`.
+# Create `$(Meta)/config.json` from `config.yaml` or `config.json`.
 #
-$(Meta)/phase1.make: $(Meta)/site.json $(MDIR)/phase1.jq 
+ifeq (config.yaml,$(wildcard config.yaml))
+
+# Convert `config.yaml` to `$(Meta)/config.json`.
+$(Meta)/config.json: $(CURDIR)/config.yaml $(THIS) \
+| $(Meta)
 	$(info ==> $@)
-	jq --raw-output 			\
-	   --from-file $(MDIR)/phase1.jq	\
-	   < $< > $@
+	yaml2json < $< > $@
 
-ifdef __phase_1
+else ifeq (config.json,$(wildcard config.json))
 
-########################################################################
-# Site destination directory.
-########################################################################
-
-$(Root):
+# Convert `config.json` to `$(Meta)/config.json`.
+$(Meta)/config.json: $(CURDIR)/config.json $(THIS) \
+| $(Meta)
 	$(info ==> $@)
-	mkdir --parents $@ >/dev/null 2>&1 || true
+	jqt -Pjson < $< > $@
 
-# Delete generated files.
-clean: ; @rm -rf $(Root)/*
-
-# Delete destination directory.
-clobber:: ; @rm -rf $(Root)
-
-endif # __phase_1
+else
+$(error Configuration file not found)
+endif
 
 # vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

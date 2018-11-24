@@ -6,12 +6,8 @@
 #
 # Rules defined in $(MDIR)/phase3.make:
 #	$(Meta)/phase3.make
-#
-# Targets defined in $(MDIR)/phase3.make:
-#	build
-# 	clean
-# 	clobber
-# 	configure
+#	$(Meta)/phase3_json.json
+#	$(Meta)/phase3d.make
 
 SUPER := $(Meta)/phase2.make
 
@@ -20,13 +16,35 @@ SUPER := $(Meta)/phase2.make
 ########################################################################
 
 # Build rules for each page.
-$(Meta)/phase3.make: $(Meta)/pages-by-id.json $(MDIR)/phase3.jq $(SUPER) $(THIS)
+$(Meta)/phase3.make: $(SUPER) $(THIS)
+$(Meta)/phase3.make: $(Meta)/pages-by-id.json $(SCRIPT)
 	$(info ==> $@)
-	jq --raw-output				\
-	   --arg Meta $(Meta)			\
-	   --arg Layouts $(Layouts)		\
-	   --arg Root $(Root)			\
-	   --from-file $(MDIR)/phase3.jq	\
+	jq --raw-output					\
+	   --arg Meta $(Meta)				\
+	   --arg Layouts $(Layouts)			\
+	   --arg Root $(Root)				\
+	   --from-file $(MDIR)/phase3.jq		\
+	   < $< > $@
+
+# Do not preserve!
+.INTERMEDIATE: $(Meta)/phase3_json.json
+
+$(Meta)/phase3_json.json: $(SCRIPT) $(THIS)
+	$(info ==> $@)
+	grep -r '<%include\s\+[^>]\+>'  blocks/ layouts/\
+	| sed -e 's/:.*<%include\s\+/\t/;s/>.*$$//'	\
+	| jq -nrR					\
+	     --arg Layouts $(Layouts)			\
+	     --from-file $(MDIR)/phase3_json.jq		\
+	     > $@
+
+$(Meta)/phase3d.make: $(Meta)/pages-by-id.json $(Meta)/phase3_json.json $(SCRIPT) $(THIS)
+	$(info ==> $@)
+	jq --raw-output					\
+	   --arg Layouts $(Layouts)			\
+	   --arg Root $(Root)				\
+	   --slurpfile ldep $(Meta)/phase3_json.json	\
+	   --from-file $(MDIR)/phase3d.jq		\
 	   < $< > $@
 
 ifdef __phase_3
@@ -36,10 +54,10 @@ ifdef __phase_3
 #
 
 define JQTFLAGS :=
-  -msite:$(Meta)/site.json	\
-  -I./				\
-  -L$(Meta)			\
-  -L$(Blocks)			\
+  -msite:$(Meta)/phase1_site.json	\
+  -I./					\
+  -L$(Meta)				\
+  -L$(Blocks)				\
   -ifilters
 endef
 
@@ -62,39 +80,16 @@ $(PagesHTML): $(Meta)/phase3.make \
 # Content example for `$(Meta)/phase3.make`:
 
 # __phase_3 := 1
-# _site/jqt/index.html: content/index.md layouts/page.html content/macros.m content/LINKS.txt content/EXAMPLE.txt .meta/snippets.json
+# _site/jqt/index.html: content/index.md content/macros.m content/LINKS.txt content/EXAMPLE.txt .meta/snippets.json
 # 	$(info ==> $@)
 # 	@$(JQT) -d $< -mpage:.meta/pages/index.json layouts/page.html | $(DETAILS) > $@
 # ...
-# _site/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md layouts/page.html .meta/snippets.json
+# _site/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md .meta/snippets.json
 # 	$(info ==> $@)
 # 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
-# _site/jqt/blog/index.html: content/blog/index.md layouts/blog.html .meta/snippets.json
+# _site/jqt/blog/index.html: content/blog/index.md .meta/snippets.json
 # 	$(info ==> $@)
 # 	@$(JQT) -d $< -mpage:.meta/pages/blog/index.json layouts/blog.html | $(DETAILS) > $@
-
-########################################################################
-# Standard targets.
-########################################################################
-
-.PHONY: clean clobber
-
-# Copy Assets after create HTML pages.
-build:: $(PagesHTML)
-	@cp --verbose --recursive --update $(Assets)/* $(Root) \
-	| sed "s/^.*-> ./==> /;s/.$$//"
-	date -Iseconds > $(Meta)/lastbuild
-
-# Delete secondary files.
-clobber:: ; @rm -rf *~ *.bak  *.log
-
-########################################################################
-# Variations on the `build` target.
-
-.PHONY: configure
-
-# Build all metadata and data files.
-configure: $(DataFiles)	# $(PagesJSON) are built for phase2.make
 
 endif # __phase_3
 

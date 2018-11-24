@@ -2,7 +2,7 @@
 # sitemap.jq -- Generate site map XML file.
 #
 # jq -r -f sitemap.jq
-#   --slurpfile site $(Meta)/site.json
+#   --slurpfile site $(Meta)/phase1_site.json
 #   < $(Meta)/pages-by-id.json 
 #   > $(Root)/sitemap.xml
 

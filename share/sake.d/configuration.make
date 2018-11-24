@@ -26,8 +26,8 @@ MAKECMDGOALS ?= build
 # Make configuration.
 ########################################################################
 
-# Use renamed makefile
-MAKE += --makefile=Sakefile
+#!# Use renamed makefile
+#!MAKE += --makefile=Sakefile
 
 # Disable builtins.
 MAKEFLAGS += --no-builtin-rules
