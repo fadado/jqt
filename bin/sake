@@ -40,6 +40,13 @@ fi
 
 # Run _sake
 case $1 in
+    dag)
+        make -f Sakefile -Bdn \
+            | sed -n \
+                -e "s/'//g" \
+                -e 's/\.$//' \
+                -e 's/Considering target file //p'
+        ;;
     help)
         echo 1>&2 "${SELF}: Target \`help\` not implemented."
         exit 1
@@ -51,12 +58,12 @@ case $1 in
     list)
         echo 'Usage: sake [goal] [[options] [variable=string] ...]'
         echo 'Goals:'
-        _sake --jobs=1 --dry-run --print-data-base --question 2>&1 \
-        | grep -v '^[SmM]akefile' \
-        | awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' \
-        | sort --unique \
-        | sed 's/:\+$//' \
-        | pr --omit-pagination --width=80 --columns=6
+        make -f Sakefile -dpq 2>&1 \
+            | grep -v '^[SmM]akefile' \
+            | awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' \
+            | sort --unique \
+            | sed 's/:\+$//' \
+            | pr --omit-pagination --width=80 --columns=6
         ;;
     touch)
         if test -e config.yaml; then touch config.yaml; else touch config.json; fi

@@ -16,11 +16,8 @@
 ########################################################################
 
 #Meta := .meta
-#JQTFLAGS +=
 #VERBOSE := 1
 #TRACE := 1
-#VNU := java -jar /usr/local/vnu/vnu.jar
-#JQTFLAGS += ...
 
 ########################################################################
 # Starting makefile
@@ -28,11 +25,15 @@
 
 include $(JQTLIB)/sake.d/main.make
 
+ifdef __build
+
 ########################################################################
-# Last phase, after metadata configuration.
+# Variables to define after include if default values must be changed.
 ########################################################################
 
-ifdef __build
+#JQTFLAGS +=
+#VNU := java -jar /usr/local/vnu/vnu.jar
+#JQTFLAGS += ...
 
 # Add some Pandoc options
 JQTFLAGS += -5 --toc-depth=4
