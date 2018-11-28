@@ -42,7 +42,14 @@ JQTFLAGS += -5 --toc-depth=4
 # experimental
 ########################################################################
 
+print-%: ; @echo $* = $($*)
+
+depend: $(Meta)/phase3d.make
+	cat $< | egrep -v '^#|^$$' | cut -c -72 - | sed 's/$$/.../'
+
 # TODO: new, help, man page, SITE section on web, taxonomies (flags, series...)
+# TODO: enhance `dag` command
+# TODO: -t -W -B
 
 # TODO: show content pending to render?
 #newer: $(Meta)/lastbuild

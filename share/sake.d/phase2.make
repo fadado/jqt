@@ -103,14 +103,18 @@ $(PagesJSON): $(Meta)/config.json $(MDIR)/phase2_page.jq $(THIS) \
 # Content example for `$(Meta)/phase2.make`:
 
 # __phase_2 := 1
-# destination_paths := _site/jqt/ _site/jqt/blog/
+# 
+# destination_paths := _site/ _site/blog/
 # metadata_paths := .meta/pages/ .meta/pages/blog/
+# 
 # data_md := .meta/snippets.json
 # data_yaml :=
 # data_json :=
 # data_csv :=
-# PagesHTML := _site/jqt/content.html _site/jqt/blog/2017-04-13-hello.html _site/jqt/blog/index.html
-# PagesJSON := .meta/pages/content.json .meta/pages/blog/2017-04-13-hello.json .meta/pages/blog/index.json
+# 
+# PagesHTML := _site/content.html _site/data.html _site/index.html _site/engine.html _site/structure.html _site/blog/2017-04-13-hello.html _site/blog/index.html
+# PagesJSON := .meta/pages/content.json .meta/pages/data.json .meta/pages/index.json .meta/pages/engine.json .meta/pages/structure.json .meta/pages/blog/2017-04-13-hello.json .meta/pages/blog/index.json
+# 
 # .meta/pages/content.json: content/content.md
 # 	$(info ==> $@)
 # 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@

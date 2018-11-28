@@ -38,7 +38,8 @@ $(Meta)/phase3_json.json: $(SCRIPT) $(THIS)
 	     --from-file $(MDIR)/phase3_json.jq		\
 	     > $@
 
-$(Meta)/phase3d.make: $(Meta)/pages-by-id.json $(Meta)/phase3_json.json $(SCRIPT) $(THIS)
+$(Meta)/phase3.make: $(SUPER) $(THIS)
+$(Meta)/phase3d.make: $(Meta)/pages-by-id.json $(Meta)/phase3_json.json $(SCRIPT)
 	$(info ==> $@)
 	jq --raw-output					\
 	   --arg Layouts $(Layouts)			\
@@ -80,16 +81,20 @@ $(PagesHTML): $(Meta)/phase3.make \
 # Content example for `$(Meta)/phase3.make`:
 
 # __phase_3 := 1
-# _site/jqt/index.html: content/index.md content/macros.m content/LINKS.txt content/EXAMPLE.txt .meta/snippets.json
+# 
+# %.html: _site/%.html ;
+# blog/%.html: _site/blog/%.html ;
+# 
+# _site/content.html: content/content.md content/macros.m content/LINKS.txt content/FLOW.txt content/opt/[4DdiT].txt .meta/snippets.json
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -mpage:.meta/pages/index.json layouts/page.html | $(DETAILS) > $@
+# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/content.json $(Layouts)/page-toc.html | $(DETAILS) > $@
 # ...
-# _site/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md .meta/snippets.json
+# _site/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md content/macros.m content/LINKS.txt .meta/snippets.json
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
-# _site/jqt/blog/index.html: content/blog/index.md .meta/snippets.json
+# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/blog/2017-04-13-hello.json $(Layouts)/page.html | $(DETAILS) > $@
+# _site/blog/index.html: content/blog/index.md content/macros.m content/LINKS.txt .meta/snippets.json
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -mpage:.meta/pages/blog/index.json layouts/blog.html | $(DETAILS) > $@
+# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/blog/index.json $(Layouts)/blog.html | $(DETAILS) > $@
 
 endif # __phase_3
 

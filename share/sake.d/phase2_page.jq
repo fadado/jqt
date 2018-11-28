@@ -24,11 +24,10 @@ def notdir:
     sub("^.*/"; "")
 ;
 
-# `$(Meta)/pages/path/to/page.json` => `(../)+`
-# BUG! No usar Meta en input!!!
+# `$(Content)/path/to/page.md` => `(../)+`
 def page_base:
-    # . as $target
-    ("../" * (((. / "/") | length) - 3)) // ""
+    $Source 
+    | ("../" * (((. / "/") | length) - 2)) // ""
 ;
 
 # `$(Meta)/pages/path/to/page.json` => `path/to/page`
