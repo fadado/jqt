@@ -1,82 +1,100 @@
 #!/bin/bash
 
 #
-# Wraps make
+# Wraps GNU Make
 #
 
-# Environment
-declare -ri NCORES=${NCORES:-2}
+########################################################################
+# Bash options
+########################################################################
 
-# Options
 set -o errexit -o noglob -o nounset -o pipefail
+
 shopt -s expand_aliases
 
-# Script name
-declare -r SELF=${0##*/}
+########################################################################
+# Environment
+########################################################################
+
+# Imported from environment if defined; otherwise use default value
+declare -ri NCORES=${NCORES:-2}
 
 # Exported to use in makefiles and Sakefile
 declare -xr JQTLIB='/usr/local/share/jqt'
 
-# GMake call
+########################################################################
+# Check project on current directory
+########################################################################
+
+# Sakefile must exist
+if test ! -e Sakefile; then
+    echo 1>&2 "sake: no \`Sakefile\` found."
+    exit 1
+fi
+
+# Configuration file must exist
+if test ! -e config.yaml && test ! -e config.json; then
+    echo 1>&2 "sake: no \`config.yaml\` or \`config.json\` file found."
+    exit 1
+fi
+
+########################################################################
+# Run
+########################################################################
+
+# Options to gmake
 declare -ra makeflags=(
     --jobs=$(( NCORES * 150 / 100  ))  # NCORES * 1.5
     --makefile=Sakefile
     --output-sync=target
 )
+
+# Exec gmake
 alias _sake='exec make "${makeflags[@]}"'
 
-# Check project on current directory
-if test ! -e Sakefile; then
-    echo 1>&2 "${SELF}: no \`Sakefile\` found."
-    exit 1
-fi
-if test ! -e config.yaml && test ! -e config.json; then
-    echo 1>&2 "${SELF}: no \`config.yaml\` or \`config.json\` file found."
-    exit 1
-fi
-
-# Check arguments
+# Default command: `build`
 [[ $# == 0 ]] && set -- build
 
 # Run _sake
 case $1 in
-    dag)
-        make -f Sakefile -Bdn \
-            | sed -n \
-                -e "s/'//g" \
-                -e 's/\.$//' \
-                -e 's/Considering target file //p'
-        ;;
     help)
-        echo 1>&2 "${SELF}: Target \`help\` not implemented."
-        exit 1
-        ;;
-    new)
-        echo 1>&2 "${SELF}: Target \`new\` not implemented."
-        exit 1
-        ;;
+        echo 'Usage: sake [command] [[options] [variable=definition] ...]'
+        echo -e '\nCommands, builtin and user defined:\n'
+        ;& # fall through
     list)
-        echo 'Usage: sake [goal] [[options] [variable=string] ...]'
-        echo 'Goals:'
-        make -f Sakefile -dpq 2>&1 \
-            | grep -v '^[SmM]akefile' \
-            | awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' \
-            | sort --unique \
-            | sed 's/:\+$//' \
-            | pr --omit-pagination --width=80 --columns=6
+        make -f Sakefile -np 2>&1  |
+            grep -v '^[SmM]akefile' |
+            awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' |
+            sort --unique  |
+            sed 's/:\+$//' |
+            pr --omit-pagination --width=50 --columns=4 --across
+        [[ $1 == help ]] && {
+            echo -e '\nSee the manpage for full documentation.'
+        }
         ;;
-    touch)
-        if test -e config.yaml; then touch config.yaml; else touch config.json; fi
+    clober)
         shift
-        _sake build "$@"
+        _sake clobber "$@"
         ;;
     config)
         shift
         _sake configure "$@"
         ;;
-    clober)
+    dag)
+        make -f Sakefile -Bdn build \
+            | sed -n \
+                -e "s/'//g" \
+                -e 's/\.$//' \
+                -e 's/Considering target file //p'
+        ;;
+    new)
+        echo 1>&2 "sake: Target \`new\` not implemented."
+        exit 1
+        ;;
+    touch)
+        if test -e config.yaml; then touch config.yaml; else touch config.json; fi
         shift
-        _sake clobber "$@"
+        _sake build "$@"
         ;;
     *)
         _sake "$@"

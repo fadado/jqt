@@ -128,7 +128,7 @@ __build := 1
 # Standard targets.
 ########################################################################
 
-sake_builtin := new help touch list dag
+sake_builtin := new help list dag touch
 .PHONY: build clean clobber nuke configure $(sake_builtin)
 
 # Filter builtin tools defined in `sake`script.

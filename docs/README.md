@@ -96,13 +96,11 @@ makefile must contain the following include:
 
 ## Current _Sake_ commands
 
-Targets not defined now: `help`, `new`.
-
 ```
-Targets:
-    build       configure       help        new
-    clean       h5.lint         list        touch
-    clobber     h5.valid
+Usage: sake [command] [[options] [variable=definition] ...]
+Commands:
+build        clobber      dag          h5.lint      help     new
+clean        configure    depend       h5.valid     list     nuke
 ```
 
 ## Autocompletion

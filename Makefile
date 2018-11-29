@@ -114,7 +114,7 @@ install: all
 	install --verbose --compare --mode 644 share/sake.d/*.* $(datadir)/$(PROJECT)/sake.d
 	install --verbose --compare --mode 644 share/milligram/*.* $(datadir)/$(PROJECT)/milligram
 	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
-	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/sake
+	sed -i -e "s#JQTLIB='.*'#JQTLIB='$(datadir)/jqt'#" $(bindir)/sake
 
 uninstall:
 	rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
