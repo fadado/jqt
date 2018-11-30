@@ -79,7 +79,7 @@ $(PagesHTML): $(Meta)/phase3.make \
 | $$(dir $$@)
 
 # Content example for `$(Meta)/phase3.make`:
-
+########################################################################
 # __phase_3 := 1
 # 
 # %.html: _site/%.html ;
@@ -95,6 +95,11 @@ $(PagesHTML): $(Meta)/phase3.make \
 # _site/blog/index.html: content/blog/index.md content/macros.m content/LINKS.txt .meta/snippets.json
 # 	$(info ==> $@)
 # 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/blog/index.json $(Layouts)/blog.html | $(DETAILS) > $@
+
+# Content example for `$(Meta)/phase3d.make`:
+########################################################################
+#_site/content.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
+#_site/data.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
 
 endif # __phase_3
 

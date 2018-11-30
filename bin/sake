@@ -81,7 +81,7 @@ case $1 in
         _sake configure "$@"
         ;;
     dag)
-        make -f Sakefile -Bdn build \
+        make -f Sakefile -Bdn \
             | sed -n \
                 -e "s/'//g" \
                 -e 's/\.$//' \

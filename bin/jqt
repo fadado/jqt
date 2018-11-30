@@ -431,10 +431,10 @@ declare -A JSON_DATA=() YAML_DATA=() YAML_SNIPPETS=()
 declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 
 # Global objects available in jq scripts:
-#	._content
-#	._highlight
-#	._source
-#	._toc
+#   ._content
+#   ._highlight
+#   ._source
+#   ._toc
 #   ._front_matter
 
 # < stdin > stdout

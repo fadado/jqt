@@ -45,7 +45,7 @@ JQTFLAGS += -5 --toc-depth=4
 depend: $(Meta)/phase3d.make
 	cat $< | egrep -v '^#|^$$' | cut -c -72 - | sed 's/$$/.../'
 
-# TODO: new, man page, SITE section on web, taxonomies (flags, series...)
+# TODO: new, new-templates, man page, SITE section on web, taxonomies (flags, series...)
 # TODO: enhance `dag` command
 # TODO: -t -W -B ???
 

@@ -139,6 +139,7 @@ build:: $(PagesHTML)
 	@cp --verbose --recursive --update $(Assets)/* $(Root) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
 	date -Iseconds > $(Meta)/lastbuild
+	echo Done! Visit file://$(realpath $(Root))/index.html
 
 # Delete secondary files.
 clobber:: ; @rm -rf *~ *.bak  *.log

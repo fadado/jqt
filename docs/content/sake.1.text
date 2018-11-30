@@ -1,0 +1,99 @@
+% SAKE(1) Version 0.1.0 | Build-automation utility for static web sites
+%
+% November 2018
+
+# NAME
+
+**sake** – Build-automation utility for static web sites
+
+# SYNOPSIS
+
+| **sake** [command] [[options] [variable=definition] ...]
+
+# DESCRIPTION
+
+**sake** is a simple wrapper to _GNU Make_.
+
+# OPTIONS
+
+Inherit from _GNU Make_.
+
+# COMMANDS
+
+build
+:   Build the static web site.
+
+clean
+:  Remove generated static web site, 
+
+clobber	   
+:  Remove all generated files and directories.
+
+configure
+:  Configure metadata used in the build process. 
+
+dag
+:   Show directed acyclic graph of dependencies.
+
+h5.lint
+:   Verify generated HTML 5 files.
+
+h5.valid
+:   Validate generated HTML 5 files.
+
+help
+:   Show a short help message.
+
+list
+:   Show the list of commands available.
+
+new
+:  Create a new static web site.
+
+nuke
+:   Remove generated metadata.
+
+touch
+:   Touch the configuration file and build again the site.
+
+# FILES
+
+/usr/local/share/jqt/sake/sake.d
+:   Library of makefiles used by `sake`.
+
+/usr/local/share/jqt/milligram
+:   Minimal CSS framework.
+
+Sakefile
+:   Mandatory user makefile.
+
+# ENVIRONMENT
+
+JQTLIB (exported)
+:   Path to files used by `sake`.
+
+NCORES (imported)
+:   Number of cores in the build machine.
+
+# BUGS
+
+See GitHub issues: <https://github.com/fadado/jqt/issues>
+
+# AUTHOR
+
+**sake** was written by Joan Josep Ordinas Rosa <jordinas@gmail.com>.
+
+# COPYRIGHT
+
+Copyright © 2015 Joan Josep Ordinas Rosa.
+**sake** is licensed under the MIT license (code) and the CC-BY-3.0 license (documents).
+
+# SEE ALSO
+
+**make(1)**, **jq(1)**, **jqt(1)**
+
+**jqt** home page: <https://fadado.github.com/jqt/>
+
+<!--
+vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
+-->

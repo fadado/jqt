@@ -78,7 +78,7 @@ SHELL := /bin/bash
 ########################################################################
 
 # The only "productive" target...
-ManPage := jqt.1.gz
+ManPages := jqt.1.gz sake.1.gz
 
 # Dependencies from documentations files
 DOCS := docs
@@ -110,7 +110,7 @@ install: all
 	install --directory $(bindir) $(datadir) $(mandir)/man1 $(datadir)/$(PROJECT)/{sake.d,milligram}
 	install --verbose --compare --mode 555 bin/* $(bindir)
 	install --verbose --compare --mode 644 share/*.m $(datadir)/$(PROJECT)
-	install --verbose --compare --mode 644 $(ManPage) $(mandir)/man1
+	install --verbose --compare --mode 644 $(ManPages) $(mandir)/man1
 	install --verbose --compare --mode 644 share/sake.d/*.* $(datadir)/$(PROJECT)/sake.d
 	install --verbose --compare --mode 644 share/milligram/*.* $(datadir)/$(PROJECT)/milligram
 	sed -i -e "s#DATADIR='.*'#DATADIR='$(datadir)'#" $(bindir)/jqt
@@ -118,7 +118,8 @@ install: all
 
 uninstall:
 	rm --verbose --force -- $(addprefix $(prefix)/,$(wildcard bin/*))
-	rm --verbose --force -- $(mandir)/man1/$(ManPage)
+	rm --verbose --force -- $(addprefix $(mandir)/man1/,$(ManPages))
+	rm --verbose --force -- $(mandir)/man1/$(ManPages)
 	test -d $(datadir)/$(PROJECT)				  \
 	&& rm --verbose --force --recursive $(datadir)/$(PROJECT) \
 	|| true
@@ -177,18 +178,18 @@ GPP_MD := gpp						\
 	+ssss '\n```' '\n```' ''			\
 	+ssss '\n~~~' '\n~~~' ''			\
     
-# Man page: jqt(1)
-$(ManPage): $(CONTENT)/jqt.1.text
+# Man page: jqt(1) sake(1)
+$(ManPages): %.1.gz : $(CONTENT)/%.1.text
 	$(info ==> $@)
 	@$(GPP_MD) -I$(DOCS) < $<			\
 	| pandoc --standalone --from markdown --to man	\
 	| gzip > $@
 
 # Default target
-all: $(ManPage)
+all: $(ManPages)
 
 # Add prerequisites and recipes to common targets
-clean:: ; @rm -f $(ManPage)
+clean:: ; @rm -f $(ManPages)
 
 ########################################################################
 # Tests
