@@ -61,7 +61,7 @@ def page_rule:
     .[] |
     "\($Root)/"+.URL+": " + .Source + dependencies,
     "\t$(info ==> $@)",
-    "\t@$(JQT) -d $<" + dataset + flags + page + layout + " | $(DETAILS) > $@"
+    "\t$(JQT) -d $<" + dataset + flags + page + layout + " | $(DETAILS) > $@"
 ;
 
 #

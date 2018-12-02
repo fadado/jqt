@@ -42,6 +42,8 @@ JQTFLAGS += -5 --toc-depth=4
 # experimental
 ########################################################################
 
+$(PagesHTML): $(Blocks)/filters.jq
+
 depend: $(Meta)/phase3d.make
 	cat $< | egrep -v '^#|^$$' | cut -c -72 - | sed 's/$$/.../'
 

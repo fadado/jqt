@@ -55,10 +55,10 @@ ifdef __phase_3
 #
 
 define JQTFLAGS :=
-  -msite:$(Meta)/phase1_site.json	\
-  -I./					\
-  -L$(Meta)				\
-  -L$(Blocks)				\
+  -I./				\
+  -L$(Meta)			\
+  -L$(Blocks)			\
+  -jsite:phase1_site.json	\
   -ifilters
 endef
 
