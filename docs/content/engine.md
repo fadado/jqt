@@ -48,7 +48,7 @@ arguments.  The usage possibilities are:
 | **jqt** [**-h** | **--help** | **-p** | **-V** | **--version**]
 | **jqt** [_options_] < _infile_ > _result_
 | **jqt** [_options_] _infile_ > _result_
-| **jqt** [_options_] _infile_ _result_
+**jqt** [_options_] _infile_ _result_
 
 ### Options
 
@@ -106,7 +106,8 @@ Block comment       `<# #>`         `<# #>`                 `/* */`         `/* 
 Line comment                                                `//`            `//`
 Bypass[^1]          `<!-- -->`      `<!-- -->`
                                     `` ` ` ``
-                                    `\n~~~` (also backticks)
+                                    <code>\\n&#96;&#96;&#96;</code>
+                                    `\n~~~`
 Escape[^2]                                                  `` ` ` ``       `` ` ` ``
 String[^3]          `{% %}`                                 `" "`           `" "`
                     `{{ }}`                                                 `' '`

@@ -44,6 +44,20 @@ JQTFLAGS += -5 --toc-depth=4 #-S
 
 $(PagesHTML): $(Blocks)/filters.jq
 
+tree:
+	tree 			\
+		-J		\
+		$(Root)		\
+		-P '*.html'	\
+		--dirsfirst
+
+#		-H $(Root)
+#		-T "Sitemap"
+#		-o $@
+
+purge:
+	killall jqt jq pandoc
+
 depend: $(Meta)/phase3d.make
 	cat $< | egrep -v '^#|^$$' | cut -c -72 - | sed 's/$$/.../'
 

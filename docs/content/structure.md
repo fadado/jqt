@@ -188,7 +188,7 @@ Table: **Delimiters used in <%cite jqt> templates**
 #### Expressions
 
 The text in expressions and actions is normal [_jq_][JQ] code, where as
-a bonus, the `$M` global variable points to the `jq` JSON input (the initial `.`).
+a bonus, the `$jqt` global variable points to the `jq` JSON input (the initial `.`).
 The rules for expression evaluation are very simple:
 
 * If an expression evaluates to `empty` the whole line vanishes.
@@ -217,14 +217,14 @@ The evaluation rules for one line actions are as follows:
 * If the delimited snippet evaluates to `empty` the whole line vanishes.
 * Otherwise, for each value produced the text following the
   snippet is evaluated with the value assigned to the dot (`.`). The initial
-  dot is still available in the global variable `$M`.
+  dot is still available in the global variable `$jqt`.
 
 The evaluation rules for multiline actions are as follows:
 
 * If the opening snippet evaluates to `empty` all lines until the ending snippet disappear.
 * Otherwise, for each value produced the lines until the ending snippet
   are evaluated with the value assigned to the dot (`.`). The initial dot is
-  still available in the global variable `$M`.
+  still available in the global variable `$jqt`.
 
 <# Warning: raw blocks are not documented because they are CONTENT! #>
 

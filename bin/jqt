@@ -538,7 +538,7 @@ function usage
 function help
 {
     cat <<'EOF'
-Usage: jqt [-h | --help | -p | -V | --version]
+Usage: jqt [-h | -p | -V ]
        jqt [options] < infile > result
        jqt [options] infile > result
        jqt [options] infile result
@@ -552,10 +552,10 @@ Preprocessor options      Data options
 Template options              -C
     -L DIRECTORY              -H                  
     -i MODULE                 -S                
-    -j MODULE:NAME        Information options
-Document options              -h, --help
+    -j NAME:MODULE        Information options
+Document options              -h
     -4, -5                    -p
-    -d FILE                   -V, --version
+    -d FILE                   -V
 
 See the manpage for full documentation and more options.
 EOF
@@ -564,37 +564,16 @@ EOF
 
 function pandoc_options
 {
-echo 'Pandoc options:'
-    cat <<'EOF' | pr -e --omit-pagination --indent=4 --width=100 --columns=2
---base-header-level=NUMBER
---bibliography=FILE
---citation-abbreviations=FILE
---columns=NUMBER
---csl=FILE
---email-obfuscation=none|javascript|references
---file-scope
---gladtex
---highlight-style=STYLE
---html-q-tags
---id-prefix=STRING
---indented-code-classes=CLASSES
---jsmath[=URL]
---katex[=URL]
---katex-stylesheet
---latexmathml[=URL]
---mathjax[=URL]
---mathml[=URL]
---mimetex[=URL]
---no-highlight
---normalize
---number-offset=NUMBER[,NUMBER,...]
---number-sections
---preserve-tabs
---section-divs
---tab-stop=NUMBER
---toc-depth=NUMBER
---webtex[=URL]
---wrap=[auto|none|preserve]'
+    cat <<'EOF'
+jqt will forward to pandoc all long options present in the command line, but
+some are reserved or have no meaning (be careful).
+
+Pandoc options used internally by jqt (do not play with them):
+    --from
+    --to
+    --template
+    --table-of-contents
+    --output
 EOF
     exit 0
 }
@@ -712,45 +691,8 @@ while getopts :hVD:I:P:L:i:j:45d:weprt:m:M:T:CHS-: opt; do
         # '--' end options
             :) break
                 ;;
-        # Generic options
-            help) help
-                ;;
-            version) echo "$SELF $VERSION"; exit 0
-                ;;
-            datadir) echo "${DATADIR}"; exit 0
-                ;;
-        # Pandoc options:
-            base-header-level=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            bibliography=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            citation-abbreviations=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            columns=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            csl=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            email-obfuscation=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            file-scope) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            gladtex) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            highlight-style=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            html-q-tags) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            id-prefix=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            indented-code-classes=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            jsmath|jsmath=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            katex-stylesheet=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            katex|katex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            latexmathml|latexmathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            mathjax|mathjax=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            mathml|mathml=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            mimetex|mimetex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            no-highlight) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            normalize) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            number-offset=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            number-sections) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            preserve-tabs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            section-divs) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            tab-stop=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            toc-depth=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            webtex|webtex=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-            wrap=*) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG";;
-        # Errors
-            *) usage "Unknown option: --$OPTARG"
+                # Errors (warning: bad options produce unexpected failures).
+            *) PANDOC_OPTS[${#PANDOC_OPTS[@]}]="--$OPTARG"
                 ;;
         esac # end case --*
         ;;

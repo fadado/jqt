@@ -138,8 +138,6 @@ $(sake_builtin): ; @echo 'sake: Target `$@` not implemented.'
 build:: $(PagesHTML)
 	@cp --verbose --recursive --update $(Assets)/* $(Root) \
 	| sed "s/^.*-> ./==> /;s/.$$//"
-	date -Iseconds > $(Meta)/lastbuild
-	echo Done! Visit file://$(realpath $(Root))/index.html
 
 # Delete secondary files.
 clobber:: ; @rm -rf *~ *.bak  *.log
@@ -175,6 +173,11 @@ include $(MDIR)/tools.make
 $(MDIR)/sitemap.make: ;
 $(MDIR)/styles.make: ;
 $(MDIR)/tools.make: ;
+
+# Bye
+build::
+	date -Iseconds >> $(Meta)/lastbuild
+	echo Done! Visit file://$(realpath $(Root))/index.html
 
 endif # __phase_3
 endif # __phase_2

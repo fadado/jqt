@@ -197,42 +197,20 @@ is, the ampersand and the newline are removed and effectively ignored).
 
 ### Pandoc’s Markdown
 
-<%cite jqt> accept as input format for documents the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
+<%cite jqt> accepts as input format for documents the [Pandoc's MarkDown](http://pandoc.org/MANUAL.html#pandocs-markdown)
 variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
-disabled, and produces by default transitional HTML.  When running `jqt` the following
-Pandoc long options can be specified in
-the command line and will be forwarded untouched to `pandoc`:
+disabled, and produces by default transitional HTML.  When running `jqt` all 
+long options specified in the command line will be forwarded
+untouched to `pandoc`, but some are reserved or have no meaning.
+
+<%cite Pandoc> options used internally by <%cite jqt> (do not play with them):
 
 ```
---base-header-level=NUMBER
---bibliography=FILE
---citation-abbreviations=FILE
---columns=NUMBER
---csl=FILE
---email-obfuscation=none|javascript|references
---file-scope
---gladtex
---highlight-style=STYLE
---html-q-tags
---id-prefix=STRING
---indented-code-classes=CLASSES
---jsmath[=URL]
---katex[=URL]
---katex-stylesheet
---latexmathml[=URL]
---mathjax[=URL]
---mathml[=URL]
---mimetex[=URL]
---no-highlight
---normalize
---number-offset=NUMBER[,NUMBER,...]
---number-sections
---preserve-tabs
---section-divs
---tab-stop=NUMBER
---toc-depth=NUMBER
---webtex[=URL]
---wrap=[auto|none|preserve]
+    --from=FORMAT
+    --to=FORMAT
+    --template=FILE
+    --table-of-contents
+    --output=FILE
 ```
 
 <#
