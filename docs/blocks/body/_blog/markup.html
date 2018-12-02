@@ -2,7 +2,7 @@
  # Body for blog posts
  ######################################################################>&
 <main class="#body">
-  {% pages("blog")[] %}
+  {% pages[] | select(.Section=="blog") %}
     <div class="post-excerpt">
       <a class="post-excerpt__title" href="{{.Base}}{{.URL}}">{{.title}}</a>
       <p class="post-excerpt__test">{{.description}}

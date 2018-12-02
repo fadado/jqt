@@ -2,7 +2,7 @@
 # Extra filters for this site
 #
 
-import "pages-by-id" as $pages;
+#import "pages-by-id" as $pages;
 #import "phase1_site" as $site;
 
 # Remove XML tags
@@ -12,14 +12,15 @@ def striptags:
 ;
 
 #def site: $site::site[0];
-def pages: $pages::pages[0];
+#def pages: $pages::pages[0];
 
-def pages($section):
-  [$pages::pages[0][] | select(.Section=="blog")]
-;
+#def pages($section):
+#  [$pages::pages[0][] | select(.Section=="blog")]
+#;
 
-def sections:
-    [$pages::pages[0].section]
+def sections($pages):
+    # . as $pages
+    map(.section)
     | unique
     | map(select(. != null and . != ""))
 ;

@@ -59,6 +59,7 @@ define JQTFLAGS :=
   -L$(Meta)			\
   -L$(Blocks)			\
   -jsite:phase1_site.json	\
+  -jpages:pages-by-id.json	\
   -ifilters
 endef
 

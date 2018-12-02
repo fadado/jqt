@@ -279,8 +279,8 @@ function convert
         echo "import \"${basename}\" as \$${module};"
     done
 
-    # $M as a global reference to '.'
-    echo '. as $M |'
+    # $jqt as a global reference to '.'
+    echo '. as $jqt |'
 
     # define helper functions for JSON modules
     for module in ${!IMPORTS[@]}; do
