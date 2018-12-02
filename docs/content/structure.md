@@ -109,7 +109,7 @@ you can put this conditional macro call to define a default title block:
 
 ```
 <%ifndef HEAD_TITLE>
-    <title>{{.page.title}}</title> {# default block #}
+    <title>{{page.title}}</title> {# default block #}
 <%else><%call HEAD_TITLE><%endif>
 ```
 
@@ -118,7 +118,7 @@ before include the base template:
 
 ```
 <%define HEAD_TITLE
-  <title>{{.page.title}} – {{.site.title}}</title>
+  <title>{{page.title}} – {{site.title}}</title>
 >
 <%include default.html>
 ```

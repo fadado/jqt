@@ -269,24 +269,25 @@ function convert
     echo '# vim:tabstop=2:syntax=jq'
 
     # jq modules
-    for module in ${!INCLUDES[@]}; do
-        echo "include \"${INCLUDES[$module]}\";"
-    done
     for module in ${!IMPORTS[@]}; do
         # remove .json suffix if present
         local basename="${IMPORTS[$module]}"
         basename=${basename%.json}
         echo "import \"${basename}\" as \$${module};"
     done
-
-    # $jqt as a global reference to '.'
-    echo '. as $jqt |'
+    for module in ${!INCLUDES[@]}; do
+        echo "include \"${INCLUDES[$module]}\";"
+    done
 
     # define helper functions for JSON modules
     for module in ${!IMPORTS[@]}; do
         [[ ${IMPORTS[$module]} == *.json ]] || continue
         echo "def ${module}: \$${module}::${module}[0];"
     done
+
+    # $jqt as a global reference to '.'
+    echo '. as $jqt |'
+
     # convert template to script
     sed -e '
 :RAW

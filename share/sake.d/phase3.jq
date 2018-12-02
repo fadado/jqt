@@ -35,7 +35,7 @@ def flags:
 ;
 
 def page:
-    " -mpage:\($Meta)/pages/\(.Id).json"
+    " -jpage:pages/\(.Id).json"
 ;
 
 # %.html: _site/%.html ;
