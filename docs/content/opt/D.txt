@@ -1,5 +1,5 @@
--D NAME=VAL
-:   Defines the user macro *NAME* as equal to *VAL*.
+-D NAME=STRING
+:   Defines the user macro *NAME* as equal to *STRING*.
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
 #>

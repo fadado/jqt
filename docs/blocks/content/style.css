@@ -35,6 +35,10 @@
   font-family: "Liberation Mono", "Nimbus Mono L", monospace;
 }
 
+&SEL{$content} cite {
+  font-style: italic;
+}
+
 &SEL{$content} .footnotes ol {
   list-style-type: decimal;
   list-style-position: outside;

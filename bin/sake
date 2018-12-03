@@ -33,10 +33,49 @@ if test ! -e Sakefile; then
 fi
 
 # Configuration file must exist
-if test ! -e config.yaml && test ! -e config.json; then
+if test -e config.yaml; then
+    CONFIGURATION_FILE=config.yaml
+elif test -e config.json; then
+    CONFIGURATION_FILE=config.json
+else
     echo 1>&2 "sake: no \`config.yaml\` or \`config.json\` file found."
     exit 1
 fi
+
+########################################################################
+# Commands
+########################################################################
+
+list() {
+    make -f Sakefile -np 2>&1  |
+        grep -v '^[SmM]akefile' |
+        awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' |
+        sort --unique  |
+        sed 's/:\+$//' |
+        pr --omit-pagination --width=50 --columns=4 --across
+}
+
+help() {
+    echo 'Usage: sake [command] [[options] [variable=definition] ...]'
+    echo -e '\nCommands, builtin and user defined:\n'
+    list
+    echo -e '\nSee the manpage for full documentation.'
+}
+
+dag()
+{
+    make -f Sakefile -Bdn \
+        | sed -n \
+            -e "s/'//g" \
+            -e 's/\.$//' \
+            -e 's/Considering target file //p'
+}
+
+new()
+{
+    local name=$1 kind=$2
+    echo 1>&2 "sake: Target \`new\` not implemented."
+}
 
 ########################################################################
 # Run
@@ -57,47 +96,35 @@ alias _sake='exec make "${makeflags[@]}"'
 
 # Run _sake
 case $1 in
-    help)
-        echo 'Usage: sake [command] [[options] [variable=definition] ...]'
-        echo -e '\nCommands, builtin and user defined:\n'
-        ;& # fall through
-    list)
-        make -f Sakefile -np 2>&1  |
-            grep -v '^[SmM]akefile' |
-            awk '/^[^ \t.%][-A-Za-z0-9_.]*:/ { print $1 }' |
-            sort --unique  |
-            sed 's/:\+$//' |
-            pr --omit-pagination --width=50 --columns=4 --across
-        [[ $1 == help ]] && {
-            echo -e '\nSee the manpage for full documentation.'
-        }
+    help) help
         ;;
-    clober)
-        shift
-        _sake clobber "$@"
+    list) list
         ;;
-    config)
-        shift
-        _sake configure "$@"
-        ;;
-    dag)
-        make -f Sakefile -Bdn \
-            | sed -n \
-                -e "s/'//g" \
-                -e 's/\.$//' \
-                -e 's/Considering target file //p'
+    dag) dag
         ;;
     new)
-        echo 1>&2 "sake: Target \`new\` not implemented."
-        exit 1
+        shift
+        name=site kind=simple
+        while (( $# > 0 )); do
+            case "$1" in
+                name=?*) eval "$1"; shift ;;
+                kind=?*) eval "$1"; shift ;;
+                *) break 2 ;; # error?
+            esac
+        done
+        new $name $kind
         ;;
     touch)
-        if test -e config.yaml; then touch config.yaml; else touch config.json; fi
-        shift
-        _sake build "$@"
+        touch $CONFIGURATION_FILE
+        shift; _sake build "$@"
         ;;
-    *)
-        _sake "$@"
+    clober)
+        shift; _sake clobber "$@"
+        ;;
+    config)
+        shift; _sake configure "$@"
+        ;;
+    *)  _sake "$@"
         ;;
 esac
 

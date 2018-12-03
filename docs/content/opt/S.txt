@@ -1,5 +1,5 @@
 -S
-:   Stops template processing before the render stage (outputs the jq script).
+:   Stops template processing before the render stage (outputs the _jq_ script).
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown
 #>

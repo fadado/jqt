@@ -24,7 +24,7 @@ def dependencies:
 
 def dataset:
     if .Datasets
-    then " " + ([.Datasets[] | basename | "-m\(.):\($Meta)/\(.).json"] | join(" "))
+    then " " + ([.Datasets[] | basename | "-j\(.):\(.).json"] | join(" "))
     else "" end
 ;
 
@@ -52,11 +52,11 @@ def layout:
 
 # _site/jqt/index.html: content/index.md layouts/page.html content/macros.m content/LINKS.txt content/EXAMPLE.txt
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -mpage:.meta/pages/index.json layouts/page.html | $(DETAILS) > $@
+# 	@$(JQT) -d $< -jpage:pages/index.json layouts/page.html | $(DETAILS) > $@
 # ...
 # _site/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md layouts/page.html
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -mpage:.meta/pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
+# 	@$(JQT) -d $< -jpage:pages/blog/2017-04-13-hello.json layouts/page.html | $(DETAILS) > $@
 def page_rule:
     .[] |
     "\($Root)/"+.URL+": " + .Source + dependencies,

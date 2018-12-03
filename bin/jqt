@@ -546,7 +546,7 @@ Usage: jqt [-h | -p | -V ]
 Some of the options include:
 
 Preprocessor options      Data options
-    -D NAME=VAL               -M NAME:FILE
+    -D NAME=STRING            -M NAME:FILE
     -I DIRECTORY              -m NAME:FILE
     -P LANGUAGE           Debugging options
 Template options              -C

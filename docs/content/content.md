@@ -82,13 +82,13 @@ jqt -T -- text.yaml | yaml2json > snippets.json
 Then this converted file can be loaded by `jqt` in succesive calls:
 
 ```zsh
-jqt -m snippets:snippets.json ...
+jqt -j snippets:snippets.json ...
 ```
 
 Template files (only!) can expand the snippets without never containing raw content:
 
 ```HTML
-<h1>{{.snippets.title}}</h1>
+<h1>{{snippets.title}}</h1>
 ```
 
 This allows the absolute separation of structure and content, as it should be.
