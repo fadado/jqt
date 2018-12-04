@@ -201,7 +201,7 @@ is, the ampersand and the newline are removed and effectively ignored).
 variant, with the <a href="http://pandoc.org/MANUAL.html#extension-pandoc_title_block">title block extension</a>
 disabled, and produces by default transitional HTML.  When running `jqt` all 
 long options specified in the command line will be forwarded
-untouched to `pandoc`, but some are reserved or have no meaning.
+untouched to `pandoc` (as for example with `--help`), but some are reserved or have no meaning.
 
 <%cite Pandoc> options used internally by <%cite jqt> (do not play with them):
 

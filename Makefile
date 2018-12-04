@@ -73,6 +73,9 @@ SHELL := /bin/bash
 # exits with a nonzero exit status.
 .DELETE_ON_ERROR:
 
+# Debug utility
+print-%: ; @echo $* = $($*)
+
 ########################################################################
 # Targets and variables
 ########################################################################
@@ -146,39 +149,27 @@ list:
 	echo '    mandir    = $(mandir)'
 
 ########################################################################
-# Generate help text
-########################################################################
-
-# Independent target: helps generating text for `jqt -h`
-# Needs explicit call: `make /tmp/help`
-/tmp/help: $(CONTENT)/help.text
-	$(info ==> $@)
-	jqt -P MarkDown -I$(DOCS) < $<					\
-	| pandoc --from markdown --to plain -				\
-	| sed '1,7b;/^$$/d;s/_\([A-Z]\+\)_/\1/g;/^[^A-Z]/s/^/    /'	\
-	> $@
-
-clean:: ; @rm -f /tmp/help
-
-########################################################################
 # Generate man page for jqt
 ########################################################################
 
-# gpp for the man page (to be build without calling jqt!)
+# gpp for the man page (to be built without calling jqt!)
 GPP_MD := gpp						\
 	-U '<%' '>' '\B' '\B' '\W>' '<' '>' '$$' ''	\
 	-M '<%' '>' '\B' '\B' '\W>' '<' '>'		\
 	+sccc '&\n' '' ''				\
-	+sccc '\\n' '' ''				\
-	+sccc '<\#' '\#>\n' ''				\
+	+sccc '<\#' '\#>' ''				\
 	+siqi "'" "'" '\'				\
 	+siQi '"' '"' '\'				\
 	+ssss '<!--' '-->' ''				\
 	+ssss '`'  '`' ''				\
 	+ssss '\n```' '\n```' ''			\
 	+ssss '\n~~~' '\n~~~' ''			\
+	-I${datadir}/jqt				\
+        --nostdinc					\
+	--include lib.md.m
     
 # Man page: jqt(1) sake(1)
+jqt.1.gz: $(CONTENT)/opt/*.txt
 $(ManPages): %.1.gz : $(CONTENT)/%.1.text
 	$(info ==> $@)
 	@$(GPP_MD) -I$(DOCS) < $<			\

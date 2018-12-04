@@ -1,5 +1,5 @@
 -j NAME:MODULE
-:   Imports the _jq_ *MODULE* in the render stage and define helper function
+:   Imports the <%cite jq> *MODULE* in the render stage and define helper function
 named *NAME* if *MODULE* is a data module and has the suffix `.json`.
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

@@ -8,7 +8,7 @@
 
 # SYNOPSIS
 
-| **jqt** [**-h** | **--help** | **-p** | **-V** | **--version**]
+| **jqt** [**-h** | **-p** | **-V** ]
 | **jqt** [options] < infile > result
 | **jqt** [options] infile > result
 | **jqt** [options] infile result
@@ -21,6 +21,7 @@ where HTML is mixed with **jq** snippets to implement the transformation logic.
 
 # OPTIONS
 
+<%include content/macros.m>&
 <%include content/opt/4.txt>
 <%include content/opt/C.txt>
 <%include content/opt/D.txt>

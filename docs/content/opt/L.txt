@@ -1,5 +1,5 @@
 -L DIRECTORY
-:   Appends *DIRECTORY* to the end of the _jq_ list of directories to be searched
+:   Appends *DIRECTORY* to the end of the <%cite jq> list of directories to be searched
 for included and imported modules.
 <#
 vim:ts=4:sw=4:ai:et:fileencoding=utf8:syntax=markdown

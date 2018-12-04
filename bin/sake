@@ -53,17 +53,16 @@ list() {
         sort --unique  |
         sed 's/:\+$//' |
         pr --omit-pagination --width=50 --columns=4 --across
-}
+} 1>&2
 
 help() {
     echo 'Usage: sake [command] [[options] [variable=definition] ...]'
     echo -e '\nCommands, builtin and user defined:\n'
     list
     echo -e '\nSee the manpage for full documentation.'
-}
+} 1>&2
 
-dag()
-{
+dag() {
     make -f Sakefile -Bdn \
         | sed -n \
             -e "s/'//g" \
@@ -71,8 +70,7 @@ dag()
             -e 's/Considering target file //p'
 }
 
-new()
-{
+new() {
     local name=$1 kind=$2
     echo 1>&2 "sake: Target \`new\` not implemented."
 }
@@ -96,11 +94,11 @@ alias _sake='exec make "${makeflags[@]}"'
 
 # Run _sake
 case $1 in
-    help) help
+    help) help; exit 0
         ;;
-    list) list
+    list) list; exit 0
         ;;
-    dag) dag
+    dag) dag; exit 0
         ;;
     new)
         shift
@@ -113,6 +111,7 @@ case $1 in
             esac
         done
         new $name $kind
+        exit 0
         ;;
     touch)
         touch $CONFIGURATION_FILE

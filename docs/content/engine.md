@@ -52,27 +52,41 @@ arguments.  The usage possibilities are:
 
 ### Options
 
-<%include content/opt/4.txt>
-<%include content/opt/C.txt>
+#### Preprocessor options
+
 <%include content/opt/D.txt>
-<%include content/opt/d.txt>
-<%include content/opt/e.txt>
-<%include content/opt/H.txt>
-<%include content/opt/h.txt>
 <%include content/opt/I.txt>
+<%include content/opt/P.txt>
+
+#### Template options
+
+<%include content/opt/L.txt>
 <%include content/opt/i.txt>
 <%include content/opt/j.txt>
-<%include content/opt/L.txt>
+
+#### Document options
+
+<%include content/opt/4.txt>
+<%include content/opt/d.txt>
+<%include content/opt/w.txt>
+
+#### Data options
+
 <%include content/opt/M.txt>
 <%include content/opt/m.txt>
-<%include content/opt/P.txt>
-<%include content/opt/p.txt>
-<%include content/opt/r.txt>
-<%include content/opt/S.txt>
 <%include content/opt/T.txt>
-<%include content/opt/t.txt>
+
+#### Debugging options
+
+<%include content/opt/C.txt>
+<%include content/opt/H.txt>
+<%include content/opt/S.txt>
+
+#### Information options
+
+<%include content/opt/h.txt>
+<%include content/opt/p.txt>
 <%include content/opt/V.txt>
-<%include content/opt/w.txt>
 
 ## Preprocessing
 
