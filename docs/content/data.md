@@ -62,6 +62,7 @@ are provided:
 * `._highlight`: CSS styles for highlighted code.
 * `._source`: the input document pathname as provided to `jqt`.
 * `._toc`: the rendered input document table of contents.
+* `._version`: <%cite jqt> installed version.
 
 Additional JSON files can be provided and are merged with front matter metadata
 to be the `jq` input in the render stage.

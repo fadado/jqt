@@ -26,21 +26,25 @@ declare -xr JQTLIB='/usr/local/share/jqt'
 # Check project on current directory
 ########################################################################
 
-# Sakefile must exist
-if test ! -e Sakefile; then
-    echo 1>&2 "sake: no \`Sakefile\` found."
-    exit 1
-fi
+declare CONFIGURATION_FILE
 
-# Configuration file must exist
-if test -e config.yaml; then
-    CONFIGURATION_FILE=config.yaml
-elif test -e config.json; then
-    CONFIGURATION_FILE=config.json
-else
-    echo 1>&2 "sake: no \`config.yaml\` or \`config.json\` file found."
-    exit 1
-fi
+check() {
+    # Sakefile must exist
+    if test ! -e Sakefile; then
+        echo 1>&2 "sake: no \`Sakefile\` found."
+        exit 1
+    fi
+
+    # Configuration file must exist
+    if test -e config.yaml; then
+        CONFIGURATION_FILE=config.yaml
+    elif test -e config.json; then
+        CONFIGURATION_FILE=config.json
+    else
+        echo 1>&2 "sake: no \`config.yaml\` or \`config.json\` file found."
+        exit 1
+    fi
+}
 
 ########################################################################
 # Commands
@@ -71,7 +75,25 @@ dag() {
 }
 
 new() {
-    local name=$1 kind=$2
+    local name=$1 skel=$2
+
+    [[ -d "$name" ]] && {
+        echo 1>&2 "sake: pathname \`$name\` exists!"
+        exit 1
+    }
+    case $skel in
+        basic|blog)
+            ;;
+        *)
+            echo 1>&2 "sake: unknown skeleton \`$skel\`!"
+            exit 1
+            ;;
+    esac
+
+    #mkdir -p "$name"
+    #cd "$name"
+    #cp -r $JQTLIB/skel-$skel/* .
+
     echo 1>&2 "sake: Target \`new\` not implemented."
 }
 
@@ -92,6 +114,9 @@ alias _sake='exec make "${makeflags[@]}"'
 # Default command: `build`
 [[ $# == 0 ]] && set -- build
 
+# Check if != new
+[[ $1 == new ]] || check
+
 # Run _sake
 case $1 in
     help) help; exit 0
@@ -102,15 +127,15 @@ case $1 in
         ;;
     new)
         shift
-        name=site kind=simple
+        name=site skel=basic
         while (( $# > 0 )); do
             case "$1" in
-                name=?*) eval "$1"; shift ;;
-                kind=?*) eval "$1"; shift ;;
+                name=?*) name=${1#name=}; shift ;;
+                skel=?*) skel=${1#skel=}; shift ;;
                 *) break 2 ;; # error?
             esac
         done
-        new $name $kind
+        new $name $skel
         exit 0
         ;;
     touch)

@@ -8,12 +8,12 @@
  #>
     <meta charset="utf-8" />
 <# Document title and related metadata #>
-    <title>jqt · {{page.title}}</title>
+    <title>{{site.title_prefix}} {{site.title_delimiter}} {{page.title}}</title>
     <meta name='description' content='{{page.description//empty}}' />
     <meta name='keywords' content='{{page.keywords//empty}}' />
     <meta name='author' content='{{[(page.author//site.author)[].name] | sort[]}}' />
 <# More metadata #>
-    <meta name="generator" content="jqt v{{site.version}}" />
+    <meta name="generator" content="JQT v<%version>" />
     <meta name='dcterms.date' content='{{page.updated//empty}}' />
 <# Presentation #>
     <link rel="shortcut icon" href="{{page.Base}}favicon.ico"/>
@@ -26,10 +26,10 @@
  #>
   <body class="#container">
     <%include blocks/header/markup.html>&
-<%ifndef BODY_BLOCK>&
-  <%error Descendent layout must define BODY_BLOCK macro>
-<%else>&
+<%ifdef BODY_BLOCK>&
     <%call BODY_BLOCK>
+<%else>&
+    <%error Descendent layout must define BODY_BLOCK macro>
 <%endif>&
     <%include blocks/footer/markup.html>&
     <%partial analytics 'UA-82432866-1'>&

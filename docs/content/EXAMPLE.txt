@@ -8,7 +8,7 @@
     <title>{{page.title | gsub("<[^>]*>"; "")}}</title>
     {# include files in preprocessing stage: #}
     <%include "head.html">
-    <meta name="generator" content="jqt v{{site.version}}"/>
+    <meta name="generator" content="JQT v<%version>"/>
     {# optional line: #}
     <meta name='dcterms.modified' content='{{page.updated//empty}}' />
     {# implicit loop for all authors: #}
@@ -17,7 +17,7 @@
 <body>
     <h1>{{page.title}}</h1>
     <div id="CONTENT">
-        {{page._content}}
+        {{$jqt._content}}
     </div>
     {# macro calls: #}
     <%partial analytics 'UA-82432866-1'>

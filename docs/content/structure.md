@@ -30,8 +30,8 @@ This is described on the top of this diagram:
 <details>
 
 <summary>
-When invoking `jqt` you can use the `-D`, `-I`, `-i`, `-j` and `-L` options to modify template
-rendering:
+When invoking `jqt` you can use the `-D`, `-I`, `-i`, `-j` and `-L` options to
+modify template rendering:
 </summary>
 
 <%include content/opt/D.txt>
@@ -46,23 +46,25 @@ rendering:
 
 A template is a text file with intermixed snippets of [_jq_][JQ] code. Snippets can be
 <%dfn expressions> (delimited by `{{` and `}}`), which get replaced with
-values when a template is rendered and <%dfn actions> (delimited by `{%` and `%}`), which control the logic of the
-template.  Comments (delimited by `{#` and `#}`) are ignored and not copied to the output.
+values when a template is rendered and <%dfn actions> (delimited by `{%` and
+`%}`), which control the logic of the template.  Comments (delimited by `{#`
+and `#}`) are ignored and not copied to the output.
 This is a complete template example:
 
 <%include content/EXAMPLE.txt>&
 
 ### Preprocessing
 
-Templates are preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
-like defining new macros, include other files, etc. For example, a template fragment
-like
+Templates are preprocessed using [GPP][GPP]. All the expected options in a
+preprocessor are available, like defining new macros, include other files, etc.
+For example, a template fragment like
 
 ```HTML
-<meta name="generator" content="jqt v<%include ../VERSION>"/>
+<meta name="generator" content="JQT v<%version>"/>
 ```
 
-will expand to the string <code>&lt;meta name="generator" content="jqt v<%include ../VERSION>"/&gt;</code>
+will expand to the string <code>&lt;meta name="generator" content="JQT v<%version>"/&gt;</code>
+(assuming the macro `version` has been defined)
 as you can see in the internal code of this page.
 
 #### Macro calls

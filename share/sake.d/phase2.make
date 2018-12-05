@@ -101,10 +101,10 @@ $(PagesJSON): $(Meta)/config.json $(MDIR)/phase2_page.jq $(THIS) \
 | $$(dir $$@)
 
 # Content example for `$(Meta)/phase2.make`:
-
+########################################################################
 # __phase_2 := 1
 # 
-# destination_paths := _site/ _site/blog/
+# destination_paths := /tmp/jqt/ /tmp/jqt/blog/
 # metadata_paths := .meta/pages/ .meta/pages/blog/
 # 
 # data_md := .meta/snippets.json
@@ -112,17 +112,14 @@ $(PagesJSON): $(Meta)/config.json $(MDIR)/phase2_page.jq $(THIS) \
 # data_json :=
 # data_csv :=
 # 
-# PagesHTML := _site/content.html _site/data.html _site/index.html _site/engine.html _site/structure.html _site/blog/2017-04-13-hello.html _site/blog/index.html
-# PagesJSON := .meta/pages/content.json .meta/pages/data.json .meta/pages/index.json .meta/pages/engine.json .meta/pages/structure.json .meta/pages/blog/2017-04-13-hello.json .meta/pages/blog/index.json
+# PagesHTML := /tmp/jqt/content.html /tmp/jqt/data.html /tmp/jqt/index.html /tmp/jqt/engine.html /tmp/jqt/structure.html /tmp/jqt/404.html /tmp/jqt/blog/2017-04-13-hello.html /tmp/jqt/blog/index.html
+# PagesJSON := .meta/pages/content.json .meta/pages/data.json .meta/pages/index.json .meta/pages/engine.json .meta/pages/structure.json .meta/pages/404.json .meta/pages/blog/2017-04-13-hello.json .meta/pages/blog/index.json
 # 
 # .meta/pages/content.json: content/content.md
 # 	$(info ==> $@)
 # 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@
 # ...
 # .meta/pages/blog/2017-04-13-hello.json: content/blog/2017-04-13-hello.md
-# 	$(info ==> $@)
-# 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@
-# .meta/pages/blog/index.json: content/blog/index.md
 # 	$(info ==> $@)
 # 	@$(EXTRACT_FRONT_MATTER) < $< | $(BUILD_PAGE_JSON) > $@
 
