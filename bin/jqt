@@ -445,6 +445,7 @@ declare -A JSON_DATA_DOT=() YAML_DATA_DOT=()
 #   ._source
 #   ._toc
 #   ._front_matter
+#   ._version
 
 # < stdin > stdout
 function merge
@@ -463,7 +464,7 @@ function merge
         else
             echo '(. / "<!--JQT-->") as [$body, $toc, $css] | { _front_matter: ('
             yaml2json < $front_matter
-            echo ")} + { _source: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css }'
+            echo ")} + { _version: \"${VERSION}\", _source: \"${DOCUMENT}\", "'_content: $body, _toc: $toc, _highlight: $css }'
         fi
 
         # additional data

@@ -25,10 +25,9 @@ Root: /tmp/jqt
 # Site parameters
 #
 
-# Site version (same as jqt)
-version: 0.5.1
-
 title: jqt, the jq template engine
+title_prefix: jqt
+title_delimiter: "·"
 baseurl: https://fadado.github.com/jqt/
 lang: &lang en
 logo: "❴❴❏❵❵"
@@ -48,7 +47,6 @@ menu:
 defaults:
   - idprefix: "" # all files
     properties:
-      title-prefix: jqt
       author: *author
       lang: *lang
       Layout: page-toc

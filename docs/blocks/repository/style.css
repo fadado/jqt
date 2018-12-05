@@ -13,8 +13,12 @@
   font-weight: bold;
 }
 
-&CHM{repository}{section}{internal} > a:focus {
+&BEM{repository}{section} > a:focus {
   color: &ColorPrimary;
+}
+
+&BEM{repository}{section} > a:hover {
+  color: &ColorSecondary;
 }
 
 &BEM{repository}{section}:first-child:before  {

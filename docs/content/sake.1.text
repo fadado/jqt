@@ -47,7 +47,7 @@ help
 list
 :   Show the list of commands available.
 
-new
+new [name=_path_] [skel=(basic|blog)]
 :  Create a new static web site.
 
 nuke

@@ -100,10 +100,11 @@ and the second does the proper conversion to HTML.
 
 ### Preprocessing
 
-The MarkDown input content is preprocessed using [GPP][GPP]. All the expected options in a preprocessor are available,
-like defining new macros, include other files, etc. For example, a macro call
-like `<%include "../VERSION">` will expand to the string <code><%include ../VERSION></code>
-as you can see in this paragraph and on the top of these pages.
+The MarkDown input content is preprocessed using [GPP][GPP]. All the expected
+options in a preprocessor are available, like defining new macros, include
+other files, etc. For example, a macro call
+like `<%version>` will expand to the <%cite jqt> version (<code><%version></code>)
+as you can see in this paragraph.
 
 #### Macro calls
 

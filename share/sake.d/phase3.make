@@ -83,24 +83,20 @@ $(PagesHTML): $(Meta)/phase3.make \
 ########################################################################
 # __phase_3 := 1
 # 
-# %.html: _site/%.html ;
-# blog/%.html: _site/blog/%.html ;
+# %.html: /tmp/jqt/%.html ;
+# blog/%.html: /tmp/jqt/blog/%.html ;
 # 
-# _site/content.html: content/content.md content/macros.m content/LINKS.txt content/FLOW.txt content/opt/[4DdiT].txt .meta/snippets.json
+# /tmp/jqt/content.html: content/content.md content/macros.m content/LINKS.txt content/FLOW.txt content/opt/[4DdiT].txt .meta/snippets.json
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/content.json $(Layouts)/page-toc.html | $(DETAILS) > $@
-# ...
-# _site/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md content/macros.m content/LINKS.txt .meta/snippets.json
+# 	$(JQT) -d $< -jsnippets:snippets.json -jpage:pages/content.json $(Layouts)/page-toc.html | $(DETAILS) > $@
+# /tmp/jqt/blog/2017-04-13-hello.html: content/blog/2017-04-13-hello.md content/macros.m content/LINKS.txt .meta/snippets.json
 # 	$(info ==> $@)
-# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/blog/2017-04-13-hello.json $(Layouts)/page.html | $(DETAILS) > $@
-# _site/blog/index.html: content/blog/index.md content/macros.m content/LINKS.txt .meta/snippets.json
-# 	$(info ==> $@)
-# 	@$(JQT) -d $< -msnippets:.meta/snippets.json -mpage:.meta/pages/blog/index.json $(Layouts)/blog.html | $(DETAILS) > $@
+# 	$(JQT) -d $< -jsnippets:snippets.json -jpage:pages/blog/2017-04-13-hello.json $(Layouts)/page.html | $(DETAILS) > $@
 
 # Content example for `$(Meta)/phase3d.make`:
 ########################################################################
-#_site/content.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
-#_site/data.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
+# /tmp/jqt/content.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
+# /tmp/jqt/data.html: blocks/body/_toc/markup.html blocks/content/markup.html blocks/footer/markup.html blocks/header/markup.html blocks/license/markup.html blocks/logo/markup.html blocks/menu-bar/markup.html blocks/repository/markup.html blocks/toc/markup.html layouts/default.html layouts/page-toc.html
 
 endif # __phase_3
 
