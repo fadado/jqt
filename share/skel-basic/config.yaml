@@ -1,0 +1,49 @@
+---
+#
+# Site configuration
+#
+# Provide defaults to each MarkDown file including `config.yaml`, and is
+# available in the `.site` top-level variable.
+#
+
+# ======================================================================
+# Site variables with default values. Can be redefined in this file.
+# ======================================================================
+#
+# Assets        assets
+# Blocks        blocks
+# Content       content
+# Data          data
+# Root          _site
+# Layouts       layouts
+# Styles        styles
+
+#
+# Site parameters
+#
+
+title: basic site skeleton
+title_prefix: basic
+title_delimiter: "·"
+baseurl: https://fadado.github.com/jqt/
+lang: &lang en
+logo: "❴❴❏❵❵"
+
+menu:
+  - index
+  - about
+
+# Default values
+defaults:
+  - idprefix: "" # all files
+    properties:
+      author: *author
+      lang: *lang
+      Layout: page-toc
+      Datasets:
+        - snippets.md
+      Dependencies:
+        - content/macros.m
+
+# vim:ts=2:sw=2:ai:et:fileencoding=utf8:syntax=yaml
+...

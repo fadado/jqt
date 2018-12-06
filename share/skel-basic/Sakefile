@@ -1,0 +1,32 @@
+########################################################################
+# Static web site Sakefile
+#
+
+########################################################################
+# Variables to define before include if default values must be changed.
+########################################################################
+
+#Meta := .meta
+
+########################################################################
+# Starting makefile
+########################################################################
+
+include $(JQTLIB)/sake.d/main.make
+
+ifdef __build
+
+########################################################################
+# Variables to define after include if default values must be changed.
+########################################################################
+
+#JQTFLAGS +=
+#VNU := java -jar /usr/local/vnu/vnu.jar
+#JQTFLAGS += ...
+
+# Add some Pandoc options
+JQTFLAGS += -5 --toc-depth=4
+
+endif # __build
+
+# vim:ai:sw=8:ts=8:noet:fileencoding=utf8:syntax=make

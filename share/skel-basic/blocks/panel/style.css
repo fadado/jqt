@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////
+// Panel
+////////////////////////////////////////////////////////////////////////
+
+&BEM{#panel} {
+  border: 0.3rem solid &ColorQuaternary;
+  border-radius: 0.4rem;
+}
+
+&BEM{#panel}{}{side-right},
+&CHM{#panel}{}{side-right} {
+  float: right;
+  margin: 0 0 0 1rem;
+}
+
+/*
+&BEM{#panel}{}{side-left},
+&CHM{#panel}{}{side-left} {
+  float: left;
+  margin: 0 1rem 0 0;
+}
+*/
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

@@ -1,0 +1,45 @@
+////////////////////////////////////////////////////////////////////////
+// Milligram theme
+////////////////////////////////////////////////////////////////////////
+
+// Include first!
+&include{milligram/BEM.m}
+&include{milligram/COLORNAMES.m}
+
+&include{milligram/Normalize.css}
+
+// Parameters
+//&define{ColorInitial}{&White}
+//&define{ColorPrimary}{&DarkCyan}
+//&define{ColorSecondary}{&Black}
+//&define{ColorTertiary}{&Lavender}
+//&define{ColorQuaternary}{&LightGrey}
+
+//&define{Scale}{1}
+//&define{SpacingScale}{0.7}
+//&define{TypographyScale}{0.8}
+
+@media screen {
+  html {
+    background-color: &ColorInitial;
+  }
+}
+
+// Modules
+&include{milligram/color.css}
+&include{milligram/base.css}
+&include{milligram/spacing.css}
+&include{milligram/typography.css}
+&include{milligram/blockquote.css}
+&include{milligram/code.css}
+&include{milligram/link.css}
+&include{milligram/list.css}
+&include{milligram/table.css}
+&include{milligram/divider.css}
+&include{milligram/grid.css}
+&include{milligram/utility.css}
+&include{milligram/image.css}
+&include{milligram/form.css}
+&include{milligram/button.css}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=scss

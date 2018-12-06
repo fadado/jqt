@@ -1,0 +1,86 @@
+////////////////////////////////////////////////////////////////////////
+// Content
+////////////////////////////////////////////////////////////////////////
+
+&SEL{$content} h2:target::after,
+&SEL{$content} h3:target::after,
+&SEL{$content} h4:target::after {
+  content: " §";
+  color: &ColorQuaternary;
+  font-family: serif;
+}
+
+&SEL{$content} td {
+  font-size: 90%;
+  padding: 0.8rem 1.0rem;
+}
+
+&SEL{$content} caption {
+  border-top:    .1rem solid &ColorQuinary;
+  border-bottom: .1rem solid &ColorQuinary;
+  font-weight: bold;
+}
+
+&SEL{$content} dt {
+  font-weight: bold;
+  margin-bottom: 0.1em;
+}
+
+&SEL{$content} ul {
+  list-style-type: square;
+}
+
+&SEL{$content} pre {
+  border-radius: 0.4rem;
+  font-family: "Liberation Mono", "Nimbus Mono L", monospace;
+}
+
+&SEL{$content} cite {
+  font-style: italic;
+}
+
+&SEL{$content} .footnotes ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+  line-height: 1.3;
+  font-size: 90%;
+  margin-left: 1.1em;
+}
+
+&SEL{$content} .footnotes p {
+  margin:  0;
+  padding: 0;
+}
+
+&SEL{$content} summary {
+  cursor: zoom-in;
+  outline: none;
+}
+
+&SEL{$content} details[open] > summary {
+  cursor: zoom-out;
+}
+
+&SEL{$content} figure > pre {
+  border: 0.3rem solid &ColorQuinary;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+}
+
+&SEL{$content} &SEL{page-quote} {
+  float: right;
+  margin: 0 0 0 auto;
+  padding-top:    0;
+  padding-bottom: 0;
+  max-width: 20em;
+  font-family: "Liberation Serif", "Times New Roman", Times, serif;
+  text-align: right;
+}
+
+@media print {
+  &SEL{$content} figure > pre {
+    font-size: 1.2rem;
+  }
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

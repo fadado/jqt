@@ -1,0 +1,31 @@
+////////////////////////////////////////////////////////////////////////
+// Toc
+////////////////////////////////////////////////////////////////////////
+
+&BEM{toc} {
+  max-width: 22em;
+  padding: 0 1em;
+  text-align: center;
+  font-size: 80%;
+}
+
+&BEM{toc}{title} {
+  margin-bottom: 0.5em;
+  border-bottom: 0.1rem solid &ColorQuaternary;
+  font-weight: bold;
+}
+
+&BEM{toc} ul {
+  margin-top:    0;
+  margin-bottom: 0;
+  list-style-type: square;
+  font-size: inherit;
+  text-align: left;
+  line-height: 1.4;
+}
+
+&BEM{toc} li {
+  margin: 0;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

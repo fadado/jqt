@@ -1,0 +1,39 @@
+////////////////////////////////////////////////////////////////////////
+// Repository
+////////////////////////////////////////////////////////////////////////
+
+&BEM{repository}  {
+	text-align: center;
+  list-style: none;
+}
+
+&BEM{repository}{section}  {
+  display: inline;
+	font-variant: small-caps;
+  font-weight: bold;
+}
+
+&BEM{repository}{section} > a:focus {
+  color: &ColorPrimary;
+}
+
+&BEM{repository}{section} > a:hover {
+  color: &ColorSecondary;
+}
+
+&BEM{repository}{section}:first-child:before  {
+  content: "❲ ";
+  color: &ColorSecondary;
+}
+
+&BEM{repository}{section}:not(last-child):after  {
+  content: " ❘ ";
+  color: &ColorSecondary;
+}
+
+&BEM{repository}{section}:last-child:after  {
+  content: " ❳";
+  color: &ColorSecondary;
+}
+
+// vim:ts=2:sw=2:ai:et:fileencoding=utf-8:syntax=css

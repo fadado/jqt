@@ -10,7 +10,7 @@ Dependencies: [content/EXAMPLE.txt]
 <%include content/macros.m>&
 <%include content/LINKS.txt>&
 
-# Welcome
+# Welcome to jqt
 
 <!--
 > _Editing is a rewording activity._\
