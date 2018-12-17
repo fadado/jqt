@@ -75,24 +75,24 @@ dag() {
 }
 
 new() {
-    local name=$1 skel=$2
+    local path=$1 template=$2
 
-    [[ -d "$name" ]] && {
-        echo 1>&2 "sake: pathname \`$name\` exists!"
+    [[ -d "$path" ]] && {
+        echo 1>&2 "sake: pathname \`$path\` exists!"
         exit 1
     }
-    case $skel in
+    case $template in
         basic|blog)
             ;;
         *)
-            echo 1>&2 "sake: unknown skeleton \`$skel\`!"
+            echo 1>&2 "sake: unknown skeleton \`$template\`!"
             exit 1
             ;;
     esac
 
-    #mkdir -p "$name"
-    #cd "$name"
-    #cp -r $JQTLIB/skel-$skel/* .
+    #mkdir -p "$path"
+    #cd "$path"
+    #cp -r $JQTLIB/template-$template/* .
 
     echo 1>&2 "sake: Target \`new\` not implemented."
 }
@@ -127,15 +127,20 @@ case $1 in
         ;;
     new)
         shift
-        name=site skel=basic
+        kind=site path=site template=basic
         while (( $# > 0 )); do
             case "$1" in
-                name=?*) name=${1#name=}; shift ;;
-                skel=?*) skel=${1#skel=}; shift ;;
+                kind=?*) kind=${1#kind=}; shift ;;
+                path=?*) path=${1#path=}; shift ;;
+                template=?*) template=${1#template=}; shift ;;
+                model=?*) template=${1#model=}; shift ;;
+                # site page post block theme layout...
+                site=?*) kind=site path=${1#site=}; shift ;;
+                page=?*) kind=page path=${1#page=}; shift ;;
                 *) break 2 ;; # error?
             esac
         done
-        new $name $skel
+        new $path $template
         exit 0
         ;;
     touch)
