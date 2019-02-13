@@ -166,7 +166,7 @@ GPP_MD := gpp						\
 	+ssss '\n~~~' '\n~~~' ''			\
 	-I${datadir}/jqt				\
         --nostdinc					\
-	--include lib.md.m
+	--include share/lib.md.m
     
 # Man page: jqt(1) sake(1)
 jqt.1.gz: $(CONTENT)/opt/*.txt
