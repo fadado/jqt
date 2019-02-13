@@ -46,15 +46,15 @@ Nested expression: {{
 	)="
 }}
 
-Local name: {{. as $M | $M.number}}
-Local name: {{. as $M | $M.array | map(.*2) | sort | map(tostring)}}
-Local name: {{. as $M | $M.array | map(.*2) | map(tostring) | sort}}
+Local name: {{. as $jqt | $jqt.number}}
+Local name: {{. as $jqt | $jqt.array | map(.*2) | sort | map(tostring)}}
+Local name: {{. as $jqt | $jqt.array | map(.*2) | map(tostring) | sort}}
 
 Repeated line: {{.array | keys[]}}
 Repeated line: {{.object | keys[]}}
 Repeated line: {{.array[]}}
 
-Repeated line: {{. as $M | range(1;5) | .*$M.number}}
+Repeated line: {{. as $jqt | range(1;5) | .*$jqt.number}}
 
 Repeated line: {{.array | sort[]}}
 
@@ -71,7 +71,7 @@ Repeated line: {{
 {% .array %}Array {{.}} has length {{length}}
 
 {% .array as $a %}Array $a has value {{$a[0]}} at position 0
-{% .array as $a | $M %}Array .array and array $a are equal? ({{$a == $M.array)}}
+{% .array as $a | $jqt %}Array .array and array $a are equal? ({{$a == $jqt.array)}}
 {% .array | map(.*2 | tostring) | sort %}Values sorted as strings: {{.}}
 
 {% .array | sort[] | tostring | "<b>{{.}}</b>" | "<li>{{.}}</li>" %}{{.}}

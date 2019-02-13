@@ -1,4 +1,4 @@
-{% .published//empty | $M %}
+{% .published//empty | $jqt %}
 	<meta name='published' content='{{.published}}' />
 {% end %}
 {% .updated//empty %}
