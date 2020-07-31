@@ -12,8 +12,8 @@ _____
 {% .number//empty %}
 	I expand to '{{.}}'
 {%end%}
-{% .number//empty | $M %}
-	I expand preserving $M: '{{$M.number}}'
+{% .number//empty | $jqt %}
+	I expand preserving $jqt: '{{$jqt.number}}'
 {% end %}
 _____
 {% .not//empty %}
@@ -24,10 +24,10 @@ _____
 {% end %}
 _____
 
-{% .yes//empty | $M %}
+{% .yes//empty | $jqt %}
 	{% .string//empty %}I expand to '{{.}}'
 {% end %}
-{% .yes//empty | $M %}
+{% .yes//empty | $jqt %}
 	{% .string//empty %}
 I expand to '{{.}}'
 	{% end %}
@@ -43,7 +43,7 @@ I expand to '{{.}}'
 {% (.number < 1)//empty %}
 	case 1
 {% end %}
-{% (.number < 1 | not)//empty | $M %}
+{% (.number < 1 | not)//empty | $jqt %}
 {% (.number < 2)//empty %}
 	case 2
 {% end %}

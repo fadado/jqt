@@ -16,7 +16,7 @@ Values sorted as strings: ["10","12","14","2","4","6","8"]
 	I expand!
 	I expand to 'Neque porro quisquam'
 	I expand to '3.141592653589793'
-	I expand preserving $M: '3.141592653589793'
+	I expand preserving $jqt: '3.141592653589793'
 -----
 -----
 

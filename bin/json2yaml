@@ -27,7 +27,7 @@ def dump_yaml(seq):
         yaml.safe_dump(obj, sys.stdout,
                 default_flow_style=False,
                 default_style=None,
-                encoding='utf-8',
+                #encoding='utf-8',
                 explicit_start=True,
                 explicit_end=False,
                 indent=2,
