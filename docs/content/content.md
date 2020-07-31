@@ -155,7 +155,7 @@ Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and arbitrary but delimited strings of characters:
 
 ```
-<# Block comments, removed, must end in newline (also removed) #>
+<# Block comments, removed #>
 Continuation lines using an ampersand &
 just before the newline character
 ```
@@ -179,7 +179,7 @@ This table summarizes all the available skips:
  Delimiters                         Macro expansion     Delimiters removed  Content removed
 -------------                       ---------------     ------------------  ---------------
 `&\n`[^1]                           No                  Yes                 There is no content
-`<#` `#>\n`                         No                  Yes                 Yes
+`<#` `#>`                           No                  Yes                 Yes
 `'` `'`[^2]                         No                  Yes                 No
 `"` `"`[^3]                         Yes                 Yes                 No
 `<!--` `-->`                        No                  No                  No

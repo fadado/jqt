@@ -138,7 +138,7 @@ Some fragments of text are skipped during macro expansion, like comments,
 continuation lines and delimited strings of characters:
 
 ```
-<# Block comments, removed, must end in newline (also removed) #>
+<# Block comments, removed #>
 Continuation lines using an ampersand &
 just before the newline character
 ```
